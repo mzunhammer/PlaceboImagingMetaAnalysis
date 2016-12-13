@@ -14,7 +14,7 @@ function ForestPlotter(MetaStats,varargin)
 %summarystat: string designating the desired outcome ('mu' for mean, 'd' or Cohen's d, 'g' for Hedges' g).
 %type: String indicating whether 'fixed' or 'random' analysis is desired.
 %fontsize: Double indicating the size of study text.
-%printsize: Integer indicating the desired with of image in mm.
+%printsize: Two-element numeric vector indicating the desired with of image in px [x,y].
 
 %Example:
 % ForestPlotter(stats,studyIDtexts,'NPS-Response (Hedge''s g)','random','g');
@@ -40,7 +40,7 @@ addParameter(p,'summarystat',defSummarystat,@ischar)
 defFontsize=16; % Negative number will later be replaced by no change in resolution
 addParameter(p,'fontsize',defFontsize,@isnumeric)
 %Check printsize
-defPrintsize=3000; % default is show background
+defPrintsize=[3000*2, 3000/sqrt(2)]; % default is show background
 addParameter(p,'printsize',defPrintsize,@isnumeric)
 
 parse(p,MetaStats,varargin{:})
@@ -74,9 +74,8 @@ end
 ci=se_summary_stat.*1.96;
  %% Forest Plot for Standardized Effect Sizes:
 %FIGURE WINDOW
-h_px=printsize;
 fig=figure('Name','Forest Plot',...
-        'Position', [0, 0, h_px*2, h_px/sqrt(2)]);% Position: left bottom width heigth;
+        'Position', [0, 0, printsize(1), printsize(2)]);% Position: left bottom width heigth;
 hold on
 
 %TEXT POSITION AND SIZE
@@ -275,7 +274,7 @@ ytitle=yscale+1; % Studies+1
          'FontName',font_name,...
          'Interpreter','none');
   % Txt n Title
-    text(txt_position_weight, ytitle, 'weight',...
+    text(txt_position_weight, ytitle, 'Weight',...
          'HorizontalAlignment','center',...
          'VerticalAlignment','middle',...
          'FontSize',font_size,...
@@ -297,9 +296,9 @@ ytitle=yscale+1; % Studies+1
          'Interpreter','none');
 %   Txt study Summary 2 (Heterogeneity)
     if p_het>=0.001
-        formatSpec='Heterogeneity: Chi^2(%d)=%0.2f, p=%0.3f ; Tau^2=%0.2f, I^2=%0.2f%%';
+        formatSpec='Heterogeneity: Chi^2(%d)=%0.2f, p=%0.3f\nTau^2=%0.2f, I^2=%0.2f%%';
         elseif p_het<0.001
-        formatSpec='Heterogeneity: Chi^2(%d)=%0.2f, p<.%0.0f01 ; Tau^2=%0.2f, I^2=%0.2f%%';
+        formatSpec='Heterogeneity: Chi^2(%d)=%0.2f, p<.%0.0f01\nTau^2=%0.2f, I^2=%0.2f%%';
     end
     text(txt_position_study, 0, sprintf(formatSpec,df,chisq,p_het,tausq,Isq),...
          'HorizontalAlignment','left',...
