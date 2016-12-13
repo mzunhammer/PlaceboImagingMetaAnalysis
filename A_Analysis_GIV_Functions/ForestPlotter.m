@@ -1,15 +1,24 @@
 function ForestPlotter(MetaStats, varargin)
 
-%% Creates summary statistic and Forest Plot
+%% Function to create Forest Plots for meta-analysis
+% by Matthias Zunhammer November 2016
+
+% General form: ForestPlotter(MetaStats,varargin)
+%
+% 'MetaStats': a struct containing i by-study meta-analysis-results, as
+% created by withinMetastats.m or betweenMetastats.m
+%
+% Optional arguments:
+
+
 %Inputs
-%MetaStats: struct containing a within or between subject summary stat for each of the i studies.
 %studyIDtexts: vector with i study labels.
 %outcomelabel: string lableing the x-axis.
-%Type: String indicating whether 'fixed' or 'random' analysis is desired.
+%type: String indicating whether 'fixed' or 'random' analysis is desired.
+%fontsize: Double indicating the size of study text.
+%printsize: Integer indicating the desired with of image in mm.
 
-studyIDtexts
-outcomelabel
-type
+%Example:
 
 %% Summarize all studies, weigh by n
 % Summarize standardized means by using the generic inverse-variance method
