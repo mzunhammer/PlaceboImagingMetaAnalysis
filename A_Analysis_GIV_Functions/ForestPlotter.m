@@ -14,6 +14,7 @@ function ForestPlotter(MetaStats,varargin)
 %summarystat: string designating the desired outcome ('mu' for mean, 'd' or Cohen's d, 'g' for Hedges' g).
 %type: String indicating whether 'fixed' or 'random' analysis is desired.
 %fontsize: Double indicating the size of study text.
+%textposition: Scalar indicating the relative distance of study info text from graph.
 %printsize: Two-element numeric vector indicating the desired with of image in px [x,y].
 
 %Example:
@@ -39,6 +40,9 @@ addParameter(p,'summarystat',defSummarystat,@ischar)
 %Check fontsize
 defFontsize=16; % Negative number will later be replaced by no change in resolution
 addParameter(p,'fontsize',defFontsize,@isnumeric)
+%Check textposition (currently automatically determined)
+%defTextposition=2.5; % Negative number will later be replaced by no change in resolution
+%addParameter(p,'textposition',defTextposition,@isnumeric)
 %Check printsize
 defPrintsize=[3000*2, 3000/sqrt(2)]; % default is show background
 addParameter(p,'printsize',defPrintsize,@isnumeric)
@@ -52,7 +56,7 @@ type=p.Results.type;
 summarystat=p.Results.summarystat;
 fontsize=p.Results.fontsize;
 printsize=p.Results.printsize;
-
+%textposition=p.Results.textposition;
 % Summarize standardized means by using the generic inverse-variance method
 
 if strcmp(summarystat,'mu')
@@ -83,14 +87,14 @@ font_size=fontsize;
 font_name='Arial';
 
 %SIZE OF GRAPH AREA VS TEXT
-x_graphW=0.5; %relative size of x-axis in normalized space (rel to the whole graph)
+x_graphW=0.33; %relative size of x-axis in normalized space (rel to the whole graph)
     
 %AXIS SCALE
 x_axis_size=max([double(ceil(max(abs(summary_stat)+ci))),3]); %x-Axis limit should be the smallest integer larger than the largest absolute stat+ci, but at least 3
 y_axis_size=(length(studyIDtexts)+2);
 ax=gca;
 set(ax,'box','off',...
- 'OuterPosition',[+0.4 0 x_graphW-0.1 1],...% Set outer figure borders to accomodate more text, Default: [left bottom width height], [0 0 1 1], in normalized units
+ 'OuterPosition',[x_graphW 0 x_graphW 1],...% Set outer figure borders to accomodate more text, Default: [left bottom width height], [0 0 1 1], in normalized units
  'Ylim',[0 y_axis_size],...
  'YTick',[],...
  'YTickLabel',[],...%
@@ -119,7 +123,19 @@ box_scaling=0.5;   % basic unit is y (height of a study-line)
 studyIDweight=rel_weight; % get study weights from summary
  
 % STUDY LABELS AND N'S
-txt_position_study=(-x_axis_size)-x_axis_size*2.5; %In x-axis units, since MATLAB does not easily allow mixing figure-coordinates and axis coordinates
+
+%Get left outer border of graph in data-units
+ax_pos_norm = get(gca, 'Position'); % Get axis positition & size [left, bottom, width, heigth] in NORMALIZED units
+%ax_pos_norm(1) Corresponds to x position of the left end of x_axis .
+%Cax_pos_norm(3) orresponds to width of x axis in normalized figure units and therefore to x_axis_size*2
+ori_times_axis=ax_pos_norm(1)/ax_pos_norm(3)*(-1); %"origin in times the axis widths"
+max_times_axis=(1-ax_pos_norm(1))/ax_pos_norm(3); %"origin in times the axis widths"
+
+fig_origin_x_data=ori_times_axis*2*x_axis_size; %Convert figure origin to data-units
+fig_max_x_data=max_times_axis*2*x_axis_size;
+fig_range_x=fig_max_x_data-fig_origin_x_data;
+
+txt_position_study=fig_origin_x_data+fig_range_x*0.05; %Text position in DATA (x-axis) units, since MATLAB does not easily allow mixing figure-coordinates and axis coordinates. Placebo 5% text border.
 txt_position_n=x_axis_size+x_axis_size*0.85;
 txt_position_eff=txt_position_n-0.5*x_axis_size;
 txt_position_weight=txt_position_n+0.5*x_axis_size;

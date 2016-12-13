@@ -1,4 +1,4 @@
-function ForestPlotter(varargin)
+function ForestPlotter(MetaStats,varargin)
 
 %% Function to create Forest Plots for meta-analysis
 % by Matthias Zunhammer November 2016
@@ -11,17 +11,18 @@ function ForestPlotter(varargin)
 % Optional arguments:
 %studyIDtexts: vector with i study labels.
 %outcomelabel: string lableing the x-axis.
-%summarystat=
+%summarystat: string designating the desired outcome ('mu' for mean, 'd' or Cohen's d, 'g' for Hedges' g).
 %type: String indicating whether 'fixed' or 'random' analysis is desired.
 %fontsize: Double indicating the size of study text.
-%printsize: Integer indicating the desired with of image in mm.
+%textposition: Scalar indicating the relative distance of study info text from graph.
+%printsize: Two-element numeric vector indicating the desired with of image in px [x,y].
 
 %Example:
 % ForestPlotter(stats,studyIDtexts,'NPS-Response (Hedge''s g)','random','g');
 
 
 %% Parse optional inputs according to: https://de.mathworks.com/help/matlab/matlab_prog/parse-function-inputs.html
-p = inputParser
+p = inputParser;
 %Check MetaStats 
 addRequired(p,'MetaStats',@isstruct);
 %Check studyIDtexts
@@ -29,33 +30,40 @@ defstudyIDtexts = {};
 addParameter(p,'studyIDtexts',defstudyIDtexts,@iscell)
 %Check outcomelabel
 defOutcomelabel = 'Outcome';
-addParameter(p,'outcomelabel',defOutcomelabel,@isnumeric)
+addParameter(p,'outcomelabel',defOutcomelabel,@ischar)
 %Check type
 defType = 'random';
 addParameter(p,'type',defType,@ischar)
+%Check type
+defSummarystat = 'g';
+addParameter(p,'summarystat',defSummarystat,@ischar)
 %Check fontsize
 defFontsize=16; % Negative number will later be replaced by no change in resolution
-addParameter(p,'resolution',defFontsize,@isnumeric)
+addParameter(p,'fontsize',defFontsize,@isnumeric)
+%Check textposition
+defTextposition=2.5; % Negative number will later be replaced by no change in resolution
+addParameter(p,'textposition',defTextposition,@isnumeric)
 %Check printsize
-defPrintsize=3000; % default is show background
-addParameter(p,'background',defaultBackground,@isnumeric)
+defPrintsize=[3000*2, 3000/sqrt(2)]; % default is show background
+addParameter(p,'printsize',defPrintsize,@isnumeric)
 
-parse(p,varargin{:})
-
+parse(p,MetaStats,varargin{:})
+% Re-format inputs for convenience
 MetaStats=p.Results.MetaStats;
 studyIDtexts=p.Results.studyIDtexts;
 outcomelabel=p.Results.outcomelabel;
 type=p.Results.type;
-resolution=p.Results.resolution;
-background=p.Results.background;
-
+summarystat=p.Results.summarystat;
+fontsize=p.Results.fontsize;
+printsize=p.Results.printsize;
+textposition=p.Results.textposition;
 % Summarize standardized means by using the generic inverse-variance method
 
-if strcmp(varargin(1),'mu')
+if strcmp(summarystat,'mu')
     summary_stat=[MetaStats.mu]';% Currently uses Hedge's g
     se_summary_stat=[MetaStats.se_mu]'; % Currently uses Hedge's g
     n=[MetaStats.n]';
-elseif strcmp(varargin(1),'d')
+elseif strcmp(summarystat,'d')
     summary_stat=[MetaStats.d]';% Currently uses Hedge's g
     se_summary_stat=[MetaStats.se_d]'; % Currently uses Hedge's g
     n=[MetaStats.n]';
@@ -70,13 +78,12 @@ end
 ci=se_summary_stat.*1.96;
  %% Forest Plot for Standardized Effect Sizes:
 %FIGURE WINDOW
-h_px=resolution;
 fig=figure('Name','Forest Plot',...
-        'Position', [0, 0, h_px*2, h_px/sqrt(2)]);% Position: left bottom width heigth;
+        'Position', [0, 0, printsize(1), printsize(2)]);% Position: left bottom width heigth;
 hold on
 
 %TEXT POSITION AND SIZE
-font_size=16;
+font_size=fontsize;
 font_name='Arial';
 
 %SIZE OF GRAPH AREA VS TEXT
@@ -87,7 +94,7 @@ x_axis_size=max([double(ceil(max(abs(summary_stat)+ci))),3]); %x-Axis limit shou
 y_axis_size=(length(studyIDtexts)+2);
 ax=gca;
 set(ax,'box','off',...
- 'OuterPosition',[+0.4 0 x_graphW-0.1 1],...% Set outer figure borders to accomodate more text, Default: [left bottom width height], [0 0 1 1], in normalized units
+ 'OuterPosition',[x_graphW 0 x_graphW 1],...% Set outer figure borders to accomodate more text, Default: [left bottom width height], [0 0 1 1], in normalized units
  'Ylim',[0 y_axis_size],...
  'YTick',[],...
  'YTickLabel',[],...%
@@ -116,7 +123,19 @@ box_scaling=0.5;   % basic unit is y (height of a study-line)
 studyIDweight=rel_weight; % get study weights from summary
  
 % STUDY LABELS AND N'S
-txt_position_study=(-x_axis_size)-x_axis_size*2.5; %In x-axis units, since MATLAB does not easily allow mixing figure-coordinates and axis coordinates
+
+%Get left outer border of graph in data-units
+ax_pos_norm = get(gca, 'Position'); % Get axis positition & size [left, bottom, width, heigth] in NORMALIZED units
+%ax_pos_norm(1) Corresponds to x position of the left end of x_axis .
+%Cax_pos_norm(3) orresponds to width of x axis in normalized figure units and therefore to x_axis_size*2
+ori_times_axis=ax_pos_norm(1)/ax_pos_norm(3)*(-1); %"origin in times the axis widths"
+max_times_axis=(1-ax_pos_norm(1))/ax_pos_norm(3); %"origin in times the axis widths"
+
+fig_origin_x_data=ori_times_axis*2*x_axis_size; %Convert figure origin to data-units
+fig_max_x_data=max_times_axis*2*x_axis_size;
+fig_range_x=fig_max_x_data-fig_origin_x_data;
+
+txt_position_study=fig_origin_x_data; %Text position in DATA (x-axis) units, since MATLAB does not easily allow mixing figure-coordinates and axis coordinates. Placebo 5% text border.
 txt_position_n=x_axis_size+x_axis_size*0.85;
 txt_position_eff=txt_position_n-0.5*x_axis_size;
 txt_position_weight=txt_position_n+0.5*x_axis_size;
@@ -271,7 +290,7 @@ ytitle=yscale+1; % Studies+1
          'FontName',font_name,...
          'Interpreter','none');
   % Txt n Title
-    text(txt_position_weight, ytitle, 'weight',...
+    text(txt_position_weight, ytitle, 'Weight',...
          'HorizontalAlignment','center',...
          'VerticalAlignment','middle',...
          'FontSize',font_size,...
@@ -293,9 +312,9 @@ ytitle=yscale+1; % Studies+1
          'Interpreter','none');
 %   Txt study Summary 2 (Heterogeneity)
     if p_het>=0.001
-        formatSpec='Heterogeneity: Chi^2(%d)=%0.2f, p=%0.3f ; Tau^2=%0.2f, I^2=%0.2f%%';
+        formatSpec='Heterogeneity: Chi^2(%d)=%0.2f, p=%0.3f\nTau^2=%0.2f, I^2=%0.2f%%';
         elseif p_het<0.001
-        formatSpec='Heterogeneity: Chi^2(%d)=%0.2f, p<.%0.0f01 ; Tau^2=%0.2f, I^2=%0.2f%%';
+        formatSpec='Heterogeneity: Chi^2(%d)=%0.2f, p<.%0.0f01\nTau^2=%0.2f, I^2=%0.2f%%';
     end
     text(txt_position_study, 0, sprintf(formatSpec,df,chisq,p_het,tausq,Isq),...
          'HorizontalAlignment','left',...
