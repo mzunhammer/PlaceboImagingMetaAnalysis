@@ -1,57 +1,54 @@
-function ForestPlotter(MetaStats, varargin)
+function ForestPlotter(varargin)
 
-%% Function to create Forest Plots f
+%% Function to create Forest Plots for meta-analysis
 % by Matthias Zunhammer November 2016
-% Function to plot a nifti image with optional overlays in a slice-wise
-% fashion.
-% General form: plot_nii_results(template_img,varargin)
-%
-% 'template_img': a .nii image to plot, required.
+
+% General form: ForestPlotter(MetaStats,varargin)
+% Required arguments:
+% 'MetaStats': a struct containing i by-study meta-analysis-results, as
+% created by withinMetastats.m or betweenMetastats.m
 %
 % Optional arguments:
-% 'overlays': a cell-array with n .nii image paths to overlay on top of
-%                template_img, e.g. {pain_increase.nii,pain_decrease.nii}.
-%             Default: no overlay.
-% 'ov_color': a nx1 cell array of colormaps (e.g.  {gray(128),cool(128)}).
-%             Default: matlab colors
-% 'ov_transparency': a nx1 numberical array of values between 0 and 1 denoting the desired alpha value for each overlay.
-%             Default: matlab colors
-% 'slices': a kx1 array with MNI-coordinates (x,y,or z) to plot relative to the image origin
-%           (from the SPM header): e.g. [-30 -15 0 15 30].
-%           Default: [-30 -15 0 15 30]
-% 'slice_ori': a single integer or kx1 array indicating spatial dimension (orienation) for all images/each slice.
-%                    x=1, y=2, z=3
-%                    >> e.g. 1 for all (Para-)SAGGITAL slices
-%                            2 for all CORONAL slices
-%                            [3 3 3 3 3] for 5 AXIAL slices (5 'slices' required)
-%                            [1 1 2 2 3] for 2 SAGGITAL, 2 CORONAL, and 1
-%                            AXIAL slices (5 'slices' required)
-%                    Default: ALL SAGITAL
-% 'background': Integer or logical indicating if background (must be nans
-% or zeros from template should be shown. 0: remove, 1: show.
-% 'resolution': an integer defining the isometric voxel size. By default this
-%               will be the size of the template img.
-% 'outfilename': a string of chars defining the desired name of the outfile.
-%
-%Example:
-
-
-%Inputs
-%MetaStats: struct containing a within or between subject summary stat for each of the i studies.
 %studyIDtexts: vector with i study labels.
 %outcomelabel: string lableing the x-axis.
-%Type: String indicating whether 'fixed' or 'random' analysis is desired.
+%summarystat=
+%type: String indicating whether 'fixed' or 'random' analysis is desired.
+%fontsize: Double indicating the size of study text.
+%printsize: Integer indicating the desired with of image in mm.
 
-studyIDtexts
-outcomelabel
-type
-fontsize
-printsize
-
-
+%Example:
+% ForestPlotter(stats,studyIDtexts,'NPS-Response (Hedge''s g)','random','g');
 
 
-%% Summarize all studies, weigh by n
+%% Parse optional inputs according to: https://de.mathworks.com/help/matlab/matlab_prog/parse-function-inputs.html
+p = inputParser
+%Check MetaStats 
+addRequired(p,'MetaStats',@isstruct);
+%Check studyIDtexts
+defstudyIDtexts = {};
+addParameter(p,'studyIDtexts',defstudyIDtexts,@iscell)
+%Check outcomelabel
+defOutcomelabel = 'Outcome';
+addParameter(p,'outcomelabel',defOutcomelabel,@isnumeric)
+%Check type
+defType = 'random';
+addParameter(p,'type',defType,@ischar)
+%Check fontsize
+defFontsize=16; % Negative number will later be replaced by no change in resolution
+addParameter(p,'resolution',defFontsize,@isnumeric)
+%Check printsize
+defPrintsize=3000; % default is show background
+addParameter(p,'background',defaultBackground,@isnumeric)
+
+parse(p,varargin{:})
+
+MetaStats=p.Results.MetaStats;
+studyIDtexts=p.Results.studyIDtexts;
+outcomelabel=p.Results.outcomelabel;
+type=p.Results.type;
+resolution=p.Results.resolution;
+background=p.Results.background;
+
 % Summarize standardized means by using the generic inverse-variance method
 
 if strcmp(varargin(1),'mu')
@@ -68,11 +65,12 @@ else
     n=[MetaStats.n]';
 end
 
+%% Summarize all studies, weighted by se_summary_total
 [summary_total,se_summary_total,rel_weight,z,p,CI_lo,CI_hi,chisq,tausq,df,p_het,Isq]=GIVsummary(summary_stat,se_summary_stat,type);
 ci=se_summary_stat.*1.96;
  %% Forest Plot for Standardized Effect Sizes:
 %FIGURE WINDOW
-h_px=3000;
+h_px=resolution;
 fig=figure('Name','Forest Plot',...
         'Position', [0, 0, h_px*2, h_px/sqrt(2)]);% Position: left bottom width heigth;
 hold on

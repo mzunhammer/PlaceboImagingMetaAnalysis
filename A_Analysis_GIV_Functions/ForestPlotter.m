@@ -1,33 +1,65 @@
-function ForestPlotter(MetaStats, varargin)
+function ForestPlotter(MetaStats,varargin)
 
 %% Function to create Forest Plots for meta-analysis
 % by Matthias Zunhammer November 2016
 
 % General form: ForestPlotter(MetaStats,varargin)
-%
+% Required arguments:
 % 'MetaStats': a struct containing i by-study meta-analysis-results, as
 % created by withinMetastats.m or betweenMetastats.m
 %
 % Optional arguments:
-
-
-%Inputs
 %studyIDtexts: vector with i study labels.
 %outcomelabel: string lableing the x-axis.
+%summarystat: string designating the desired outcome ('mu' for mean, 'd' or Cohen's d, 'g' for Hedges' g).
 %type: String indicating whether 'fixed' or 'random' analysis is desired.
 %fontsize: Double indicating the size of study text.
 %printsize: Integer indicating the desired with of image in mm.
 
 %Example:
+% ForestPlotter(stats,studyIDtexts,'NPS-Response (Hedge''s g)','random','g');
 
-%% Summarize all studies, weigh by n
+
+%% Parse optional inputs according to: https://de.mathworks.com/help/matlab/matlab_prog/parse-function-inputs.html
+p = inputParser;
+%Check MetaStats 
+addRequired(p,'MetaStats',@isstruct);
+%Check studyIDtexts
+defstudyIDtexts = {};
+addParameter(p,'studyIDtexts',defstudyIDtexts,@iscell)
+%Check outcomelabel
+defOutcomelabel = 'Outcome';
+addParameter(p,'outcomelabel',defOutcomelabel,@ischar)
+%Check type
+defType = 'random';
+addParameter(p,'type',defType,@ischar)
+%Check type
+defSummarystat = 'g';
+addParameter(p,'summarystat',defSummarystat,@ischar)
+%Check fontsize
+defFontsize=16; % Negative number will later be replaced by no change in resolution
+addParameter(p,'fontsize',defFontsize,@isnumeric)
+%Check printsize
+defPrintsize=3000; % default is show background
+addParameter(p,'printsize',defPrintsize,@isnumeric)
+
+parse(p,MetaStats,varargin{:})
+% Re-format inputs for convenience
+MetaStats=p.Results.MetaStats;
+studyIDtexts=p.Results.studyIDtexts;
+outcomelabel=p.Results.outcomelabel;
+type=p.Results.type;
+summarystat=p.Results.summarystat;
+fontsize=p.Results.fontsize;
+printsize=p.Results.printsize;
+
 % Summarize standardized means by using the generic inverse-variance method
 
-if strcmp(varargin(1),'mu')
+if strcmp(summarystat,'mu')
     summary_stat=[MetaStats.mu]';% Currently uses Hedge's g
     se_summary_stat=[MetaStats.se_mu]'; % Currently uses Hedge's g
     n=[MetaStats.n]';
-elseif strcmp(varargin(1),'d')
+elseif strcmp(summarystat,'d')
     summary_stat=[MetaStats.d]';% Currently uses Hedge's g
     se_summary_stat=[MetaStats.se_d]'; % Currently uses Hedge's g
     n=[MetaStats.n]';
@@ -37,17 +69,18 @@ else
     n=[MetaStats.n]';
 end
 
+%% Summarize all studies, weighted by se_summary_total
 [summary_total,se_summary_total,rel_weight,z,p,CI_lo,CI_hi,chisq,tausq,df,p_het,Isq]=GIVsummary(summary_stat,se_summary_stat,type);
 ci=se_summary_stat.*1.96;
  %% Forest Plot for Standardized Effect Sizes:
 %FIGURE WINDOW
-h_px=3000;
+h_px=printsize;
 fig=figure('Name','Forest Plot',...
         'Position', [0, 0, h_px*2, h_px/sqrt(2)]);% Position: left bottom width heigth;
 hold on
 
 %TEXT POSITION AND SIZE
-font_size=16;
+font_size=fontsize;
 font_name='Arial';
 
 %SIZE OF GRAPH AREA VS TEXT
