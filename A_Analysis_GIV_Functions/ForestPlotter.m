@@ -1,4 +1,4 @@
-function ForestPlotter(MetaStats,studyIDtexts,outcomelabel,type,varargin)
+function ForestPlotter(MetaStats, varargin)
 
 %% Creates summary statistic and Forest Plot
 %Inputs
@@ -6,6 +6,10 @@ function ForestPlotter(MetaStats,studyIDtexts,outcomelabel,type,varargin)
 %studyIDtexts: vector with i study labels.
 %outcomelabel: string lableing the x-axis.
 %Type: String indicating whether 'fixed' or 'random' analysis is desired.
+
+studyIDtexts
+outcomelabel
+type
 
 %% Summarize all studies, weigh by n
 % Summarize standardized means by using the generic inverse-variance method
