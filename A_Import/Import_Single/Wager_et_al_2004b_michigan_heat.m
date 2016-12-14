@@ -31,7 +31,7 @@ for j=1:length(subdir)
     for i=1:size(beta_ID,2)
         %Get filenames in a (subj,con) matrix
         img{j,i} = fullfile(studydir,subdir{j},sprintf('beta_00%0.2d.img', beta_ID(j,i)));
-        sub(j,i)=j; % The subject number (study specific)
+        sub(j,i)=subdir(j); % The subject number (study specific)
         xSpan(j,i)=xSpanRaw(beta_ID(j,i)); % Gets xSpan for betas one at a time
         nImages(j,i)=size(xX.X,1);
     end
@@ -62,7 +62,7 @@ wager_michigan=table(img);
 wager_michigan.imgType=repmat({'fMRI'},size(wager_michigan.img));
 wager_michigan.studyType=repmat({'within'},size(wager_michigan.img));
 wager_michigan.studyID=repmat({'wager04b_michigan'},size(wager_michigan.img));
-wager_michigan.subID=strcat(wager_michigan.studyID,'_',num2str(sub));
+wager_michigan.subID=strcat(wager_michigan.studyID,'_',sub);
 wager_michigan.male=NaN(size(wager_michigan.img));
 wager_michigan.age=NaN(size(wager_michigan.img));
 wager_michigan.healthy=ones(size(wager_michigan.img));

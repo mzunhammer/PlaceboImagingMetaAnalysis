@@ -39,7 +39,7 @@ con_ID=[2;3;4;5;6];
         nImages(j,i)=size(xX.X,1);
         %Get filenames in a (subj,con) matrix
         img{j,i} = fullfile(currpath,sprintf('con_00%0.2d.img', con_ID(i)));
-        sub(j,i)=j; % The subject number (study specific)
+        sub(j,i)=subdir(j); % The subject number (study specific)
         %Build Placebo vector
         if con_ID(i)==3 || con_ID(i)==5
             pla(j,i)=1; % 0= Any Control 1 = Any Placebo  2 = Other
@@ -106,7 +106,7 @@ wager_princeton=table(img);
 wager_princeton.imgType=repmat({'fMRI'},size(wager_princeton.img));
 wager_princeton.studyType=repmat({'within'},size(wager_princeton.img));
 wager_princeton.studyID=repmat({'wager04a_princeton'},size(wager_princeton.img));
-wager_princeton.subID=strcat(wager_princeton.studyID,'_',num2str(sub));
+wager_princeton.subID=strcat(wager_princeton.studyID,'_',sub);
 wager_princeton.male=NaN(size(wager_princeton.img));
 wager_princeton.age=NaN(size(wager_princeton.img));
 wager_princeton.healthy=ones(size(wager_princeton.img));

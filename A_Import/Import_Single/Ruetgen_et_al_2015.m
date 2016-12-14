@@ -13,10 +13,10 @@ img=cellfun(@(x) fullfile(studydir, x),con_img,'UniformOutput',0);              
 
 % Get subjects
 subc=regexp(img,'c(\d\d\d)_con','tokens'); % Make separate IDs for control and placebo group
-subc=[subc{:}];subc=str2double([subc{:}]);
+subc=[subc{:}];subc=strcat('c',[subc{:}]');
 subp=regexp(img,'p(\d\d\d)_con','tokens');
-subp=[subp{:}];subp=str2double([subp{:}])+100;
-sub=[subc,subp]';
+subp=[subp{:}];subp=strcat('p',[subp{:}]');
+sub=[subc;subp];
 
 pla(ismember(sub,subc),1)=0;       % 0= Any Control 1 = Any Placebo 2 = Other
 pla(ismember(sub,subp),1)=1;       % 0= Any Control 1 = Any Placebo 2 = Other
@@ -71,7 +71,7 @@ ruetgen=table(img);
 ruetgen.imgType=repmat({'fMRI'},size(ruetgen.img));
 ruetgen.studyType=repmat({'between'},size(ruetgen.img));
 ruetgen.studyID=repmat({'ruetgen'},size(ruetgen.img));
-ruetgen.subID=strcat(ruetgen.studyID,'_',num2str(sub));
+ruetgen.subID=strcat(ruetgen.studyID,'_',sub);
 ruetgen.male=male;
 ruetgen.age=age;
 ruetgen.healthy=ones(size(ruetgen.img));
