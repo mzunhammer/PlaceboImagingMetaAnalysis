@@ -41,7 +41,7 @@ conditions={...
 'AnticLoPain_Hidden_ExpectationPeriod'};
 
 img=cell(length(subdir),length(beta_ID));
-sub=NaN(length(subdir),length(beta_ID));
+sub=cell(length(subdir),length(beta_ID));
 xSpan=NaN(length(subdir),length(beta_ID));
 nImages=NaN(length(subdir),length(beta_ID));
 cond=cell(length(subdir),length(beta_ID));
@@ -68,7 +68,7 @@ for j=1:length(subdir)
         %Get filenames in a (subj,con) matrix
         img{j,i} = fullfile(studydir,subdir{j},sprintf('swbeta_00%0.2d.img', beta_ID(i)));
         cond(j,i) = conditions(i);
-        sub(j,i)=j; % The subject number (study specific)
+        sub{j,i}=subdir(j); % The subject number (study specific)
         xSpan(j,i)=xSpanRaw(beta_ID(i)); % Gets xSpan for betas one at a time
         nImages(j,i)=size(SPM.xX.X,1);
         temp(j,i)= EXPT.cov_uncentered(j,3);
@@ -162,7 +162,7 @@ atlas=table(img);
 atlas.imgType=repmat({'fMRI'},size(atlas.img));
 atlas.studyType=repmat({'within'},size(atlas.img));
 atlas.studyID=repmat({'atlas'},size(atlas.img));
-atlas.subID=strcat(atlas.studyID,'_',num2str(sub));
+atlas.subID=strcat(atlas.studyID,'_',[sub{:}]')
 atlas.male=ones(size(atlas.img)).*10/21; %male proportion in sample 
 atlas.age=ones(size(atlas.img)).*24.7; %male proportion in sample
 atlas.healthy=ones(size(atlas.img));

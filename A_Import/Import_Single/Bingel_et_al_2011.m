@@ -130,8 +130,7 @@ bingel11.meanBlockDur  =blockLength;
 bingel11.nImages      =nImages; % Images per Participant
 bingel11.xSpan        =xSpan;
 bingel11.xSpan(strcmp(bingel11.subID,'bingel11_14'))=NaN;
-% For Subj14 (10th subject in array) one onset for pain has been entered in
-% duplicate: the x-Vector is flawed.
+% For Subj14 (10th subject in array) one onset for pain has been entered in duplicate: the x-Vector is flawed.
 bingel11.conSpan      =conSpan;
 %% Save
 outpath=fullfile(basedir,'Bingel_et_al_2011.mat')
