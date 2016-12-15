@@ -41,20 +41,3 @@ plot_nii_results(t,...
                  'slice_ori',[1,2,3],...
                  'background',0,...
                  'outfilename',['montage_',fname]); %Scalar or array designating slice orientation (x=1,y=2,z=3)
-
-
-%% For visually checking single-images with SPM's check_reg
-%Get list of the first image of each study for exploration 
-% for i=1:length(studies)
-%    imagei=find(strcmp(df.studyID,studies(i)));
-%    firstimagei(i)=imagei(1);
-% end
-% images=fullfile(datapath,df.img(firstimagei));
-% images_hdr=strrep(images,'.img','.hdr');
-% for i=1:length(images)
-% [fpath,filename,ext]=fileparts(images{i});
-% r_images{i,1}=fullfile(fpath,['r',filename,ext])
-% end
-% %Repeat for visually checking registration of first images with SPM's MNI
-% %T1-template
-% spm_check_registration(images{17},r_images{17},'/Users/matthiaszunhammer/Documents/MATLAB/spm8/canonical/single_subj_T1.nii')
