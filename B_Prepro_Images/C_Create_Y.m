@@ -2,7 +2,7 @@ clear
 
 % Setup: Load df with paths and variables
 datapath='../../Datasets/';
-load(fullfile(datapath,'AllData_w_NPS_MHE.mat'));
+load(fullfile(datapath,'AllData.mat'));
 
 %% Step 1: Pre-select volumes
 % limiting the amount of data is key for analysis
