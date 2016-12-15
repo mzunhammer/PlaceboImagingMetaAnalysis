@@ -1,6 +1,5 @@
 clear
-cd /Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis;
-datadir='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Datasets/';
+datadir='../Datasets/';
 
 % 'Atlas_et_al_2012_NPS'
 % 'Bingel_et_al_2006_NPS'
@@ -47,7 +46,6 @@ runstudies={...
 };
 
 tic
-addpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/CAN/'))
 for i=1:length(runstudies)
 %Load table into a struct
 varload=load(strcat(datadir,runstudies{i},'.mat'))
@@ -58,7 +56,7 @@ df=varload.(currtablename{:});
 
 % Compute MHE (The CAN Toolbox must be added to path!!!!)
 all_imgs= df.img;
-results=apply_zun(strcat(datadir, all_imgs));
+results=apply_patternmask(strcat(datadir, all_imgs),'b_Weights_for_PCA_469_y_temp_x.nii');
 df.MHEraw=[results{:}]';
 df.MHEcorrected=nps_rescale(df.MHEraw,df.voxelVolMat,df.xSpan,df.conSpan);
 
@@ -69,4 +67,3 @@ eval(['save([datadir,runstudies{i},''_MHE.mat''],''',currtablename{1},''')'])
 
 toc/60, 'Minutes'
 end
-rmpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/CAN/'))

@@ -2,10 +2,10 @@
 clear
 
 % Setup: Load df with paths and variables
-datapath='/Volumes/Transcend/Boulder_Essen/Datasets/';
+datapath='./Datasets/';
 tic
 load(fullfile(datapath,'dfMaskedBasicImg.mat'));
-cd '/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/C_Exploratory_Analyses/A_Check_Image_Alignment'
+outpath='/C_Exploratory_Analyses/A_Check_Image_Alignment/'
 
 outfile='Check_coverage_all_images_raw.nii';
 
@@ -13,14 +13,14 @@ outfile='Check_coverage_all_images_raw.nii';
 %test_images=df.img
 
 % For preparing a mask with the k'th image of each participant
-subs=unique(df.subID)
- for i=1:length(subs)
-    imagei=find(strcmp(df.subID,subs(i)));
-    firstimagei(i)=imagei(1);
- end
-test_images=df.img(firstimagei);
+% subs=unique(df.subID)
+%  for i=1:length(subs)
+%     imagei=find(strcmp(df.subID,subs(i)));
+%     firstimagei(i)=imagei(1);
+%  end
+% test_images=df.img(firstimagei);
 
-[p,f,e]=cellfun(@(x) fileparts(x),test_images,'UniformOutput',0);
+[p,f,e]=cellfun(@(x) fileparts(x),df.img,'UniformOutput',0);
 rfilenames=fullfile(datapath,p,strcat(f,e)); % Un-masked version
 %rfilenames=fullfile(datapath,p,strcat('r',f,e)); % Masked version
 volume_coverage(rfilenames,outfile)

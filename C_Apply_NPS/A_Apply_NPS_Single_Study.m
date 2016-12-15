@@ -1,6 +1,6 @@
 clear
-cd /Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis;
-datadir='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Datasets/';
+datadir='../Datasets/';
+
 % 'Atlas_et_al_2012'
 % 'Bingel_et_al_2006'
 % 'Bingel_et_al_2011'
@@ -46,7 +46,6 @@ runstudies={...
 };
 
 tic
-addpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/CAN/'))
 for i=1:length(runstudies)
 %Load table into a struct
 varload=load(strcat(datadir,runstudies{i},'.mat'));
@@ -57,7 +56,7 @@ df=varload.(currtablename{:});
 
 % Compute NPS (The CAN Toolbox must be added to path!!!!)
 all_imgs= df.img;
-results=apply_nps(strcat(datadir, all_imgs));
+results=apply_patternmask(strcat(datadir, all_imgs),'weights_NSF_grouppred_cvpcr.img');
 df.NPSraw=[results{:}]';
 df.NPScorrected=nps_rescale(df.NPSraw,df.voxelVolMat,df.xSpan,df.conSpan);
 
@@ -68,4 +67,3 @@ eval(['save([datadir,runstudies{i},''_NPS.mat''],''',currtablename{1},''')']);
 
 toc/60, 'Minutes'
 end
-rmpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/CAN/'))

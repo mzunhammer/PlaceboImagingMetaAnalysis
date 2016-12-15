@@ -1,6 +1,5 @@
 clear
-cd /Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis;
-datadir='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Datasets/';
+datadir='../Datasets/';
 
 % 'Atlas_et_al_2012_NPS_MHE'
 % 'Bingel_et_al_2006_NPS_MHE'
@@ -47,9 +46,6 @@ runstudies={...
 };
 
 tic
-addpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/CAN/'))
-addpath(genpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/B_Apply_NPS'))
-
 for i=1:length(runstudies)
 %Load table into a struct
 varload=load(strcat(datadir,runstudies{i},'.mat'))
@@ -63,11 +59,11 @@ all_imgs= df.img;
 
 %mask = '/Users/matthiaszunhammer/Documents/MATLAB/zun_pain_pattern/b_Weights_for_PCA_469_y_temp_x.nii';
 
-grey=apply_brainmask(strcat(datadir,all_imgs),'/Users/matthiaszunhammer/Documents/MATLAB/spm8/apriori/grey.nii');
-white=apply_brainmask(strcat(datadir,all_imgs),'/Users/matthiaszunhammer/Documents/MATLAB/spm8/apriori/white.nii');
-csf=apply_brainmask(strcat(datadir,all_imgs),'/Users/matthiaszunhammer/Documents/MATLAB/spm8/apriori/csf.nii');
-brain=apply_brainmask(strcat(datadir, all_imgs),'/Users/matthiaszunhammer/Documents/MATLAB/spm8/apriori/brainmask.nii');
-nobrain=apply_brainmask(strcat(datadir, all_imgs),'/Users/matthiaszunhammer/Documents/MATLAB/spm8/apriori/inverted_brainmask.nii');
+grey=apply_patternmask(strcat(datadir,all_imgs),'./B_Apply_NPS/pattern_masks/grey.nii');
+white=apply_patternmask(strcat(datadir,all_imgs),'./B_Apply_NPS/pattern_masks/white.nii');
+csf=apply_patternmask(strcat(datadir,all_imgs),'./B_Apply_NPS/pattern_masks/csf.nii');
+brain=apply_patternmask(strcat(datadir, all_imgs),'./B_Apply_NPS/pattern_masks/brainmask.nii');
+nobrain=apply_patternmask(strcat(datadir, all_imgs),'./B_Apply_NPS/pattern_masks/inverted_brainmask.nii');
 
 df.grey=[grey{:}]';
 df.white=[white{:}]';
@@ -82,4 +78,3 @@ eval(['save([datadir,runstudies{i},''_NOBRAIN.mat''],''',currtablename{1},''')']
 
 toc/60, 'Minutes'
 end
-rmpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/CAN/'))

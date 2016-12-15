@@ -1,8 +1,6 @@
 %% Set working environment
 clear
-basedir = '/Users/matthiaszunhammer/Dropbox/boulder_essen/Datasets/';
-cd(basedir)
-
+datadir = '../Datasets/';
 
 %% Predefine empty variables and data table
 img=cell(1,1);                %path of image relative to basedir
@@ -87,26 +85,27 @@ brain,...
 nobrain);
 
 %% Import all study df's
-load 'Atlas_et_al_2012_NPS_MHE_NOBRAIN.mat'
-load 'Bingel_et_al_2006_NPS_MHE_NOBRAIN.mat'
-load 'Bingel_et_al_2011_NPS_MHE_NOBRAIN.mat'
-load 'Choi_et_al_2013_NPS_MHE_NOBRAIN.mat'
-load 'Eippert_et_al_2009_NPS_MHE_NOBRAIN.mat'
-load 'Ellingsen_et_al_2013_NPS_MHE_NOBRAIN.mat'
-load 'Elsenbruch_et_al_2012_NPS_MHE_NOBRAIN.mat'
-load 'Freeman_et_al_2015_NPS_MHE_NOBRAIN.mat'
-load 'Geuter_et_al_2013_NPS_MHE_NOBRAIN.mat'
-load 'Huber_et_al_2013_NPS_MHE_NOBRAIN.mat'
-load 'Kessner_et_al_201314_NPS_MHE_NOBRAIN.mat'
-load 'Kong_et_al_2006_NPS_MHE_NOBRAIN.mat'
-load 'Kong_et_al_2009_NPS_MHE_NOBRAIN.mat'
-load 'Ruetgen_et_al_2015_NPS_MHE_NOBRAIN.mat'
-load 'Schenk_et_al_2014_NPS_MHE_NOBRAIN.mat'
-load 'Theysohn_et_al_2014_NPS_MHE_NOBRAIN.mat'
-load 'Wager_at_al_2004a_princeton_shock_NPS_MHE_NOBRAIN.mat'
-load 'Wager_et_al_2004b_michigan_heat_NPS_MHE_NOBRAIN.mat'
-load 'Wrobel_et_al_2014_NPS_MHE_NOBRAIN.mat'
-load 'Zeidan_et_al_2015_NPS_MHE_NOBRAIN.mat'
+load([datadir, 'Atlas_et_al_2012_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Bingel_et_al_2006_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Bingel_et_al_2011_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Choi_et_al_2013_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Eippert_et_al_2009_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Ellingsen_et_al_2013_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Elsenbruch_et_al_2012_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Freeman_et_al_2015_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Geuter_et_al_2013_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Huber_et_al_2013_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Kessner_et_al_201314_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Kong_et_al_2006_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Kong_et_al_2009_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Ruetgen_et_al_2015_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Schenk_et_al_2014_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Theysohn_et_al_2014_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Wager_at_al_2004a_princeton_shock_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Wager_et_al_2004b_michigan_heat_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Wrobel_et_al_2014_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Zeidan_et_al_2015_NPS_MHE_NOBRAIN.mat'])
+
 
 
 %% Combine the studies

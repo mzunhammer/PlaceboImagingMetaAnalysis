@@ -1,8 +1,6 @@
 %% Set working environment
 clear
-basedir = '/Users/matthiaszunhammer/Dropbox/boulder_essen/Datasets/';
-cd(basedir)
-
+datadir = '../../Datasets/';
 
 %% Predefine empty variables and data table
 img=cell(1,1);                %path of image relative to basedir
@@ -37,6 +35,13 @@ stimDur=NaN(1,1);             %actual stimulus duration(from paper)
 nImages=NaN(1,1);             %number of images per session (on a by-condition&subject basis based on SPMs)
 xSpan=NaN(1,1);               %max-min predictor weight given by SPM when calculating the design matrix... varies according to block length due to HRS-convolution
 conSpan=NaN(1,1);             %in case con-images are used: difference in predictor weights between conditions
+NPSraw=NaN(1,1);             %in case con-images are used: difference in predictor weights between conditions
+NPScorrected=NaN(1,1);             %in case con-images are used: difference in predictor weights between conditions
+grey=NaN(1,1);
+white=NaN(1,1);
+csf=NaN(1,1);
+brain=NaN(1,1);
+nobrain=NaN(1,1);
 
 % Create empty dataframe
 df=table(img,...
@@ -70,31 +75,40 @@ meanBlockDur,...
 stimDur,...
 nImages,...
 xSpan,...
-conSpan);
+conSpan,...
+NPSraw,...
+NPScorrected,...
+grey,...
+white,...
+csf,...
+brain,...
+nobrain);
 
 %% Import all study df's
-load 'Bingel_et_al_2006.mat'
-load 'Bingel_et_al_2011.mat'
-load 'Choi_et_al_2013.mat'
-load 'Eippert_et_al_2009.mat'
-load 'Ellingsen_et_al_2013'
-load 'Elsenbruch_et_al_2012.mat'
-load 'Freeman_et_al_2015.mat'
-load 'Geuter_et_al_2013.mat'
-load 'Huber_et_al_2013.mat'
-load 'Kessner_et_al_201314.mat'
-load 'Kong_et_al_2006.mat'
-load 'Kong_et_al_2009.mat'
-load 'Ruetgen_et_al_2015.mat'
-load 'Schenk_et_al_2014'
-load 'Theysohn_et_al_2014.mat'
-load 'Wager_at_al_2004a_princeton_shock.mat'
-load 'Wager_et_al_2004b_michigan_heat.mat'
-load 'Wrobel_et_al_2014.mat'
-load 'Zeidan_et_al_2015'
+load([datadir, 'Atlas_et_al_2012.mat'])
+load([datadir, 'Bingel_et_al_2006.mat'])
+load([datadir, 'Bingel_et_al_2011.mat'])
+load([datadir, 'Choi_et_al_2013.mat'])
+load([datadir, 'Eippert_et_al_2009.mat'])
+load([datadir, 'Ellingsen_et_al_2013.mat'])
+load([datadir, 'Elsenbruch_et_al_2012.mat'])
+load([datadir, 'Freeman_et_al_2015.mat'])
+load([datadir, 'Geuter_et_al_2013.mat'])
+load([datadir, 'Huber_et_al_2013.mat'])
+load([datadir, 'Kessner_et_al_201314.mat'])
+load([datadir, 'Kong_et_al_2006.mat'])
+load([datadir, 'Kong_et_al_2009.mat'])
+load([datadir, 'Ruetgen_et_al_2015.mat'])
+load([datadir, 'Schenk_et_al_2014.mat'])
+load([datadir, 'Theysohn_et_al_2014.mat'])
+load([datadir, 'Wager_at_al_2004a_princeton_shock.mat'])
+load([datadir, 'Wager_et_al_2004b_michigan_heat.mat'])
+load([datadir, 'Wrobel_et_al_2014.mat'])
+load([datadir, 'Zeidan_et_al_2015.mat'])
+
 
 
 %% Combine the studies
-df=[bingel06;bingel11;choi;eippert;ellingsen;elsenb;freeman;geuter;huber;kessner;kong06;kong09;ruetgen;they;wager_princeton;wager_michigan;wrobel;zeidan];
+df=[atlas;bingel06;bingel11;choi;eippert;ellingsen;elsenb;freeman;geuter;huber;kessner;kong06;kong09;ruetgen;schenk;they;wager_princeton;wager_michigan;wrobel;zeidan];
 %% Save all studies as df
-save AllData.mat df
+save(fullfile(datadir,'AllData.mat'), 'df')

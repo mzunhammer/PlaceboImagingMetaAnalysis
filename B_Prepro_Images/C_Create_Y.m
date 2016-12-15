@@ -1,18 +1,15 @@
 clear
 
 % Setup: Load df with paths and variables
-basepath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/D_Meta_Analysis';
-cd(basepath)
-dfpath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Datasets';
-load(fullfile(dfpath,'AllData_w_NPS_MHE.mat'));
-datapath='/Volumes/Transcend/Boulder_Essen/Datasets/';
+datapath='../../Datasets/';
+load(fullfile(datapath,'AllData_w_NPS_MHE.mat'));
 
 %% Step 1: Pre-select volumes
 % limiting the amount of data is key for analysis
 
 % function reduceddf = dfselect(df,'PainVsNoPain','PainPlaceboControl')
 
-%Basic
+%Inclusive
 
 %'Atlas'
 idf(:,1)    =(strcmp(df.studyID,'atlas')&~cellfun(@isempty,regexp(df.cond,'StimHiPain_Open_Stimulation')));
@@ -29,10 +26,17 @@ idf(:,end+1)=(strcmp(df.studyID,'bingel11')&strcmp(df.cond,'pain_remi_no_exp'));
 idf(:,end+1)=(strcmp(df.studyID,'bingel11')&strcmp(df.cond,'pain_remi_pos_exp'));
 
 idf(:,end+1)=(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp1_control_pain_beta.*')));
+idf(:,end+1)=(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp1_1potent_pain_beta.*')));
 idf(:,end+1)=(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp1_100potent_pain_beta.*')));
 
+idf(:,end+1)=(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: control_saline')));
 idf(:,end+1)=(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: control_saline')));
+idf(:,end+1)=(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: placebo_saline')));
 idf(:,end+1)=(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: placebo_saline')));
+idf(:,end+1)=(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: control_naloxone')));
+idf(:,end+1)=(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: control_naloxone')));
+idf(:,end+1)=(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: placebo_naloxone')));
+idf(:,end+1)=(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: placebo_naloxone')));
 
 idf(:,end+1)=(strcmp(df.studyID,'ellingsen')&~cellfun(@isempty,regexp(df.cond,'Painful_touch_control')));
 idf(:,end+1)=(strcmp(df.studyID,'ellingsen')&~cellfun(@isempty,regexp(df.cond,'Painful_touch_placebo')));
@@ -43,6 +47,12 @@ idf(:,end+1)=(strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'
 idf(:,end+1)=(strcmp(df.studyID,'freeman')&~cellfun(@isempty,regexp(df.cond,'pain_post_control_high_pain')));
 idf(:,end+1)=(strcmp(df.studyID,'freeman')&~cellfun(@isempty,regexp(df.cond,'pain_post_placebo_high_pain')));
 
+idf(:,end+1)=(strcmp(df.studyID,'geuter')&strcmp(df.cond,'early_pain_control_weak'));
+idf(:,end+1)=(strcmp(df.studyID,'geuter')&strcmp(df.cond,'early_pain_placebo_weak'));
+idf(:,end+1)=(strcmp(df.studyID,'geuter')&strcmp(df.cond,'early_pain_control_strong'));
+idf(:,end+1)=(strcmp(df.studyID,'geuter')&strcmp(df.cond,'early_pain_placebo_strong'));
+idf(:,end+1)=(strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_control_weak'));
+idf(:,end+1)=(strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_placebo_weak'));
 idf(:,end+1)=(strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_control_strong'));
 idf(:,end+1)=(strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_placebo_strong'));
 
@@ -61,8 +71,10 @@ idf(:,end+1)=(strcmp(df.studyID,'kong09')&strcmp(df.cond,'pain_post_placebo'));
 idf(:,end+1)=(strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_Pain_Control_Group'));
 idf(:,end+1)=(strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_Pain_Placebo_Group'));
 
-idf(:,end+1)=(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocain_control'));
-idf(:,end+1)=(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocain_placebo'));
+idf(:,end+1)=(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_control'));
+idf(:,end+1)=(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_placebo'));
+idf(:,end+1)=(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocaine_control'));
+idf(:,end+1)=(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocaine_placebo'));
 
 idf(:,end+1)=(strcmp(df.studyID,'theysohn')&strcmp(df.cond,'control_pain'));
 idf(:,end+1)=(strcmp(df.studyID,'theysohn')&strcmp(df.cond,'placebo_pain'));
@@ -73,8 +85,14 @@ idf(:,end+1)=(strcmp(df.studyID,'wager_michigan')&strcmp(df.cond,'placebo_pain')
 idf(:,end+1)=(strcmp(df.studyID,'wager_princeton')&strcmp(df.cond,'(intense-none)control-placebo'));
 idf(:,end+1)=(strcmp(df.studyID,'wager_princeton')&strcmp(df.cond,'intense-none'));
 
+idf(:,end+1)=(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'early_pain_control_saline')));
+idf(:,end+1)=(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'early_pain_placebo_saline')));
 idf(:,end+1)=(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'late_pain_control_saline')));
 idf(:,end+1)=(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'late_pain_placebo_saline')));
+idf(:,end+1)=(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'early_pain_control_haldol')));
+idf(:,end+1)=(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'early_pain_placebo_haldol')));
+idf(:,end+1)=(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'late_pain_control_haldol')));
+idf(:,end+1)=(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'late_pain_placebo_haldol')));
 
 idf(:,end+1)=(strcmp(df.studyID,'zeidan')&strcmp(df.cond,'Pla>Control within painful series'));
 idf(:,end+1)=(strcmp(df.studyID,'zeidan')&strcmp(df.cond,'Pain>NoPain controlling for placebo&interaction'));
@@ -88,7 +106,7 @@ df=df(idf,:);
 %% USE THE IMAGES (r attached to name) THAT WERE EQUALZED IN DIMENSIONS WITH A_Equalize_Image_Size_and_Mask.m
 
 % Load mask
-maskheader=spm_vol('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Datasets/brainmask_logical.nii,1');
+maskheader=spm_vol('../C_Apply_NPS/pattern_masks/brainmask_logical.nii,1');
 mask=logical(spm_read_vols(maskheader));
 masking=mask(:);
 
@@ -124,4 +142,4 @@ Y(isnan(Y))=0;
 %Y=zscore(Y,[ ],2);
 %toc/60
 
-save(fullfile(datapath,'dfMaskedBasicImg'),'df','Y','-v7.3');
+save(fullfile(datapath,'dfMaskedInclusiveImg'),'df','Y','-v7.3');

@@ -1,12 +1,8 @@
 clear
 
 % Setup: Load df with paths and variables
-basepath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/D_Meta_Analysis';
-cd(basepath)
-dfpath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Datasets';
-load(fullfile(dfpath,'AllData_w_NPS_MHE.mat'));
-datapath='/Volumes/Transcend/Boulder_Essen/Datasets/';
-
+datapath='../../Datasets';
+load(fullfile(datapath,'AllData.mat'));
 %% Step 1: Pre-select volumes
 % limiting the amount of data is key for analysis
 

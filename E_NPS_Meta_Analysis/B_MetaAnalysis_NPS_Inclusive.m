@@ -14,7 +14,7 @@
 % Kessner: None
 % Kong06: High + Low Pain
 % Kong09: None
-% Rütgen: None
+% R?tgen: None
 % Schenk: No Lidocaine & Lidocaine
 % Theysohn: None
 % Wager06a: None
@@ -304,7 +304,7 @@ con_rating=df((strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_Pain_Control_Gr
 pla_rating=df((strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_Pain_Placebo_Group')),'rating');
 
 % BETWEEN SUBJECT DESIGN... no within study differences available, so all
-% participants are taken as respondes (Rütgen pre-selected subjects
+% participants are taken as respondes (R?tgen pre-selected subjects
 % according to a test-session)
 %rating_diff=con_rating{:,1}-pla_rating{:,1};
 %responders=rating_diff>0;
@@ -314,15 +314,15 @@ i=find(strcmp(studies,'ruetgen'));
 stats(i)=betweenMetastats(placebo{:,1},control{:,1});
 
 %'Schenk'
-control=mean([df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocain_control')),'NPScorrected'},...
-              df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocain_control')),'NPScorrected'}],2);
-placebo=mean([df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocain_placebo')),'NPScorrected'},...
-              df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocain_placebo')),'NPScorrected'}],2);
+control=mean([df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_control')),'NPScorrected'},...
+              df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocaine_control')),'NPScorrected'}],2);
+placebo=mean([df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_placebo')),'NPScorrected'},...
+              df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocaine_placebo')),'NPScorrected'}],2);
 
-con_rating=mean([df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocain_control')),'rating'},...
-             df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocain_control')),'rating'}],2);
-pla_rating=mean([df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocain_placebo')),'rating'},...
-              df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocain_placebo')),'rating'}],2);
+con_rating=mean([df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_control')),'rating'},...
+             df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocaine_control')),'rating'}],2);
+pla_rating=mean([df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_placebo')),'rating'},...
+              df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocaine_placebo')),'rating'}],2);
 rating_diff=con_rating-pla_rating;
 responders=rating_diff>0;
 
