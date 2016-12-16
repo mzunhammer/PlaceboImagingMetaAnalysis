@@ -1,153 +1,53 @@
+#### TODO #####
+– Re-run BRAINMASKS overnight
+– Re-run exploratory, add "Print relevant results" to scripts
+– Complete "Run All" script
+- Add mean rating results
+– Final re-assessment of outliers
+– Complete "Responder" analysis
+– Complete "Auxiliary" analyses
 
-Analysis decisions:
+
+#### OPEN, DISCUSS WITH TOR & ULRIKE
 – Anthony Jone's and the last Remifentanil-Data are needed URGENTLY.
-– For the Wager studies only rating differences are available. Since these were acquired within-subject, within-subject-correlations have to be imputed 
-– Single data-points for placebo-control cannot be plotted for between-subject studies...
-– NPS values (pain conditions only) for Freeman and Bingel'06 show really leptokurtic ("outlier prone") distributions (Kurtosis >7)... wrobel (>6), kong06 and choi (>5) also might be worth a look.
-The negative placebo-effect of the bingel-study is partly driven by an outlier...
-
-– Discuss Choi et al.:
- 	– NPS activation good (pain> no pain, control>placebo, also shows lower-NPS-during-placebo-anticipation trend)
- 	– PROBLEM: Seemingly, separate GLMs were performed for each of the three experimental conditions for each session... brain images represent activation vs baseline+all other conditions. Comparable but a waste of power.
- 	– PROBLEM: Evidence for artifacts (stripes, strong, large activation blobs near edge of brain)
- 	– PROBLEM: Data for two sessions (300 images *TR=3= 15 min) per participant... the paper only mentions only first session of 15 mins... analyze second session? Pro: Higher Power, Con: Unpublished
- 	– PROBLEM: (partly solved) Standardized images larger than brainmask (Functional2Standard used to normalize fsl images. Incomplete BET may lead to "residual scull" >> no problem then, alignment should be fine.)
- 
-– Discuss how to handle existing "baseline" data:
-	–Pre-treatment baselines are available for: Bingel11, Kong06, Kong09
-	–No-pain baselines are available for: Ellingsen, Rütgen, Zeidan
-	–Special: Extra "treatment effect"basline is avaliable: Kessner
-Solution a) Analyze only Pain_Placebo vs Pain_Control. Pro: Easy to select, no computational problems, images/contrasts are comparable across all between and within-studies. Con: Discarding data means less power.
-Solution b) Build contrasts against baselines where possible. Pro: More power for studies above. Con: Contrasts may not be comparable across all between and within-studies anymore. Contrasted NPS results often do not correlate positively within subjects anymore >> within-subject analysis may be invalid.
-I would feel better not including the baseline data.
-
-–Excluded Participants:
-	bingel11_14:
-	% For Subj14 of the Bingel Remifentanil study the one onset for the 4th pain stimulus was entered in
-	% duplicate: the x-Vector is flawed.
-
-– Discuss how to handle within-subject studies where only contrast placebo>control images are available...
-in this case we cannot produce a standardized measure of effect/error without imputing (guessing) a within-subject correlating.
-I would recommend using the mean correlation found in all other studies
-
+– Outlier handling
 Publication decisions:
 – What is the target journal?
 	– Nature neuroscience
 	– Neuron
 	– Plos Biology
 	– PNAS
-	
 	– Neuroimage
 	– HBM
 	– PAIN
-
 Further Directions:
 – Ask Tor for placebo-prediction mask(s). With the pipeline at hand, making Forest Plots for placebo-predictor would be a matter of minutes.
 – Ask Tor/Ulrike whether we should ask collaborators if they agree to share data with one-another via OSF
-– Initiate symposium/meeting at a conference next year.
+– Re-Analysis price
 
-
-
-
-
-
-ANALYSIS:
-
-##### CHECKS: ######
-
-– Check for irregularities/errors in raw images:
-	X Check for N of NaNs per study/condition
-		– Kessner: One Participant with increased number of NaNs
-		– Wager Princeton: Three Participants with increased (?) number of NaNs
-		– Wrobel: One Participant with increased number of NaNs in haldol group
-	X Check for mean signal per study/condition
-	    – Choi: One Participant with decreased Mean Signal
-	    – Bingel: One Participant with increased/decreased Mean Signal
-		– Wager Princeton: Two Participants with increased (?) Mean Signal
-		– Wrobel: One Participant with increased Mean Signal in haldol group
-	X Check for IQR per study/condition
-		– Huber: VEERY Tailed distribution of IQRs (2-5 Participants with with increased IQR)
-		– Bingel: Two to three paticipants with increased IQR
-		– Choi: One Participant with decreased IQR
-		– Eippert: ~3 Participants with with increased IQR
-		– Huber: VEERY Tailed distribution of IQRs (~5 Participants with with increased IQR)
-		– Kong06: One Participant with with increased IQR
-	    – Kong09: One Participant with with increased IQR
-		– Wager Michigan: One Participants with increased IQR
-		– Wrobel: One Participant with increased IQR in haldol group
-  	    – Final Raw-data comparisons df vs raw data for every study and variable
-
-ToDo Analysis:
-
-NPS Meta-Analysis Anticipation: In studies with anticipation phase, placebo reduces (the already low) NPS activity...
-
-SPM Analysis
-
-##### RESULTS: ######
-– Create tables + flowchart of screened/invited/included studies
-
-Graph Descriptives: Mean age, Mean sex, Mean pain level
-
-Graph Descriptives – Stacked bar graphs: Within/Between, Field Strength, Imaging type, Original Analysis software (SPM, fsl), Pain Stimulus type, Placebo Type
-
-
-NOT DONE: NPS meta-analysis
-– Look for meta-analysis tools
-– Get tool from Cochrane, check calculation for two studies
-– Get somebody with meta-analysis expertise to doublecheck
-
-
-NOT DONE: Create SPM-maps for pain and placebo
-	– SPM-analysis:
-	LM:
-	– Random Effect: Study
-	>> First level
-	– y= single-subject beta signal
-	X
-	– Factor: Placebo (Placebo vs Control)
-	– Factor: Stimulus intensity?
-	– Factor: Rating?
-	– Factor: Rating difference?
-	– Factor: Gender
-	– Factor: Age
-	>> Second level
-	– y= single-study beta signal
-	– Factor: Left/Right stimulation
-	– Factor: Heat/Visceral/Electric/Laser stimulation
-	– Voxel size/TR/TE
-
-
-#### ToDo Manuscript ####
-– Intro:
-What placebo analgesia can do
-What placebo analgesia usually does
-The ingredients of placebo effects
-	- How to concoct a strong (and deep) placebo treatment
-	- Reinforcement: Schafer et al.
-	- What is reinforced? Concepts: Jepma et al.
-	- Precise, plausible information: Koban et al.
-	- Placebo effects across domains and disorders
-	– Placebo effects on sensory vs. decision processes
-
-– Methods:
-
-– Results:
-Document analysis in parallel
-
-– Discussion/Conclusion
-
-– Abstract
-
-##### ToDo Collaborators: #####
-
-– Collect Watson's, El-Deredy's and Anthony Johnson's data
-
+#### ARCHIVED:####:
+– For the Wager studies only rating differences are available. Since these were acquired within-subject, within-subject-correlations have to be imputed 
+– Single data-points for placebo-control cannot be plotted for between-subject studies...
+– NPS values (pain conditions only) for Freeman and Bingel'06 show really leptokurtic ("outlier prone") distributions (Kurtosis >7)... wrobel (>6), kong06 and choi (>5) also might be worth a look.
+– The negative placebo-effect of the bingel-study is partly driven by an outlier...
+– Discuss Choi et al.:
+ 	– NPS activation good (pain> no pain, control>placebo, also shows lower-NPS-during-placebo-anticipation trend)
+ 	– PROBLEM: Seemingly, separate GLMs were performed for each of the three experimental conditions for each session... brain images represent activation vs baseline+all other conditions. Comparable but a waste of power.
+ 	– PROBLEM: Evidence for artifacts (stripes, strong, large activation blobs near edge of brain)
+ 	– PROBLEM: Data for two sessions (300 images *TR=3= 15 min) per participant... the paper only mentions only first session of 15 mins... analyze second session? Pro: Higher Power, Con: Unpublished
+ 	– PROBLEM: (partly solved) Standardized images larger than brainmask (Functional2Standard used to normalize fsl images. Incomplete BET may lead to "residual scull" >> no problem then, alignment should be fine.)
+– Discuss how to handle existing "baseline" data:
+	–Pre-treatment baselines are available for: Bingel11, Kong06, Kong09
+	–No-pain baselines are available for: Ellingsen, Rütgen, Zeidan
+	–Special: Extra "treatment effect"basline is avaliable: Kessner
+Solution a) YES: Analyze only Pain_Placebo vs Pain_Control. Pro: Easy to select, no computational problems, images/contrasts are comparable across all between and within-studies. Con: Discarding data means less power.
+NO: Build contrasts against baselines where possible. Pro: More power for studies above. Con: Contrasts may not be comparable across all between and within-studies anymore. Contrasted NPS results often do not correlate positively within subjects anymore >> within-subject analysis may be invalid.
+I would feel better not including the baseline data.
 – Solve: Missing variables Bingel 2006:
 	- gender
 	- age
-
 – Ask Elsenbruch for anticipation data (betas 1 and 5)
-– Contact KONG: NPS scaling for kong06, kong09, freeman
+– Ask KONG: SPMs for NPS scaling for kong06, kong09, freeman
 >> Especially the contrast in freeman et al. seems to be on a completely different scale than the simple-contrast images
 – Solve: Missing variables Kong 2009:
 	- Age
@@ -156,11 +56,8 @@ Document analysis in parallel
 	- stimInt: Stimulus Intensities currently missing
 	– Anticipation data
 
-###### ToDo PROTOCOL update #######
-	– Include analysis anticipation periods
-	– Include NPS validation
-	– Include inclusion procedures for re-analysed data-sets (chosen a-priori together with authors)
-	– Include averaging procedures for data-sets where pain regressor was was modeled with a parametric modulator (e.g. to regress out time, stimulus intensity or ratings)
-	– Data-collection deadline, date for end-of-study updated (July 1st 2017)
+
+
+
 
 
