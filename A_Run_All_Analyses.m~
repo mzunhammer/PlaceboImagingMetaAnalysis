@@ -52,7 +52,7 @@ run('./D_Exploratory_Analyses/A_Check_Image_Alignment/C_Check_Coverage_NPS.m')
 % Study-level: Plot relative signal intensities for white/gray, csf/gray, nobrain/brain (for painful images)
 run('./D_Exploratory_Analyses/B_Outlier_Search/A_by_study_tissue_signal_outlier_detection.m') 
 % Subject-level (within studies): Plot relative signal intensities for white/gray, csf/gray, nobrain/brain (for painful images)
-run('./D_Exploratory_Analyses/B_Outlier_Search/B_by_subject_tissue_signal_outlier_detection.m') 
+run('./D_Exploratory_Analyses/C_by_subject_tissue_signal_outlier_detection.m') 
 % File in which the excluded subjects (for responder analysis) are defined
 run('./D_Exploratory_Analyses/D_Mark_Excluded_Subjects.m') 
 

@@ -1,10 +1,9 @@
 clear
 
 %% Load df_pain
-datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Datasets/';
-cd(datapath)
-df_path='AllData_w_NPS_MHE_NOBRAIN_checks.mat';
-load(df_path);
+datapath='../../../Datasets/';
+df_path='AllData_w_NPS_MHE_NOBRAIN.mat';
+load(fullfile(datapath,df_path));
 
 %Variables to be used for outlier prediction
 img_check_vars={'grey','white','csf','brain','nobrain'}; %  select variables for which mahal should be computed
@@ -27,7 +26,7 @@ df_by_subID.nobrain_by_brain=df_by_subID.mean_nobrain./df_by_subID.mean_brain;
 tomahal={'white_by_gray','csf_by_gray','nobrain_by_brain'}; 
 % Mahalanobi's distance (D) follows a chi-square distribution.
 % Calculate outlier-threshold as value of D that is less likely than 1:100
-% (D was calculated by-study and by-condition... since all studies except rütgen et al had <100 participants values with a prob <1:100 are suspicious)
+% (D was calculated by-study and by-condition... since all studies except r?tgen et al had <100 participants values with a prob <1:100 are suspicious)
 mahal_outlr_tresh=chi2inv(.99, length(tomahal));
 df_by_subID.mahal_tissue=NaN(height(df_by_subID),1);
 df_by_subID.tissue_outlier=logical(zeros(height(df_by_subID),1));
@@ -61,12 +60,16 @@ for i=1:length(studies)
     text(df_by_subID.mean_brain(iout),df_by_subID.mean_nobrain(iout),df_by_subID.subID(iout),'Color','r')
     xlabel('brain')
     ylabel('nobrain')
+    
+print([studies{i},'_tissue_and_brain_signal'],gcf,'-dtiff');    
+
 end
 
 %Plot histogram of mahal values with threshold
-figure
-hist(df_by_subID.mahal_tissue)
-vline(mahal_outlr_tresh)
+figure;
+hist(df_by_subID.mahal_tissue);
+vline(mahal_outlr_tresh);
 
 %Print tissue outlier suspects to console
-disp(df_by_subID.subID(df_by_subID.tissue_outlier))
+disp(['Outlier_Suspects:'; df_by_subID.subID(df_by_subID.tissue_outlier)]);
+close all

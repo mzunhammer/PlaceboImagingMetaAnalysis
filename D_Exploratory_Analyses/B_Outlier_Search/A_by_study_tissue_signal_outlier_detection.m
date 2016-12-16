@@ -1,10 +1,9 @@
 clear
 
 %% Load df_pain
-datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Datasets/';
-cd(datapath)
-df_path='AllData_w_NPS_MHE_NOBRAIN_checks.mat';
-load(df_path);
+datapath='../../../Datasets/';
+df_path='AllData_w_NPS_MHE_NOBRAIN.mat';
+load(fullfile(datapath,df_path));
 
 %Variables to be used for outlier prediction
 img_check_vars={'grey','white','csf','brain','nobrain'}; %  select variables for which mahal should be computed
@@ -56,6 +55,9 @@ a=figure(1);
     text(df_by_study.mean_brain(iout),df_by_study.mean_nobrain(iout),df_by_study.studyID(iout),'Color','r')
     xlabel('brain')
     ylabel('nobrain')
+
+print('By_study_tissue_and_brain_signal',gcf,'-dtiff');    
+    
     
 %Plot histogram of mahal values with threshold
 figure(2)

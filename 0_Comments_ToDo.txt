@@ -1,12 +1,13 @@
 #### TODO #####
-– Re-run BRAINMASKS overnight
-– Re-run exploratory, add "Print relevant results" to scripts
-– Complete "Run All" script
-- Add mean rating results
+– Re-run BRAINMASKS: does it produce files?
+– Re-run exploratory
 – Final re-assessment of outliers
+– Re-run demographics "Print relevant results" to scripts
+- Add mean rating results
+– Complete "Run All" script
 – Complete "Responder" analysis
 – Complete "Auxiliary" analyses
-
+– Meta-analysis scripts >> functons?
 
 #### OPEN, DISCUSS WITH TOR & ULRIKE
 – Anthony Jone's and the last Remifentanil-Data are needed URGENTLY.
