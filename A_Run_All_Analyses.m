@@ -29,7 +29,7 @@ run('./B_Prepro_Images/A_Equalize_Image_Size_and_Mask.m')
 
 % Will create an umasked matrix + corresponding df for all data in inclusive analysis
 % [WILL APPROCIMATELY DOUBLE THE SIZE OF ORIGINAL DATA]
-run('./B_Prepro_Images/C_Create_Y.m')
+run('../B_Prepro_Images/C_Create_Y.m')
 
 %% Apply all Masks (NPS, MHE, Tissue Probability-Maps, Brain-Masks)
 
@@ -43,7 +43,7 @@ rmpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/CAN/')) % avoid confli
 
 % Check brain coverage and alignment
 % Create a global coverage image including all files >> visual coverage check
-run('./D_Exploratory_Analyses/A_Check_Image_Alignment/A_Check_Registrations.m')
+run('./D_Exploratory_Analyses/A_Check_Image_Alignment/A_Check_Coverage.m')
 % Create a coverage image for each study separately >> visual realignment check
 run('./D_Exploratory_Analyses/A_Check_Image_Alignment/B_Check_Registrations_single_study.m')
 % Calculate coverage of NPS based on global coverage image and NPS-mask
