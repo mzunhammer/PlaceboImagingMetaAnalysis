@@ -1,38 +1,28 @@
 
 % Setup: Load df with paths and variables
 clear
-basepath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/C_Exploratory_Analyses/A_Check_Image_Alignment';
-cd(basepath)
-dfpath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Datasets';
-load(fullfile(dfpath,'AllData_w_NPS_MHE.mat'));
-%datapath='/Volumes/Transcend/Boulder_Essen/Datasets/';
-datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Datasets/'
-addpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/MontagePlot')
+% Setup: Load df with paths and variables
+datapath='../../../Datasets/';
+tic
+outpath='./C_Exploratory_Analyses/A_Check_Image_Alignment/';
+
+load(fullfile(datapath,'AllData_w_NPS_MHE.mat'));
 
 studies=unique(df.studyID);
 masking_tol=0.00001;
 
-for i=1%:length(studies)
+for i=1:length(studies)
 currimgs=df.img(strcmp(df.studyID,studies(i)));
 infiles=fullfile(datapath,currimgs);
 [p,f,ext]=cellfun(@fileparts,infiles,'UniformOutput',0);
-outfile=fullfile(basepath,['Check_',studies{i},'.nii']);
+outfile=fullfile(['Check_',studies{i},'.nii']);
 
 disp(['Masking ',studies(i)])
 
-matlabbatch{1}.spm.util.imcalc.input = fullfile(datapath,currimgs);
-matlabbatch{1}.spm.util.imcalc.output = outfile;
-matlabbatch{1}.spm.util.imcalc.outdir = {};
-matlabbatch{1}.spm.util.imcalc.expression = 'sum(abs(X)>masking_tol)/size(X,1)';
-matlabbatch{1}.spm.util.imcalc.var = struct('name', {}, 'value', {});
-matlabbatch{1}.spm.util.imcalc.options.dmtx = 1;
-matlabbatch{1}.spm.util.imcalc.options.mask = 0;
-matlabbatch{1}.spm.util.imcalc.options.interp = 1;
-matlabbatch{1}.spm.util.imcalc.options.dtype = 4;
-spm_jobman('run', matlabbatch);
-% For each Study load all images and convert them to logical (only voxels with content survive)
-% Sum up all images/study
-% Print
+%[p,f,e]=cellfun(@(x) fileparts(x),df.img,'UniformOutput',0);
+rfilenames=fullfile(datapath,currimgs); % Un-masked version
+%rfilenames=fullfile(datapath,p,strcat('r',f,e)); % Masked version
+volume_coverage(rfilenames,outfile)
 end
 
 %% Display results as orthview-plots in a png
@@ -47,7 +37,7 @@ o=summary_img_paths(i);
 [~,fname,~]=fileparts(summary_img_paths{i});
 plot_nii_results(t,...
                  'overlays',o,... %Cell array of overlay volumes
-                 'ov_color',{parula},... %Cell array of overlay colors (RGB)
+                 'ov_color',{brighten(parula,-.6)},... %Cell array of overlay colors (RGB)
                  'ov_transparency',[0.6],...
                  'slices',[0,0,0],... %Cell array of slices (MNI)
                  'slice_ori',[1,2,3],...

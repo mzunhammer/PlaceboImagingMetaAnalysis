@@ -2,10 +2,10 @@
 clear
 
 % Setup: Load df with paths and variables
-datapath='./Datasets/';
+datapath='../../../Datasets/';
 tic
-load(fullfile(datapath,'dfMaskedBasicImg.mat'));
-outpath='/C_Exploratory_Analyses/A_Check_Image_Alignment/'
+load(fullfile(datapath,'dfMaskedInclusiveImg.mat'));
+outpath='./C_Exploratory_Analyses/A_Check_Image_Alignment/'
 
 outfile='Check_coverage_all_images_raw.nii';
 
@@ -25,9 +25,7 @@ rfilenames=fullfile(datapath,p,strcat(f,e)); % Un-masked version
 %rfilenames=fullfile(datapath,p,strcat('r',f,e)); % Masked version
 volume_coverage(rfilenames,outfile)
 
-
 %% Display results as orthview-plots in a png
-
 
 t='/Users/matthiaszunhammer/Documents/MATLAB/spm8/canonical/avg152T1.nii';
 %t='/Users/matthiaszunhammer/Documents/MATLAB/spm8/canonical/single_subj_T1.nii';
@@ -35,7 +33,7 @@ t='/Users/matthiaszunhammer/Documents/MATLAB/spm8/canonical/avg152T1.nii';
 [~,fname,~]=fileparts(outfile);
 plot_nii_results(t,...
                  'overlays',{outfile},... %Cell array of overlay volumes
-                 'ov_color',{parula},... %Cell array of overlay colors (RGB)
+                 'ov_color',{brighten(parula,-0.5)},... %Cell array of overlay colors (RGB)
                  'ov_transparency',[0.6],...
                  'slices',[0,0,0],... %Cell array of slices (MNI)
                  'slice_ori',[1,2,3],...
