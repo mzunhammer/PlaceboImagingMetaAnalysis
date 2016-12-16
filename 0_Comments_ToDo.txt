@@ -1,5 +1,6 @@
 #### TODO #####
-– Re-run BRAINMASKS: does it produce files?
+– Re-run BRAINMASKS: Check
+- Create BRAINMASKS-version abs(signal)
 – Re-run exploratory
 – Final re-assessment of outliers
 – Re-run demographics "Print relevant results" to scripts
