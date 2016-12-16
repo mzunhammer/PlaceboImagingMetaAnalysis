@@ -1,6 +1,6 @@
 %% Set working environment
 clear
-datadir = '../Datasets/';
+datadir = '../../Datasets/';
 
 %% Predefine empty variables and data table
 img=cell(1,1);                %path of image relative to basedir
@@ -106,9 +106,7 @@ load([datadir, 'Wager_et_al_2004b_michigan_heat_NPS_MHE_NOBRAIN.mat'])
 load([datadir, 'Wrobel_et_al_2014_NPS_MHE_NOBRAIN.mat'])
 load([datadir, 'Zeidan_et_al_2015_NPS_MHE_NOBRAIN.mat'])
 
-
-
 %% Combine the studies
 df=[atlas;bingel06;bingel11;choi;eippert;ellingsen;elsenb;freeman;geuter;huber;kessner;kong06;kong09;ruetgen;schenk;they;wager_princeton;wager_michigan;wrobel;zeidan];
 %% Save all studies as df
-save AllData_w_NPS_MHE_NOBRAIN.mat df
+save(fullfile(datadir,'AllData_w_NPS_MHE_NOBRAIN.mat'), 'df')

@@ -1,5 +1,8 @@
 clear
-datadir='../Datasets/';
+p = mfilename('fullpath'); %CANlab's apply mask do not like lists with relative paths so this cludge is needed
+[p,~,~]=fileparts(p);
+splitp=strsplit(p,'/');
+datadir=fullfile(filesep,splitp{1:end-2},'Datasets');
 
 % 'Atlas_et_al_2012_NPS_MHE'
 % 'Bingel_et_al_2006_NPS_MHE'
@@ -46,9 +49,10 @@ runstudies={...
 };
 
 tic
+h = waitbar(0,'Calculating NPS, studies completed:')
 for i=1:length(runstudies)
 %Load table into a struct
-varload=load(strcat(datadir,runstudies{i},'.mat'))
+varload=load(fullfile(datadir,[runstudies{i},'.mat']));
 %Every table will be named differently, so get the name
 currtablename=fieldnames(varload);
 %Load the variably named table into "df"
@@ -59,11 +63,11 @@ all_imgs= df.img;
 
 %mask = '/Users/matthiaszunhammer/Documents/MATLAB/zun_pain_pattern/b_Weights_for_PCA_469_y_temp_x.nii';
 
-grey=apply_patternmask(strcat(datadir,all_imgs),'./B_Apply_NPS/pattern_masks/grey.nii');
-white=apply_patternmask(strcat(datadir,all_imgs),'./B_Apply_NPS/pattern_masks/white.nii');
-csf=apply_patternmask(strcat(datadir,all_imgs),'./B_Apply_NPS/pattern_masks/csf.nii');
-brain=apply_patternmask(strcat(datadir, all_imgs),'./B_Apply_NPS/pattern_masks/brainmask.nii');
-nobrain=apply_patternmask(strcat(datadir, all_imgs),'./B_Apply_NPS/pattern_masks/inverted_brainmask.nii');
+grey=apply_patternmask(fullfile(datadir,all_imgs),fullfile(p,'pattern_masks/grey.nii'));
+white=apply_patternmask(fullfile(datadir,all_imgs),fullfile(p,'pattern_masks/white.nii'));
+csf=apply_patternmask(fullfile(datadir,all_imgs),fullfile(p,'pattern_masks/csf.nii'));
+brain=apply_patternmask(fullfile(datadir, all_imgs),fullfile(p,'pattern_masks/brainmask.nii'));
+nobrain=apply_patternmask(fullfile(datadir, all_imgs),fullfile(p,'pattern_masks/inverted_brainmask.nii'));
 
 df.grey=[grey{:}]';
 df.white=[white{:}]';
@@ -74,7 +78,9 @@ df.nobrain=[nobrain{:}]';
 % Push the data in df into a table with the name of the original table
 eval([currtablename{1} '= df']);
 % Eval statement saving results with original table name
-eval(['save([datadir,runstudies{i},''_NOBRAIN.mat''],''',currtablename{1},''')'])
+eval(['save(fullfile(datadir,[runstudies{i},''_NOBRAIN.mat'']),''',currtablename{1},''')'])
 
 toc/60, 'Minutes'
+waitbar(i / length(runstudies))
 end
+close(h)
