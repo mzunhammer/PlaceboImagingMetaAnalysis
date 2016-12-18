@@ -27,7 +27,7 @@ df_by_subID.white_by_gray_abs=df_by_subID.mean_white_abs./df_by_subID.mean_grey_
 df_by_subID.csf_by_gray_abs=df_by_subID.mean_csf_abs./df_by_subID.mean_grey_abs;
 df_by_subID.nobrain_by_brain_abs=df_by_subID.mean_nobrain_abs./df_by_subID.mean_brain_abs;
 
-tomahal={'white_by_gray','csf_by_gray','nobrain_by_brain','white_by_gray_abs','csf_by_gray_abs','nobrain_by_brain_abs'}; 
+tomahal={'white_by_gray','csf_by_gray','nobrain_by_brain'}; 
 % Mahalanobi's distance (D) follows a chi-square distribution.
 % Calculate outlier-threshold as value of D that is less likely than 1:100
 % (D was calculated by-study and by-condition... since all studies except r?tgen et al had <100 participants values with a prob <1:100 are suspicious)
@@ -42,11 +42,9 @@ for i=1:length(studies)
     df_by_subID.tissue_outlier(istudy)=df_by_subID.mahal_tissue(istudy)>mahal_outlr_tresh;
     
     a=figure(i);
-    figure('Position', [100, 100, 400*4, 400]);
-    axes
-    axis('equal');
     
-    subplot(1,4,1)
+    
+    subplot(1,3,1)
     plot(df_by_subID.white_by_gray(istudy),...
         df_by_subID.csf_by_gray(istudy),...
         '.')
@@ -62,7 +60,7 @@ for i=1:length(studies)
     xlabel('white/gray')
     ylabel('csf/gray')
     
-    subplot(1,4,2)
+    subplot(1,3,2)
     plot(df_by_subID.white_by_gray_abs(istudy),...
         df_by_subID.csf_by_gray_abs(istudy),...
         '.')
@@ -79,19 +77,12 @@ for i=1:length(studies)
     ylabel('abs(csf)/abs(gray)')
     
     % Label outlier data-points
-    subplot(1,4,3)
+    subplot(1,3,3)
     plot(df_by_subID.mean_brain(istudy),df_by_subID.mean_nobrain(istudy),'.')
     text(df_by_subID.mean_brain(inormal),df_by_subID.mean_nobrain(inormal),df_by_subID.subID(inormal))
     text(df_by_subID.mean_brain(iout),df_by_subID.mean_nobrain(iout),df_by_subID.subID(iout),'Color','r')
     xlabel('brain')
     ylabel('nobrain')
-
-    subplot(1,4,4)
-    plot(df_by_subID.mean_brain_abs(istudy),df_by_subID.mean_nobrain_abs(istudy),'.')
-    text(df_by_subID.mean_brain_abs(inormal),df_by_subID.mean_nobrain_abs(inormal),df_by_subID.subID(inormal))
-    text(df_by_subID.mean_brain_abs(iout),df_by_subID.mean_nobrain_abs(iout),df_by_subID.subID(iout),'Color','r')
-    xlabel('brain_abs')
-    ylabel('nobrain_abs')
     
 print([studies{i},'_tissue_and_brain_signal'],gcf,'-dtiff');    
 

@@ -75,6 +75,18 @@ df.csf=[csf{:}]';
 df.brain=[brain{:}]';
 df.nobrain=[nobrain{:}]';
 
+grey_abs=apply_patternmask_abs(fullfile(datadir,all_imgs),fullfile(p,'pattern_masks/grey.nii'));
+white_abs=apply_patternmask_abs(fullfile(datadir,all_imgs),fullfile(p,'pattern_masks/white.nii'));
+csf_abs=apply_patternmask_abs(fullfile(datadir,all_imgs),fullfile(p,'pattern_masks/csf.nii'));
+brain_abs=apply_patternmask_abs(fullfile(datadir, all_imgs),fullfile(p,'pattern_masks/brainmask.nii'));
+nobrain_abs=apply_patternmask_abs(fullfile(datadir, all_imgs),fullfile(p,'pattern_masks/inverted_brainmask.nii'));
+
+df.grey_abs=[grey_abs{:}]';
+df.white_abs=[white_abs{:}]';
+df.csf_abs=[csf_abs{:}]';
+df.brain_abs=[brain_abs{:}]';
+df.nobrain_abs=[nobrain_abs{:}]';
+
 % Push the data in df into a table with the name of the original table
 eval([currtablename{1} '= df']);
 % Eval statement saving results with original table name
