@@ -6,7 +6,7 @@ df_path='AllData_w_NPS_MHE_NOBRAIN.mat';
 load(fullfile(datapath,df_path));
 
 %Variables to be used for outlier prediction
-img_check_vars={'grey','white','csf','brain','nobrain'}; %  select variables for which mahal should be computed
+img_check_vars={'grey','white','csf','grey_abs','white_abs','csf_abs','brain','nobrain','brain_abs','nobrain_abs'}; %  select variables for which mahal should be computed
 %Limit outlier prediction to images representing pain (anticipation etc may be scaled differently)
 df_pain=df(logical(df.pain),:);
 
@@ -21,7 +21,11 @@ df_by_study.white_by_gray=df_by_study.mean_white./df_by_study.mean_grey;
 df_by_study.csf_by_gray=df_by_study.mean_csf./df_by_study.mean_grey;
 df_by_study.nobrain_by_brain=df_by_study.mean_nobrain./df_by_study.mean_brain;
 
-tomahal={'white_by_gray','csf_by_gray','nobrain_by_brain'}; 
+df_by_study.white_by_gray_abs=df_by_study.mean_white_abs./df_by_study.mean_grey_abs;
+df_by_study.csf_by_gray_abs=df_by_study.mean_csf_abs./df_by_study.mean_grey_abs;
+df_by_study.nobrain_by_brain_abs=df_by_study.mean_nobrain_abs./df_by_study.mean_brain_abs;
+
+tomahal={'white_by_gray','csf_by_gray','nobrain_by_brain','white_by_gray_abs','csf_by_gray_abs','nobrain_by_brain_abs'}; 
 % Mahalanobi's distance (D) follows a chi-square distribution.
 % Calculate outlier-threshold as value of D that is less likely than 1:100
 % (D was calculated by-study and by-condition... since all studies except r?tgen et al had <100 participants values with a prob <1:100 are suspicious)
@@ -32,7 +36,10 @@ Y=df_by_study{:,tomahal};
 df_by_study.mahal_tissue=mahal(Y,mvnrnd(mean(Y),cov(Y),1000));
 df_by_study.tissue_outlier=df_by_study.mahal_tissue>mahal_outlr_tresh;
 a=figure(1);
-    subplot(1,2,1)
+    figure('Position', [100, 100, 400*4, 400]);
+    axes
+    axis('equal');
+    subplot(1,4,1)
     plot(df_by_study.white_by_gray,...
         df_by_study.csf_by_gray,...
         '.')
@@ -48,14 +55,37 @@ a=figure(1);
     xlabel('white/gray')
     ylabel('csf/gray')
     
+    subplot(1,4,2)
+    plot(df_by_study.white_by_gray_abs,...
+        df_by_study.csf_by_gray_abs,...
+        '.')
+    % Label normal data-points
+    inormal=~df_by_study.tissue_outlier;
+    iout=df_by_study.tissue_outlier;
+    text(df_by_study.white_by_gray_abs(inormal),...
+        df_by_study.csf_by_gray_abs(inormal),...
+        df_by_study.studyID(inormal))
+    text(df_by_study.white_by_gray_abs(iout),...
+        df_by_study.csf_by_gray_abs(iout),...
+        df_by_study.studyID(iout),'Color','r')
+    xlabel('abs(white)/abs(gray)')
+    ylabel('abs(csf)/abs(gray)')
+    
     % Label outlier data-points
-    subplot(1,2,2)
+    subplot(1,4,3)
     plot(df_by_study.mean_brain,df_by_study.mean_nobrain,'.')
     text(df_by_study.mean_brain(inormal),df_by_study.mean_nobrain(inormal),df_by_study.studyID(inormal))
     text(df_by_study.mean_brain(iout),df_by_study.mean_nobrain(iout),df_by_study.studyID(iout),'Color','r')
     xlabel('brain')
     ylabel('nobrain')
 
+    subplot(1,4,4)
+    plot(df_by_study.mean_brain_abs,df_by_study.mean_nobrain_abs,'.')
+    text(df_by_study.mean_brain_abs(inormal),df_by_study.mean_nobrain_abs(inormal),df_by_study.studyID(inormal))
+    text(df_by_study.mean_brain_abs(iout),df_by_study.mean_nobrain_abs(iout),df_by_study.studyID(iout),'Color','r')
+    xlabel('brain_abs')
+    ylabel('nobrain_abs')
+    
 print('By_study_tissue_and_brain_signal',gcf,'-dtiff');    
     
     
