@@ -55,7 +55,7 @@ run('./D_Exploratory_Analyses/B_Outlier_Search/A_by_study_tissue_signal_outlier_
 % Subject-level (within studies): Plot relative signal intensities for white/gray, csf/gray, nobrain/brain (for painful images)
 run('./D_Exploratory_Analyses/B_Outlier_Search/B_by_subject_tissue_signal_outlier_detection.m') 
 % File in which the excluded subjects (for responder analysis) are defined
-run('./D_Exploratory_Analyses/D_Mark_Excluded_Subjects.m') 
+run('./D_Exploratory_Analyses/C_Mark_Excluded_Subjects.m') 
 
 % Calculate overall demographic and behavioral results for tabulation
 run('./D_Exploratory_Analyses/E_demographics.m')
