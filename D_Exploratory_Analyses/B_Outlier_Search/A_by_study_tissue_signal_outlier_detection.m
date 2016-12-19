@@ -9,6 +9,7 @@ load(fullfile(datapath,df_path));
 img_check_vars={'grey','white','csf','grey_abs','white_abs','csf_abs','brain','nobrain','brain_abs','nobrain_abs'}; %  select variables for which mahal should be computed
 %Limit outlier prediction to images representing pain (anticipation etc may be scaled differently)
 df_pain=df(logical(df.pain),:);
+%df_pain=df(~strcmp(df_pain.studyID,'zeidan'),:);
 
 %% Summarize variables for outlierdetection BY SUBJECT
 df_by_study=varfun(@mean,df_pain,'InputVariables',img_check_vars,...
@@ -25,7 +26,7 @@ df_by_study.white_by_gray_abs=df_by_study.mean_white_abs./df_by_study.mean_grey_
 df_by_study.csf_by_gray_abs=df_by_study.mean_csf_abs./df_by_study.mean_grey_abs;
 df_by_study.nobrain_by_brain_abs=df_by_study.mean_nobrain_abs./df_by_study.mean_brain_abs;
 
-tomahal={'white_by_gray','csf_by_gray','nobrain_by_brain','white_by_gray_abs','csf_by_gray_abs','nobrain_by_brain_abs'}; 
+tomahal={'white_by_gray','csf_by_gray','nobrain_by_brain','white_by_gray_abs','csf_by_gray_abs','nobrain_by_brain_abs'}; %
 % Mahalanobi's distance (D) follows a chi-square distribution.
 % Calculate outlier-threshold as value of D that is less likely than 1:100
 % (D was calculated by-study and by-condition... since all studies except r?tgen et al had <100 participants values with a prob <1:100 are suspicious)
@@ -90,9 +91,9 @@ print('By_study_tissue_and_brain_signal',gcf,'-dtiff');
     
     
 %Plot histogram of mahal values with threshold
-figure(2)
-hist(df_by_study.mahal_tissue)
-vline(mahal_outlr_tresh)
+% figure(2)
+% hist(df_by_study.mahal_tissue)
+% vline(mahal_outlr_tresh)
 
 %Print tissue outlier suspects to console
 disp(df_by_study.studyID(df_by_study.tissue_outlier))

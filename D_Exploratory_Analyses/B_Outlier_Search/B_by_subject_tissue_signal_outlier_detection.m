@@ -27,7 +27,7 @@ df_by_subID.white_by_gray_abs=df_by_subID.mean_white_abs./df_by_subID.mean_grey_
 df_by_subID.csf_by_gray_abs=df_by_subID.mean_csf_abs./df_by_subID.mean_grey_abs;
 df_by_subID.nobrain_by_brain_abs=df_by_subID.mean_nobrain_abs./df_by_subID.mean_brain_abs;
 
-tomahal={'white_by_gray','csf_by_gray','nobrain_by_brain','white_by_gray_abs','csf_by_gray_abs','nobrain_by_brain_abs'}; 
+tomahal={'white_by_gray','csf_by_gray','nobrain_by_brain','white_by_gray_abs','csf_by_gray_abs','nobrain_by_brain_abs'}; %'white_by_gray','csf_by_gray','nobrain_by_brain','white_by_gray_abs','csf_by_gray_abs','nobrain_by_brain_abs'
 % Mahalanobi's distance (D) follows a chi-square distribution.
 % Calculate outlier-threshold as value of D that is less likely than 1:100
 % (D was calculated by-study and by-condition... since all studies except r?tgen et al had <100 participants values with a prob <1:100 are suspicious)
@@ -96,7 +96,7 @@ for i=1:length(studies)
 print([studies{i},'_tissue_and_brain_signal'],gcf,'-dtiff');    
 
 end
-
+close all
 %Plot histogram of mahal values with threshold
 figure;
 hist(df_by_subID.mahal_tissue);
@@ -104,4 +104,3 @@ vline(mahal_outlr_tresh);
 
 %Print tissue outlier suspects to console
 disp(['Outlier_Suspects:'; df_by_subID.subID(df_by_subID.tissue_outlier)]);
-close all
