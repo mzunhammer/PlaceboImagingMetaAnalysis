@@ -72,6 +72,8 @@ run('./D_Exploratory_Analyses/E_demographics.m')
 run('./E_NPS_Meta_Analysis/A_MetaAnalysis_Ratings_Inclusive.m')
 % Inclusive NPS
 run('./E_NPS_Meta_Analysis/B_MetaAnalysis_NPS_Inclusive.m')
+% Responder Ratings (just to check if all went right)
+run('./E_NPS_Meta_Analysis/C_MetaAnalysis_Ratings_Responder.m')
 % Responder NPS
 run('./E_NPS_Meta_Analysis/C_MetaAnalysis_NPS_Responder.m')
 

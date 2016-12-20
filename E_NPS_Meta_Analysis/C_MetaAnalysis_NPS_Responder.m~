@@ -43,14 +43,14 @@ studyIDtexts={
             'Freeman et al. 2015:';...
             'Geuter et al. 2013:';...
             'Huber et al. 2013:';...
-            'Kessner et al. 2014:*';...
+            'Kessner et al. 2014:';...
             'Kong et al. 2006:';...
             'Kong et al. 2009:';...
-            'Ruetgen et al. 2015:'
+            'Ruetgen et al. 2015:*'
             'Schenk et al. 2015:'
             'Theysohn et al. 2009:';...
             'Wager et al. 2004, Study 1:';...
-            'Wager et al. 2004, Study 2:';...
+            'Wager et al. 2004, Study 2:*';...
             'Wrobel et al. 2014:'
             'Zeidan et al. 2015:';...
             };
@@ -173,7 +173,7 @@ rating_diff=con_rating{:,1}-pla_rating{:,1};
 responders=rating_diff>0;
 
 i=find(strcmp(studies,'freeman'));
-stats(i)=withinMetastats(placebo{responders,1},control{responders,1});
+stats(i)=withinMetastats(placebo{responders,1},con_rating{responders,1});
 
 %'geuter'
 control=mean([df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'early_pain_control_strong')),'NPScorrected'},...
@@ -182,14 +182,14 @@ control=mean([df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'early_pain_control
 placebo=mean([df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'early_pain_placebo_strong')),'NPScorrected'},...
          df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_placebo_strong')),'NPScorrected'}],2);
 
-con_rating=df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'early_pain_control_strong')),'rating'};
-pla_rating=df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'early_pain_placebo_strong')),'rating'};
+con_rating=df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'early_pain_control_stron')),'rating'};
+pla_rating=df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'early_pain_placebo_stron')),'rating'};
      
 rating_diff=con_rating-pla_rating;
 responders=rating_diff>0;
 
 i=find(strcmp(studies,'geuter'));
-stats(i)=withinMetastats(placebo(responders),control(responders));
+stats(i)=withinMetastats(pla_rating(responders),con_rating(responders));
 
 %'huber'
 control=df((strcmp(df.studyID,'huber')&strcmp(df.cond,'conPainControl')),'NPScorrected');
@@ -201,7 +201,7 @@ rating_diff=con_rating{:,1}-pla_rating{:,1};
 responders=rating_diff>0;
 
 i=find(strcmp(studies,'huber'));
-stats(i)=withinMetastats(placebo{responders,1},control{responders,1});
+stats(i)=withinMetastats(pla_rating{responders,1},con_rating{responders,1});
 
 %'kessner'
 %control_neg=df((strcmp(df.studyID,'kessner')&strcmp(df.cond,'pain_control_neg')),'NPScorrected');
@@ -230,7 +230,7 @@ rating_diff=con_rating-pla_rating;
 responders=rating_diff>0;
 
 i=find(strcmp(studies,'kong06'));
-stats(i)=withinMetastats(placebo(responders),control(responders));
+stats(i)=withinMetastats(pla_rating(responders),con_rating(responders));
 
 %'kong09'
 control=df((strcmp(df.studyID,'kong09')&strcmp(df.cond,'pain_post_control')),'NPScorrected');
@@ -242,7 +242,7 @@ rating_diff=con_rating{:,1}-pla_rating{:,1};
 responders=rating_diff>0;
 
 i=find(strcmp(studies,'kong09'));
-stats(i)=withinMetastats(placebo{responders,1},control{responders,1});
+stats(i)=withinMetastats(pla_rating{responders,1},con_rating{responders,1});
 
 'ruetgen'
 control=df((strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_Pain_Control_Group')),'NPScorrected');
@@ -259,7 +259,7 @@ pla_rating=df((strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_Pain_Placebo_Gr
 
 i=find(strcmp(studies,'ruetgen'));
 % Get stats for between-subject design
-stats(i)=betweenMetastats(placebo{:,1},control{:,1});
+stats(i)=betweenMetastats(pla_rating{:,1},con_rating{:,1});
 
 %'Schenk'
 control=df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_control')),'NPScorrected'};
@@ -271,7 +271,7 @@ rating_diff=con_rating-pla_rating;
 responders=rating_diff>0;
 
 i=find(strcmp(studies,'schenk'));
-stats(i)=withinMetastats(placebo(responders),control(responders));
+stats(i)=withinMetastats(pla_rating(responders),con_rating(responders));
 
 %'theysohn'
 control=df((strcmp(df.studyID,'theysohn')&strcmp(df.cond,'control_pain')),'NPScorrected');
@@ -283,10 +283,11 @@ rating_diff=con_rating{:,1}-pla_rating{:,1};
 responders=rating_diff>0;
 
 i=find(strcmp(studies,'theysohn'));
-stats(i)=withinMetastats(placebo{responders,1},control{responders,1});
+stats(i)=withinMetastats(pla_rating{responders,1},con_rating{responders,1});
 
 %'wager_princeton (study 1)'
 pla_effect=df((strcmp(df.studyID,'wager04a_princeton')&strcmp(df.cond,'(intense-none)control-placebo')),'NPScorrected');
+pla_effect=pla_effect{:,:};
 
 rating_diff=df((strcmp(df.studyID,'wager04a_princeton')&strcmp(df.cond,'(intense-none)control-placebo')),'rating');
 % No ratings are available. Include study anyways?
@@ -295,7 +296,7 @@ responders=rating_diff{:,:}>0;
 i=find(strcmp(studies,'wager04a_princeton'));
 % WARNING: The standardized effect can only be computed when using betas or
 % non-differential cons
-stats(i)=withinMetastats(-pla_effect{responders,:},0.6654);%NO RATINGS AVAILABLE
+stats(i)=withinMetastats(-rating_diff{responders,:},0.6654);%NO RATINGS AVAILABLE
 
 %'wager_michigan'
 control=df((strcmp(df.studyID,'wager04b_michigan')&strcmp(df.cond,'control_pain')),'NPScorrected');
@@ -305,7 +306,7 @@ responders=rating_diff{:,:}>0;
 
 %NO RAW RATINGS AVAILABLE, ONLY RATING CONTRAST CONTROL-PLACEBO
 i=find(strcmp(studies,'wager04b_michigan'));
-stats(i)=withinMetastats(placebo{responders,:},control{responders,:});%NO RAW RATINGS AVAILABLE, ONLY RATING CONTRAST CONTROL-PLACEBO
+stats(i)=withinMetastats(-rating_diff{responders,:},0.6654);%NO RAW RATINGS AVAILABLE, ONLY RATING CONTRAST CONTROL-PLACEBO
 
 %'wrobel'
 control=mean([df{(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'early_pain_control_saline'))),'NPScorrected'},...
@@ -321,7 +322,7 @@ rating_diff=con_rating-pla_rating;
 responders=rating_diff>0;
 
 i=find(strcmp(studies,'wrobel'));
-stats(i)=withinMetastats(placebo(responders),control(responders));
+stats(i)=withinMetastats(pla_rating(responders),con_rating(responders));
 
 %'zeidan'
 pla_effect=df((strcmp(df.studyID,'zeidan')&strcmp(df.cond,'Pla>Control within painful series')),'NPScorrected');
@@ -333,7 +334,7 @@ responders=rating_diff{:,1}<0; % INVERSE CONTRAST THAN OTHER STUDIES
 i=find(strcmp(studies,'zeidan'));
 % WARNING: The standardized effect can only be computed when using betas or
 % non-differential cons
-stats(i)=withinMetastats(pla_effect(responders,:),0.6654);
+stats(i)=withinMetastats(rating_diff(responders,:),0.6654);
 
 %% Summarize all studies, weigh by SE
 % Summary analysis+ Forest Plot
@@ -342,7 +343,7 @@ ForestPlotter(stats,...
               'outcomelabel','Pain ratings (Hedge''s g)',...
               'type','random',...
               'summarystat','g',...
-              'withoutlier',0,...
-              'WIsubdata',0);
-hgexport(gcf, 'NPS_Meta_Responder.eps', hgexport('factorystyle'), 'Format', 'eps'); 
+              'withoutlier',1,...
+              'WIsubdata',1);
+hgexport(gcf, 'Ratings_Meta_Responder.eps', hgexport('factorystyle'), 'Format', 'eps'); 
 close all;
