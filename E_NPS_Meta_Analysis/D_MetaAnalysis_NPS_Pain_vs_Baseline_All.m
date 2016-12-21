@@ -287,15 +287,15 @@ i=find(strcmp(studies,'ruetgen'));
 stats(i)=withinMetastats([control{:,:};placebo{:,:}],0);
 
 %'Schenk'
-control=mean([df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocain_control')),'NPSraw'},...
-              df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocain_control')),'NPSraw'}],2);
-placebo=mean([df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocain_placebo')),'NPSraw'},...
-              df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocain_placebo')),'NPSraw'}],2);
+control=mean([df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_control')),'NPSraw'},...
+              df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocaine_control')),'NPSraw'}],2);
+placebo=mean([df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_placebo')),'NPSraw'},...
+              df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocaine_placebo')),'NPSraw'}],2);
 
-con_rating=mean([df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocain_control')),'rating'},...
-             df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocain_control')),'rating'}],2);
-pla_rating=mean([df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocain_placebo')),'rating'},...
-              df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocain_placebo')),'rating'}],2);
+con_rating=mean([df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_control')),'rating'},...
+             df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocaine_control')),'rating'}],2);
+pla_rating=mean([df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_placebo')),'rating'},...
+              df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocaine_placebo')),'rating'}],2);
 rating_diff=con_rating-pla_rating;
 responders=rating_diff>0;
 
@@ -314,25 +314,24 @@ responders=rating_diff>0;
 i=find(strcmp(studies,'theysohn'));
 stats(i)=withinMetastats(nanmean([control{:,:},placebo{:,:}],2),0);
 
-%'wager_michigan'
-control=df((strcmp(df.studyID,'wager_michigan')&strcmp(df.cond,'control_pain')),'NPSraw');
-placebo=df((strcmp(df.studyID,'wager_michigan')&strcmp(df.cond,'placebo_pain')),'NPSraw');
-
-% No ratings are available. Include study anyways?
-i=find(strcmp(studies,'wager_michigan'));
-stats(i)=withinMetastats(nanmean([control{:,:},placebo{:,:}],2),0);
-
 %'wager_princeton'
-pain_effect=df((strcmp(df.studyID,'wager_princeton')&strcmp(df.cond,'intense-none')),'NPSraw');
+pain_effect=df((strcmp(df.studyID,'wager04a_princeton')&strcmp(df.cond,'intense-none')),'NPSraw');
 pain_effect=pain_effect{:,:};
 
-rating_diff=df((strcmp(df.studyID,'wager_princeton')&strcmp(df.cond,'intense-none')),'rating');
+rating_diff=df((strcmp(df.studyID,'wager04a_princeton')&strcmp(df.cond,'intense-none')),'rating');
 % No ratings are available. Include study anyways?
 
-i=find(strcmp(studies,'wager_princeton'));
+i=find(strcmp(studies,'wager04a_princeton'));
 % WARNING: The standardized effect can only be computed when using betas or
 % non-differential cons
 stats(i)=withinMetastats(pain_effect,0);
+
+%'wager_michigan'
+control=df((strcmp(df.studyID,'wager04b_michigan')&strcmp(df.cond,'control_pain')),'NPSraw');
+placebo=df((strcmp(df.studyID,'wager04b_michigan')&strcmp(df.cond,'placebo_pain')),'NPSraw');
+% No ratings are available. Include study anyways?
+i=find(strcmp(studies,'wager04b_michigan'));
+stats(i)=withinMetastats(nanmean([control{:,:},placebo{:,:}],2),0);
 
 
 %'wrobel'
@@ -375,8 +374,14 @@ stats(i)=withinMetastats(pain_effect,0);
 % Summary analysis+ Forest Plot
 ForestPlotter(stats,...
               'studyIDtexts',studyIDtexts,...
-              'outcomelabel','NPS-Response (Hedge''s {\itg})',...
+              'outcomelabel','NPS-Response (Hedge''s g',...
               'type','random',...
               'summarystat','g');
 
-hgexport(gcf, 'NPS_Pain_vs_Baseline_Inclusive.eps', hgexport('factorystyle'), 'Format', 'eps'); 
+hgexport(gcf, 'NPS_Pain_vs_Baseline_All.eps', hgexport('factorystyle'), 'Format', 'eps'); 
+
+close all
+NPS_pos_imgs=vertcat(stats.delta)>0;
+perc_pos_NPS=sum(NPS_pos_imgs)/sum(~isnan(NPS_pos_imgs));
+
+disp([num2str(perc_pos_NPS*100),'% of participants showed a positive NPS response.'])

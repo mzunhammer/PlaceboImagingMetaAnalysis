@@ -79,7 +79,7 @@ run('./E_NPS_Meta_Analysis/C_MetaAnalysis_NPS_Responder.m')
 
 % Auxiliary findings NPS (all inclusive)
 % Pain vs baseline
-run('./E_NPS_Meta_Analysis/D_MetaAnalysis_NPS_Pain_vs_Baseline_Inclusive.m')
+run('./E_NPS_Meta_Analysis/D_MetaAnalysis_NPS_Pain_vs_Baseline_All.m')
 % High pain vs low pain
 run('./E_NPS_Meta_Analysis/E_MetaAnalysis_NPS_High_vs_Low_Pain.m')
 % Medications (NPS)
