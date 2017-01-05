@@ -2,7 +2,7 @@
 % printing out all numerical results for the paper.
 
 %% Import required functions
-
+%cd /Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis
 % SPM required
 addpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/spm12/'))
 % All custom meta-analysis functions required
@@ -75,17 +75,21 @@ run('./E_NPS_Meta_Analysis/B_MetaAnalysis_NPS_Inclusive.m')
 % Responder Ratings (just to check if all went right)
 run('./E_NPS_Meta_Analysis/C_MetaAnalysis_Ratings_Responder.m')
 % Responder NPS
-run('./E_NPS_Meta_Analysis/C_MetaAnalysis_NPS_Responder.m')
+run('./E_NPS_Meta_Analysis/D_MetaAnalysis_NPS_Responder.m')
 
 % Auxiliary findings NPS (all inclusive)
 % Pain vs baseline
-run('./E_NPS_Meta_Analysis/D_MetaAnalysis_NPS_Pain_vs_Baseline_All.m')
+run('./E_NPS_Meta_Analysis/E_MetaAnalysis_NPS_Pain_vs_Baseline_All.m')
+run('./E_NPS_Meta_Analysis/E1_MetaAnalysis_NPS_Pain_vs_Baseline_wo_Excluded.m')
+
 % High pain vs low pain
-run('./E_NPS_Meta_Analysis/E_MetaAnalysis_NPS_High_vs_Low_Pain.m')
+run('./E_NPS_Meta_Analysis/F_MetaAnalysis_NPS_High_vs_Low_Pain_All.m')
+run('./E_NPS_Meta_Analysis/F2_MetaAnalysis_NPS_High_vs_Low_Pain_wo_Excluded.m')
+
 % Medications (NPS)
-run('./E_NPS_Meta_Analysis/F_MetaAnalysis_NPS_Medication_Effects.m')
+run('./E_NPS_Meta_Analysis/G_MetaAnalysis_NPS_Medication_Effects.m')
 % Medications (Ratings)
-run('./E_NPS_Meta_Analysis/F2_MetaAnalysis_Rating_Medication_Effects.m')
+run('./E_NPS_Meta_Analysis/G2_MetaAnalysis_Rating_Medication_Effects.m')
 
 
 
