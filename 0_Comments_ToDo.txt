@@ -1,7 +1,5 @@
 #### TODO #####
-– Re-check imputed correlations 
-– Complete "Run All" script
-– Complete "Auxiliary" analyses
+– Shorten Meta-Analysis: Separate Data-Selection and Stat-Calculation
 
 #### OPEN, DISCUSS WITH TOR & ULRIKE
 Correct first drafts, decisions:

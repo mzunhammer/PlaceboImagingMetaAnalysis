@@ -68,6 +68,12 @@ run('./D_Exploratory_Analyses/E_demographics.m')
 
 %% NPS based meta-analysis (also MHE)
 
+%Assemble full data-set
+run('./E_NPS_Meta_Analysis/A_Select_All.m')
+%Assemble inclusive/conservative data-set
+
+%Assemble responder data-set
+
 % Inclusive Ratings
 run('./E_NPS_Meta_Analysis/A_MetaAnalysis_Ratings_Inclusive.m')
 % Inclusive NPS
@@ -91,6 +97,7 @@ run('./E_NPS_Meta_Analysis/G_MetaAnalysis_NPS_Medication_Effects.m')
 % Medications (Ratings)
 run('./E_NPS_Meta_Analysis/G2_MetaAnalysis_Rating_Medication_Effects.m')
 
-
+% Correlation NPS vs Ratings
+run('./E_NPS_Meta_Analysis/H_Meta_Placebo_NPS_vs_ratings_all.m')
 
 %% Whole brain analysis
