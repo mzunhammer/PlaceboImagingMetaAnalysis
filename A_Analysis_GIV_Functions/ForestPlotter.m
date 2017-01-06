@@ -93,6 +93,7 @@ else
     n=[MetaStats.n]';
 end
 
+MetaStats.delta
 %% Summarize all studies, weighted by se_summary_total
 [summary_total,se_summary_total,rel_weight,z,p,CI_lo,CI_hi,chisq,tausq,df,p_het,Isq]=GIVsummary(summary_stat,se_summary_stat,type);
 ci=se_summary_stat.*1.96;
@@ -115,7 +116,14 @@ font_name='Arial';
 x_graphW=0.33; %relative size of x-axis in normalized space (rel to the whole graph)
     
 %AXIS SCALE
-x_axis_size=max([double(ceil(max(abs(summary_stat)+ci))),3]); %x-Axis limit should be the smallest integer larger than the largest absolute stat+ci, but at least 3
+if ~WIsubdata % no-single subj data-points >> scale x-axis to max(summary?CI) but at least 3
+    x_axis_size=max([double(ceil(max(abs(summary_stat)+ci))),3]);
+elseif WIsubdata && withoutlier % single subj data-points (for WI-studies), yet points beyond max(summary?CI) not plotted > outliermarks instead
+    x_axis_size=max([double(ceil(max(abs(summary_stat)+ci))),3]); 
+elseif WIsubdata && ~withoutlier % plot full range of wi-single subj data. x-axis are scaled to max(abs(indiv datapoint))
+    x_axis_size=max([double(ceil(max(abs(vertcat(MetaStats.std_delta))))),3]); 
+end    
+
 y_axis_size=(length(studyIDtexts)+2);
 if NOsummary
     y_axis_size=y_axis_size-1;
