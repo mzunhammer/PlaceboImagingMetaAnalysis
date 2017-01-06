@@ -1,16 +1,20 @@
 #### TODO #####
-– Re-run BRAINMASKS: Check
-- Create BRAINMASKS-version abs(signal)
-– Re-run exploratory
-– Final re-assessment of outliers
-– Re-run demographics "Print relevant results" to scripts
-- Add mean rating results
+– Re-check imputed correlations 
 – Complete "Run All" script
-– Complete "Responder" analysis
 – Complete "Auxiliary" analyses
-– Meta-analysis scripts >> functons?
 
 #### OPEN, DISCUSS WITH TOR & ULRIKE
+Correct first drafts, decisions:
+–We missed two major (PET) study:
+1. T. D. Wager, D. J. Scott, J.-K. Zubieta, Placebo effects on human mu-opioid activity during pain., Proc. Natl. Acad. Sci. U. S. A. 104, 11056–61 (2007).
+1. D. J. Scott, C. S. Stohler, C. M. Egnatuk, H. Wang, R. a Koeppe, J.-K. Zubieta, Placebo and nocebo effects are defined by opposite opioid and dopaminergic responses., Arch. Gen. Psychiatry 65, 220–31 (2008).
+
+–sorting of studies in tables (alphabetical?, year?,n?) and and forest plots (alphabetical?, year?,n?,weight?,effect?)
+
+– ForrestPlot format:
+	–sorting of studies
+
+
 – Anthony Jone's and the last Remifentanil-Data are needed URGENTLY.
 – Outlier handling
 Publication decisions:

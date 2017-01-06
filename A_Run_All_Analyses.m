@@ -2,7 +2,7 @@
 % printing out all numerical results for the paper.
 
 %% Import required functions
-%cd /Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis
+cd /Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis
 % SPM required
 addpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/spm12/'))
 % All custom meta-analysis functions required
