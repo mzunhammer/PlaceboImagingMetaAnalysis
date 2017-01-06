@@ -29,6 +29,7 @@ function plot_nii_results(template_img,varargin)
 % or zeros from template should be shown. 0: remove, 1: show.
 % 'resolution': an integer defining the isometric voxel size. By default this
 %               will be the size of the template img.
+% 'figure_size': a numeric vector defining the figure size in widthxheigth (in cm).
 % 'outfilename': a string of chars defining the desired name of the outfile.
 %
 %Example:
@@ -38,7 +39,7 @@ close all
 %% Parse optional inputs according to: https://de.mathworks.com/help/matlab/matlab_prog/parse-function-inputs.html
 p = inputParser
 
-iptsetpref('ImshowBorder','tight'); % Set Imshow Border to tight, otherwise there will be excess space around images
+%iptsetpref('ImshowBorder','tight'); % Set Imshow Border to tight, otherwise there will be excess space around images
  
 addRequired(p,'template_img',@ischar);
 %Check overlays
@@ -56,6 +57,9 @@ addParameter(p,'slice_ori',defaultSlice_ori,@isnumeric)
 %Check resolution
 defaultResolution=-1; % Negative number will later be replaced by no change in resolution
 addParameter(p,'resolution',defaultResolution,@isnumeric)
+%Check figure_size
+defaultfigure_size=[6 6]; % Negative number will later be replaced by no change in resolution
+addParameter(p,'figure_size',defaultfigure_size,@isnumeric)
 %Check outfilename
 defaultOutfilename='montage'; % Negative number will later be replaced by no change in resolution
 addParameter(p,'outfilename',defaultOutfilename,@ischar)
@@ -145,16 +149,16 @@ for s=1:length(mat_slices)
     %Select current orientation
     curr_slice_ori=slice_ori(s);
      % ANALYZE FORMAT in y and z planes HAVE TO BE L-R-FLIPPED! SEE: spm_flip_analyze_images
-     % IN ADDITION a 270° tilt is necessary
+     % IN ADDITION a 270? tilt is necessary
      if curr_slice_ori==1
         curr_tmp=squeeze(template_img(curr_slice_mat,:,:));
-         curr_tmp=mat2gray(rot90(curr_tmp,1)); %here, no left & right, only a 90° tilt is necessary and standardize to gray
+         curr_tmp=mat2gray(rot90(curr_tmp,1)); %here, no left & right, only a 90? tilt is necessary and standardize to gray
      elseif curr_slice_ori==2
         curr_tmp=squeeze(template_img(:,curr_slice_mat,:));
-        curr_tmp=mat2gray(rot90(fliplr(curr_tmp),3)); %flip left right and 270° tilt is necessary and standardize to gray
+        curr_tmp=mat2gray(rot90(fliplr(curr_tmp),3)); %flip left right and 270? tilt is necessary and standardize to gray
      elseif curr_slice_ori==3
         curr_tmp=squeeze(template_img(:,:,curr_slice_mat));
-        curr_tmp=mat2gray(rot90(fliplr(curr_tmp),3)); %flip left right and 270° tilt is necessary and standardize to gray
+        curr_tmp=mat2gray(rot90(fliplr(curr_tmp),3)); %flip left right and 270? tilt is necessary and standardize to gray
      end
 
      
@@ -180,17 +184,17 @@ for s=1:length(mat_slices)
             hold on
             if curr_slice_ori==1
                 curr_ovl=squeeze(overlay_img{i}(curr_slice_mat,:,:));
-                curr_ovl=rot90(curr_ovl,1); %flip left right and 270° tilt is necessary
+                curr_ovl=rot90(curr_ovl,1); %flip left right and 270? tilt is necessary
             elseif curr_slice_ori==2
                 curr_ovl=squeeze(overlay_img{i}(:,curr_slice_mat,:));
-                curr_ovl=rot90(fliplr(curr_ovl),3); %flip left right and 270° tilt is necessary
+                curr_ovl=rot90(fliplr(curr_ovl),3); %flip left right and 270? tilt is necessary
             elseif curr_slice_ori==3
                 curr_ovl=squeeze(overlay_img{i}(:,:,curr_slice_mat));
-                curr_ovl=rot90(fliplr(curr_ovl),3); %flip left right and 270° tilt is necessary
+                curr_ovl=rot90(fliplr(curr_ovl),3); %flip left right and 270? tilt is necessary
             end
             
             % ANALYZE FORMAT IMAGES HAVE TO BE L-R-FLIPPED! SEE: spm_flip_analyze_images
-            % IN ADDITION a 270° tilt is necessary
+            % IN ADDITION a 270? tilt is necessary
             
             %o=imshow(curr_ovl); % Create handle for overlay
             empty_ovl1=curr_ovl==0|isnan(curr_ovl);
@@ -212,9 +216,11 @@ for s=1:length(mat_slices)
     end
     hold off
 %Print slice
+
 result_img{s}=getimage(gcf);
-set(gca,'position',[0 0 1 1],'units','normalized')
-print(['slice',num2str(s)],gcf,'-dtiff');
+set(gca,'position',[0 0 1 1],'units','normalized');
+%set(gcf,'PaperPosition',[0 0 p.Results.figure_size]);%set desired size of image. Must be the same for image and scale, otherwise the montage function will not work.
+print([p.Results.outfilename,'_slice_',num2str(s)],gcf,'-dtiff');
 end
 
 %% Plot Scales as additional image
@@ -242,12 +248,15 @@ text(w_scale*i+(w_scale/2*(i-1))-w_scale/2,l_scale-l_scale/20,num2str(min_signal
 text(w_scale*i+(w_scale/2*(i-1))-w_scale/2,l_scale/20,num2str(max_signal(i)),'FontSize',l_scale/20) %w_scale*i*1.25-w_scale/1.5
 %annotation('textbox',[.5 .1 .2 .1],'String','123','FitBoxToText','on')
 end
-print('scale',gcf,'-dtiff');
+%set(gcf,'PaperPosition',[0 0 p.Results.figure_size]);%set desired size of image. Must be the same for image and scale, otherwise the montage function will not work.
+print([p.Results.outfilename,'_scale'],gcf,'-dtiff');
 
 %% Load single images, put in montage, delete single images
-slice_files=dir(fullfile('slice*.tif'));
-scale_file=dir(fullfile('scale.tif'));
+%Currently not working due to transition from MATLAB 2015a to 2016b
+%Scale is now printed in a smaller size than previously
+%slice_files=dir(fullfile('slice*.tif'));
+%scale_file=dir(fullfile('scale.tif'));
 
-montage({slice_files.name,scale_file.name}','Size',[m,n+1]);
-print(p.Results.outfilename,gcf,'-dtiff');
+%montage({slice_files.name,scale_file.name}','Size',[m,n+1]);
+%print(p.Results.outfilename,gcf,'-dtiff');
 %delete(slice_files.name);% Remove single files for they make problems

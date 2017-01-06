@@ -148,7 +148,7 @@ rating(rating==0)=NaN; %Unfortunately the regress function spits out zeros when 
         pla(~cellfun(@isempty, regexp(cond,'Open')))=1; % 0= Any Control 1 = Any Placebo 2 = Other (in this case placebo = treatment expectation)
 
         pain=zeros(size(cond));  
-        pain(~cellfun(@isempty, regexp(cond,'Stim')))=1; % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
+        pain(~cellfun(@isempty, regexp(cond,'StimHiPain')))=1; % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
         
         condSeq=NaN(length(subdir)*length(beta_ID),1);
         condSeq(~cellfun(@isempty, regexp(cond,'Open'))&openFirst==1)=1;

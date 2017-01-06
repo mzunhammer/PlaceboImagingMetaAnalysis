@@ -20,14 +20,14 @@ sub=cellfun(@str2num,dirnames(isubfolder),'UniformOutput',0);
 sub=[sub{:}];
 beta_IDs = [3,4,8,9,13,14,18,19]; %define betas of interest
 beta_descriptors= {...
-    'anti_lidocain_control'... % beta_3
-    'pain_lidocain_control'... % beta_4
-    'anti_nolidocain_control'...%beta_8
-    'pain_nolidocain_control'...%beta_9
-    'anti_lidocain_placebo'...% beta_13
-    'pain_lidocain_placebo'...% beta_14
-    'anti_nolidocain_placebo'...%beta_18
-    'pain_nolidocain_placebo'...%beta_19
+    'anti_lidocaine_control'... % beta_3
+    'pain_lidocaine_control'... % beta_4
+    'anti_nolidocaine_control'...%beta_8
+    'pain_nolidocaine_control'...%beta_9
+    'anti_lidocaine_placebo'...% beta_13
+    'pain_lidocaine_placebo'...% beta_14
+    'anti_nolidocaine_placebo'...%beta_18
+    'pain_nolidocaine_placebo'...%beta_19
     };
 nbetas=length(beta_descriptors);
 % Get all img-paths
@@ -67,8 +67,8 @@ pain(~cellfun(@isempty,regexp(cond,'anti')),1)=0;  % 0= NoPain 1=FullPain 2=Earl
 pain(~cellfun(@isempty,regexp(cond,'pain')),1)=1;  % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
 
 realTreat=NaN(size(cond));
-realTreat(~cellfun(@isempty,regexp(cond,'nolidocain')),1)=0;  % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
-realTreat(~cellfun(@isempty,regexp(cond,'_lidocain')),1)=1;  % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
+realTreat(~cellfun(@isempty,regexp(cond,'nolidocaine')),1)=0;  % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
+realTreat(~cellfun(@isempty,regexp(cond,'_lidocaine')),1)=1;  % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
 
 %% Import behavioral from Excel-Sheet
 xls_path=fullfile(basedir, studydir,'SchenkBehavioral.xlsx');
@@ -148,7 +148,7 @@ schenk.healthy=ones(size(schenk.img));
 schenk.pla=pla;
 schenk.pain=pain;
 schenk.predictable= ones(size(schenk.img)); %The anticipatory phase was always 5 s long.
-schenk.realTreat=realTreat; %Mark all participants receiving lidocain
+schenk.realTreat=realTreat; %Mark all participants receiving lidocaine
 schenk.cond=cond;
 schenk.stimtype=repmat({'Capsaicin+Heat'},size(schenk.img));
 schenk.stimloc=repmat({'L & R forearm (v)'},size(schenk.img));

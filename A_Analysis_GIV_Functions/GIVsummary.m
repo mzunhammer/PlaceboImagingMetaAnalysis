@@ -36,7 +36,7 @@ function [summary,SEsummary,rel_weight,z,p,CI_lo,CI_hi,chisq,tausq,df,p_het,Isq]
 weight=1./SEs.^2; % weight derived from every SE
 rel_weight=weight/nansum(weight); %normalized weight in %
 df=sum(~isnan(effects))-1; %degrees of freedom,same for fixed and random
-summary=sum(effects.*weight)./nansum(weight); %Formula 7 in Deeks&Higgins
+summary=nansum(effects.*weight)./nansum(weight); %Formula 7 in Deeks&Higgins
 SEsummary=1./sqrt(nansum(weight)); %Formula 8 in Deeks&Higgins
 
 % Heterogeneity statistic (same for random & fixed, but tau is reported additionally for random)
