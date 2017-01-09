@@ -14,7 +14,7 @@ studies=unique(df.studyID);   %Get all studies in df
 %             'Atlas et al. 2012: Hidden vs open remifentanil drip infusion (expectation period)| heat';...
 % 			'Bingel et al. 2006: Control vs placebo cream | laser';...
 % 			'Bingel et al. 2011: No vs positive expectations | heat';...
-% 			'Choi et al. 2011: No vs low & high effective placebo drip infusion (Exp1 and 2) | electrical';...
+% 			'Choi et al. 2011: No vs low & high effective placebo drip infusion | electrical';...
 % 			'Eippert et al. 2009: Control vs placebo cream (saline & naloxone group) | heat (early & late)';...
 % 			'Ellingsen et al. 2013: Pre vs post placebo nasal spray | heat';...
 %             'Elsenbruch et al. 2012: No vs certain placebo drip infusion | distension';...
@@ -22,7 +22,7 @@ studies=unique(df.studyID);   %Get all studies in df
 %             'Geuter et al. 2013: Control vs weak & strong placebo cream | heat (early & late)';...
 %             'Huber et al. 2013: Red vs green cue signifying sham TENS off vs on | laser';...
 %             'Kessner et al. 2014: Negative vs positive treatment expectation group | heat';...
-%             'Kong et al. 2006: Control vs placebo acupuncture | heat (high & low)';...
+%             'Kong et al. 2006: Control vs placebo acupuncture | heat';...
 %             'Kong et al. 2009: Control vs placebo sham acupuncture | heat';...
 %             'Ruetgen et al. 2015: No treatment vs placebo pill group  | electrical'
 %             'Schenk et al. 2015:  Control vs placebo (saline & lidocain) | heat'
@@ -65,15 +65,17 @@ varselect={'NPSraw','rating','MHEraw',...
 df_full.variables=varselect;
 
 df_full.studies=studies;
-
+%Between-subject studies
 df_full.BetweenSubject=zeros(size(studies));
 df_full.BetweenSubject(strcmp(studies,'ruetgen'))=1;
 df_full.BetweenSubject(strcmp(studies,'kessner'))=1;
-
+%Studies where only contrasts between conditions (e.g. pla>con), rather than conditions themselves (pla pain & con pain separately) are available
+%...for imaging data
 df_full.consOnlyNPS=zeros(size(studies));
 df_full.consOnlyNPS(strcmp(studies,'wager04a_princeton'))=1;
 df_full.consOnlyNPS(strcmp(studies,'zeidan'))=1;
-
+%Studies where only contrasts between conditions (e.g. pla>con), rather than conditions themselves (pla pain & con pain separately) are available
+%...for rating data
 df_full.consOnlyRating=zeros(size(studies));
 df_full.consOnlyRating(strcmp(studies,'wager04a_princeton'))=1;
 df_full.consOnlyRating(strcmp(studies,'wager04b_michigan'))=1;
@@ -219,4 +221,41 @@ df_full.condata{i}=NaN(size(df_full.pladata{i}));
 
 %% Add study/variable descriptions needed for meta-analysis
 
-save('Full_Sample.mat','df_full');
+save('A_Full_Sample.mat','df_full');
+
+%% INCLUSIVE SAMPLE
+% Difference compared to "ALL":
+% Atlas: None 
+% Bingel06: None
+% Bingel11: None
+% Choi: None
+% Eippert: None
+% Ellingsen: None
+% Elsenbruch: None
+% Freeman: None
+% Geuter: None
+% Huber: None
+% Kessner: None
+% Kong06: None
+% Kong09: None
+% Ruetgen: Excluded bc of responder selection
+% Schenk: None
+% Theysohn: None
+% Wager06a: None
+% Wager06b: Excluded bc of responder selection
+% Wrobel: None
+% Zeidan: None
+
+%%>> Essentially just exclude Ruetgen & Wager06b
+
+df_incl=df_full;
+%'ruetgen'
+i=find(strcmp(studies,'ruetgen'));
+df_incl.condata{i}=NaN(size(df_full.condata{i}));
+df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
+%'wager04b_michigan'
+i=find(strcmp(studies,'wager04b_michigan'));
+df_incl.condata{i}=NaN(size(df_full.condata{i}));
+df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
+
+save('A_Inclusive_Sample.mat','df_incl');

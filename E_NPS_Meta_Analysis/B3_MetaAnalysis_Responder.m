@@ -25,7 +25,7 @@
 clear
 % Add folder with Generic Inverse Variance Methods Functions first
 addpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/A_Analysis_GIV_Functions/')
-load('Full_Sample.mat')
+load('A3_Responder_Sample.mat')
 
 % !!!!! These must be in the same order as listed under "studies" !!!!
 
@@ -75,57 +75,57 @@ studyIDtexts={
             'Zeidan et al. 2015:';...
             };
 %% Meta-Analysis Ratings
-v=find(strcmp(df_full.variables,'rating'));
-for i=1:length(df_full.studies) % Calculate for all studies except...
-    if df_full.consOnlyRating(i)==0 %...data-sets where both pla and con is available
-        if df_full.BetweenSubject(i)==0 %Within-subject studies
-           stats.rating(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-           stats.rating(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+v=find(strcmp(df_resp.variables,'rating'));
+for i=1:length(df_resp.studies) % Calculate for all studies except...
+    if df_resp.consOnlyRating(i)==0 %...data-sets where both pla and con is available
+        if df_resp.BetweenSubject(i)==0 %Within-subject studies
+           stats.rating(i)=withinMetastats(df_resp.pladata{i}(:,v),df_resp.condata{i}(:,v));
+        elseif df_resp.BetweenSubject(i)==1 %Between-subject studies
+           stats.rating(i)=betweenMetastats(df_resp.pladata{i}(:,v),df_resp.condata{i}(:,v));
         end        
     end
 end
 % Calculate for those studies where only pla>con contrasts are available
-conOnly=find(df_full.consOnlyRating==1);
+conOnly=find(df_resp.consOnlyRating==1);
 impu_r=nanmean([stats.rating.r]); % impute the mean within-subject study correlation observed in all other studies
 for i=conOnly'
-stats.rating(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
+stats.rating(i)=withinMetastats(df_resp.pladata{i}(:,v),impu_r);
 end
 
 %% Meta-Analysis NPS
-v=find(strcmp(df_full.variables,'NPSraw'));
-for i=1:length(df_full.studies) % Calculate for all studies except...
-    if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
-        if df_full.BetweenSubject(i)==0 %Within-subject studies
-           stats.NPS(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-           stats.NPS(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+v=find(strcmp(df_resp.variables,'NPSraw'));
+for i=1:length(df_resp.studies) % Calculate for all studies except...
+    if df_resp.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
+        if df_resp.BetweenSubject(i)==0 %Within-subject studies
+           stats.NPS(i)=withinMetastats(df_resp.pladata{i}(:,v),df_resp.condata{i}(:,v));
+        elseif df_resp.BetweenSubject(i)==1 %Between-subject studies
+           stats.NPS(i)=betweenMetastats(df_resp.pladata{i}(:,v),df_resp.condata{i}(:,v));
         end        
     end
 end
 % Calculate for those studies where only pla>con contrasts are available
-conOnly=find(df_full.consOnlyNPS==1);
+conOnly=find(df_resp.consOnlyNPS==1);
 impu_r=nanmean([stats.NPS.r]); % impute the mean within-subject study correlation observed in all other studies
 for i=conOnly'
-stats.NPS(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
+stats.NPS(i)=withinMetastats(df_resp.pladata{i}(:,v),impu_r);
 end
 
 %% Meta-Analysis MHE
-v=find(strcmp(df_full.variables,'MHEraw'));
-for i=1:length(df_full.studies) % Calculate for all studies except...
-    if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
-        if df_full.BetweenSubject(i)==0 %Within-subject studies
-           stats.MHE(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-           stats.MHE(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+v=find(strcmp(df_resp.variables,'MHEraw'));
+for i=1:length(df_resp.studies) % Calculate for all studies except...
+    if df_resp.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
+        if df_resp.BetweenSubject(i)==0 %Within-subject studies
+           stats.MHE(i)=withinMetastats(df_resp.pladata{i}(:,v),df_resp.condata{i}(:,v));
+        elseif df_resp.BetweenSubject(i)==1 %Between-subject studies
+           stats.MHE(i)=betweenMetastats(df_resp.pladata{i}(:,v),df_resp.condata{i}(:,v));
         end        
     end
 end
 % Calculate for those studies where only pla>con contrasts are available
-conOnly=find(df_full.consOnlyNPS==1);
+conOnly=find(df_resp.consOnlyNPS==1);
 impu_r=nanmean([stats.MHE.r]); % impute the mean within-subject study correlation observed in all other studies
 for i=conOnly'
-stats.MHE(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
+stats.MHE(i)=withinMetastats(df_resp.pladata{i}(:,v),impu_r);
 end
 
 %% One Forest plot per variable
@@ -133,7 +133,7 @@ varnames=fieldnames(stats)
 nicevarnames={'Pain ratings',...
               'NPS-score',...
               'VAS-score'};
-for i = 1:numel(nvars)
+for i = 1:numel(varnames)
     ForestPlotter(stats.(varnames{i}),...
                   'studyIDtexts',studyIDtexts,...
                   'outcomelabel',[nicevarnames{i},' (Hedges'' g)'],...
@@ -142,6 +142,6 @@ for i = 1:numel(nvars)
                   'withoutlier',0,...
                   'WIsubdata',1,...
                   'boxscaling',1);
-    hgexport(gcf, ['A_Meta_All_',varnames{i},'.eps'], hgexport('factorystyle'), 'Format', 'eps'); 
+    hgexport(gcf, ['B3_Meta_Resp_',varnames{i},'.eps'], hgexport('factorystyle'), 'Format', 'eps'); 
     close all;
 end

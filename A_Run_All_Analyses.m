@@ -68,29 +68,26 @@ run('./D_Exploratory_Analyses/E_demographics.m')
 
 %% NPS based meta-analysis (also MHE)
 
-%Assemble full data-set
-run('./E_NPS_Meta_Analysis/A_Select_All.m')
-%Assemble inclusive/conservative data-set
-
+%Assemble full data-set and inclusive/conservative data-set
+run('./E_NPS_Meta_Analysis/A1_Select_All_and_Inclusive.m')
 %Assemble responder data-set
+run('./E_NPS_Meta_Analysis/A2_Select_Responder.m')
 
-% Inclusive Ratings
-run('./E_NPS_Meta_Analysis/A_MetaAnalysis_Ratings_Inclusive.m')
-% Inclusive NPS
-run('./E_NPS_Meta_Analysis/B_MetaAnalysis_NPS_Inclusive.m')
-% Responder Ratings (just to check if all went right)
-run('./E_NPS_Meta_Analysis/C_MetaAnalysis_Ratings_Responder.m')
-% Responder NPS
-run('./E_NPS_Meta_Analysis/D_MetaAnalysis_NPS_Responder.m')
+%Perform all meta-analyses for full data-set
+run('./E_NPS_Meta_Analysis/B1_MetaAnalysis_All.m')
+%Perform all meta-analyses for inclusive data-set
+run('./E_NPS_Meta_Analysis/B2_MetaAnalysis_Inclusive.m')
+%Perform all meta-analyses for responder data-set
+run('./E_NPS_Meta_Analysis/B3_MetaAnalysis_Responder.m')
 
 % Auxiliary findings NPS (all inclusive)
 % Pain vs baseline
-run('./E_NPS_Meta_Analysis/E_MetaAnalysis_NPS_Pain_vs_Baseline_All.m')
-run('./E_NPS_Meta_Analysis/E1_MetaAnalysis_NPS_Pain_vs_Baseline_wo_Excluded.m')
+run('./E_NPS_Meta_Analysis/C1_NPS_Pain_vs_Baseline_All.m')
+run('./E_NPS_Meta_Analysis/C2_NPS_Pain_vs_Baseline_Outlier_Excluded.m')
 
 % High pain vs low pain
-run('./E_NPS_Meta_Analysis/F_MetaAnalysis_NPS_High_vs_Low_Pain_All.m')
-run('./E_NPS_Meta_Analysis/F2_MetaAnalysis_NPS_High_vs_Low_Pain_wo_Excluded.m')
+run('./E_NPS_Meta_Analysis/D1_MetaAnalysis_NPS_High_vs_Low_Pain_All.m')
+run('./E_NPS_Meta_Analysis/D2_MetaAnalysis_NPS_High_vs_Low_Pain_wo_Excluded.m')
 
 % Medications (NPS)
 run('./E_NPS_Meta_Analysis/G_MetaAnalysis_NPS_Medication_Effects.m')
