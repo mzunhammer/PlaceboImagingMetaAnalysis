@@ -66,35 +66,39 @@ run('./D_Exploratory_Analyses/E_demographics.m')
 %ratings was performed by hand on a single-study basis in the original
 %tables
 
-%% NPS based meta-analysis (also MHE)
+%% Meta-analysis placebo paper (Ratings, NPS, MHE)
 
 %Assemble full data-set and inclusive/conservative data-set
-run('./E_NPS_Meta_Analysis/A1_Select_All_and_Inclusive.m')
+run('./E_NPS_Meta_Analysis_Placebo/A1_Select_All_and_Inclusive.m')
 %Assemble responder data-set
-run('./E_NPS_Meta_Analysis/A2_Select_Responder.m')
+run('./E_NPS_Meta_Analysis_Placebo/A2_Select_Responder.m')
 
 %Perform all meta-analyses for full data-set
-run('./E_NPS_Meta_Analysis/B1_MetaAnalysis_All.m')
+run('./E_NPS_Meta_Analysis_Placebo/B1_MetaAnalysis_All.m')
 %Perform all meta-analyses for inclusive data-set
-run('./E_NPS_Meta_Analysis/B2_MetaAnalysis_Inclusive.m')
+run('./E_NPS_Meta_Analysis_Placebo/B2_MetaAnalysis_Inclusive.m')
 %Perform all meta-analyses for responder data-set
-run('./E_NPS_Meta_Analysis/B3_MetaAnalysis_Responder.m')
-
-% Auxiliary findings NPS (all inclusive)
-% Pain vs baseline
-run('./E_NPS_Meta_Analysis/C1_NPS_Pain_vs_Baseline_All.m')
-run('./E_NPS_Meta_Analysis/C2_NPS_Pain_vs_Baseline_Outlier_Excluded.m')
-
-% High pain vs low pain
-run('./E_NPS_Meta_Analysis/D1_MetaAnalysis_NPS_High_vs_Low_Pain_All.m')
-run('./E_NPS_Meta_Analysis/D2_MetaAnalysis_NPS_High_vs_Low_Pain_wo_Excluded.m')
-
-% Medications (NPS)
-run('./E_NPS_Meta_Analysis/G_MetaAnalysis_NPS_Medication_Effects.m')
-% Medications (Ratings)
-run('./E_NPS_Meta_Analysis/G2_MetaAnalysis_Rating_Medication_Effects.m')
+run('./E_NPS_Meta_Analysis_Placebo/B3_MetaAnalysis_Responder.m')
 
 % Correlation NPS vs Ratings
-run('./E_NPS_Meta_Analysis/H_Meta_Placebo_NPS_vs_ratings_all.m')
+run('./E_NPS_Meta_Analysis_Placebo/C_Meta_Placebo_NPS_vs_ratings.m')
+
+%% Meta-analysis validation paper (Ratings, NPS, MHE)
+
+% Validation findings NPS (all inclusive)
+% Pain vs baseline
+run('./F_NPS_Meta_Analysis_Validation/C1_NPS_Pain_vs_Baseline_All.m')
+run('./F_NPS_Meta_Analysis_Validation/C2_NPS_Pain_vs_Baseline_Outlier_Excluded.m')
+
+% High pain vs low pain
+run('./F_NPS_Meta_Analysis_Validation/D1_MetaAnalysis_NPS_High_vs_Low_Pain_All.m')
+run('./F_NPS_Meta_Analysis_Validation/D2_MetaAnalysis_NPS_High_vs_Low_Pain_wo_Excluded.m')
+
+% Medications (NPS)
+run('./F_NPS_Meta_Analysis_Validation/G_MetaAnalysis_NPS_Medication_Effects.m')
+% Medications (Ratings)
+run('./F_NPS_Meta_Analysis_Validation/G2_MetaAnalysis_Rating_Medication_Effects.m')
+
+
 
 %% Whole brain analysis

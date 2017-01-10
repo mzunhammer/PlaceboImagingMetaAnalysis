@@ -1,21 +1,19 @@
 #### TODO #####
-– Shorten Meta-Analysis: Separate Data-Selection and Stat-Calculation
 
-#### OPEN, DISCUSS WITH TOR & ULRIKE
-Correct first drafts, decisions:
-–We missed two major (PET) study:
+#### DISCUSS WITH TOR & ULRIKE
+
+1.) Meta-stats: Hedges'g RM, vs Hedges'g
+Should we consult some expert? Whom Lakens, Senn, Borenstein?
+
+1.) Need placebo-prediction mask(s). With the pipeline at hand, making Forest Plots for placebo-predictor would be a matter of minutes.
+
+2.) Data-sharing agreement between collaborators.
+
+3.) Did we miss two major PET studies?
 1. T. D. Wager, D. J. Scott, J.-K. Zubieta, Placebo effects on human mu-opioid activity during pain., Proc. Natl. Acad. Sci. U. S. A. 104, 11056–61 (2007).
 1. D. J. Scott, C. S. Stohler, C. M. Egnatuk, H. Wang, R. a Koeppe, J.-K. Zubieta, Placebo and nocebo effects are defined by opposite opioid and dopaminergic responses., Arch. Gen. Psychiatry 65, 220–31 (2008).
 
-–sorting of studies in tables (alphabetical?, year?,n?) and and forest plots (alphabetical?, year?,n?,weight?,effect?)
-
-– ForrestPlot format:
-	–sorting of studies
-
-
-– Anthony Jone's and the last Remifentanil-Data are needed URGENTLY.
-– Outlier handling
-Publication decisions:
+Validation paper:
 – What is the target journal?
 	– Nature neuroscience
 	– Neuron
@@ -24,42 +22,27 @@ Publication decisions:
 	– Neuroimage
 	– HBM
 	– PAIN
-Further Directions:
-– Ask Tor for placebo-prediction mask(s). With the pipeline at hand, making Forest Plots for placebo-predictor would be a matter of minutes.
-– Ask Tor/Ulrike whether we should ask collaborators if they agree to share data with one-another via OSF
-– Re-Analysis price
-
-#### ARCHIVED:####:
-– For the Wager studies only rating differences are available. Since these were acquired within-subject, within-subject-correlations have to be imputed 
-– Single data-points for placebo-control cannot be plotted for between-subject studies...
-– NPS values (pain conditions only) for Freeman and Bingel'06 show really leptokurtic ("outlier prone") distributions (Kurtosis >7)... wrobel (>6), kong06 and choi (>5) also might be worth a look.
-– The negative placebo-effect of the bingel-study is partly driven by an outlier...
-– Discuss Choi et al.:
- 	– NPS activation good (pain> no pain, control>placebo, also shows lower-NPS-during-placebo-anticipation trend)
- 	– PROBLEM: Seemingly, separate GLMs were performed for each of the three experimental conditions for each session... brain images represent activation vs baseline+all other conditions. Comparable but a waste of power.
- 	– PROBLEM: Evidence for artifacts (stripes, strong, large activation blobs near edge of brain)
- 	– PROBLEM: Data for two sessions (300 images *TR=3= 15 min) per participant... the paper only mentions only first session of 15 mins... analyze second session? Pro: Higher Power, Con: Unpublished
- 	– PROBLEM: (partly solved) Standardized images larger than brainmask (Functional2Standard used to normalize fsl images. Incomplete BET may lead to "residual scull" >> no problem then, alignment should be fine.)
-– Discuss how to handle existing "baseline" data:
-	–Pre-treatment baselines are available for: Bingel11, Kong06, Kong09
-	–No-pain baselines are available for: Ellingsen, Rütgen, Zeidan
-	–Special: Extra "treatment effect"basline is avaliable: Kessner
-Solution a) YES: Analyze only Pain_Placebo vs Pain_Control. Pro: Easy to select, no computational problems, images/contrasts are comparable across all between and within-studies. Con: Discarding data means less power.
-NO: Build contrasts against baselines where possible. Pro: More power for studies above. Con: Contrasts may not be comparable across all between and within-studies anymore. Contrasted NPS results often do not correlate positively within subjects anymore >> within-subject analysis may be invalid.
-I would feel better not including the baseline data.
-– Solve: Missing variables Bingel 2006:
-	- gender
-	- age
-– Ask Elsenbruch for anticipation data (betas 1 and 5)
-– Ask KONG: SPMs for NPS scaling for kong06, kong09, freeman
->> Especially the contrast in freeman et al. seems to be on a completely different scale than the simple-contrast images
-– Solve: Missing variables Kong 2009:
-	- Age
-	- Placebo First. It is not mentioned in the paper whether skin-spots on meridian and non-meridian sides were tested in random order
-	- Condition sequence: Placebo
-	- stimInt: Stimulus Intensities currently missing
-	– Anticipation data
-
+	
+Placebo paper:
+5.) 
+– "Full analysis" in paper, conservative/responder analysis in supplement
+– Which type of forrest plot:
+	–  Sorting of studies in tables (alphabetical?, year?,n?) and and forest plots (alphabetical?, year?,n?,weight?,effect?)
+	–  Labelling: Short: Studies + Year OR Long: Studies + Year + Conditions compared
+	-  Data:
+		A) Clean but uninformative version: Only mean ± CI
+		B) Noisy but informative version: mean ± CI + ss data (problems: huge scale, diff WI/BTW-study designs, noisy...)
+		C) Compromise: mean ± CI + ss data up to certain CI (problems: diff WI/BTW-study designs, how to treat outliers)
+		>> Suggested solution: Clean for main manuscript, noisy for supplement.
+		
+– What is the target journal?
+	– Nature neuroscience
+	– Neuron
+	– Plos Biology
+	– PNAS
+	– Neuroimage
+	– HBM
+	– PAIN
 
 
 
