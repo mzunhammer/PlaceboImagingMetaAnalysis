@@ -22,4 +22,12 @@ octave-workspace
 .DS_store
 
 # Figures
-E_NPS_Meta_Analysis/*.eps
+*.eps
+*.svg
+*.png
+*/*.eps
+*/*.svg
+*/*.png
+*/*.eps/*
+*/*.svg/*
+*/*.png/*
