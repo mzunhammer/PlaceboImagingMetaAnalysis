@@ -142,6 +142,6 @@ for i = 1:numel(varnames)
                   'withoutlier',0,...
                   'WIsubdata',1,...
                   'boxscaling',1);
-    hgexport(gcf, ['B2_Meta_Incl_',varnames{i},'.eps'], hgexport('factorystyle'), 'Format', 'eps'); 
+    hgexport(gcf, ['B2_Meta_Incl_',varnames{i},'.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
     close all;
 end

@@ -1,20 +1,15 @@
 #### TODO #####
 
 #### DISCUSS WITH TOR & ULRIKE
+Placebo paper almost ready
+Validation paper 50%
 
 1.) Meta-stats: Hedges'g RM, vs Hedges'g
 Should we consult some expert? Whom Lakens, Senn, Borenstein?
 
-1.) Need placebo-prediction mask(s). With the pipeline at hand, making Forest Plots for placebo-predictor would be a matter of minutes.
+2.) Need placebo-prediction mask(s). With the pipeline at hand, making Forest Plots for placebo-predictor would be a matter of minutes.
 
-2.) Data-sharing agreement between collaborators.
-
-3.) Did we miss two major PET studies?
-1. T. D. Wager, D. J. Scott, J.-K. Zubieta, Placebo effects on human mu-opioid activity during pain., Proc. Natl. Acad. Sci. U. S. A. 104, 11056–61 (2007).
-1. D. J. Scott, C. S. Stohler, C. M. Egnatuk, H. Wang, R. a Koeppe, J.-K. Zubieta, Placebo and nocebo effects are defined by opposite opioid and dopaminergic responses., Arch. Gen. Psychiatry 65, 220–31 (2008).
-
-Validation paper:
-– What is the target journal?
+3.) What is the target journal?
 	– Nature neuroscience
 	– Neuron
 	– Plos Biology
@@ -23,7 +18,13 @@ Validation paper:
 	– HBM
 	– PAIN
 	
-Placebo paper:
+4.) Data-sharing agreement between collaborators.
+
+5.) Did we miss two major PET studies?
+1. T. D. Wager, D. J. Scott, J.-K. Zubieta, Placebo effects on human mu-opioid activity during pain., Proc. Natl. Acad. Sci. U. S. A. 104, 11056–61 (2007).
+1. D. J. Scott, C. S. Stohler, C. M. Egnatuk, H. Wang, R. a Koeppe, J.-K. Zubieta, Placebo and nocebo effects are defined by opposite opioid and dopaminergic responses., Arch. Gen. Psychiatry 65, 220–31 (2008).
+
+
 5.) 
 – "Full analysis" in paper, conservative/responder analysis in supplement
 – Which type of forrest plot:
