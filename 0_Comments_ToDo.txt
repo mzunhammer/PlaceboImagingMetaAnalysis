@@ -1,33 +1,28 @@
 #### TODO #####
 
 #### DISCUSS WITH TOR & ULRIKE
-Placebo paper almost ready
-Validation paper 50%
 
-1.) Meta-stats: Hedges'g RM, vs Hedges'g
-Should we consult some expert? Whom Lakens, Senn, Borenstein?
+1.) Placebo-NPS paper first draft:
+INCLUDE MAIN PAIN > BASELINE FOREST PLOT
+Two step approach in informing the collaborators
 
-2.) Need placebo-prediction mask(s). With the pipeline at hand, making Forest Plots for placebo-predictor would be a matter of minutes.
+a) Meta-stats for within-subject studies: Hedges'g RM, vs Hedges'g. Should we consult some expert? Whom Lakens, Senn, Borenstein?
+b) Need placebo-prediction mask(s). With the pipeline at hand, making Forest Plots for placebo-predictor would be a matter of minutes.
+c) What is the target journal?
+Medical Journal/Translational Journal
+	– NEJM
+	– STM
+	
 
-3.) What is the target journal?
-	– Nature neuroscience
-	– Neuron
 	– Plos Biology
-	– PNAS
 	– Neuroimage
 	– HBM
 	– PAIN
-	
-4.) Data-sharing agreement between collaborators.
-
-5.) Did we miss two major PET studies?
-1. T. D. Wager, D. J. Scott, J.-K. Zubieta, Placebo effects on human mu-opioid activity during pain., Proc. Natl. Acad. Sci. U. S. A. 104, 11056–61 (2007).
-1. D. J. Scott, C. S. Stohler, C. M. Egnatuk, H. Wang, R. a Koeppe, J.-K. Zubieta, Placebo and nocebo effects are defined by opposite opioid and dopaminergic responses., Arch. Gen. Psychiatry 65, 220–31 (2008).
-
-
-5.) 
-– "Full analysis" in paper, conservative/responder analysis in supplement
-– Which type of forrest plot:
+d) Did we miss two major PET studies? Beyond scope
+		1. T. D. Wager, D. J. Scott, J.-K. Zubieta, Placebo effects on human mu-opioid activity during pain., Proc. Natl. Acad. Sci. U. S. A. 104, 11056–61 (2007).
+		1. D. J. Scott, C. S. Stohler, C. M. Egnatuk, H. Wang, R. a Koeppe, J.-K. Zubieta, Placebo and nocebo effects are defined by opposite opioid and dopaminergic responses., Arch. Gen. Psychiatry 65, 220–31 (2008).
+e) "Full analysis" in paper, conservative/responder analysis in supplement
+f) Which type of forrest plot:
 	–  Sorting of studies in tables (alphabetical?, year?,n?) and and forest plots (alphabetical?, year?,n?,weight?,effect?)
 	–  Labelling: Short: Studies + Year OR Long: Studies + Year + Conditions compared
 	-  Data:
@@ -35,16 +30,23 @@ Should we consult some expert? Whom Lakens, Senn, Borenstein?
 		B) Noisy but informative version: mean ± CI + ss data (problems: huge scale, diff WI/BTW-study designs, noisy...)
 		C) Compromise: mean ± CI + ss data up to certain CI (problems: diff WI/BTW-study designs, how to treat outliers)
 		>> Suggested solution: Clean for main manuscript, noisy for supplement.
-		
-– What is the target journal?
-	– Nature neuroscience
-	– Neuron
-	– Plos Biology
+2.) Validation paper 50%:
+	Example of validation reliablity, cooperation
+
+ 	– Not a systematic meta-analysis. Different focus.
+ 	– How to deal with low-level stimulus activity of NPS
+ 	
+ 	– Nature neuroscience
 	– PNAS
+	– Plos Biology
 	– Neuroimage
 	– HBM
 	– PAIN
-
+	
+3.) Misc:
+	- Parental leave
+	- Data-sharing agreement
+	- Made a .git repo for analysis files separate
 
 
 
