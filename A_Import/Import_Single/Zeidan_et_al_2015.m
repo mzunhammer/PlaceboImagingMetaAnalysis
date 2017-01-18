@@ -53,9 +53,9 @@ unirating_pain=xlsread(xlspath,1,'R2:R18'); %UNPLEASANTNESS RATINGS, CONTRAST PA
 
 male=NaN(size(img));
 age=NaN(size(img));
-temp=[ones(size(zeidandir))*49; %Always 49°C in all subjects
-      ones(size(zeidandir))*35; %Always 35°C in all subjects
-      ones(size(zeidandir))*49];%Actually this represents 49-35°C
+temp=[ones(size(zeidandir))*49; %Always 49?C in all subjects
+      ones(size(zeidandir))*35; %Always 35?C in all subjects
+      ones(size(zeidandir))*49];%Actually this represents 49-35?C
 rating=nan(size(img));
 %according to the paper all NoPain stimuli were rated with so for the Pain>No pain contrast mean pain ratings can be used directly
 %for the placebo>control contras the appropriate rating differences can be
@@ -103,7 +103,7 @@ zeidan.condSeq=[ones(size(zeidandir))*1; % Placebo contrasts are Post (Sess 2) -
                 ones(size(zeidandir))*1.5; % Pain contrasts are mean of (Sess 1) and (Sess 2) = 1.5
                 ones(size(zeidandir))*1];% Placebo contrasts are Post (Sess 2) - Pre (Sess 1) Placebo = 1
 zeidan.rating=rating; %These are ratings of Pain UNPLEASANTNESS (0-10 pt scale)            
-zeidan.stimInt=temp; %either 49 or 35°C;             
+zeidan.stimInt=temp; %either 49 or 35?C;             
 zeidan.fieldStrength=ones(size(zeidan.img)).*3;
 zeidan.tr           =ones(size(zeidan.img)).*4;
 zeidan.te           =ones(size(zeidan.img)).*12;
@@ -117,7 +117,7 @@ zeidan.conSpan      =[ones(size(zeidandir))*4;
                       ones(size(zeidandir))*4]; %Use design calculator in B_Unpack_and_Contrast_Zeidan to get contrast weights.
 
 %% Save
-outpath=fullfile(basedir,'Zeidan_et_al_2015.mat');
+outpath=fullfile(basedir,'Zeidan_et_al_2015.mat')
 save(outpath,'zeidan')
 
 end

@@ -9,7 +9,7 @@ basedir = '/Users/matthiaszunhammer/Dropbox/boulder_essen/Datasets/';
 
 studydir = 'Wrobel_et_al_2014';
 wrobeldir = dir(fullfile(basedir, studydir));
-beta_img = {wrobeldir(~cellfun(@isempty,regexp({wrobeldir.name},'.img'))).name}';
+beta_img = {wrobeldir(~cellfun(@isempty,regexp({wrobeldir.name},'^sub\d\d.*img'))).name}';
 
 img=cellfun(@(x) fullfile(studydir, x),beta_img,'UniformOutput',0); % The absolute image paths
 sub=regexp(img,'sub(\d\d)_beta','tokens');
@@ -91,7 +91,7 @@ wrobel.age=age;
 wrobel.healthy=ones(size(wrobel.img));
 wrobel.pla=pla;
 wrobel.pain=pain;
-wrobel.predictable=zeros(size(wrobel.img)); %Uncertainty: mean 7.5 ± 3.5 sec
+wrobel.predictable=zeros(size(wrobel.img)); %Uncertainty: mean 7.5 ? 3.5 sec
 wrobel.realTreat=zeros(size(wrobel.img));
 wrobel.realTreat(~cellfun(@isempty,regexp(beta_img,'haldol')))=1;
 wrobel.cond=vertcat(cond(:));

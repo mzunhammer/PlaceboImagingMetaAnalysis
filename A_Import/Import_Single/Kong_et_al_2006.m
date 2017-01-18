@@ -8,36 +8,36 @@ basedir = '/Users/matthiaszunhammer/Dropbox/boulder_essen/Datasets/';
 % in a data frame, saves as .mat
 
 studydir = 'Kong_et_al_2006';
-
+subjpattern='^\w\w\d\d\d\d\d\dcon_\d\d\d\d.img';
 kong_control_dir_hp_pre = dir(fullfile(basedir, studydir, 'control_hpVSbase_pre'));
-img_pain_control_hp_pre = {kong_control_dir_hp_pre(~cellfun(@isempty,regexp({kong_control_dir_hp_pre.name},'.img'))).name}';
+img_pain_control_hp_pre = {kong_control_dir_hp_pre(~cellfun(@isempty,regexp({kong_control_dir_hp_pre.name},subjpattern))).name}';
 
 kong_placebo_dir_hp_pre = dir(fullfile(basedir, studydir, 'placebo_hpVSbase_pre'));
-img_pain_placebo_hp_pre = {kong_placebo_dir_hp_pre(~cellfun(@isempty,regexp({kong_placebo_dir_hp_pre.name},'.img'))).name}';
+img_pain_placebo_hp_pre = {kong_placebo_dir_hp_pre(~cellfun(@isempty,regexp({kong_placebo_dir_hp_pre.name},subjpattern))).name}';
 
 kong_control_dir_lp_pre = dir(fullfile(basedir, studydir, 'control_lpVSbase_pre'));
-img_pain_control_lp_pre = {kong_control_dir_lp_pre(~cellfun(@isempty,regexp({kong_control_dir_lp_pre.name},'.img'))).name}';
+img_pain_control_lp_pre = {kong_control_dir_lp_pre(~cellfun(@isempty,regexp({kong_control_dir_lp_pre.name},subjpattern))).name}';
 
 kong_placebo_dir_lp_pre = dir(fullfile(basedir, studydir, 'placebo_lpVSbase_pre'));
-img_pain_placebo_lp_pre = {kong_placebo_dir_lp_pre(~cellfun(@isempty,regexp({kong_placebo_dir_lp_pre.name},'.img'))).name}';
+img_pain_placebo_lp_pre = {kong_placebo_dir_lp_pre(~cellfun(@isempty,regexp({kong_placebo_dir_lp_pre.name},subjpattern))).name}';
 
 
 kong_control_dir_hp_post = dir(fullfile(basedir, studydir, 'control_hpVSbase_post'));
-img_pain_control_hp_post = {kong_control_dir_hp_post(~cellfun(@isempty,regexp({kong_control_dir_hp_post.name},'.img'))).name}';
+img_pain_control_hp_post = {kong_control_dir_hp_post(~cellfun(@isempty,regexp({kong_control_dir_hp_post.name},subjpattern))).name}';
 
 kong_placebo_dir_hp_post = dir(fullfile(basedir, studydir, 'placebo_hpVSbase_post'));
-img_pain_placebo_hp_post = {kong_placebo_dir_hp_post(~cellfun(@isempty,regexp({kong_placebo_dir_hp_post.name},'.img'))).name}';
+img_pain_placebo_hp_post = {kong_placebo_dir_hp_post(~cellfun(@isempty,regexp({kong_placebo_dir_hp_post.name},subjpattern))).name}';
 
 kong_control_dir_lp_post = dir(fullfile(basedir, studydir, 'control_lpVSbase_post'));
-img_pain_control_lp_post = {kong_control_dir_lp_post(~cellfun(@isempty,regexp({kong_control_dir_lp_post.name},'.img'))).name}';
+img_pain_control_lp_post = {kong_control_dir_lp_post(~cellfun(@isempty,regexp({kong_control_dir_lp_post.name},subjpattern))).name}';
 
 kong_placebo_dir_lp_post = dir(fullfile(basedir, studydir, 'placebo_lpVSbase_post'));
-img_pain_placebo_lp_post = {kong_placebo_dir_lp_post(~cellfun(@isempty,regexp({kong_placebo_dir_lp_post.name},'.img'))).name}';
+img_pain_placebo_lp_post = {kong_placebo_dir_lp_post(~cellfun(@isempty,regexp({kong_placebo_dir_lp_post.name},subjpattern))).name}';
 
 %Suboptimal: Currently only con-images but no non-painful beta-images
 %available
 kong_painHiLo_dir = dir(fullfile(basedir, studydir, 'pre_highpain_vs_lowpain'));
-img_painHiLo = {kong_painHiLo_dir(~cellfun(@isempty,regexp({kong_painHiLo_dir.name},'.img'))).name}';
+img_painHiLo = {kong_painHiLo_dir(~cellfun(@isempty,regexp({kong_painHiLo_dir.name},'\w\w\d\d\d\d\d\d.img'))).name}';
 
 % Create image variable
 img=[fullfile(studydir, 'control_hpVSbase_pre', img_pain_control_hp_pre);...

@@ -9,18 +9,18 @@ basedir = '/Users/matthiaszunhammer/Dropbox/boulder_essen/Datasets/';
 
 studydir = 'Freeman_et_al_2015';
 freeman_control_dir = dir(fullfile(basedir, studydir, 'post-pain-Control'));
-img_pain_control = {freeman_control_dir(~cellfun(@isempty,regexp({freeman_control_dir.name},'.img'))).name}';
+img_pain_control = {freeman_control_dir(~cellfun(@isempty,regexp({freeman_control_dir.name},'^L.*img'))).name}';
 
 freeman_placebo_dir = dir(fullfile(basedir, studydir, 'post-pain-placebo'));
-img_pain_placebo = {freeman_placebo_dir(~cellfun(@isempty,regexp({freeman_placebo_dir.name},'.img'))).name}';
+img_pain_placebo = {freeman_placebo_dir(~cellfun(@isempty,regexp({freeman_placebo_dir.name},'^L.*img'))).name}';
 
 %Suboptimal: Currently only con-images but no non-painful beta-images
 %available
 freeman_painHiLo_dir = dir(fullfile(basedir, studydir, 'post-HighpainVsLowpain'));
-img_painHiLo = {freeman_painHiLo_dir(~cellfun(@isempty,regexp({freeman_painHiLo_dir.name},'.img'))).name}';
+img_painHiLo = {freeman_painHiLo_dir(~cellfun(@isempty,regexp({freeman_painHiLo_dir.name},'^L.*img'))).name}';
 
 freeman_allPrePainvsbldir = dir(fullfile(basedir, studydir, 'all_pre-painVSbaseline'));
-img_painAllPrevsBL = {freeman_allPrePainvsbldir(~cellfun(@isempty,regexp({freeman_allPrePainvsbldir.name},'.img'))).name}';
+img_painAllPrevsBL = {freeman_allPrePainvsbldir(~cellfun(@isempty,regexp({freeman_allPrePainvsbldir.name},'^L.*img'))).name}';
 
 % Create image variable
 img=[fullfile(studydir, 'post-pain-Control', img_pain_control);...

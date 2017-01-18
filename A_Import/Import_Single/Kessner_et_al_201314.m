@@ -9,7 +9,7 @@ basedir = '/Users/matthiaszunhammer/Dropbox/boulder_essen/Datasets/';
 studydir = 'Kessner_et_al_201314';
 kessnerdir = dir(fullfile(basedir, studydir));
 xls_path=fullfile(basedir, studydir,'Kessner_et_al_behavioral.xlsx');
-beta_img = {kessnerdir(~cellfun(@isempty,regexp({kessnerdir.name},'.img'))).name}';
+beta_img = {kessnerdir(~cellfun(@isempty,regexp({kessnerdir.name},'^s.*img'))).name}';
 img=cellfun(@(x) fullfile(studydir, x),beta_img,'UniformOutput',0);                                               % The absolute image paths
 
 % Get subject numbers

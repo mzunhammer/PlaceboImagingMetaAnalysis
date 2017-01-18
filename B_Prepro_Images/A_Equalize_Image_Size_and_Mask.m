@@ -18,7 +18,7 @@ spm_write_vol(outheader,mask);
 for i=1:length(df.img)
 infile=fullfile(datapath,df.img{i});
 [path,filename,ext]=fileparts(infile);
-outfile=fullfile(path,['r',filename,ext])
+outfile=fullfile(path,['r_',filename,ext])
 disp(['Masking ',outfile])    
 matlabbatch{1}.spm.util.imcalc.input = {
                                         maskpath

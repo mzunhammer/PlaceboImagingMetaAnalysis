@@ -11,11 +11,11 @@ basedir = '/Users/matthiaszunhammer/Dropbox/boulder_essen/Datasets/';
 %and extract/assign experimental conditions from/to image names
 studydir= 'Bingel_et_al_2011';
 bingeldir = dir(fullfile(basedir, studydir));
-iimg=~cellfun(@isempty,regexp({bingeldir.name},'.img')); %actual images in dir
+iimg=~cellfun(@isempty,regexp({bingeldir.name},'^sub.*img')); %actual images in dir
 beta_img = {bingeldir(iimg).name}';
 img=cellfun(@(x) fullfile(studydir, x),beta_img,'UniformOutput',0);
 % Get subject numbers from img paths
-sub=regexp(img,'sub(\d\d)_beta','tokens');    
+sub=regexp(img,'/sub(\d\d)_beta','tokens');    
 sub=[sub{:}];
 % Assign "placebo condition" to beta image
 % 0= Any Control 1 = Any Placebo 2 = Other
@@ -109,7 +109,7 @@ bingel11.age=ones(size(bingel11.img))*28; %Unfortunately not available, using gr
 bingel11.healthy=ones(size(bingel11.img));
 bingel11.pla=pla;
 bingel11.pain=pain;
-bingel11.predictable= zeros(size(bingel11.img)); %Uncertainty: 6±2.8284s ???; %This anticipatory phase was 4 to 8 s long.
+bingel11.predictable= zeros(size(bingel11.img)); %Uncertainty: 6?2.8284s ???; %This anticipatory phase was 4 to 8 s long.
 bingel11.realTreat=~cellfun(@isempty,(regexp(cond,'remi'))); %Mark all blocks w remifentanil
 bingel11.cond=cond;
 bingel11.stimtype=repmat({'heat'},size(bingel11.img));

@@ -14,7 +14,7 @@ schenkdir = dir(fullfile(basedir, studydir));
 dirnames={schenkdir.name};
 isubfolder=regexp(dirnames,'sub\d\d');
 isubfolder=~cellfun(@isempty,isubfolder); %actual images in dir
-% Get paths of subjects as string
+% Get paths of subjects as string^
 subfolder=dirnames(isubfolder);
 sub=cellfun(@str2num,dirnames(isubfolder),'UniformOutput',0);
 sub=[sub{:}];
@@ -37,7 +37,7 @@ for j=1:length(subfolder)
     xSpanRaw=max(SPM.xX.X)-min(SPM.xX.X);
     for i=1:nbetas
         %Get filenames in a (subj,beta) matrix
-        img(j,i) = fullfile(studydir,subfolder(j), sprintf('beta_00%0.2d.img', beta_IDs(i)));
+        img(j,i) = fullfile(studydir,subfolder(j), sprintf('^beta_00%0.2d.img', beta_IDs(i)));
         beta(j,i)=beta_IDs(i);
         %Get description of conditions in a in (subj,beta) matrix format
         cond(j,i)=beta_descriptors(i); 

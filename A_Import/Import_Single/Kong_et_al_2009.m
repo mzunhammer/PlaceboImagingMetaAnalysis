@@ -8,21 +8,21 @@ basedir = '/Users/matthiaszunhammer/Dropbox/boulder_essen/Datasets/';
 % in a data frame, saves as .mat
 
 studydir = 'Kong_et_al_2009';
-
+subjpattern='^\w\w\d\d\d\d\d\d.img';
 kong_control_dir_pre = dir(fullfile(basedir, studydir, 'control_pre_pain'));
-img_pain_control_pre = {kong_control_dir_pre(~cellfun(@isempty,regexp({kong_control_dir_pre.name},'.img'))).name}';
+img_pain_control_pre = {kong_control_dir_pre(~cellfun(@isempty,regexp({kong_control_dir_pre.name},subjpattern))).name}';
 kong_placebo_dir_pre = dir(fullfile(basedir, studydir, 'placebo_pre_pain'));
-img_pain_placebo_pre = {kong_placebo_dir_pre(~cellfun(@isempty,regexp({kong_placebo_dir_pre.name},'.img'))).name}';
+img_pain_placebo_pre = {kong_placebo_dir_pre(~cellfun(@isempty,regexp({kong_placebo_dir_pre.name},subjpattern))).name}';
 
 kong_control_dir_post = dir(fullfile(basedir, studydir, 'control_post_pain'));
-img_pain_control_post = {kong_control_dir_post(~cellfun(@isempty,regexp({kong_control_dir_post.name},'.img'))).name}';
+img_pain_control_post = {kong_control_dir_post(~cellfun(@isempty,regexp({kong_control_dir_post.name},subjpattern))).name}';
 kong_placebo_dir_post = dir(fullfile(basedir, studydir, 'placebo_post_pain'));
-img_pain_placebo_post = {kong_placebo_dir_post(~cellfun(@isempty,regexp({kong_placebo_dir_post.name},'.img'))).name}';
+img_pain_placebo_post = {kong_placebo_dir_post(~cellfun(@isempty,regexp({kong_placebo_dir_post.name},subjpattern))).name}';
 
 %Suboptimal: Currently only con-images but no non-painful beta-images
 %available
 kong_painHiLo_dir = dir(fullfile(basedir, studydir, 'allHighpainVSLowPain'));
-img_painHiLo = {kong_painHiLo_dir(~cellfun(@isempty,regexp({kong_painHiLo_dir.name},'.img'))).name}';
+img_painHiLo = {kong_painHiLo_dir(~cellfun(@isempty,regexp({kong_painHiLo_dir.name},subjpattern))).name}';
 
 % Create image variable
 img=[fullfile(studydir, 'control_pre_pain', img_pain_control_pre);...

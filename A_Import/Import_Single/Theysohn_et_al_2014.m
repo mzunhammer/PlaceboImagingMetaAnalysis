@@ -43,7 +43,7 @@ for j= 1:nsubj
      xSpanRaw=max(SPM.xX.X)-min(SPM.xX.X);
     for i = 1:length(beta_IDs)
         %Get filenames in a (subj,beta) matrix
-        img(j,i) = fullfile(studydir,theyfolders(j), sprintf('beta_00%0.2d.img', beta_IDs(i)));
+        img(j,i) = fullfile(studydir,theyfolders(j), sprintf('^beta_00%0.2d.img', beta_IDs(i)));
         %Get subject and con ID in the same (subj,beta) matrix format
         i_sub(j,i)=j;
         sub(j,i)=theyfolders(j);

@@ -30,7 +30,7 @@ for j=1:length(subdir)
      xSpanRaw=max(xX.X)-min(xX.X);
     for i=1:size(beta_ID,2)
         %Get filenames in a (subj,con) matrix
-        img{j,i} = fullfile(studydir,subdir{j},sprintf('beta_00%0.2d.img', beta_ID(j,i)));
+        img{j,i} = fullfile(studydir,subdir{j},sprintf('^beta_00%0.2d.img', beta_ID(j,i)));
         sub(j,i)=subdir(j); % The subject number (study specific)
         xSpan(j,i)=xSpanRaw(beta_ID(j,i)); % Gets xSpan for betas one at a time
         nImages(j,i)=size(xX.X,1);

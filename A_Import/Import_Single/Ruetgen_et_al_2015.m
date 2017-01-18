@@ -8,7 +8,7 @@ basedir = '/Users/matthiaszunhammer/Dropbox/boulder_essen/Datasets/';
 %and extract/assign experimental conditions from/to image names
 studydir = 'Ruetgen_et_al_2015';
 ruetgendir = dir(fullfile(basedir, studydir));
-con_img = {ruetgendir(~cellfun(@isempty,regexp({ruetgendir.name},'.img'))).name}';
+con_img = {ruetgendir(~cellfun(@isempty,regexp({ruetgendir.name},'\w\d\d\d.*img'))).name}';
 img=cellfun(@(x) fullfile(studydir, x),con_img,'UniformOutput',0);                                               % The absolute image paths
 
 % Get subjects

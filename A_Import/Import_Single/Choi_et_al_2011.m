@@ -13,7 +13,7 @@ basedir = '/Users/matthiaszunhammer/Dropbox/boulder_essen/Datasets/';
 studydir= 'Choi_et_al_2011';
 
 choidir = dir(fullfile(basedir, studydir));
-iimg=~cellfun(@isempty,regexp({choidir.name},'.nii')); %actual images in dir
+iimg=~cellfun(@isempty,regexp({choidir.name},'^S.*nii')); %actual images in dir
 beta_img = {choidir(iimg).name}';
 idesignmats=~cellfun(@isempty,regexp({choidir.name},'DesignMatrix')); %actual images in dir
 designmats = {choidir(idesignmats).name}';

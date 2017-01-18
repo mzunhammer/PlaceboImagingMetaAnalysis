@@ -38,7 +38,7 @@ con_ID=[2;3;4;5;6];
        for i=1:size(con_ID,1)
         nImages(j,i)=size(xX.X,1);
         %Get filenames in a (subj,con) matrix
-        img{j,i} = fullfile(currpath,sprintf('con_00%0.2d.img', con_ID(i)));
+        img{j,i} = fullfile(currpath,sprintf('^con_00%0.2d.img', con_ID(i)));
         sub(j,i)=subdir(j); % The subject number (study specific)
         %Build Placebo vector
         if con_ID(i)==3 || con_ID(i)==5
