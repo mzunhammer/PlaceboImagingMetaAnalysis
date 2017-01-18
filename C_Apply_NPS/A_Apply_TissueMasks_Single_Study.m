@@ -3,7 +3,7 @@ p = mfilename('fullpath'); %CANlab's apply mask do not like lists with relative 
 [p,~,~]=fileparts(p);
 splitp=strsplit(p,'/');
 datadir=fullfile(filesep,splitp{1:end-2},'Datasets');
-
+addpath('./pattern_masks/')
 % 'Atlas_et_al_2012_NPS_MHE'
 % 'Bingel_et_al_2006_NPS_MHE'
 % 'Bingel_et_al_2011_NPS_MHE'
@@ -17,6 +17,7 @@ datadir=fullfile(filesep,splitp{1:end-2},'Datasets');
 % 'Kessner_et_al_201314_NPS_MHE'
 % 'Kong_et_al_2006_NPS_MHE'
 % 'Kong_et_al_2009_NPS_MHE'
+% 'Lui_et_al_2010_NPS_MHE'
 % 'Ruetgen_et_al_2015_NPS_MHE'
 % 'Schenk_et_al_2014_NPS_MHE'
 % 'Theysohn_et_al_2014_NPS_MHE'
@@ -26,11 +27,11 @@ datadir=fullfile(filesep,splitp{1:end-2},'Datasets');
 % 'Zeidan_et_al_2015_NPS_MHE'
 
 runstudies={...
-%'Atlas_et_al_2012_NPS_MHE'
-%'Bingel_et_al_2006_NPS_MHE'
-%'Bingel_et_al_2011_NPS_MHE'
-%'Choi_et_al_2013_NPS_MHE'
-%'Eippert_et_al_2009_NPS_MHE'
+'Atlas_et_al_2012_NPS_MHE'
+'Bingel_et_al_2006_NPS_MHE'
+'Bingel_et_al_2011_NPS_MHE'
+'Choi_et_al_2013_NPS_MHE'
+'Eippert_et_al_2009_NPS_MHE'
 'Ellingsen_et_al_2013_NPS_MHE'
 'Elsenbruch_et_al_2012_NPS_MHE'
 'Freeman_et_al_2015_NPS_MHE'
@@ -39,8 +40,9 @@ runstudies={...
 'Kessner_et_al_201314_NPS_MHE'
 'Kong_et_al_2006_NPS_MHE'
 'Kong_et_al_2009_NPS_MHE'
+'Lui_et_al_2010_NPS_MHE'
 'Ruetgen_et_al_2015_NPS_MHE'
-%'Schenk_et_al_2014_NPS_MHE'
+'Schenk_et_al_2014_NPS_MHE'
 'Theysohn_et_al_2014_NPS_MHE'
 'Wager_at_al_2004a_princeton_shock_NPS_MHE'
 'Wager_et_al_2004b_michigan_heat_NPS_MHE'
@@ -90,7 +92,7 @@ df.nobrain_abs=[nobrain_abs{:}]';
 % Push the data in df into a table with the name of the original table
 eval([currtablename{1} '= df']);
 % Eval statement saving results with original table name
-eval(['save(fullfile(datadir,[runstudies{i},''_NOBRAIN.mat'']),''',currtablename{1},''')'])
+eval(['save(fullfile(datadir,[runstudies{i}]),''',currtablename{1},''')'])
 
 toc/60, 'Minutes'
 waitbar(i / length(runstudies))

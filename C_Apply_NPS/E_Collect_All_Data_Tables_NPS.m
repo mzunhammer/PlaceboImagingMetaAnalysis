@@ -108,6 +108,7 @@ load([datadir, 'Huber_et_al_2013_NPS_MHE_NOBRAIN.mat'])
 load([datadir, 'Kessner_et_al_201314_NPS_MHE_NOBRAIN.mat'])
 load([datadir, 'Kong_et_al_2006_NPS_MHE_NOBRAIN.mat'])
 load([datadir, 'Kong_et_al_2009_NPS_MHE_NOBRAIN.mat'])
+load([datadir, 'Lui_et_al_2010_NPS_MHE_NOBRAIN.mat'])
 load([datadir, 'Ruetgen_et_al_2015_NPS_MHE_NOBRAIN.mat'])
 load([datadir, 'Schenk_et_al_2014_NPS_MHE_NOBRAIN.mat'])
 load([datadir, 'Theysohn_et_al_2014_NPS_MHE_NOBRAIN.mat'])
@@ -117,6 +118,6 @@ load([datadir, 'Wrobel_et_al_2014_NPS_MHE_NOBRAIN.mat'])
 load([datadir, 'Zeidan_et_al_2015_NPS_MHE_NOBRAIN.mat'])
 
 %% Combine the studies
-df=[atlas;bingel06;bingel11;choi;eippert;ellingsen;elsenb;freeman;geuter;huber;kessner;kong06;kong09;ruetgen;schenk;they;wager_princeton;wager_michigan;wrobel;zeidan];
+df=[atlas;bingel06;bingel11;choi;eippert;ellingsen;elsenb;freeman;geuter;huber;kessner;kong06;kong09;lui;ruetgen;schenk;they;wager_princeton;wager_michigan;wrobel;zeidan];
 %% Save all studies as df
 save(fullfile(datadir,'AllData_w_NPS_MHE_NOBRAIN.mat'), 'df')

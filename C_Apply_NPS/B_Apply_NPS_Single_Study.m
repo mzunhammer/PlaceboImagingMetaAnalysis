@@ -3,6 +3,7 @@ p = mfilename('fullpath'); %CANlab's apply mask do not like lists with relative 
 [p,~,~]=fileparts(p);
 splitp=strsplit(p,'/');
 datadir=fullfile(filesep,splitp{1:end-2},'Datasets');
+addpath('./pattern_masks/')
 % 'Atlas_et_al_2012'
 % 'Bingel_et_al_2006'
 % 'Bingel_et_al_2011'
@@ -16,6 +17,7 @@ datadir=fullfile(filesep,splitp{1:end-2},'Datasets');
 % 'Kessner_et_al_201314'
 % 'Kong_et_al_2006'
 % 'Kong_et_al_2009'
+% 'Lui_et_al_2010'
 % 'Ruetgen_et_al_2015'
 % 'Schenk_et_al_2014'
 % 'Theysohn_et_al_2014'
@@ -25,26 +27,7 @@ datadir=fullfile(filesep,splitp{1:end-2},'Datasets');
 % 'Zeidan_et_al_2015'
 
 runstudies={...
-'Atlas_et_al_2012'
-'Bingel_et_al_2006'
-'Bingel_et_al_2011'
-'Choi_et_al_2013'
-'Eippert_et_al_2009'
-'Ellingsen_et_al_2013'
-'Elsenbruch_et_al_2012'
-'Freeman_et_al_2015'
-'Geuter_et_al_2013'
-'Huber_et_al_2013'
-'Kessner_et_al_201314'
-'Kong_et_al_2006'
-'Kong_et_al_2009'
-'Ruetgen_et_al_2015'
-'Schenk_et_al_2014'
-'Theysohn_et_al_2014'
-'Wager_at_al_2004a_princeton_shock'
-'Wager_et_al_2004b_michigan_heat'
-'Wrobel_et_al_2014'
-'Zeidan_et_al_2015'
+'Lui_et_al_2010'
 };
 
 tic
@@ -66,7 +49,7 @@ df.NPScorrected=nps_rescale(df.NPSraw,df.voxelVolMat,df.xSpan,df.conSpan);
 % Push the data in df into a table with the name of the original table
 eval([currtablename{1} '= df']);
 % Eval statement saving results with original table name
-eval(['save(fullfile(datadir,[runstudies{i},''_NPS.mat'']),''',currtablename{1},''')']);
+eval(['save(fullfile(datadir,[runstudies{i}]),''',currtablename{1},''')']);
 
 toc/60, 'Minutes'
 waitbar(i / length(runstudies))

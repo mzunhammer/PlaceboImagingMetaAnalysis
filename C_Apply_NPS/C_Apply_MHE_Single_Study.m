@@ -3,7 +3,7 @@ p = mfilename('fullpath'); %CANlab's apply mask do not like lists with relative 
 [p,~,~]=fileparts(p);
 splitp=strsplit(p,'/');
 datadir=fullfile(filesep,splitp{1:end-2},'Datasets');
-
+addpath('./pattern_masks/')
 % 'Atlas_et_al_2012_NPS'
 % 'Bingel_et_al_2006_NPS'
 % 'Bingel_et_al_2011_NPS'
@@ -17,6 +17,7 @@ datadir=fullfile(filesep,splitp{1:end-2},'Datasets');
 % 'Kessner_et_al_201314_NPS'
 % 'Kong_et_al_2006_NPS'
 % 'Kong_et_al_2009_NPS'
+% 'Lui_et_al_2010_NPS'
 % 'Ruetgen_et_al_2015_NPS'
 % 'Schenk_et_al_2014_NPS'
 % 'Theysohn_et_al_2014_NPS'
@@ -39,6 +40,7 @@ runstudies={...
 'Kessner_et_al_201314_NPS'
 'Kong_et_al_2006_NPS'
 'Kong_et_al_2009_NPS'
+'Lui_et_al_2010_NPS'
 'Ruetgen_et_al_2015_NPS'
 'Schenk_et_al_2014_NPS'
 'Theysohn_et_al_2014_NPS'
@@ -67,7 +69,7 @@ df.MHEcorrected=nps_rescale(df.MHEraw,df.voxelVolMat,df.xSpan,df.conSpan);
 % Push the data in df into a table with the name of the original table
 eval([currtablename{1} '= df']);
 % Eval statement saving results with original table name
-eval(['save(fullfile(datadir,[runstudies{i},''_MHE.mat'']),''',currtablename{1},''')'])
+eval(['save(fullfile(datadir,[runstudies{i}]),''',currtablename{1},''')'])
 
 toc/60, 'Minutes'
 waitbar(i / length(runstudies))
