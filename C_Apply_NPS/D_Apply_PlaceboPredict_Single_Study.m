@@ -62,9 +62,17 @@ df=varload.(currtablename{:});
 
 % Compute PPR (The CAN Toolbox must be added to path!!!!)
 all_imgs= df.img;
-results=apply_patternmask(fullfile(datadir, all_imgs), fullfile(p, 'pattern_masks/weights_NSF_grouppred_cvpcr.img'));
-df.PPRraw=[results{:}]';
-df.PPRcorrected=nps_rescale(df.PPRraw,df.voxelVolMat,df.xSpan,df.conSpan);
+results=apply_patternmask(fullfile(datadir, all_imgs), fullfile(p, 'pattern_masks/Wager_JNeuro2011_PlaceboPredict_PainPeriod.img'));
+df.PPR_pain_raw=[results{:}]';
+df.PPR_pain_corrected=nps_rescale(df.PPR_pain_raw,df.voxelVolMat,df.xSpan,df.conSpan);
+
+results2=apply_patternmask(fullfile(datadir, all_imgs), fullfile(p, 'pattern_masks/Wager_JNeuro2011_PlaceboPredict_Anticipation.img'));
+df.PPR_anti_raw=[results2{:}]';
+df.PPR_anti_corrected=nps_rescale(df.PPR_anti_raw,df.voxelVolMat,df.xSpan,df.conSpan);
+
+results3=apply_patternmask(fullfile(datadir, all_imgs), fullfile(p, 'pattern_masks/Wager_JNeuro2011_PlaceboBrainPredict_Anticipation.img'));
+df.brainPPR_anti_raw=[results3{:}]';
+df.brainPPR_anti_corrected=nps_rescale(df.brainPPR_anti_raw,df.voxelVolMat,df.xSpan,df.conSpan);
 
 % Push the data in df into a table with the name of the original table
 eval([currtablename{1} '= df']);
