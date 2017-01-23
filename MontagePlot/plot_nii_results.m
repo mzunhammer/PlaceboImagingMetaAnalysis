@@ -243,11 +243,11 @@ empty=rgb2gray(fullscale)>0;
 set(sc,'AlphaData',double(empty)*p.Results.ov_transparency);
 
 %annotate scale
-for i=1:n_overlays
-text(w_scale*i+(w_scale/2*(i-1))-w_scale/2,l_scale-l_scale/20,num2str(min_signal(i)),'FontSize',l_scale/20)
-text(w_scale*i+(w_scale/2*(i-1))-w_scale/2,l_scale/20,num2str(max_signal(i)),'FontSize',l_scale/20) %w_scale*i*1.25-w_scale/1.5
-%annotation('textbox',[.5 .1 .2 .1],'String','123','FitBoxToText','on')
-end
+% for i=1:n_overlays
+% text(w_scale*i+(w_scale/2*(i-1))-w_scale/2,l_scale-l_scale/20,num2str(min_signal(i)),'FontSize',l_scale/20)
+% text(w_scale*i+(w_scale/2*(i-1))-w_scale/2,l_scale/20,num2str(max_signal(i)),'FontSize',l_scale/20) %w_scale*i*1.25-w_scale/1.5
+% %annotation('textbox',[.5 .1 .2 .1],'String','123','FitBoxToText','on')
+% end
 %set(gcf,'PaperPosition',[0 0 p.Results.figure_size]);%set desired size of image. Must be the same for image and scale, otherwise the montage function will not work.
 print([p.Results.outfilename,'_scale'],gcf,'-dtiff');
 

@@ -25,20 +25,21 @@ run('./B_Prepro_Images/A_Equalize_Image_Size_and_Mask.m')
 
 % Will create an un-masked matrix + corresponding df for each study
 % >> only performed when alignment in single images looks suspicions
+% since otherwise the data-matrix is too large
 %run('./B_Prepro_Images/B_Create_Y_Unmasked_SingleStudy.m')
 
-% Will create an umasked matrix + corresponding df for all data in inclusive analysis
+% Will create an masked matrix + corresponding df for all data in inclusive analysis
 % [WILL APPROCIMATELY DOUBLE THE SIZE OF ORIGINAL DATA]
-run('../B_Prepro_Images/C_Create_Y.m')
+run('./B_Prepro_Images/C_Create_Y.m')
 
 %% Apply all Masks (NPS, MHE, Tissue Probability-Maps, Brain-Masks)
 
-addpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/CAN/'))
-run('./C_Apply_NPS/A_Apply_NPS_Single_Study.m') %Apply NPS study-wise, add to df, save new df as study_NPS
-run('./C_Apply_NPS/B_Apply_MHE_Single_Study.m') %Apply MHE (whole brain-version of NPS from Zunhammer et al. 2016) study-wise, add to df, save new df as study_NPS_MHE
-run('./C_Apply_NPS/C_Apply_NOTBRAIN_Single_Study.m') %Calculate relative tissue-signal levels study-wise analog to other masks, add to df, save new df as study_NPS_MHE_NOBRAIN
-run('./C_Apply_NPS/C_Apply_NOTBRAIN_Abs.m') %Calculate relative ABSOLUTE tissue-signal levels study-wise analog to other masks, add to df, save new df as study_NPS_MHE_NOBRAIN
-run('./C_Apply_NPS/D_Collect_All_Data_Tables_NPS.m')            %Collect all study_NPS_MHE_NOBRAIN tables in one big df (./Datasets/AllData_w_NPS_MHE_NOBRAIN.mat)
+addpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/CanlabCore/CanlabCore'))
+run('./C_Apply_NPS/A_Apply_TissueMasks_Single_Study.m') %Calculate relative tissue-signal levels study-wise analog to other masks, add to df
+run('./C_Apply_NPS/B_Apply_NPS_Single_Study.m') %Apply NPS study-wise, add to df, save new df as study_NPS
+run('./C_Apply_NPS/C_Apply_MHE_Single_Study.m') %Apply MHE (whole brain-version of NPS from Zunhammer et al. 2016) study-wise, add to df
+run('./C_Apply_NPS/D_Apply_PlaceboPredict_Single_Study.m') %Calculate relative ABSOLUTE tissue-signal levels study-wise analog to other masks, add to df
+run('./C_Apply_NPS/E_Collect_All_Data_Tables_NPS.m')            %Collect all study_NPS_MHE_NOBRAIN tables in one big df (./Datasets/AllData_w_NPS_MHE_NOBRAIN.mat)
 rmpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/CAN/')) % avoid conflict-messages with SPM
 %% Quality control and demographic results
 
