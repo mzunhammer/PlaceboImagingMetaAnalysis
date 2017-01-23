@@ -114,7 +114,7 @@ masking=mask(:);
 images=fullfile(datapath,df.img);
 for i=1:length(images)
     [fpath,filename,ext]=fileparts(images{i});
-    r_images{i,1}=fullfile(fpath,['r',filename,ext]);
+    r_images{i,1}=fullfile(fpath,['r_',filename,ext]);
 end
 
 headers=spm_vol(r_images);
