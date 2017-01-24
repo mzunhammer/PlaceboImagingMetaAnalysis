@@ -5,7 +5,7 @@ clear
 addpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/A_Analysis_GIV_Functions/')
 datapath='../../Datasets';
 
-load(fullfile(datapath,'AllData_w_NPS_MHE_NOBRAIN.mat'))
+load(fullfile(datapath,'AllData.mat'))
 
 studies=unique(df.studyID);   %Get all studies in df
 % !!!!! These must be in the same order as listed under "studies" !!!!
@@ -20,9 +20,9 @@ studies=unique(df.studyID);   %Get all studies in df
 %             'Elsenbruch et al. 2012: No vs certain placebo drip infusion | distension';...
 %             'Freeman et al. 2015: Control vs placebo cream | heat';...
 %             'Geuter et al. 2013: Control vs weak & strong placebo cream | heat (early & late)';...
-%             'Huber et al. 2013: Red vs green cue signifying sham TENS off vs on | laser';...
 %             'Kessner et al. 2014: Negative vs positive treatment expectation group | heat';...
 %             'Kong et al. 2006: Control vs placebo acupuncture | heat';...
+%             'Lui et al. 2010: Red vs green cue signifying sham TENS off vs on | laser';...
 %             'Kong et al. 2009: Control vs placebo sham acupuncture | heat';...
 %             'Ruetgen et al. 2015: No treatment vs placebo pill group  | electrical'
 %             'Schenk et al. 2015:  Control vs placebo (saline & lidocain) | heat'
@@ -43,10 +43,10 @@ studyIDtexts={
             'Elsenbruch et al. 2012:';...
             'Freeman et al. 2015:';...
             'Geuter et al. 2013:';...
-            'Huber et al. 2013:';...
             'Kessner et al. 2014:';...
             'Kong et al. 2006:';...
             'Kong et al. 2009:';...
+            'Lui et al. 2014:';...
             'Ruetgen et al. 2015:'
             'Schenk et al. 2015:'
             'Theysohn et al. 2009:';...
@@ -58,8 +58,9 @@ studyIDtexts={
 %% VARIABLES TO SELECT
 
 varselect={'NPSraw','rating','MHEraw',...
-           'stimInt',...
-           'ex_lo_p_ratings','ex_img_artifact','ex_all'};
+           'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw'...
+           'stimInt'}%,...
+           %'ex_lo_p_ratings','ex_img_artifact','ex_all'};
 
 %% Study-level data
 df_full.variables=varselect;
@@ -162,10 +163,6 @@ df_full.pladata{i}=mean(cat(3,df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'ea
          df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_placebo_weak')),varselect},...
          df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'early_pain_placebo_strong')),varselect},...
          df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_placebo_strong')),varselect}),3);
-%'huber'
-i=find(strcmp(studies,'huber'));
-df_full.condata{i}=df{(strcmp(df.studyID,'huber')&strcmp(df.cond,'conPainControl')),varselect};
-df_full.pladata{i}=df{(strcmp(df.studyID,'huber')&strcmp(df.cond,'conPainPlacebo')),varselect};
 %'kessner'
 i=find(strcmp(studies,'kessner'));
 df_full.condata{i}=df{(strcmp(df.studyID,'kessner')&strcmp(df.cond,'pain_placebo_neg')),varselect};
@@ -178,6 +175,10 @@ df_full.pladata{i}=df{(strcmp(df.studyID,'kong06')&strcmp(df.cond,'pain_post_pla
 i=find(strcmp(studies,'kong09'));
 df_full.condata{i}=df{(strcmp(df.studyID,'kong09')&strcmp(df.cond,'pain_post_control')),varselect};
 df_full.pladata{i}=df{(strcmp(df.studyID,'kong09')&strcmp(df.cond,'pain_post_placebo')),varselect};
+%'lui'
+i=find(strcmp(studies,'lui'));
+df_full.condata{i}=df{(strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainControl')),varselect};
+df_full.pladata{i}=df{(strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainPlacebo')),varselect};
 %'ruetgen'
 i=find(strcmp(studies,'ruetgen'));
 df_full.condata{i}=df{(strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_Pain_Control_Group')),varselect};
@@ -221,7 +222,7 @@ df_full.condata{i}=NaN(size(df_full.pladata{i}));
 
 %% Add study/variable descriptions needed for meta-analysis
 
-save('A_Full_Sample.mat','df_full');
+save('A1_Full_Sample.mat','df_full');
 
 %% INCLUSIVE SAMPLE
 % Difference compared to "ALL":
@@ -234,7 +235,6 @@ save('A_Full_Sample.mat','df_full');
 % Elsenbruch: None
 % Freeman: None
 % Geuter: None
-% Huber: None
 % Kessner: None
 % Kong06: None
 % Kong09: None
@@ -246,7 +246,8 @@ save('A_Full_Sample.mat','df_full');
 % Wrobel: None
 % Zeidan: None
 
-%%>> Essentially just exclude Ruetgen & Wager06b
+%%>> Exclude Ruetgen (responder selection), Wager06b (responder selection),
+% Bingel 2011 (sequence effects)
 
 df_incl=df_full;
 %'ruetgen'
@@ -258,4 +259,8 @@ i=find(strcmp(studies,'wager04b_michigan'));
 df_incl.condata{i}=NaN(size(df_full.condata{i}));
 df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
 
-save('A_Inclusive_Sample.mat','df_incl');
+%'bingel11'
+i=find(strcmp(studies,'bingel11'));
+df_incl.condata{i}=NaN(size(df_full.condata{i}));
+df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
+save('A2_Inclusive_Sample.mat','df_incl');

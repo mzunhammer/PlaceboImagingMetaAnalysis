@@ -62,6 +62,7 @@
         /><glyph unicode="k" horiz-adv-x="50.0" d="M6.6406 0 L6.6406 71.582 L15.4297 71.582 L15.4297 30.7617 L36.2305 51.8555 L47.6074 51.8555 L27.7832 32.6172 L49.6094 0 L38.7695 0 L21.6309 26.5137 L15.4297 20.5566 L15.4297 0 Z"
         /><glyph unicode="c" horiz-adv-x="50.0" d="M40.4297 18.9941 L49.0723 17.8711 Q47.6562 8.9355 41.8213 3.8818 Q35.9863 -1.1719 27.4902 -1.1719 Q16.8457 -1.1719 10.376 5.7861 Q3.9062 12.7441 3.9062 25.7324 Q3.9062 34.1309 6.6895 40.4297 Q9.4727 46.7285 15.1611 49.8779 Q20.8496 53.0273 27.5391 53.0273 Q35.9863 53.0273 41.3574 48.7549 Q46.7285 44.4824 48.2422 36.6211 L39.6973 35.3027 Q38.4766 40.5273 35.376 43.1641 Q32.2754 45.8008 27.8809 45.8008 Q21.2402 45.8008 17.0898 41.04 Q12.9395 36.2793 12.9395 25.9766 Q12.9395 15.5273 16.9434 10.791 Q20.9473 6.0547 27.3926 6.0547 Q32.5684 6.0547 36.0352 9.2285 Q39.502 12.4023 40.4297 18.9941 Z"
         /><glyph unicode="R" horiz-adv-x="72.2168" d="M7.8613 0 L7.8613 71.582 L39.5996 71.582 Q49.1699 71.582 54.1504 69.6533 Q59.1309 67.7246 62.1094 62.8418 Q65.0879 57.959 65.0879 52.0508 Q65.0879 44.4336 60.1562 39.209 Q55.2246 33.9844 44.9219 32.5684 Q48.6816 30.7617 50.6348 29.0039 Q54.7852 25.1953 58.4961 19.4824 L70.9473 0 L59.0332 0 L49.5605 14.8926 Q45.4102 21.3379 42.7246 24.7559 Q40.0391 28.1738 37.915 29.541 Q35.791 30.9082 33.5938 31.4453 Q31.9824 31.7871 28.3203 31.7871 L17.334 31.7871 L17.334 0 ZM17.334 39.9902 L37.6953 39.9902 Q44.1895 39.9902 47.8516 41.333 Q51.5137 42.6758 53.418 45.6299 Q55.3223 48.584 55.3223 52.0508 Q55.3223 57.1289 51.6357 60.4004 Q47.9492 63.6719 39.9902 63.6719 L17.334 63.6719 Z"
+        /><glyph unicode="L" horiz-adv-x="55.615234" d="M7.3242 0 L7.3242 71.582 L16.7969 71.582 L16.7969 8.4473 L52.0508 8.4473 L52.0508 0 Z"
         /><glyph unicode="K" horiz-adv-x="66.69922" d="M7.3242 0 L7.3242 71.582 L16.7969 71.582 L16.7969 36.084 L52.3438 71.582 L65.1855 71.582 L35.1562 42.5781 L66.5039 0 L54.0039 0 L28.5156 36.2305 L16.7969 24.8047 L16.7969 0 Z"
         /><glyph unicode="G" horiz-adv-x="77.7832" d="M41.2109 28.0762 L41.2109 36.4746 L71.5332 36.5234 L71.5332 9.9609 Q64.5508 4.3945 57.1289 1.5869 Q49.707 -1.2207 41.8945 -1.2207 Q31.3477 -1.2207 22.7295 3.2959 Q14.1113 7.8125 9.7168 16.3574 Q5.3223 24.9023 5.3223 35.4492 Q5.3223 45.8984 9.6924 54.9561 Q14.0625 64.0137 22.2656 68.4082 Q30.4688 72.8027 41.1621 72.8027 Q48.9258 72.8027 55.2002 70.2881 Q61.4746 67.7734 65.0391 63.2812 Q68.6035 58.7891 70.459 51.5625 L61.9141 49.2188 Q60.3027 54.6875 57.9102 57.8125 Q55.5176 60.9375 51.0742 62.8174 Q46.6309 64.6973 41.2109 64.6973 Q34.7168 64.6973 29.9805 62.7197 Q25.2441 60.7422 22.3389 57.5195 Q19.4336 54.2969 17.8223 50.4395 Q15.0879 43.7988 15.0879 36.0352 Q15.0879 26.4648 18.3838 20.0195 Q21.6797 13.5742 27.9785 10.4492 Q34.2773 7.3242 41.3574 7.3242 Q47.5098 7.3242 53.3691 9.6924 Q59.2285 12.0605 62.2559 14.7461 L62.2559 28.0762 Z"
         /><glyph unicode="F" horiz-adv-x="61.083984" d="M8.2031 0 L8.2031 71.582 L56.4941 71.582 L56.4941 63.1348 L17.6758 63.1348 L17.6758 40.9668 L51.2695 40.9668 L51.2695 32.5195 L17.6758 32.5195 L17.6758 0 Z"
@@ -337,113 +338,113 @@
       >Ruetgen et al. 2015:</text
     ></g
     ><g style="stroke-linecap:butt; fill:rgb(0,114,189); text-rendering:geometricPrecision; color-rendering:optimizeQuality; image-rendering:optimizeQuality; stroke-linejoin:round; color-interpolation:linearRGB; stroke:rgb(0,114,189); stroke-width:0.8621;"
-    ><line y2="480.8636" style="fill:none;" x1="510.9002" x2="556.1112" y1="480.8636"
+    ><line y2="480.8636" style="fill:none;" x1="525.2017" x2="542.5905" y1="480.8636"
     /></g
     ><g style="text-rendering:optimizeSpeed; shape-rendering:crispEdges; color-interpolation:sRGB; color-rendering:optimizeSpeed; image-rendering:optimizeSpeed;"
-    ><path style="stroke:none;" d="M531.1779 483.1914 L535.8335 483.1914 L535.8335 478.5358 L531.1779 478.5358 Z"
+    ><path style="stroke:none;" d="M530.4484 484.3114 L537.3439 484.3114 L537.3439 477.4159 L530.4484 477.4159 Z"
     /></g
     ><g style="text-rendering:geometricPrecision; stroke-width:0.431; color-interpolation:linearRGB; color-rendering:optimizeQuality; stroke-linecap:butt; image-rendering:optimizeQuality;"
-    ><path d="M531.1779 483.1914 L535.8335 483.1914 L535.8335 478.5358 L531.1779 478.5358 Z" style="fill:none; fill-rule:evenodd;"
+    ><path d="M530.4484 484.3114 L537.3439 484.3114 L537.3439 477.4159 L530.4484 477.4159 Z" style="fill:none; fill-rule:evenodd;"
     /></g
     ><g transform="translate(726.9858,480.8636)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
-    ><text x="-47.5" xml:space="preserve" y="4" style="stroke:none;"
-      >-0.49 [-1.07; 0.09]</text
+    ><text x="-49.5" xml:space="preserve" y="4" style="stroke:none;"
+      >-0.48 [-0.70; -0.26]</text
     ></g
     ><g transform="translate(820.045,480.8636)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
     ><text x="-7" xml:space="preserve" y="4" style="stroke:none;"
-      >12</text
+      >31</text
     ></g
     ><g transform="translate(878.2069,480.8636)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
     ><text x="-14" xml:space="preserve" y="4" style="stroke:none;"
-      >3.0%</text
+      >6.7%</text
     ></g
     ><g transform="translate(213.2845,480.8636)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
+    ><text x="0" xml:space="preserve" y="4" style="stroke:none;"
+      >Lui et al. 2010</text
+    ></g
+    ><g style="stroke-linecap:butt; fill:rgb(0,114,189); text-rendering:geometricPrecision; color-rendering:optimizeQuality; image-rendering:optimizeQuality; stroke-linejoin:round; color-interpolation:linearRGB; stroke:rgb(0,114,189); stroke-width:0.8621;"
+    ><line y2="454.1818" style="fill:none;" x1="510.9002" x2="556.1112" y1="454.1818"
+    /></g
+    ><g style="text-rendering:optimizeSpeed; shape-rendering:crispEdges; color-interpolation:sRGB; color-rendering:optimizeSpeed; image-rendering:optimizeSpeed;"
+    ><path style="stroke:none;" d="M531.1779 456.5096 L535.8335 456.5096 L535.8335 451.854 L531.1779 451.854 Z"
+    /></g
+    ><g style="text-rendering:geometricPrecision; stroke-width:0.431; color-interpolation:linearRGB; color-rendering:optimizeQuality; stroke-linecap:butt; image-rendering:optimizeQuality;"
+    ><path d="M531.1779 456.5096 L535.8335 456.5096 L535.8335 451.854 L531.1779 451.854 Z" style="fill:none; fill-rule:evenodd;"
+    /></g
+    ><g transform="translate(726.9858,454.1818)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
+    ><text x="-47.5" xml:space="preserve" y="4" style="stroke:none;"
+      >-0.49 [-1.07; 0.09]</text
+    ></g
+    ><g transform="translate(820.045,454.1818)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
+    ><text x="-7" xml:space="preserve" y="4" style="stroke:none;"
+      >12</text
+    ></g
+    ><g transform="translate(878.2069,454.1818)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
+    ><text x="-14" xml:space="preserve" y="4" style="stroke:none;"
+      >3.0%</text
+    ></g
+    ><g transform="translate(213.2845,454.1818)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
     ><text x="0" xml:space="preserve" y="4" style="stroke:none;"
       >Kong et al. 2009:</text
     ></g
     ><g style="stroke-linecap:butt; fill:rgb(0,114,189); text-rendering:geometricPrecision; color-rendering:optimizeQuality; image-rendering:optimizeQuality; stroke-linejoin:round; color-interpolation:linearRGB; stroke:rgb(0,114,189); stroke-width:0.8621;"
-    ><line y2="454.1818" style="fill:none;" x1="520.0012" x2="554.3324" y1="454.1818"
+    ><line y2="427.5" style="fill:none;" x1="520.0012" x2="554.3324" y1="427.5"
     /></g
     ><g style="text-rendering:optimizeSpeed; shape-rendering:crispEdges; color-interpolation:sRGB; color-rendering:optimizeSpeed; image-rendering:optimizeSpeed;"
-    ><path style="stroke:none;" d="M534.4416 456.907 L539.892 456.907 L539.892 451.4566 L534.4416 451.4566 Z"
+    ><path style="stroke:none;" d="M534.4416 430.2252 L539.892 430.2252 L539.892 424.7748 L534.4416 424.7748 Z"
     /></g
     ><g style="text-rendering:geometricPrecision; stroke-width:0.431; color-interpolation:linearRGB; color-rendering:optimizeQuality; stroke-linecap:butt; image-rendering:optimizeQuality;"
-    ><path d="M534.4416 456.907 L539.892 456.907 L539.892 451.4566 L534.4416 451.4566 Z" style="fill:none; fill-rule:evenodd;"
+    ><path d="M534.4416 430.2252 L539.892 430.2252 L539.892 424.7748 L534.4416 424.7748 Z" style="fill:none; fill-rule:evenodd;"
     /></g
-    ><g transform="translate(726.9858,454.1818)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
+    ><g transform="translate(726.9858,427.5)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
     ><text x="-47.5" xml:space="preserve" y="4" style="stroke:none;"
       >-0.40 [-0.84; 0.05]</text
     ></g
-    ><g transform="translate(820.045,454.1818)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
+    ><g transform="translate(820.045,427.5)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
     ><text x="-7" xml:space="preserve" y="4" style="stroke:none;"
       >10</text
     ></g
-    ><g transform="translate(878.2069,454.1818)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
+    ><g transform="translate(878.2069,427.5)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
     ><text x="-14" xml:space="preserve" y="4" style="stroke:none;"
       >4.2%</text
     ></g
-    ><g transform="translate(213.2845,454.1818)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
+    ><g transform="translate(213.2845,427.5)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
     ><text x="0" xml:space="preserve" y="4" style="stroke:none;"
       >Kong et al. 2006:</text
     ></g
     ><g style="stroke-linecap:butt; fill:rgb(0,114,189); text-rendering:geometricPrecision; color-rendering:optimizeQuality; image-rendering:optimizeQuality; stroke-linejoin:round; color-interpolation:linearRGB; stroke:rgb(0,114,189); stroke-width:0.8621;"
-    ><line y2="427.5" style="fill:none;" x1="490.9216" x2="541.2832" y1="427.5"
+    ><line y2="400.8182" style="fill:none;" x1="490.9216" x2="541.2832" y1="400.8182"
     /></g
     ><g style="text-rendering:optimizeSpeed; shape-rendering:crispEdges; color-interpolation:sRGB; color-rendering:optimizeSpeed; image-rendering:optimizeSpeed;"
-    ><path style="stroke:none;" d="M513.9352 429.6671 L518.2695 429.6671 L518.2695 425.3329 L513.9352 425.3329 Z"
+    ><path style="stroke:none;" d="M513.9352 402.9853 L518.2695 402.9853 L518.2695 398.651 L513.9352 398.651 Z"
     /></g
     ><g style="text-rendering:geometricPrecision; stroke-width:0.431; color-interpolation:linearRGB; color-rendering:optimizeQuality; stroke-linecap:butt; image-rendering:optimizeQuality;"
-    ><path d="M513.9352 429.6671 L518.2695 429.6671 L518.2695 425.3329 L513.9352 425.3329 Z" style="fill:none; fill-rule:evenodd;"
-    /></g
-    ><g transform="translate(726.9858,427.5)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
-    ><text x="-49.5" xml:space="preserve" y="4" style="stroke:none;"
-      >-0.94 [-1.59; -0.29]</text
-    ></g
-    ><g transform="translate(820.045,427.5)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
-    ><text x="-7" xml:space="preserve" y="4" style="stroke:none;"
-      >39</text
-    ></g
-    ><g transform="translate(878.2069,427.5)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
-    ><text x="-14" xml:space="preserve" y="4" style="stroke:none;"
-      >2.6%</text
-    ></g
-    ><g transform="translate(213.2845,427.5)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
-    ><text x="0" xml:space="preserve" y="4" style="stroke:none;"
-      >Kessner et al. 2014:</text
-    ></g
-    ><g style="stroke-linecap:butt; fill:rgb(0,114,189); text-rendering:geometricPrecision; color-rendering:optimizeQuality; image-rendering:optimizeQuality; stroke-linejoin:round; color-interpolation:linearRGB; stroke:rgb(0,114,189); stroke-width:0.8621;"
-    ><line y2="400.8182" style="fill:none;" x1="525.2017" x2="542.5905" y1="400.8182"
-    /></g
-    ><g style="text-rendering:optimizeSpeed; shape-rendering:crispEdges; color-interpolation:sRGB; color-rendering:optimizeSpeed; image-rendering:optimizeSpeed;"
-    ><path style="stroke:none;" d="M530.4484 404.2659 L537.3439 404.2659 L537.3439 397.3704 L530.4484 397.3704 Z"
-    /></g
-    ><g style="text-rendering:geometricPrecision; stroke-width:0.431; color-interpolation:linearRGB; color-rendering:optimizeQuality; stroke-linecap:butt; image-rendering:optimizeQuality;"
-    ><path d="M530.4484 404.2659 L537.3439 404.2659 L537.3439 397.3704 L530.4484 397.3704 Z" style="fill:none; fill-rule:evenodd;"
+    ><path d="M513.9352 402.9853 L518.2695 402.9853 L518.2695 398.651 L513.9352 398.651 Z" style="fill:none; fill-rule:evenodd;"
     /></g
     ><g transform="translate(726.9858,400.8182)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
     ><text x="-49.5" xml:space="preserve" y="4" style="stroke:none;"
-      >-0.48 [-0.70; -0.26]</text
+      >-0.94 [-1.59; -0.29]</text
     ></g
     ><g transform="translate(820.045,400.8182)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
     ><text x="-7" xml:space="preserve" y="4" style="stroke:none;"
-      >31</text
+      >39</text
     ></g
     ><g transform="translate(878.2069,400.8182)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
     ><text x="-14" xml:space="preserve" y="4" style="stroke:none;"
-      >6.7%</text
+      >2.6%</text
     ></g
     ><g transform="translate(213.2845,400.8182)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
     ><text x="0" xml:space="preserve" y="4" style="stroke:none;"
-      >Huber et al. 2013:</text
+      >Kessner et al. 2014:</text
     ></g
     ><g style="stroke-linecap:butt; fill:rgb(0,114,189); text-rendering:geometricPrecision; color-rendering:optimizeQuality; image-rendering:optimizeQuality; stroke-linejoin:round; color-interpolation:linearRGB; stroke:rgb(0,114,189); stroke-width:0.8621;"
     ><line y2="374.1364" style="fill:none;" x1="513.3384" x2="537.7539" y1="374.1364"
     /></g
     ><g style="text-rendering:optimizeSpeed; shape-rendering:crispEdges; color-interpolation:sRGB; color-rendering:optimizeSpeed; image-rendering:optimizeSpeed;"
-    ><path style="stroke:none;" d="M522.4006 377.282 L528.6918 377.282 L528.6918 370.9907 L522.4006 370.9907 Z"
+    ><path style="stroke:none;" d="M522.4006 377.282 L528.6918 377.282 L528.6918 370.9908 L522.4006 370.9908 Z"
     /></g
     ><g style="text-rendering:geometricPrecision; stroke-width:0.431; color-interpolation:linearRGB; color-rendering:optimizeQuality; stroke-linecap:butt; image-rendering:optimizeQuality;"
-    ><path d="M522.4006 377.282 L528.6918 377.282 L528.6918 370.9907 L522.4006 370.9907 Z" style="fill:none; fill-rule:evenodd;"
+    ><path d="M522.4006 377.282 L528.6918 377.282 L528.6918 370.9908 L522.4006 370.9908 Z" style="fill:none; fill-rule:evenodd;"
     /></g
     ><g transform="translate(726.9858,374.1364)" style="text-rendering:geometricPrecision; font-family:'Arial'; color-interpolation:linearRGB; color-rendering:optimizeQuality; image-rendering:optimizeQuality;"
     ><text x="-49.5" xml:space="preserve" y="4" style="stroke:none;"

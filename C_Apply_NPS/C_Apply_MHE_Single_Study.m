@@ -36,7 +36,6 @@ runstudies={...
 'Elsenbruch_et_al_2012'
 'Freeman_et_al_2015'
 'Geuter_et_al_2013'
-'Huber_et_al_2013'
 'Kessner_et_al_201314'
 'Kong_et_al_2006'
 'Kong_et_al_2009'

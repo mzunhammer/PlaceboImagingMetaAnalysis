@@ -10,10 +10,10 @@
 % Elsenbruch: None (50% placebo condition relevant but unavailable)
 % Freeman: None
 % Geuter: Late + Early Pain, Weak + Strong Placebo
-% Huber: None
 % Kessner: None
 % Kong06: High + Low Pain
 % Kong09: None
+% Lui: None
 % R?tgen: None
 % Schenk: No Lidocaine & Lidocaine
 % Theysohn: None
@@ -39,10 +39,10 @@ load('A1_Full_Sample.mat')
 %             'Elsenbruch et al. 2012: No vs certain placebo drip infusion | distension';...
 %             'Freeman et al. 2015: Control vs placebo cream | heat';...
 %             'Geuter et al. 2013: Control vs weak & strong placebo cream | heat (early & late)';...
-%             'Huber et al. 2013: Red vs green cue signifying sham TENS off vs on | laser';...
 %             'Kessner et al. 2014: Negative vs positive treatment expectation group | heat';...
 %             'Kong et al. 2006: Control vs placebo acupuncture | heat (high & low)';...
 %             'Kong et al. 2009: Control vs placebo sham acupuncture | heat';...
+%             'Lui et al. 2010: Red vs green cue signifying sham TENS off vs on | laser';...
 %             'Ruetgen et al. 2015: No treatment vs placebo pill group  | electrical'
 %             'Schenk et al. 2015:  Control vs placebo (saline & lidocain) | heat'
 %             'Theysohn et al. 2009: No vs certain placebo drip infusion | distension';...
@@ -62,16 +62,16 @@ studyIDtexts={
             'Elsenbruch et al. 2012:';...
             'Freeman et al. 2015:';...
             'Geuter et al. 2013:';...
-            'Huber et al. 2013:';...
             'Kessner et al. 2014:';...
             'Kong et al. 2006:';...
             'Kong et al. 2009:';...
-            'Ruetgen et al. 2015:'
-            'Schenk et al. 2015:'
+            'Lui et al. 2010';...
+            'Ruetgen et al. 2015:';...
+            'Schenk et al. 2015:';...
             'Theysohn et al. 2009:';...
             'Wager et al. 2004, Study 1:';...
             'Wager et al. 2004, Study 2:';...
-            'Wrobel et al. 2014:'
+            'Wrobel et al. 2014:';...
             'Zeidan et al. 2015:';...
             };
 %% Meta-Analysis Ratings
@@ -128,11 +128,68 @@ for i=conOnly'
 stats.MHE(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
 end
 
+
+%% Meta-Analysis PPR_pain
+v=find(strcmp(df_full.variables,'PPR_pain_raw'));
+for i=1:length(df_full.studies) % Calculate for all studies except...
+    if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
+        if df_full.BetweenSubject(i)==0 %Within-subject studies
+           stats.PPR_pain_raw(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
+           stats.PPR_pain_raw(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+        end        
+    end
+end
+% Calculate for those studies where only pla>con contrasts are available
+conOnly=find(df_full.consOnlyNPS==1);
+impu_r=nanmean([stats.PPR_pain_raw.r]); % impute the mean within-subject study correlation observed in all other studies
+for i=conOnly'
+stats.PPR_pain_raw(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
+end
+
+%% Meta-Analysis PPR_anti
+v=find(strcmp(df_full.variables,'PPR_anti_raw'));
+for i=1:length(df_full.studies) % Calculate for all studies except...
+    if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
+        if df_full.BetweenSubject(i)==0 %Within-subject studies
+           stats.PPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
+           stats.PPR_anti_raw(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+        end        
+    end
+end
+% Calculate for those studies where only pla>con contrasts are available
+conOnly=find(df_full.consOnlyNPS==1);
+impu_r=nanmean([stats.PPR_anti_raw.r]); % impute the mean within-subject study correlation observed in all other studies
+for i=conOnly'
+stats.PPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
+end
+
+%% Meta-Analysis brainPPR_anti
+v=find(strcmp(df_full.variables,'brainPPR_anti_raw'));
+for i=1:length(df_full.studies) % Calculate for all studies except...
+    if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
+        if df_full.BetweenSubject(i)==0 %Within-subject studies
+           stats.brainPPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
+           stats.brainPPR_anti_raw(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+        end        
+    end
+end
+% Calculate for those studies where only pla>con contrasts are available
+conOnly=find(df_full.consOnlyNPS==1);
+impu_r=nanmean([stats.brainPPR_anti_raw.r]); % impute the mean within-subject study correlation observed in all other studies
+for i=conOnly'
+stats.brainPPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
+end
 %% One Forest plot per variable
 varnames=fieldnames(stats)
 nicevarnames={'Pain ratings',...
               'NPS-score',...
-              'MHE-score'};
+              'MHE-score',...
+              'PPR-pain-score',...
+              'PPR-anti--score',...
+              'brainPPR-anti-score'};
 for i = 1:numel(varnames)
     ForestPlotter(stats.(varnames{i}),...
                   'studyIDtexts',studyIDtexts,...
@@ -146,3 +203,17 @@ for i = 1:numel(varnames)
     hgexport(gcf, ['B1_Meta_All_',varnames{i},'.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
     close all;
 end
+
+% Plot Wager-Studies, Pain-Pla prediction vs ratings
+% Princeton
+hold on
+studyIDtexts{18}
+%plot(df_full.pladata{18}(:,find(strcmp(df_full.variables,'PPR_pain_raw'))),df_full.pladata{18}(:,find(strcmp(df_full.variables,'rating'))),'.')
+plot(stats.PPR_pain_raw(18).std_delta*-1,stats.rating(18).std_delta*-1,'.b')
+
+% Michigan
+studyIDtexts{19}
+%plot(df_full.pladata{19}(:,find(strcmp(df_full.variables,'PPR_pain_raw'))),df_full.pladata{19}(:,find(strcmp(df_full.variables,'rating'))),'.')
+plot(stats.PPR_pain_raw(19).std_delta*-1,stats.rating(19).std_delta*-1,'.r')
+lsline
+hold off
