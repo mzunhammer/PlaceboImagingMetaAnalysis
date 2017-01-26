@@ -183,7 +183,7 @@ for i=conOnly'
 stats.brainPPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
 end
 %% One Forest plot per variable
-varnames=fieldnames(stats)
+varnames=fieldnames(stats);
 nicevarnames={'Pain ratings',...
               'NPS-score',...
               'MHE-score',...
@@ -204,16 +204,22 @@ for i = 1:numel(varnames)
     close all;
 end
 
-% Plot Wager-Studies, Pain-Pla prediction vs ratings
-% Princeton
-hold on
-studyIDtexts{18}
-%plot(df_full.pladata{18}(:,find(strcmp(df_full.variables,'PPR_pain_raw'))),df_full.pladata{18}(:,find(strcmp(df_full.variables,'rating'))),'.')
-plot(stats.PPR_pain_raw(18).std_delta*-1,stats.rating(18).std_delta*-1,'.b')
+%% Obtain Bayesian Factors
 
-% Michigan
-studyIDtexts{19}
-%plot(df_full.pladata{19}(:,find(strcmp(df_full.variables,'PPR_pain_raw'))),df_full.pladata{19}(:,find(strcmp(df_full.variables,'rating'))),'.')
-plot(stats.PPR_pain_raw(19).std_delta*-1,stats.rating(19).std_delta*-1,'.r')
-lsline
-hold off
+bayesfactor(0.08,0.04,1,[0,0.2]) % Bayes factor for negligible results
+bayesfactor(0.08,0.04,1,[0.2,0.5]) % Bayes factor for small results
+
+
+% % Plot Wager-Studies, Pain-Pla prediction vs ratings
+% % Princeton
+% hold on
+% studyIDtexts{18}
+% %plot(df_full.pladata{18}(:,find(strcmp(df_full.variables,'PPR_pain_raw'))),df_full.pladata{18}(:,find(strcmp(df_full.variables,'rating'))),'.')
+% plot(stats.PPR_pain_raw(18).std_delta*-1,stats.rating(18).std_delta*-1,'.b');
+% 
+% % Michigan
+% studyIDtexts{19}
+% %plot(df_full.pladata{19}(:,find(strcmp(df_full.variables,'PPR_pain_raw'))),df_full.pladata{19}(:,find(strcmp(df_full.variables,'rating'))),'.')
+% plot(stats.PPR_pain_raw(19).std_delta*-1,stats.rating(19).std_delta*-1,'.r');
+% lsline;
+% hold off
