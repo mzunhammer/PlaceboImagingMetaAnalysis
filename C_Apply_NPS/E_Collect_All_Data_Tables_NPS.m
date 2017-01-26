@@ -104,7 +104,7 @@ load([datadir, 'Ellingsen_et_al_2013.mat'])
 load([datadir, 'Elsenbruch_et_al_2012.mat'])
 load([datadir, 'Freeman_et_al_2015.mat'])
 load([datadir, 'Geuter_et_al_2013.mat'])
-load([datadir, 'Huber_et_al_2013.mat'])
+%load([datadir, 'Huber_et_al_2013.mat']) % Duplicate! Use Lui et al.
 load([datadir, 'Kessner_et_al_201314.mat'])
 load([datadir, 'Kong_et_al_2006.mat'])
 load([datadir, 'Kong_et_al_2009.mat'])
@@ -118,6 +118,6 @@ load([datadir, 'Wrobel_et_al_2014.mat'])
 load([datadir, 'Zeidan_et_al_2015.mat'])
 
 %% Combine the studies
-df=[atlas;bingel06;bingel11;choi;eippert;ellingsen;elsenb;freeman;geuter;huber;kessner;kong06;kong09;lui;ruetgen;schenk;they;wager_princeton;wager_michigan;wrobel;zeidan];
+df=[atlas;bingel06;bingel11;choi;eippert;ellingsen;elsenb;freeman;geuter;kessner;kong06;kong09;lui;ruetgen;schenk;they;wager_princeton;wager_michigan;wrobel;zeidan];
 %% Save all studies as df
 save(fullfile(datadir,'AllData.mat'), 'df')
