@@ -8,7 +8,7 @@ load(fullfile(datapath,'dfMaskedInclusiveImg.mat'));
 outpath='./C_Exploratory_Analyses/A_Check_Image_Alignment/'
 
 outfile='Check_coverage_all_images_raw.nii';
-addpath('../MontagePlot/')
+addpath('../../MontagePlot/')
 
 % For preparing a mask of all images:
 %test_images=df.img

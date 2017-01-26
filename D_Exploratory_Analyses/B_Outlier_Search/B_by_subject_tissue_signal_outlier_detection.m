@@ -2,7 +2,7 @@ clear
 
 %% Load df_pain
 datapath='../../../Datasets/';
-df_path='AllData_w_NPS_MHE_NOBRAIN.mat';
+df_path='AllData.mat';
 load(fullfile(datapath,df_path));
 
 %Variables to be used for outlier prediction
