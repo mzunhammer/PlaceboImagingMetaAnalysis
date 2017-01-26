@@ -30,6 +30,14 @@ function [summary,SEsummary,rel_weight,z,p,CI_lo,CI_hi,chisq,tausq,df,p_het,Isq]
 % of The Cochrane Collaboration
 % August 2010
 
+% Make sure that effects and SEs are entered as column vectors
+if ~iscolumn(effects)
+effects=effects';
+end
+if ~iscolumn(SEs)
+SEs=SEs';
+end
+
 % Calculate fixed effects model first
 % All calculations are performed column-wise
 
