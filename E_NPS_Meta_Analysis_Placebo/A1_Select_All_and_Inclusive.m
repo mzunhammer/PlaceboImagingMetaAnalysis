@@ -59,7 +59,7 @@ studyIDtexts={
 
 varselect={'NPSraw','rating','MHEraw',...
            'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw'...
-           'stimInt'}%,...
+           'stimInt'};%,...
            %'ex_lo_p_ratings','ex_img_artifact','ex_all'};
 
 %% Study-level data
@@ -250,6 +250,10 @@ save('A1_Full_Sample.mat','df_full');
 % Bingel 2011 (sequence effects)
 
 df_incl=df_full;
+%'kong06'
+i=find(strcmp(studies,'kong06'));
+df_incl.condata{i}=NaN(size(df_full.condata{i}));
+df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
 %'ruetgen'
 i=find(strcmp(studies,'ruetgen'));
 df_incl.condata{i}=NaN(size(df_full.condata{i}));
@@ -258,9 +262,12 @@ df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
 i=find(strcmp(studies,'wager04b_michigan'));
 df_incl.condata{i}=NaN(size(df_full.condata{i}));
 df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
-
 %'bingel11'
 i=find(strcmp(studies,'bingel11'));
+df_incl.condata{i}=NaN(size(df_full.condata{i}));
+df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
+%'zeidan'
+i=find(strcmp(studies,'zeidan'));
 df_incl.condata{i}=NaN(size(df_full.condata{i}));
 df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
 save('A2_Inclusive_Sample.mat','df_incl');
