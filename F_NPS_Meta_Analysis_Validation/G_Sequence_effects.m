@@ -6,7 +6,7 @@ clear
 addpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/A_Analysis_GIV_Functions/')
 datapath='../../Datasets';
 
-load(fullfile(datapath,'AllData_w_NPS_MHE_NOBRAIN.mat'))
+load(fullfile(datapath,'AllData.mat'))
 
 studies=unique(df.studyID);   %Get all studies in df
 % !!!!! These must be in the same order as listed under "studies" !!!!
@@ -70,11 +70,11 @@ sess2=sortrows(sess2,'subID');
 strcmp(sess1.subID,sess2.subID);
 corrcoef(sess1.rating,sess2.rating,'rows','complete')
 corrcoef(sess1.NPSraw,sess2.NPSraw,'rows','complete')
-stats.NPSraw(i)=withinMetastats(sess1.NPSraw,sess2.NPSraw);
-stats.MHEraw(i)=withinMetastats(sess1.MHEraw,sess2.MHEraw);
-stats.rating(i)=withinMetastats(sess1.rating,sess2.rating);
+stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
+stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 %'bingel06' >> Testing was performed within participants on left and right
-%side... summarizine data across hemispheres for NPS and ratings first.
+%side... summarizine data across hemispheres for NPS and ratings.
 %There were two missing sessions>> Match values according to subID's 
 control_R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painNoPlacebo_R'))),varselect);
 placebo_R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painPlacebo_R'))),varselect);
@@ -113,9 +113,9 @@ end
 i=find(strcmp(studies,'bingel'));
 corrcoef(sess1.rating,sess2.rating,'rows','complete')
 corrcoef(sess1.NPSraw,sess2.NPSraw,'rows','complete')
-stats.NPSraw(i)=withinMetastats(sess1.NPSraw,sess2.NPSraw);
-stats.MHEraw(i)=withinMetastats(sess1.MHEraw,sess2.MHEraw);
-stats.rating(i)=withinMetastats(sess1.rating,sess2.rating);
+stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
+stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 %'bingel11'
 % NOT USEFUL >> Sequence of testing and remifentanil not counterbalanced
@@ -154,9 +154,9 @@ if sum(~strcmp(sess1.subID,sess2.subID));
 end
 corrcoef(sess1.rating,sess2.rating,'rows','complete')
 corrcoef(sess1.NPSraw,sess2.NPSraw,'rows','complete')
-stats.NPSraw(i)=withinMetastats(sess1.NPSraw,sess2.NPSraw);
-stats.MHEraw(i)=withinMetastats(sess1.MHEraw,sess2.MHEraw);
-stats.rating(i)=withinMetastats(sess1.rating,sess2.rating);
+stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
+stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 %'ellingsen'
 i=find(strcmp(studies,'ellingsen'));
@@ -172,9 +172,9 @@ if sum(~strcmp(sess1.subID,sess2.subID));
 end
 corrcoef(sess1.rating,sess2.rating,'rows','complete')
 corrcoef(sess1.NPSraw,sess2.NPSraw,'rows','complete')
-stats.NPSraw(i)=withinMetastats(sess1.NPSraw,sess2.NPSraw);
-stats.MHEraw(i)=withinMetastats(sess1.MHEraw,sess2.MHEraw);
-stats.rating(i)=withinMetastats(sess1.rating,sess2.rating);
+stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
+stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 %'elsenbruch'
 i=find(strcmp(studies,'elsenbruch'));
@@ -194,9 +194,9 @@ if sum(~strcmp(sess1.subID,sess2.subID));
 end
 corrcoef(sess1.rating,sess2.rating,'rows','complete')
 corrcoef(sess1.NPSraw,sess2.NPSraw,'rows','complete')
-stats.NPSraw(i)=withinMetastats(sess1.NPSraw,sess2.NPSraw);
-stats.MHEraw(i)=withinMetastats(sess1.MHEraw,sess2.MHEraw);
-stats.rating(i)=withinMetastats(sess1.rating,sess2.rating);
+stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
+stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 %'freeman'
 % NOT USEFUL >> Sequence of testing random within only within sessions
@@ -220,9 +220,9 @@ if sum(~strcmp(sess1.subID,sess2.subID));
 end
 corrcoef(sess1.rating,sess2.rating,'rows','complete')
 corrcoef(sess1.NPSraw,sess2.NPSraw,'rows','complete')
-stats.NPSraw(i)=withinMetastats(sess1.NPSraw,sess2.NPSraw);
-stats.MHEraw(i)=withinMetastats(sess1.MHEraw,sess2.MHEraw);
-stats.rating(i)=withinMetastats(sess1.rating,sess2.rating);
+stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
+stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 %'huber'
 % all conditions balanced within a session
@@ -264,9 +264,9 @@ if sum(~strcmp(sess1.subID,sess2.subID));
 end
 corrcoef(sess1.rating,sess2.rating,'rows','complete')
 corrcoef(sess1.NPSraw,sess2.NPSraw,'rows','complete')
-stats.NPSraw(i)=withinMetastats(sess1.NPSraw,sess2.NPSraw);
-stats.MHEraw(i)=withinMetastats(sess1.MHEraw,sess2.MHEraw);
-stats.rating(i)=withinMetastats(sess1.rating,sess2.rating);
+stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
+stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 %'wager_princeton'
 %not available
@@ -292,9 +292,9 @@ if sum(~strcmp(sess1.subID,sess2.subID));
 end
 corrcoef(sess1.rating,sess2.rating,'rows','complete')
 corrcoef(sess1.NPSraw,sess2.NPSraw,'rows','complete')
-stats.NPSraw(i)=withinMetastats(sess1.NPSraw,sess2.NPSraw);
-stats.MHEraw(i)=withinMetastats(sess1.MHEraw,sess2.MHEraw);
-stats.rating(i)=withinMetastats(sess1.rating,sess2.rating);
+stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
+stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 %'zeidan'
 % No info available
@@ -302,11 +302,11 @@ stats.rating(i)=withinMetastats(sess1.rating,sess2.rating);
 % Summary analysis+ Forest Plot
 ForestPlotter(stats.NPSraw,...
               'studyIDtexts',studyIDtexts,...
-              'outcomelabel','NPS Rating (Hedge''s {\itg})',...
+              'outcomelabel','NPS response (Hedge''s {\itg})',...
               'type','random',...
               'summarystat','g',...
               'withoutlier',0,...
               'WIsubdata',1,...
               'boxscaling',1);
 
-hgexport(gcf, 'G_Sequence_effects_VAS.svg', hgexport('factorystyle'), 'Format', 'svg'); 
+hgexport(gcf, 'G_Sequence_effects_NPS.svg', hgexport('factorystyle'), 'Format', 'svg'); 

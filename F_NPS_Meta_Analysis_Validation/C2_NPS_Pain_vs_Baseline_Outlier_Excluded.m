@@ -6,7 +6,7 @@ clear
 addpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/A_Analysis_GIV_Functions/')
 datapath='../../Datasets';
 
-load(fullfile(datapath,'AllData_w_NPS_MHE_NOBRAIN.mat'))
+load(fullfile(datapath,'AllData.mat'))
 
 studies=unique(df.studyID);   %Get all studies in df
 % !!!!! These must be in the same order as listed under "studies" !!!!
@@ -21,10 +21,10 @@ studies=unique(df.studyID);   %Get all studies in df
 %             'Elsenbruch et al. 2012: No & certain placebo drip infusion | distension';...
 %             'Freeman et al. 2015: Control & placebo cream | heat';...
 %             'Geuter et al. 2013: Control & weak & strong placebo cream | heat (early & late)';...
-%             'Huber et al. 2013: Red & green cue signifying sham TENS off vs on | laser';...
 %             'Kessner et al. 2014: Negative & positive treatment expectation group | heat';...
 %             'Kong et al. 2006: Control & placebo acupuncture | heat (high & low)';...
 %             'Kong et al. 2009: Control & placebo sham acupuncture | heat';...
+%             'Lui et al. 2010: Red & green cue signifying sham TENS off vs on | laser';...
 %             'Ruetgen et al. 2015: No treatment & placebo pill group  | electrical'
 %             'Schenk et al. 2015:  Control vs placebo (saline & lidocaine) | heat'
 %             'Theysohn et al. 2009: No & certain placebo drip infusion | distension';...
@@ -44,12 +44,12 @@ studies=unique(df.studyID);   %Get all studies in df
             'Elsenbruch et al. 2012:';...
             'Freeman et al. 2015:';...
             'Geuter et al. 2013:';...
-            'Huber et al. 2013:';...
             'Kessner et al. 2014:';...
             'Kong et al. 2006:';...
             'Kong et al. 2009:';...
-            'Ruetgen et al. 2015:'
-            'Schenk et al. 2015:'
+            'Lui et al. 2010:';...
+            'Ruetgen et al. 2015:';...
+            'Schenk et al. 2015:';...
             'Theysohn et al. 2009:';...
             'Wager et al. 2004, Study 1:';...
             'Wager et al. 2004, Study 2:';...
@@ -215,18 +215,6 @@ responders=rating_diff>0;
 i=find(strcmp(studies,'geuter'));
 stats(i)=withinMetastats(nanmean([control,placebo],2),0);
 
-%'huber'
-control=df((strcmp(df.studyID,'huber')&strcmp(df.cond,'conPainControl')&~df.ex_all),'NPSraw');
-placebo=df((strcmp(df.studyID,'huber')&strcmp(df.cond,'conPainPlacebo')&~df.ex_all),'NPSraw');
-
-con_rating=df((strcmp(df.studyID,'huber')&strcmp(df.cond,'conPainControl')&~df.ex_all),'rating');
-pla_rating=df((strcmp(df.studyID,'huber')&strcmp(df.cond,'conPainPlacebo')&~df.ex_all),'rating');
-rating_diff=con_rating{:,1}-pla_rating{:,1};
-responders=rating_diff>0;
-
-i=find(strcmp(studies,'huber'));
-stats(i)=withinMetastats(nanmean([control{:,:},placebo{:,:}],2),0);
-
 %'kessner'
 %control_neg=df((strcmp(df.studyID,'kessner')&strcmp(df.cond,'pain_control_neg')),'NPSraw');
 placebo_neg=df((strcmp(df.studyID,'kessner')&strcmp(df.cond,'pain_placebo_neg')&~df.ex_all),'NPSraw');
@@ -268,6 +256,19 @@ responders=rating_diff>0;
 
 i=find(strcmp(studies,'kong09'));
 stats(i)=withinMetastats(nanmean([control{:,:},placebo{:,:}],2),0);
+
+%'lui'
+control=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainControl')&~df.ex_all),'NPSraw');
+placebo=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainPlacebo')&~df.ex_all),'NPSraw');
+
+con_rating=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainControl')&~df.ex_all),'rating');
+pla_rating=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainPlacebo')&~df.ex_all),'rating');
+rating_diff=con_rating{:,1}-pla_rating{:,1};
+responders=rating_diff>0;
+
+i=find(strcmp(studies,'lui'));
+stats(i)=withinMetastats(nanmean([control{:,:},placebo{:,:}],2),0);
+
 
 %'ruetgen'
 control=df((strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_Pain_Control_Group')&~df.ex_all),'NPSraw');

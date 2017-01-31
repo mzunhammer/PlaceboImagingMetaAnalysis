@@ -88,7 +88,7 @@ run('./E_NPS_Meta_Analysis_Placebo/C_Meta_Placebo_NPS_vs_ratings.m')
 
 % Validation findings NPS (all inclusive)
 % Pain vs baseline
-run('./F_NPS_Meta_Analysis_Validation/C1_NPS_Pain_vs_Baseline_All.m')
+run('./F_NPS_Meta_Analysis_Validation/C1_Pain_vs_Baseline_NPS.m')
 run('./F_NPS_Meta_Analysis_Validation/C2_NPS_Pain_vs_Baseline_Outlier_Excluded.m')
 
 % High pain vs low pain

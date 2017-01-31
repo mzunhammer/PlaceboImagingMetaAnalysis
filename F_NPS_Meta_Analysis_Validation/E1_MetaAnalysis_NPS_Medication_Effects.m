@@ -5,11 +5,13 @@ clear
 addpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/A_Analysis_GIV_Functions/')
 datapath='../../Datasets';
 
-load(fullfile(datapath,'AllData_w_NPS_MHE_NOBRAIN.mat'))
+load(fullfile(datapath,'AllData.mat'))
 
-studies=unique(df.studyID);   %Get all studies in df
-% !!!!! These must be in the same order as listed under "studies" !!!!
-studies=studies([1,3,5,15,19]);
+studies={  'atlas'
+           'bingel11'
+           'eippert'
+           'schenk'
+           'wrobel'};
 
 % studyIDtexts={
 %             'Atlas et al. 2012: Remifentanil (~0.884ng/ml) vs saline infusion (across open & hidden)|heat';...
@@ -20,10 +22,10 @@ studies=studies([1,3,5,15,19]);
 %             };
 
 studyIDtexts={
-            'Atlas et al. 2012: Remifentanil vs salinet infusion';...
+            'Atlas et al. 2012: Remifentanil vs saline infusion';...
 			'Bingel et al. 2011: Remifentanil vs saline infusion';...
 			'Eippert et al. 2009: Naloxone vs saline infusion';...
-            'Schenk et al. 2015:  Lidocain vs control cream'
+            'Schenk et al. 2015:  Lidocaine/Prilocaine vs control cream'
             'Wrobel et al. 2014: Haloperidol vs saline pill'
             };
 
