@@ -1,9 +1,12 @@
-function [summary,SEsummary,rel_weight,z,p,CI_lo,CI_hi,chisq,tausq,df,p_het,Isq]=GIVsummary(effects,SEs,method)
+function [summary,SEsummary,rel_weight,z,p,CI_lo,CI_hi,chisq,tausq,df,p_het,Isq]=GIVsummary(effects,SEs,stattype,method)
 % Generic inverse-variance (GIV) method to summarize continuous statistics across studies 
 % Input:
-% effects ? vector of continuous single-study effect measures (means or d)
-% SEs ? vector of standard errors for the effects (means,d)
-% method ? 'fixed' for fixed-effects analysis or
+% effects: vector of continuous single-study effect measures (means or d),
+% or correlations (pearsons r)
+% SEs: vector of standard errors for the effects (means,d),
+% for r enter n's!!!
+% stattype: 'cont' for continuous (means, d, g) or 'corr' for correlation (r).
+% method: 'fixed' for fixed-effects analysis or
 %          'random' fir random effects analysis according to DerSimonian and Laird random-effects models
 %
 % Output:
@@ -34,8 +37,15 @@ function [summary,SEsummary,rel_weight,z,p,CI_lo,CI_hi,chisq,tausq,df,p_het,Isq]
 if ~iscolumn(effects)
 effects=effects';
 end
+
 if ~iscolumn(SEs)
 SEs=SEs';
+end
+
+% If correlations are entered, replace effects and SEs by Fisher's Z and SE_Z
+if strcmp(stattype,'r')
+    effects=r2fishersZ(effects); %transform effects to Fisher's Z scores
+    SEs=r2fishersZ(SEs); %for r no SE's but n's are provided >> calculate SE of Fisher's Z scores
 end
 
 % Calculate fixed effects model first
@@ -75,4 +85,13 @@ z=summary./SEsummary; % Standardized overall effect (z-Value)
 p = normcdf(-abs(z),0,1)*2; % p of z-Value assuming a normal distribution (two-tailed!)
 CI_lo=summary-SEsummary*1.96;
 CI_hi=summary+SEsummary*1.96;
+
+% If correlations were entered, r-rantsform Fisher's Z and SE_Z to r.
+if strcmp(stattype,'r')
+    summary=fishersZ2r(summary);
+    SEsummary=fishersZ2r(SEsummary);
+    CI_lo=fishersZ2r(CI_lo);
+    CI_hi=fishersZ2r(CI_hi);
+end
+
 end

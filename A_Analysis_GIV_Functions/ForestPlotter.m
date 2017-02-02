@@ -80,23 +80,36 @@ NOsummary=p.Results.NOsummary;
 % Summarize standardized means by using the generic inverse-variance method
 
 if strcmp(summarystat,'mu')
-    summary_stat=[MetaStats.mu]';% Currently uses Hedge's g
-    se_summary_stat=[MetaStats.se_mu]'; % Currently uses Hedge's g
+    eff=[MetaStats.mu]';% Currently uses Hedge's g
+    se_eff=[MetaStats.se_mu]'; % Currently uses Hedge's g
     n=[MetaStats.n]';
 elseif strcmp(summarystat,'d')
-    summary_stat=[MetaStats.d]';% Currently uses Hedge's g
-    se_summary_stat=[MetaStats.se_d]'; % Currently uses Hedge's g
+    eff=[MetaStats.d]';% Currently uses Hedge's g
+    se_eff=[MetaStats.se_d]'; % Currently uses Hedge's g
     n=[MetaStats.n]';
+elseif strcmp(summarystat,'r')
+    eff=[MetaStats.r]';
+    n=[MetaStats.n]';
+    seZ_eff=sqrt(1./(n-3));% Note that variance of r will be computed anew using Fisher's Z for GIVsummary
+    se_eff=fishersZ2r(seZ_eff);
+    WIsubdata=0;
 else
-    summary_stat=[MetaStats.g]';% Currently uses Hedge's g
-    se_summary_stat=[MetaStats.se_g]'; % Currently uses Hedge's g
+    eff=[MetaStats.g]';% Currently uses Hedge's g
+    se_eff=[MetaStats.se_g]'; % Currently uses Hedge's g
     n=[MetaStats.n]';
 end
 
 MetaStats.delta
 %% Summarize all studies, weighted by se_summary_total
-[summary_total,se_summary_total,rel_weight,z,p,CI_lo,CI_hi,chisq,tausq,df,p_het,Isq]=GIVsummary(summary_stat,se_summary_stat,type);
-ci=se_summary_stat.*1.96;
+[summary_total,se_summary_total,rel_weight,z,p,summary_ciLo,summary_ciHi,chisq,tausq,df,p_het,Isq]=GIVsummary(eff,se_eff,summarystat,type);
+
+if strcmp(summarystat,'r')
+    ciLo=fishersZ2r(r2fishersZ(eff)-seZ_eff.*1.96);
+    ciHi=fishersZ2r(r2fishersZ(eff)+seZ_eff.*1.96);
+else
+    ciLo=eff-se_eff.*1.96;
+    ciHi=eff+se_eff.*1.96;
+end
  %% Forest Plot for Standardized Effect Sizes:
 %FIGURE WINDOW
 figure_width=printwidth;
@@ -117,12 +130,16 @@ x_graphW=0.33; %relative size of x-axis in normalized space (rel to the whole gr
     
 %AXIS SCALE
 if ~WIsubdata % no-single subj data-points >> scale x-axis to max(summary?CI) but at least 3
-    x_axis_size=max([double(ceil(max(abs(summary_stat)+ci))),3]);
+    x_axis_size=max([double(ceil(max(abs([ciLo;ciHi])))),3]);
 elseif WIsubdata && withoutlier % single subj data-points (for WI-studies), yet points beyond max(summary?CI) not plotted > outliermarks instead
-    x_axis_size=max([double(ceil(max(abs(summary_stat)+ci))),3]); 
+    x_axis_size=max([double(ceil(max(abs([ciLo;ciHi])))),3]); 
 elseif WIsubdata && ~withoutlier % plot full range of wi-single subj data. x-axis are scaled to max(abs(indiv datapoint))
     x_axis_size=max([double(ceil(max(abs(vertcat(MetaStats.std_delta))))),3]); 
 end    
+
+if strcmp(summarystat,'r')
+    x_axis_size=1;
+end
 
 y_axis_size=(length(studyIDtexts)+2);
 if NOsummary
@@ -204,11 +221,11 @@ for i=1:length(ids)
         y=i+1;       % If summary is desired shift lines up
     end
     
-    x=summary_stat(ii);  % Get current x yalue
+    x=eff(ii);  % Get current x yalue
     
     if ~isnan(x) % No plotting of stats for NaN Studies
-        xsdleft=x-ci(ii);  % Set current x-error
-        xsdright=x+ci(ii); % Set current x-error
+        xsdleft=ciLo(ii);  % Set current x-error
+        xsdright=ciHi(ii); % Set current x-error
 
         % Plot points representing standardized single-subject results
         if WIsubdata
@@ -335,7 +352,7 @@ if ~NOsummary
     % Plot Summary Results as rhombus:
     rhoheight=1;
     % left  upper  right lower 
-    x=[CI_lo summary_total CI_hi summary_total];
+    x=[summary_ciLo summary_total summary_ciHi summary_total];
     y=[1 1+rhoheight/2 1 1-rhoheight/2];
     fill(x,y,[0.9 0.9 0.9])
     %   Txt study Summary
@@ -363,7 +380,7 @@ if ~NOsummary
              'FontName',font_name);
     %   Txt effect Summary
         formatSpec='%0.2f [%0.2f; %0.2f]';
-        text(txt_position_eff, 1, sprintf(formatSpec,summary_total,CI_lo,CI_hi),...
+        text(txt_position_eff, 1, sprintf(formatSpec,summary_total,summary_ciLo,summary_ciHi),...
              'HorizontalAlignment','center',...
              'VerticalAlignment','middle',...
              'FontSize',font_size*0.90,...

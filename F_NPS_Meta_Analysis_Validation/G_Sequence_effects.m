@@ -73,42 +73,55 @@ corrcoef(sess1.NPSraw,sess2.NPSraw,'rows','complete')
 stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
 stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
 stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
-%'bingel06' >> Testing was performed within participants on left and right
-%side... summarizine data across hemispheres for NPS and ratings.
-%There were two missing sessions>> Match values according to subID's 
+
+%'bingel06'
+% ?Participants underwent two runs each.
+% ?In each run both the left AND the right hand were tested.
+% ?In each run both the placebo AND the control group were tested.
+% The placebo/control condition switched between right and left inbetween
+% sessions.
+% ?Left and right hands were modeled as separate regressors and have to be
+% summarized
+% -Second Session is missing for two participants
+
+% Get pain-images for both sides and treatments
 control_R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painNoPlacebo_R'))),varselect);
+placebo_L=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painPlacebo_L'))),varselect);
 placebo_R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painPlacebo_R'))),varselect);
 control_L=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painNoPlacebo_L'))),varselect);
-placebo_L=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painPlacebo_L'))),varselect);
-L_all=outerjoin(placebo_L,control_L,'Keys','subID');
-R_all=outerjoin(placebo_R,control_R,'Keys','subID');
-L_all.NPSraw=nanmean([L_all{:,'NPSraw_placebo_L'},L_all{:,'NPSraw_control_L'}],2);
-R_all.NPSraw=nanmean([R_all{:,'NPSraw_placebo_R'},R_all{:,'NPSraw_control_R'}],2);
-L_all.MHEraw=nanmean([L_all{:,'MHEraw_placebo_L'},L_all{:,'MHEraw_control_L'}],2);
-R_all.MHEraw=nanmean([R_all{:,'MHEraw_placebo_R'},R_all{:,'MHEraw_control_R'}],2);
-L_all.rating=nanmean([L_all{:,'rating_placebo_L'},L_all{:,'rating_control_L'}],2);
-R_all.rating=nanmean([R_all{:,'rating_placebo_R'},R_all{:,'rating_control_R'}],2);
-R_all.subID=R_all.subID_placebo_R;
-L_all.subID=L_all.subID_placebo_L;
-Bingel_all=outerjoin(L_all,R_all,'Keys','subID');
-Bingel_all.subID=Bingel_all.subID_R_all;
-Bingel_all.condSeq_placebo_L(isnan(Bingel_all.condSeq_placebo_L))=2;
 
-sess1R=Bingel_all(Bingel_all.condSeq_placebo_R==1,{'subID','rating_R_all','NPSraw_R_all','MHEraw_R_all'});
-sess1R.Properties.VariableNames={'subID','rating','NPSraw','MHEraw'};
-sess1L=Bingel_all(Bingel_all.condSeq_placebo_L==1,{'subID','rating_L_all','NPSraw_L_all','MHEraw_L_all'});
-sess1L.Properties.VariableNames={'subID','rating','NPSraw','MHEraw'};
-sess1=sortrows([sess1R;sess1L],'subID')
-
-sess2R=Bingel_all(Bingel_all.condSeq_placebo_R==2,{'subID','rating_R_all','NPSraw_R_all','MHEraw_R_all'});
-sess2R.Properties.VariableNames={'subID','rating','NPSraw','MHEraw'};
-sess2L=Bingel_all(Bingel_all.condSeq_placebo_L==2,{'subID','rating_L_all','NPSraw_L_all','MHEraw_L_all'});
-sess2L.Properties.VariableNames={'subID','rating','NPSraw','MHEraw'};
-sess2=sortrows([sess2R;sess2L],'subID')
-
-if sum(~strcmp(sess1.subID,sess2.subID));   
-'Warning, Session pairing in Bingel et al. 2006 is wrong.'
+% Check whether control_R and placebo_L can be combined with matching
+% subjects and matching runs
+if ~all(control_R.condSeq==placebo_L.condSeq)|~all(strcmp(placebo_L.subID,control_R.subID))
+    'Warning, Session pairing in Bingel et al. 2006 is wrong.'
+    return
 end
+% Check whether control_L and placebo_R can be combined with matching
+% subjects and matching runs
+if ~all(control_L.condSeq==placebo_R.condSeq)|~all(strcmp(placebo_R.subID,control_L.subID))
+    'Warning, Session pairing in Bingel et al. 2006 is wrong.'
+    return
+end
+% combined control_R and placebo_L
+labelscombi1=control_R(:, {'subID','cond'});            
+combi1=array2table(...
+        mean(cat(3,control_R{:, {'NPSraw','MHEraw','rating','condSeq'}},...
+              placebo_L{:, {'NPSraw','MHEraw','rating','condSeq'}}),3),...
+              'VariableNames',{'NPSraw','MHEraw','rating','condSeq'});
+combi1=[labelscombi1,combi1];
+% combined control_L and placebo_R
+labelscombi2=placebo_R(:, {'subID','cond'});            
+combi2=array2table(...
+        mean(cat(3,placebo_R{:, {'NPSraw','MHEraw','rating','condSeq'}},...
+              control_L{:, {'NPSraw','MHEraw','rating','condSeq'}}),3),...
+              'VariableNames',{'NPSraw','MHEraw','rating','condSeq'});
+combi2=[labelscombi2,combi2];
+
+% Get pain-images for both sides and treatments
+sess1=[combi1(combi1.condSeq==1,:);combi2(combi2.condSeq==1,:)];
+sess2=[combi1(combi1.condSeq==2,:);combi2(combi2.condSeq==2,:)];
+sess1=sortrows(sess1,'subID');
+sess2=sortrows(sess2,'subID');
 
 i=find(strcmp(studies,'bingel'));
 corrcoef(sess1.rating,sess2.rating,'rows','complete')
@@ -298,7 +311,7 @@ stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 %'zeidan'
 % No info available
-%% Summarize all studies, weigh by SE
+%% Summarize all studies, weigh by SE for session differences
 % Summary analysis+ Forest Plot
 ForestPlotter(stats.NPSraw,...
               'studyIDtexts',studyIDtexts,...
@@ -310,3 +323,29 @@ ForestPlotter(stats.NPSraw,...
               'boxscaling',1);
 
 hgexport(gcf, 'G_Sequence_effects_NPS.svg', hgexport('factorystyle'), 'Format', 'svg'); 
+
+%% Summarize all studies, weigh by SE for session correlations
+% Summary analysis+ Forest Plot
+ForestPlotter(stats.NPSraw,...
+              'studyIDtexts',studyIDtexts,...
+              'outcomelabel','NPS response (Hedge''s {\itg})',...
+              'type','random',...
+              'summarystat','r',...
+              'withoutlier',0,...
+              'WIsubdata',1,...
+              'boxscaling',1);
+
+hgexport(gcf, 'G_Reliability_NPS.svg', hgexport('factorystyle'), 'Format', 'svg'); 
+
+%% Summarize all studies, weigh by SE for session correlations
+% Summary analysis+ Forest Plot
+ForestPlotter(stats.rating,...
+              'studyIDtexts',studyIDtexts,...
+              'outcomelabel','NPS response (Hedge''s {\itg})',...
+              'type','random',...
+              'summarystat','r',...
+              'withoutlier',0,...
+              'WIsubdata',1,...
+              'boxscaling',1);
+
+hgexport(gcf, 'G_Reliability_rating.svg', hgexport('factorystyle'), 'Format', 'svg'); 
