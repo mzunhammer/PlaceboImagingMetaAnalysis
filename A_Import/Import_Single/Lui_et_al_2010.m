@@ -9,84 +9,36 @@ basedir = '/Users/matthiaszunhammer/Dropbox/boulder_essen/Datasets/';
 studydir= 'Lui_et_al_2010';
 
 %% Load images paths
-
-%% Combine Betas to Cons representing the experimental conditions:
-% Since placebo-pain and control-pain stimuli were modeled as
-% stimulus+time-derivative, we'll have to combine betas:
-
 % CAVE: FOR SOME PARTICIPANTS THERE WERE EXTRA PREDICTORS ON  SESSIONS 1 and 2
-% (the  conditioning session unimportant for our analysis)... therefore the beta-numbers are
+% (the unimportant ones)... therefore the beta-numbers are
 % not identical for all participants and have to be calculated based on the
 % names of the design-matrix columns given in the SPM.xX.name
-% The usual participant has 44 beta images.
-% To get column names for a given SPM: [[SPM_lui.Sess(1).U.name],[SPM_lui.Sess(2).U.name]]'
+% The usual participant has 53 beta images.
 % The columns of interest are:
+% "Sn(3) A_R_3*bf(1)" (Anticipation Control)
+% "Sn(3) A_G_3*bf(1)" (Anticipation Placebo)
+% "Sn(3) P_3*bf(1)" (Pain Control) (P stands for PAIN not PLACEBO!)
+% "Sn(3) NoP_3*bf(1)"(Pain Placebo) (P stands for PAIN not PLACEBO!)
 
-% 'Sn(2) A_R_3*bf(1)' + 'Sn(2) A_R_3xpsicofisica^1*bf(1)' + 'Sn(2) A_R_3xpsicofisica^2*bf(1)' + 'Sn(2) A_R_3xordine^1*bf(1)' + 'Sn(2) A_R_3xordine^2*bf(1)' + 'Sn(2) A_R_3xpsicXord^1*bf(1)' (Anticipation Control)
-% 'Sn(2) A_G_3*bf(1)' + 'Sn(2) A_G_3xpsicofisica^1*bf(1)' + 'Sn(2) A_G_3xpsicofisica^2*bf(1)' + 'Sn(2) A_G_3xordine^1*bf(1)' + 'Sn(2) A_G_3xordine^2*bf(1)' + 'Sn(2) A_G_3xpsicXord^1*bf(1)' (Anticipation Placebo)
-% 'Sn(2) P_3*bf(1)'   + 'Sn(2) P_3xpsicofisica^1*bf(1)'   + 'Sn(2) P_3xpsicofisica^2*bf(1)'   + 'Sn(2) P_3xordine^1*bf(1)'   + 'Sn(2) P_3xordine^2*bf(1)'   + 'Sn(2) P_3xpsicXord^1*bf(1)'   (Pain Control)
-% 'Sn(2) NoP_3*bf(1)' + 'Sn(2) NoP_3xpsicofisica^1*bf(1)' + 'Sn(2) NoP_3xpsicofisica^2*bf(1)' + 'Sn(2) NoP_3xordine^1*bf(1)' + 'Sn(2) NoP_3xordine^2*bf(1)' + 'Sn(2) NoP_3xpsicXord^1*bf(1)' (Pain Placebo)
+beta_IDs = [1,3,5,7];
+beta_descriptors= {...
+   'antic_control_red'...
+   'antic_placebo_green'...
+   'pain_control'...
+   'pain_placebo'};
+% Beta terms as listed in SPM.xX.name used to search the correct betas-numbers for
+% each participant
+beta_term= {...
+ 'Sn(2) A_R_3*bf(1)'...  %(Anticipation Control)
+ 'Sn(2) A_G_3*bf(1)'... %(Anticipation Placebo)
+ 'Sn(2) P_3*bf(1)'...   %(Pain Control) (P stands for PAIN not PLACEBO!)
+ 'Sn(2) NoP_3*bf(1)'}; %(Pain Placebo) (P stands for PAIN not PLACEBO!)
 
 luifolders=dir(fullfile(basedir,studydir));
 luifolders={luifolders.name};
 luifolders=luifolders(~cellfun(@isempty,...
                             regexpi(luifolders','^TOMO_\d\d$','match')));
 nsubj=length(luifolders);
-%% Con terms as listed in SPM.xX.name' used to index the correct betas-numbers for
-% each participant
-con_IDs = [1, 2, 3, 4];
-con_descriptors= {...
-    'conAnticControl'...
-    'conAnticPlacebo'...
-    'conPainControl'...
-    'conPainPlacebo'};
-ConLabels{1}= {... %AntiControlLabels
-    'Sn(2) A_R_3*bf(1)'
-    'Sn(2) A_R_3xpsicofisica^1*bf(1)'
-    'Sn(2) A_R_3xpsicofisica^2*bf(1)'
-    'Sn(2) A_R_3xordine^1*bf(1)'
-    'Sn(2) A_R_3xordine^2*bf(1)'
-    'Sn(2) A_R_3xpsicXord^1*bf(1)'}; 
-ConLabels{2}= {... %AntiPlaceboLabels
-    'Sn(2) A_G_3*bf(1)'
-    'Sn(2) A_G_3xpsicofisica^1*bf(1)'
-    'Sn(2) A_G_3xpsicofisica^2*bf(1)'
-    'Sn(2) A_G_3xordine^1*bf(1)'
-    'Sn(2) A_G_3xordine^2*bf(1)'
-    'Sn(2) A_G_3xpsicXord^1*bf(1)'}; 
-ConLabels{3}= {... %PainControlLabels
-    'Sn(2) P_3*bf(1)'
-    'Sn(2) P_3xpsicofisica^1*bf(1)'
-    'Sn(2) P_3xpsicofisica^2*bf(1)'
-    'Sn(2) P_3xordine^1*bf(1)'
-    'Sn(2) P_3xordine^2*bf(1)'
-    'Sn(2) P_3xpsicXord^1*bf(1)'}; 
-ConLabels{4}= {... %PainPlaceboLabels
-    'Sn(2) NoP_3*bf(1)'
-    'Sn(2) NoP_3xpsicofisica^1*bf(1)'
-    'Sn(2) NoP_3xpsicofisica^2*bf(1)'
-    'Sn(2) NoP_3xordine^1*bf(1)'
-    'Sn(2) NoP_3xordine^2*bf(1)'
-    'Sn(2) NoP_3xpsicXord^1*bf(1)'}; 
-%% Procedure to calculate "CON" images representing stimulus+derivatives (assuming default standardization and orthagonalization as implemented in SPM)
-% for i=1:length(luifolders)
-%     % Get current participant folder and load SPM
-%     currdir=fullfile(basedir,studydir,luifolders{i});    
-%     load(fullfile(currdir, 'SPM.mat'));
-%     for j=1:length(ConLabels) % for each desired contrast
-%         betaNos=find(ismember(SPM.xX.name,ConLabels{j}')); % get beta-numbers
-%         betaImgs=strsplit(sprintf('beta_00%d.hdr,',betaNos'),',');
-%         betaImgs=betaImgs(~cellfun(@isempty,betaImgs));
-%         disp(['For participant ',luifolders{i},' ',num2str(length(betaImgs)),' beta images were summarized for ',con_descriptors{j},'.img'])
-%         spm_imcalc(...
-%             fullfile(currdir,betaImgs),...
-%             fullfile(currdir,[con_descriptors{j},'.img']),...
-%             'sum(X)',...
-%             {1}); % <--- This is spm_imcalc's "read images as data-matrix (dtmx)" argument...
-%     end
-% end
-% For some reason the placebo condition was only modeled with 5 regressors
-% in Participant TOMO_18 (anticipation and placebo)
 
 %% Import behavioral
 xls_path=fullfile(basedir, studydir, 'Lui_Behavioural_Demografics.xlsx');
@@ -98,27 +50,27 @@ uniratingPla=xlsread(xls_path,1,'M3:M40');
 uniratingCon=xlsread(xls_path,1,'L3:L40');
 unistimInt=xlsread(xls_path,1,'F3:F40'); % Day 3 Data had high stimulus intensities only, so only high stim ints are imported
 
-%Read image names and ratings
+%% Import images, combine with behavioral
 for j= 1:nsubj
     currdir=fullfile(basedir,studydir,luifolders{j});
     load(fullfile(currdir, 'SPM.mat'));
     xSpanRaw=max(SPM.xX.X)-min(SPM.xX.X);
-    for i = 1:length(con_descriptors)
+    for i = 1:length(beta_descriptors)
         currsubNO=luifolders{j}(end-1:end);
-        %Get filenames in a (subj,con) matrix
-        img{j,i} = fullfile(studydir,luifolders{j}, [con_descriptors{i},'.img']);
-        %Get subject and con ID in the same (subj,con) matrix format
+        currbetano=find(strcmp(SPM.xX.name,beta_term{i}));
+        %Get filenames in a (subj,beta) matrix
+        img{j,i} = fullfile(studydir,luifolders{j}, sprintf('beta_%04d.img',currbetano));
+        %Get subject and beta ID in the same (subj,beta) matrix format
         i_sub{j,i}=['lui_',currsubNO];
-        con(j,i)=con_IDs(i);
-        %Get description of conditions in a in (subj,con) matrix format
-        cond(j,i)=con_descriptors(i); 
-        
+        beta(j,i)=beta_IDs(i);
+        %Get description of conditions in a in (subj,beta) matrix format
+        cond(j,i)=beta_descriptors(i);
         % Placebo condition
         % 0= Any Control 1 = Any Placebo  2 = Other
-        if ismember(con(j,i),[2 4])
+        if ismember(beta(j,i),[3 7])
              pla(j,i)=1;
              rating(j,i)=uniratingPla(str2num(currsubNO));
-            elseif ismember(con(j,i),[1 3])
+            elseif ismember(beta(j,i),[1 5])
              pla(j,i)=0;    % 0= Any Control 1 = Any Placebo  2 = Other
              rating(j,i)=uniratingCon(str2num(currsubNO));
             else
@@ -126,7 +78,7 @@ for j= 1:nsubj
              rating(j,i)=NaN;
         end
         %Get xSpan from SPM:
-        iCon=ismember(SPM.xX.name,ConLabels{i}); % Get index of right betas with correct names
+        iCon=strcmp(SPM.xX.name,beta_term{i}); % Get index of right betas with correct names
         xSpan(j,i)=sum(xSpanRaw(iCon)); % Gets x-Vextors according to index above
         conSpan(j,i)=2; % Computed manually above
         nImages(j,i)=size(SPM.xX.X,1);
@@ -139,13 +91,13 @@ end
 
 img=vertcat(img(:));          % The absolute image paths
 sub=vertcat(i_sub(:));               % The subject number (study specific)
-con=vertcat(con(:));
+beta=vertcat(beta(:));
 nImages=vertcat(nImages(:));
 
 % Pain condition
 % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
-pain(ismember(con,[1 2]),1)=0;     
-pain(ismember(con,[3 4]),1)=1;
+pain(ismember(beta,[1 3]),1)=0;     
+pain(ismember(beta,[5 7]),1)=1;
 cond=vertcat(cond(:));  
 
 condSeq=ones(size(img))*3;         % Third session in row, red and green cues "pseudorandomly alternated" within run.
@@ -183,7 +135,7 @@ lui.tr           =ones(size(lui.img)).*3014;
 lui.te           =ones(size(lui.img)).*35;
 lui.voxelVolAcq  =ones(size(lui.img)).*(1.875*1.875*3.5);
 lui.voxelVolMat  =ones(size(lui.img)).*(2*2*2);
-lui.meanBlockDur =ones(size(lui.cond)).*0; % Paper and SPM agree (somewhat, the paper states that pain was modeled as an 1 TR event, which is not possible)
+lui.meanBlockDur =ones(size(lui.cond)).*0; % Paper and SPM agree
 lui.nImages      =nImages; % Images per Participant
 lui.xSpan        =xSpan;
 lui.conSpan      =conSpan(:);

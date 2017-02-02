@@ -17,10 +17,10 @@ idf(:,end+1)=(strcmp(df.studyID,'atlas')&~cellfun(@isempty,regexp(df.cond,'StimH
 idf(:,end+1)=(strcmp(df.studyID,'atlas')&~cellfun(@isempty,regexp(df.cond,'StimHiPain_Hidden_Stimulation')));
 idf(:,end+1)=(strcmp(df.studyID,'atlas')&~cellfun(@isempty,regexp(df.cond,'StimHiPain_Hidden_ExpectationPeriod')));
 
-idf(:,end+1)=(strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painNoPlacebo_R')));
-idf(:,end+1)=(strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painPlacebo_R')));
-idf(:,end+1)=(strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painNoPlacebo_L')));
-idf(:,end+1)=(strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painPlacebo_L')));
+idf(:,end+1)=(strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'painNoPlacebo_R')));
+idf(:,end+1)=(strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'painPlacebo_R')));
+idf(:,end+1)=(strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'painNoPlacebo_L')));
+idf(:,end+1)=(strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'painPlacebo_L')));
 
 idf(:,end+1)=(strcmp(df.studyID,'bingel11')&strcmp(df.cond,'pain_remi_no_exp'));
 idf(:,end+1)=(strcmp(df.studyID,'bingel11')&strcmp(df.cond,'pain_remi_pos_exp'));

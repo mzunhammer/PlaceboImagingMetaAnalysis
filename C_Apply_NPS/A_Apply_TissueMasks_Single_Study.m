@@ -27,7 +27,7 @@ addpath('./pattern_masks/')
 
 runstudies={...
 % 'Atlas_et_al_2012'
-% 'Bingel_et_al_2006'
+'Bingel_et_al_2006'
 % 'Bingel_et_al_2011'
 % 'Choi_et_al_2013'
 % 'Eippert_et_al_2009'
@@ -35,18 +35,18 @@ runstudies={...
 % 'Elsenbruch_et_al_2012'
 % 'Freeman_et_al_2015'
 % 'Geuter_et_al_2013'
-% 'Huber_et_al_2013'
+'Huber_et_al_2013'
 % 'Kessner_et_al_201314'
 % 'Kong_et_al_2006'
 % 'Kong_et_al_2009'
-% 'Lui_et_al_2010'
-'Ruetgen_et_al_2015'
-'Schenk_et_al_2014'
-'Theysohn_et_al_2014'
-'Wager_at_al_2004a_princeton_shock'
-'Wager_et_al_2004b_michigan_heat'
-'Wrobel_et_al_2014'
-'Zeidan_et_al_2015'
+'Lui_et_al_2010'
+% 'Ruetgen_et_al_2015'
+% 'Schenk_et_al_2014'
+% 'Theysohn_et_al_2014'
+% 'Wager_at_al_2004a_princeton_shock'
+% 'Wager_et_al_2004b_michigan_heat'
+% 'Wrobel_et_al_2014'
+% 'Zeidan_et_al_2015'
 };
 
 tic
@@ -70,6 +70,12 @@ csf=apply_patternmask(fullfile(datadir,all_imgs),fullfile(p,'pattern_masks/csf.n
 brain=apply_patternmask(fullfile(datadir, all_imgs),fullfile(p,'pattern_masks/brainmask.nii'));
 nobrain=apply_patternmask(fullfile(datadir, all_imgs),fullfile(p,'pattern_masks/inverted_brainmask.nii'));
 
+grey(cellfun(@isempty,grey))={NaN};
+white(cellfun(@isempty,white))={NaN};
+csf(cellfun(@isempty,csf))={NaN};
+brain(cellfun(@isempty,brain))={NaN};
+nobrain(cellfun(@isempty,nobrain))={NaN};
+
 df.grey=[grey{:}]';
 df.white=[white{:}]';
 df.csf=[csf{:}]';
@@ -82,11 +88,18 @@ csf_abs=apply_patternmask_abs(fullfile(datadir,all_imgs),fullfile(p,'pattern_mas
 brain_abs=apply_patternmask_abs(fullfile(datadir, all_imgs),fullfile(p,'pattern_masks/brainmask.nii'));
 nobrain_abs=apply_patternmask_abs(fullfile(datadir, all_imgs),fullfile(p,'pattern_masks/inverted_brainmask.nii'));
 
+grey_abs(cellfun(@isempty,grey_abs))={NaN};
+white_abs(cellfun(@isempty,white_abs))={NaN};
+csf_abs(cellfun(@isempty,csf_abs))={NaN};
+brain_abs(cellfun(@isempty,brain_abs))={NaN};
+nobrain_abs(cellfun(@isempty,nobrain_abs))={NaN};
+
 df.grey_abs=[grey_abs{:}]';
 df.white_abs=[white_abs{:}]';
 df.csf_abs=[csf_abs{:}]';
 df.brain_abs=[brain_abs{:}]';
 df.nobrain_abs=[nobrain_abs{:}]';
+
 
 % Push the data in df into a table with the name of the original table
 eval([currtablename{1} '= df']);

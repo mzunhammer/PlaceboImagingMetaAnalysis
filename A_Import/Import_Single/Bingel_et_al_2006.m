@@ -2,6 +2,8 @@ function Bingel_et_al_2006
 
 %% Collects all behavioral data and absolute img-paths for Elsenbruch 2012
 % in a data frame, saves as .mat
+% Since second session data for participant CK and FK were missing these
+% were replaced by "dummy" images (Session 1) where all values were replaced with NaNs.
 
 %% Set working environment
 clear
@@ -14,23 +16,25 @@ studydir= 'Bingel_et_al_2006/';
 con_IDs = [1 4 2 5];
 ncon=length(con_IDs);
 con_descriptors= {...
-    'con_cuePlacebo'...
-    'con_cueNoPlacebo'...
-    'con_painPlacebo'...
-    'con_painNoPlacebo'...
+    'cuePlacebo'...
+    'cueNoPlacebo'...
+    'painPlacebo'...
+    'painNoPlacebo'...
     };
 con_imgnames= {...
     'beta_0001'...
     'beta_0004'...
-    'con_painPlacebo'...
-    'con_painNoPlacebo'...
+    'beta_0002'...
+    'beta_0005'...
     };
 con_coding={...
     logical([1 0 0 0 0 0 0 0]),...
     logical([0 0 0 1 0 0 0 0]),...
-    logical([0 1 1 0 0 0 0 0]),...
-    logical([0 0 0 0 1 1 0 0]),...
+    logical([0 1 0 0 0 0 0 0]),...
+    logical([0 0 0 0 1 0 0 0]),...
     }; %Contrasts had to be computed from betas post-hoc
+sides={'L'...
+       'R'};
 bingelfolders=dir(fullfile(basedir,studydir));
 bingelfolders={bingelfolders.name};
 bingelfolders=bingelfolders(~cellfun(@isempty,...
@@ -48,6 +52,11 @@ rating_con_sess1=xlsread(xls_path,1,'C3:C21');
 rating_pla_sess2=xlsread(xls_path,1,'F3:F21');
 rating_con_sess2=xlsread(xls_path,1,'G3:G21');
 
+%Quote from the original publication:
+% Subjects were investigated in two scanning sessions. The placebo- cream was applied to the right hand in one session and to the left hand in the other scanning session, with the order randomized across subjects. The non-placebo hand was treated with an ?inactive? control cream
+% Folder Structure is:
+% SUBJECTID/ana{SESSION NUMBER}{PLACEBO L or R}
+
 for j= 1:nsubj
     currfolder=fullfile(basedir,studydir,bingelfolders{j});
     % Get sub-folders of sub-sessions
@@ -55,8 +64,8 @@ for j= 1:nsubj
     sidefolders={sidefolders.name};
     sidefolders=sidefolders(~cellfun(@isempty,...
                             regexpi(sidefolders','^ana\d\w','match')));
-    sides=regexpi(sidefolders','^ana\d(\w)','tokens');
-    sides=[sides{:}]; sides=[sides{:}];
+    pla_side=regexpi(sidefolders','^ana\d(\w)','tokens');
+    pla_side=[pla_side{:}]; pla_side=[pla_side{:}];
     %for each session
     for k= 1:length(sidefolders)
         currfolder2=fullfile(currfolder,sidefolders{k});
@@ -71,19 +80,28 @@ for j= 1:nsubj
             img{j,i,k}=fullfile(studydir,bingelfolders{j},sidefolders{k}, [con_imgnames{i},'.img']);
             %Get subject and con ID in the same (subj,con) matrix format
             i_sub(j,i,k)=bingelfolders(j);
-            side(j,i,k)=sides(k);
             nImages(j,i,k)=xLength;
             xSpan(j,i,k)=sum(xSpanRaw(con_coding{i})); %Approximate predictor scaling 
             conSpan(j,i,k)=sum(abs(con_coding{i})); %sum(abs(SPMcon));
             %Get description of conditions in a in (subj,con) matrix format
-            cond(j,i,k)={[con_descriptors{i},'_', sides{k}]}; 
+            cond_raw(j,i,k)={con_descriptors{i}}; 
             condSeq(j,i,k)=k; 
             % Assign "placebo condition" according to experimental condition
             % 0= Any Control 1 = Any Placebo  2 = Other
-            pla(j,i,k)=cellfun(@isempty, regexpi(cond(j,i,k),'NoPlacebo'));
+            pla(j,i,k)=cellfun(@isempty, regexpi(cond_raw(j,i,k),'NoPlacebo'));
             
-            if pla(j,i,k)==1 && condSeq(j,i,k)==1
-                rating(j,i,k)=rating_pla_sess1(j);
+            % Get side depending on placebo condition
+            if pla(j,i,k)==1 % If current session was placebo...
+                side(j,i,k)=sides(strcmp(sides,pla_side(k))); % use pla_side as is.
+            elseif pla(j,i,k)==0 % If current session was control...
+                side(j,i,k)=sides(~strcmp(sides,pla_side(k))); %insert opposite side.
+            end
+            cond{j,i,k}=[cond_raw{j,i,k},'_', side{j,i,k}]; %combine cond_raw and side to cond
+
+            % Get rating depending on session number and placebo
+            % condition
+            if pla(j,i,k)==1 && condSeq(j,i,k)==1 
+                rating(j,i,k)=rating_pla_sess1(j); %select rating
             elseif pla(j,i,k)==0 && condSeq(j,i,k)==1
                 rating(j,i,k)=rating_con_sess1(j);
             elseif pla(j,i,k)==1 && condSeq(j,i,k)==2
@@ -124,7 +142,7 @@ bingel06.age=ones(size(bingel06.img))*((19-4)/19);  %MISSING: Mean age according
 bingel06.healthy=ones(size(bingel06.img));
 bingel06.pla=pla;
 bingel06.pain=pain;
-bingel06.predictable=ones(size(bingel06.img)); %Uncertainty: Train of 4 stimuli started 6±1s after cue, with 7±1s between stimuli"
+bingel06.predictable=ones(size(bingel06.img)); %Uncertainty: Train of 4 stimuli started 6?1s after cue, with 7?1s between stimuli"
 bingel06.realTreat=zeros(size(bingel06.img));  %only placebo creams
 bingel06.cond=cond;
 bingel06.stimtype=repmat({'laser'},size(bingel06.img));
