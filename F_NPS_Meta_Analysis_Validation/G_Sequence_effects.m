@@ -85,10 +85,10 @@ stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 % -Second Session is missing for two participants
 
 % Get pain-images for both sides and treatments
-control_R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painNoPlacebo_R'))),varselect);
-placebo_L=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painPlacebo_L'))),varselect);
-placebo_R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painPlacebo_R'))),varselect);
-control_L=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painNoPlacebo_L'))),varselect);
+control_R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'painNoPlacebo_R'))),varselect);
+placebo_L=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'painPlacebo_L'))),varselect);
+placebo_R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'painPlacebo_R'))),varselect);
+control_L=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'painNoPlacebo_L'))),varselect);
 
 % Check whether control_R and placebo_L can be combined with matching
 % subjects and matching runs

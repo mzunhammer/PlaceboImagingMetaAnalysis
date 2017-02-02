@@ -139,7 +139,7 @@ mdl1 = fitlm(df_lm,'rating ~ studyID+NPS');
 
 %% Mixed model analysis
 mmdl0 = fitlme(df_lm,'rating ~ 1+(1+NPS|studyID)',...
-              'CheckHessian',true)
+              'CheckHessian',true);
 mmdl1 = fitlme(df_lm,'rating ~ NPS+(1+NPS|studyID)',...
               'CheckHessian',true)
           

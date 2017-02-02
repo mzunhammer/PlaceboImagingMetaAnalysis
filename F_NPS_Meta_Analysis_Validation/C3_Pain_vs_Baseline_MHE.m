@@ -87,10 +87,10 @@ stats(i)=withinMetastats(nanmean([control,placebo],2),0);
 %'bingel06' >> Testing was performed within participants on left and right
 %side... summarizine data across hemispheres for MHE and ratings first.
 %There were two missing sessions>> Match values according to subID's 
-control_R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painNoPlacebo_R'))),{'subID','MHEraw','rating'});
-placebo_R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painPlacebo_R'))),{'subID','MHEraw','rating'});
-control_L=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painNoPlacebo_L'))),{'subID','MHEraw','rating'});
-placebo_L=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'con_painPlacebo_L'))),{'subID','MHEraw','rating'});
+control_R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'painNoPlacebo_R'))),{'subID','MHEraw','rating'});
+placebo_R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'painPlacebo_R'))),{'subID','MHEraw','rating'});
+control_L=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'painNoPlacebo_L'))),{'subID','MHEraw','rating'});
+placebo_L=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'painPlacebo_L'))),{'subID','MHEraw','rating'});
 control=outerjoin(control_R,control_L,'Keys','subID');
 placebo=outerjoin(placebo_R,placebo_L,'Keys','subID');
 
