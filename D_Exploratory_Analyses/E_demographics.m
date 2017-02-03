@@ -13,6 +13,13 @@ dfstud=df(ia,:);      %dataframe single-data-point-per-subject
 ['Total number of independent subjects:' num2str(height(dfs))]
 
 
+
+df_by_subID=varfun(@mean,df,'InputVariables',{'ex_lo_p_ratings','ex_img_artifact','ex_all'},...
+    'GroupingVariables','subID')
+
+['Total number of independent subjects excluded for near-zero ratings: ', num2str(sum(df_by_subID.mean_ex_lo_p_ratings))]
+['Total number of independent subjects excluded for suspected image artifacts: ', num2str(sum(df_by_subID.mean_ex_img_artifact))]
+
 f1=figure('position', [100, 100, 1049*2, 895*0.5],...
         'PaperPositionMode', 'auto'); %'Units','centimeters','position',[0 0 17 3]
 [subplothandle, pos] =tight_subplot(1,7,0,[0.01 0.1],0.01);
@@ -202,3 +209,4 @@ by_study_propmale = grpstats( df.male, df.studyID, {'mean'})
 
 df_pain=df(logical(df.pain),:);
 close all;
+
