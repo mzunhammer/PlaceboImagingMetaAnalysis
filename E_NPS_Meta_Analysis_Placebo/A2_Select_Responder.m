@@ -193,7 +193,7 @@ df_resp.condata{i}=df{(strcmp(df.studyID,'kong09')&strcmp(df.cond,'pain_post_con
 df_resp.pladata{i}=df{(strcmp(df.studyID,'kong09')&strcmp(df.cond,'pain_post_placebo')&~df.ex_all),varselect};
 %'lui'
 i=find(strcmp(studies,'lui'));
-df_resp.condata{i}=df{(strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_placebo')&~df.ex_all),varselect};
+df_resp.condata{i}=df{(strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_control')&~df.ex_all),varselect};
 df_resp.pladata{i}=df{(strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_placebo')&~df.ex_all),varselect};
 %'ruetgen'
 i=find(strcmp(studies,'ruetgen'));

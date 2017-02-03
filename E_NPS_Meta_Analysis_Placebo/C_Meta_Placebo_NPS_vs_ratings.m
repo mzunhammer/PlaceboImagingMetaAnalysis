@@ -205,8 +205,10 @@ line(repmat(mean(df_lm.NPS),2,1),[-4,4])
 % Make graph prettier
 xticks(-4:2:4)
 yticks(-4:2:4)
-
+ 
 hold off
 
 
-hgexport(gcf, ['C_Ratings_vs_NPS.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
+%hgexport(gcf, ['C_Ratings_vs_NPS.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
+pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
+hgexport(gcf, fullfile(pubpath,'C_Ratings_vs_NPS.svg'), hgexport('factorystyle'), 'Format', 'svg');

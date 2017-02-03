@@ -273,8 +273,8 @@ stats(i)=withinMetastats(nanmean([control{:,:},placebo{:,:}],2),0);
 control=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_control')),'NPSraw');
 placebo=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_placebo')),'NPSraw');
 
-con_rating=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainControl')),'rating');
-pla_rating=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainPlacebo')),'rating');
+con_rating=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_control')),'rating');
+pla_rating=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_placebo')),'rating');
 rating_diff=con_rating{:,1}-pla_rating{:,1};
 responders=rating_diff>0;
 
@@ -396,3 +396,8 @@ ForestPlotter(stats,...
 
 %hgexport(gcf, 'C1_Pain_vs_Baseline_All', hgexport('factorystyle'), 'Format', 'eps'); 
 hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/C1_Pain_vs_Baseline_NPS', hgexport('factorystyle'), 'Format', 'svg');
+
+NPS_pos_imgs=vertcat(stats.delta)>0;
+perc_pos_NPS=sum(NPS_pos_imgs)/sum(~isnan(NPS_pos_imgs));
+
+disp([num2str(perc_pos_NPS*100),'% of participants showed a positive NPS response.'])

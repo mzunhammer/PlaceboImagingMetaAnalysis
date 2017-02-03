@@ -129,7 +129,7 @@ stats.MHE(i)=withinMetastats(df_incl.pladata{i}(:,v),impu_r);
 end
 
 %% One Forest plot per variable
-varnames=fieldnames(stats)
+varnames=fieldnames(stats);
 nicevarnames={'Pain ratings',...
               'NPS-score',...
               'VAS-score'};
@@ -142,6 +142,9 @@ for i = 1:numel(varnames)
                   'withoutlier',0,...
                   'WIsubdata',0,...
                   'boxscaling',1);
-    hgexport(gcf, ['B2_Meta_Incl_',varnames{i},'.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
+    %hgexport(gcf, ['B2_Meta_Incl_',varnames{i},'.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
+    pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
+    hgexport(gcf, fullfile(pubpath,['B2_Meta_Incl_',varnames{i},'.svg']), hgexport('factorystyle'), 'Format', 'svg'); 
+  
     close all;
 end

@@ -32,16 +32,9 @@ studyIDtexts={
 r=find(strcmp(df_full.variables,'stimint'));
 n=find(strcmp(df_full.variables,'NPSraw'));
 
-for i=1:length(df_full.studies) % Calculate for all studies except...
-    if df_full.consOnlyRating(i)==0 %...data-sets where both pla and con is available
-        if df_full.BetweenSubject(i)==0 %Within-subject studies
-           stats.rating(i)=withinMetastats(nanmean([df_full.pladata{i}(:,r),df_full.condata{i}(:,r)],2),0);
-           stats.NPSraw(i)=withinMetastats(nanmean([df_full.pladata{i}(:,n),df_full.condata{i}(:,n)],2),0);
-        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-           stats.rating(i)=withinMetastats([df_full.pladata{i}(:,r);df_full.condata{i}(:,r)],0);
-           stats.NPSraw(i)=withinMetastats([df_full.pladata{i}(:,n);df_full.condata{i}(:,n)],0); 
-        end
-    end
+for i=1:length(df_full.studies)
+studyID=df_full.pladata{i}
+data=vertcat(df_full.pladata{i})
+t{i}=array2table(data,'VariableNames',df_full.variables);
 
 end
-
