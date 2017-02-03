@@ -100,11 +100,13 @@ normaly = @(mn, variance, x) 2.718283^(- (x - mn)*(x - mn)/(2*variance))/realsqr
      area = 0;
      if uniform
          theta = lower;
-     else theta = meanoftheory - 5*(omega)^0.5;
+     else
+         theta = meanoftheory - 5*(omega)^0.5;
      end
      if uniform
           incr = (upper- lower)/2000;
-     else incr =  (omega)^0.5/200;
+     else
+          incr =  (omega)^0.5/200;
      end
         
      for A = -1000:1000

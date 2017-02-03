@@ -31,39 +31,39 @@ p = inputParser;
 addRequired(p,'MetaStats',@isstruct);
 %Check studyIDtexts
 defstudyIDtexts = {};
-addParameter(p,'studyIDtexts',defstudyIDtexts,@iscell)
+addParameter(p,'studyIDtexts',defstudyIDtexts,@iscell);
 %Check outcomelabel
 defOutcomelabel = 'Outcome';
-addParameter(p,'outcomelabel',defOutcomelabel,@ischar)
+addParameter(p,'outcomelabel',defOutcomelabel,@ischar);
 %Check type
 defType = 'random';
-addParameter(p,'type',defType,@ischar)
+addParameter(p,'type',defType,@ischar);
 %Check type
 defSummarystat = 'g';
-addParameter(p,'summarystat',defSummarystat,@ischar)
+addParameter(p,'summarystat',defSummarystat,@ischar);
 %Check fontsize
 defFontsize=16; % Negative number will later be replaced by no change in resolution
-addParameter(p,'fontsize',defFontsize,@isnumeric)
+addParameter(p,'fontsize',defFontsize,@isnumeric);
 %Check textoffset (currently automatically determined)
 deftextoffset=0; % Negative number will later be replaced by no change in resolution
-addParameter(p,'textoffset',deftextoffset,@isnumeric)
+addParameter(p,'textoffset',deftextoffset,@isnumeric);
 %Check boxscaling
 defBoxscaling=1; %
-addParameter(p,'boxscaling',defBoxscaling,@isnumeric)   % basic unit is y (height of a study-line)
+addParameter(p,'boxscaling',defBoxscaling,@isnumeric);   % basic unit is y (height of a study-line)
 %Check printwidth
 defprintwidth=3000; % printwidth in px
-addParameter(p,'printwidth',defprintwidth,@isnumeric)
+addParameter(p,'printwidth',defprintwidth,@isnumeric);
 %Check Withoutlier
 defWithoutlier = 1;
-addParameter(p,'withoutlier',defWithoutlier,@isnumeric)
+addParameter(p,'withoutlier',defWithoutlier,@isnumeric);
 %Check WIsubdata
 defWIsubdata = 1;
-addParameter(p,'WIsubdata',defWIsubdata,@isnumeric)
+addParameter(p,'WIsubdata',defWIsubdata,@isnumeric);
 %Supress summary
 defNOsummary = 0;
-addParameter(p,'NOsummary',defNOsummary,@isnumeric)
+addParameter(p,'NOsummary',defNOsummary,@isnumeric);
 
-parse(p,MetaStats,varargin{:})
+parse(p,MetaStats,varargin{:});
 % Re-format inputs for convenience
 MetaStats=p.Results.MetaStats;
 studyIDtexts=p.Results.studyIDtexts;
@@ -99,9 +99,8 @@ else
     n=[MetaStats.n]';
 end
 
-MetaStats.delta
 %% Summarize all studies, weighted by se_summary_total
-[summary_total,se_summary_total,rel_weight,z,p,summary_ciLo,summary_ciHi,chisq,tausq,df,p_het,Isq]=GIVsummary(eff,se_eff,summarystat,type);
+[summary_total,~,rel_weight,z,p,summary_ciLo,summary_ciHi,chisq,tausq,df,p_het,Isq]=GIVsummary(eff,se_eff,summarystat,type);
 
 if strcmp(summarystat,'r')
     ciLo=fishersZ2r(r2fishersZ(eff)-seZ_eff.*1.96);
@@ -116,7 +115,7 @@ figure_width=printwidth;
 lineheight=printwidth/25;
 figure_height=(length(studyIDtexts)+2)*lineheight;%figure height is defined as: (number of lines +one line for summary and one line for head)*line scaling*150px
 
-fig=figure('Name','Forest Plot',...
+figure('Name','Forest Plot',...
         'Position', [0, 0, figure_width, figure_height],...
         'Units','pixels');% Position: left bottom width heigth;
 hold on
@@ -156,15 +155,14 @@ set(ax,'box','off',...
  'Xlim', [-x_axis_size x_axis_size],...
  'color','none',...
  'FontSize',font_size*0.90,...
- 'FontName',font_name)
+ 'FontName',font_name);
  xlabel({[outcomelabel,' with 95% CI; IV, random']});
  
  yscale=diff(get(ax,'Ylim'));
- set(gca,'DataAspectRatioMode','auto') %https://de.mathworks.com/help/matlab/ref/axes-properties.html#prop_DataAspectRatio
- set(gca,'PlotBoxAspectRatioMode','manual') %https://de.mathworks.com/help/matlab/ref/axes-properties.html#prop_DataAspectRatio
+ set(gca,'DataAspectRatioMode','auto'); %https://de.mathworks.com/help/matlab/ref/axes-properties.html#prop_DataAspectRatio
+ set(gca,'PlotBoxAspectRatioMode','manual'); %https://de.mathworks.com/help/matlab/ref/axes-properties.html#prop_DataAspectRatio
 
  AR=get(gca, 'DataAspectRatio');
-% HIER WEITER! 
  xy_rel=(AR(1))/(AR(2)); %get relative size of axis in axis space, adding one to each, since we are counting the steps on the scale, not the difference of maxima!
 
 % LINE APPEARANCE
@@ -235,7 +233,7 @@ for i=1:length(ids)
                      random('unif',-.1,.1,length(ss_delta),1)+y,... %Y
                     '.',...
                     'MarkerSize',dot_size,...
-                    'Color',dot_color)
+                    'Color',dot_color);
                 % OPTIONAL: Additionally plot all outliers exceeding the axis
                 if withoutlier
                     n_out_lo=sum(ss_delta<(-x_axis_size));
@@ -259,7 +257,7 @@ for i=1:length(ids)
                                 '>',...
                                 'MarkerSize',dot_size,...
                                 'MarkerEdgeColor',dot_color,...
-                                'MarkerFaceColor',dot_color)
+                                'MarkerFaceColor',dot_color);
                             text(x_axis_size-0.02*x_axis_size, y, num2str(n_out_hi),...
                                  'HorizontalAlignment','right',...
                                  'VerticalAlignment','bottom',...
@@ -273,7 +271,7 @@ for i=1:length(ids)
         
         
         % Plot lines representing error-bars
-        line([xsdleft xsdright],[y y],'LineWidth',line_width)
+        line([xsdleft xsdright],[y y],'LineWidth',line_width);
 
         % Create box symbolizing effect and study weights
         % Note that box-size is in y-units... we have to use data-units, otherwise we cannot plot the rectangle correctly on x.
@@ -354,7 +352,7 @@ if ~NOsummary
     % left  upper  right lower 
     x=[summary_ciLo summary_total summary_ciHi summary_total];
     y=[1 1+rhoheight/2 1 1-rhoheight/2];
-    fill(x,y,[0.9 0.9 0.9])
+    fill(x,y,[0.9 0.9 0.9]);
     %   Txt study Summary
         if p>=0.001
             formatSpec='Total effect (95%% CI): z=%0.2f, p=%0.3f';
