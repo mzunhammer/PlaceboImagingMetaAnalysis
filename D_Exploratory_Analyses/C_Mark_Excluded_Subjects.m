@@ -16,9 +16,6 @@ df.ex_lo_p_ratings(strcmp(df.subID,'lui_09'))=1;
 
 % Mark participants with problematic images
 df.ex_img_artifact=logical(zeros(height(df),1));
-df.ex_img_artifact(strcmp(df.subID,'bingel06_AK'))=1;
-df.ex_img_artifact(strcmp(df.subID,'bingel06_CK'))=1;
-df.ex_img_artifact(strcmp(df.subID,'bingel06_TK'))=1;
 df.ex_img_artifact(strcmp(df.subID,'bingel11_13'))=1;
 df.ex_img_artifact(strcmp(df.subID,'bingel11_14'))=1;
 df.ex_img_artifact(strcmp(df.subID,'choi_A'))=1;

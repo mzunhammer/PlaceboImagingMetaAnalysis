@@ -270,8 +270,8 @@ i=find(strcmp(studies,'kong09'));
 stats(i)=withinMetastats(nanmean([control{:,:},placebo{:,:}],2),0);
 
 %'lui'
-control=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainControl')),'NPSraw');
-placebo=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainPlacebo')),'NPSraw');
+control=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_control')),'NPSraw');
+placebo=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_placebo')),'NPSraw');
 
 con_rating=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainControl')),'rating');
 pla_rating=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainPlacebo')),'rating');

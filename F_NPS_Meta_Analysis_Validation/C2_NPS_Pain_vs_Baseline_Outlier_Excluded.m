@@ -258,11 +258,11 @@ i=find(strcmp(studies,'kong09'));
 stats(i)=withinMetastats(nanmean([control{:,:},placebo{:,:}],2),0);
 
 %'lui'
-control=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainControl')&~df.ex_all),'NPSraw');
-placebo=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainPlacebo')&~df.ex_all),'NPSraw');
+control=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_control')&~df.ex_all),'NPSraw');
+placebo=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_control')&~df.ex_all),'NPSraw');
 
-con_rating=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainControl')&~df.ex_all),'rating');
-pla_rating=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainPlacebo')&~df.ex_all),'rating');
+con_rating=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_control')&~df.ex_all),'rating');
+pla_rating=df((strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_control')&~df.ex_all),'rating');
 rating_diff=con_rating{:,1}-pla_rating{:,1};
 responders=rating_diff>0;
 

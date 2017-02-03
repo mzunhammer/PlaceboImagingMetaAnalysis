@@ -46,7 +46,7 @@ studyIDtexts={
             'Kessner et al. 2014:';...
             'Kong et al. 2006:';...
             'Kong et al. 2009:';...
-            'Lui et al. 2014:';...
+            'Lui et al. 2010:';...
             'Ruetgen et al. 2015:'
             'Schenk et al. 2015:'
             'Theysohn et al. 2009:';...
@@ -177,8 +177,8 @@ df_full.condata{i}=df{(strcmp(df.studyID,'kong09')&strcmp(df.cond,'pain_post_con
 df_full.pladata{i}=df{(strcmp(df.studyID,'kong09')&strcmp(df.cond,'pain_post_placebo')),varselect};
 %'lui'
 i=find(strcmp(studies,'lui'));
-df_full.condata{i}=df{(strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainControl')),varselect};
-df_full.pladata{i}=df{(strcmp(df.studyID,'lui')&strcmp(df.cond,'conPainPlacebo')),varselect};
+df_full.condata{i}=df{(strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_control')),varselect};
+df_full.pladata{i}=df{(strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_placebo')),varselect};
 %'ruetgen'
 i=find(strcmp(studies,'ruetgen'));
 df_full.condata{i}=df{(strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_Pain_Control_Group')),varselect};

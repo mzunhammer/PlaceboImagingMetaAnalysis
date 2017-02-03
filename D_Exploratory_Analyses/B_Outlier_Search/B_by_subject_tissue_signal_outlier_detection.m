@@ -37,7 +37,7 @@ df_by_subID.tissue_outlier=logical(zeros(height(df_by_subID),1));
 for i=1:length(studies)
     istudy=strcmp(df_by_subID.studyID,studies(i)); %create current study index
     Y=df_by_subID{istudy,tomahal};
-    df_by_subID.mahal_tissue(istudy)=mahal(Y,mvnrnd(mean(Y),cov(Y),1000));
+    df_by_subID.mahal_tissue(istudy)=mahal(Y,mvnrnd(nanmean(Y),nancov(Y),1000));
     %df_by_subID.img_p(istudy)=normcdf(zscore(Y));
     df_by_subID.tissue_outlier(istudy)=df_by_subID.mahal_tissue(istudy)>mahal_outlr_tresh;
     

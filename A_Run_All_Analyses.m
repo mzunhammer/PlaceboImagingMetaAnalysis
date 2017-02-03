@@ -40,7 +40,7 @@ run('./C_Apply_NPS/B_Apply_NPS_Single_Study.m') %Apply NPS study-wise, add to df
 run('./C_Apply_NPS/C_Apply_MHE_Single_Study.m') %Apply MHE (whole brain-version of NPS from Zunhammer et al. 2016) study-wise, add to df
 run('./C_Apply_NPS/D_Apply_PlaceboPredict_Single_Study.m') %Calculate relative ABSOLUTE tissue-signal levels study-wise analog to other masks, add to df
 run('./C_Apply_NPS/E_Collect_All_Data_Tables_NPS.m')            %Collect all study_NPS_MHE_NOBRAIN tables in one big df (./Datasets/AllData_w_NPS_MHE_NOBRAIN.mat)
-rmpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/CAN/')) % avoid conflict-messages with SPM
+rmpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/CanlabCore/CanlabCore')) % avoid conflict-messages with SPM
 %% Quality control and demographic results
 
 % Check brain coverage and alignment
