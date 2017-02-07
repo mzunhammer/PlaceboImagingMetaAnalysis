@@ -157,15 +157,14 @@ paindf{i}.cond(strcmp(paindf{i}.cond,'Exp1_100potent_pain_beta3'))=repmat({'Exp1
     
 %'eippert'
 % Pain vector was split into early and late pain >> average
-
 i=find(strcmp(studies,'eippert'));
-% First get pure pain effect for 100potent only to get basic data-frame
+% First get pure pain effect for late pain only to get basic data-frame
 paindf{i}=[df((strcmp(df.studyID,'eippert')&strcmp(df.cond,'pain late: control_saline')),varselect);
            df((strcmp(df.studyID,'eippert')&strcmp(df.cond,'pain late: control_naloxone')),varselect);
           df((strcmp(df.studyID,'eippert')&strcmp(df.cond,'pain late: placebo_saline')),varselect);
           df((strcmp(df.studyID,'eippert')&strcmp(df.cond,'pain late: placebo_naloxone')),varselect)];
 % These variables are available for right and left side and have to be averaged of
-vars2avg={ 'NPSraw','MHEraw','PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw',...
+vars2avg={ 'NPSraw','MHEraw','PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw','xSpan',....
            };      
 % Average variables      
 earlynlate=mean(cat(3,[df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: control_saline'))),vars2avg};...
@@ -178,9 +177,8 @@ earlynlate=mean(cat(3,[df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp
                        df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: placebo_naloxone'))),vars2avg}]),3)
 % Replace placebo condition in df
 paindf{i}{:,vars2avg}=earlynlate;
-
-HIER WEITER NAME DER CONDITION IN "PAIN" (statt) "PAIN LATE" ?ndern.
-AUSSERDEM BLOCKDUR UND EVTL. xSPAN ?NDERN
+paindf{i}.cond=regexprep(paindf{i}.cond,'pain(.*): ','pain: ');
+paindf{i}.meanBlockDur=paindf{i}.meanBlockDur*2;
                    
 %'ellingsen'
 i=find(strcmp(studies,'ellingsen'));
@@ -189,8 +187,8 @@ paindf{i}=[df((strcmp(df.studyID,'ellingsen')&strcmp(df.cond,'Painful_touch_cont
 
 %'elsenbruch'
 i=find(strcmp(studies,'elsenbruch'));
-paindf{i}=[df((strcmp(df.studyID,'elsenbruch')&strcmp(df.cond,'pain_placebo_0%_analgesia')),varselect);
-          df((strcmp(df.studyID,'elsenbruch')&strcmp(df.cond,'pain_control_100%_analgesia')),varselect)];
+paindf{i}=[df((strcmp(df.studyID,'elsenbruch')&strcmp(df.cond,'pain_control_0%_analgesia')),varselect);
+          df((strcmp(df.studyID,'elsenbruch')&strcmp(df.cond,'pain_placebo_100%_analgesia')),varselect)];
 
 %'freeman'
 i=find(strcmp(studies,'freeman'));
@@ -198,20 +196,35 @@ paindf{i}=[df((strcmp(df.studyID,'freeman')&strcmp(df.cond,'pain_post_control_hi
           df((strcmp(df.studyID,'freeman')&strcmp(df.cond,'pain_post_placebo_high_pain')),varselect)];
 
 %'geuter'
-% i=find(strcmp(studies,'geuter'));
-% df_full.condata{i}=mean(cat(3,df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'early_pain_control_weak')),varselect},...
-%          df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_control_weak')),varselect},...
-%          df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'early_pain_control_strong')),varselect},...
-%          df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_control_strong')),varselect}),3);
-% df_full.pladata{i}=mean(cat(3,df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'early_pain_placebo_weak')),varselect},...
-%          df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_placebo_weak')),varselect},...
-%          df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'early_pain_placebo_strong')),varselect},...
-%          df{(strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_placebo_strong')),varselect}),3);
+% Pain vector was split into early and late pain >> average
+% Placebo & Control conditions were split into weak and strong version >> average
+i=find(strcmp(studies,'geuter'));
+% First get pure pain effect for strong_late only to get basic data-frame
+paindf{i}=[df((strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_control_strong')),varselect);
+          df((strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_placebo_strong')),varselect)];
+% These variables are available for right and left side and have to be averaged of
+vars2avg={'NPSraw','MHEraw','PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw','xSpan',....
+           };      
+% Average variables      
+combined=[mean(cat(3,df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'early_pain_control_weak'))),vars2avg},...
+                       df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'late_pain_control_weak'))),vars2avg},...
+                       df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'early_pain_control_strong'))),vars2avg},...
+                       df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'late_pain_control_strong'))),vars2avg}),3);
+            mean(cat(3,df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'early_pain_placebo_weak'))),vars2avg},...
+                       df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'late_pain_placebo_weak'))),vars2avg},...
+                       df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'early_pain_placebo_strong'))),vars2avg},...
+                       df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'late_pain_placebo_strong'))),vars2avg}),3)];
+% Replace placebo condition in df
+paindf{i}{:,vars2avg}=combined;
+paindf{i}.cond=regexprep(paindf{i}.cond,'late_pain','pain');
+paindf{i}.cond=regexprep(paindf{i}.cond,'_strong','');
+paindf{i}.meanBlockDur=paindf{i}.meanBlockDur*2;
+
 %'kessner'
 i=find(strcmp(studies,'kessner'));
 paindf{i}=[df((strcmp(df.studyID,'kessner')&strcmp(df.cond,'pain_placebo_neg')),varselect);
           df((strcmp(df.studyID,'kessner')&strcmp(df.cond,'pain_placebo_pos')),varselect)];
-
+paindf{i}.pla(strcmp(paindf{i}.cond,'pain_placebo_neg'))=0; %Assign group-level control condition explicitly.
 
 %'kong06'
 i=find(strcmp(studies,'kong06'));
@@ -234,14 +247,24 @@ i=find(strcmp(studies,'ruetgen'));
 paindf{i}=[df((strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_Pain_Control_Group')),varselect);
           df((strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_Pain_Placebo_Group')),varselect)];
 
-
 %'schenk'
-% i=find(strcmp(studies,'schenk'));
-% df_full.condata{i}=mean(cat(3,df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_control')),varselect},...
-%               df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocaine_control')),varselect}),3);
-% df_full.pladata{i}=mean(cat(3,df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_placebo')),varselect},...
-%               df{(strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_lidocaine_placebo')),varselect}),3);
-
+% Testing was performed under no-lidocaine and lidocaine conditions >> average
+% Placebo & Control conditions were split into weak and strong version >> average
+i=find(strcmp(studies,'schenk'));
+% First get pure pain effect for strong_late only to get basic data-frame
+paindf{i}=[df((strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_control')),varselect);
+          df((strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_placebo')),varselect)];
+% These variables are available for right and left side and have to be averaged of
+vars2avg={'NPSraw','MHEraw','PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw','xSpan',....
+           };      
+% Average variables      
+combined=[mean(cat(3,df{(strcmp(df.studyID,'schenk')&~cellfun(@isempty,regexp(df.cond,'pain_nolidocaine_control'))),vars2avg},...
+                       df{(strcmp(df.studyID,'schenk')&~cellfun(@isempty,regexp(df.cond,'pain_lidocaine_control'))),vars2avg}),3);
+          mean(cat(3,df{(strcmp(df.studyID,'schenk')&~cellfun(@isempty,regexp(df.cond,'pain_nolidocaine_placebo'))),vars2avg},...
+                       df{(strcmp(df.studyID,'schenk')&~cellfun(@isempty,regexp(df.cond,'pain_lidocaine_placebo'))),vars2avg}),3)];
+% Replace placebo condition in df
+paindf{i}{:,vars2avg}=combined;
+paindf{i}.cond=regexprep(paindf{i}.cond,'nolidocaine_','');
 
         
 %'theysohn'
@@ -263,70 +286,54 @@ paindf{i}=[df((strcmp(df.studyID,'wager04b_michigan')&strcmp(df.cond,'control_pa
 paindf{i}.rating=NaN(size(paindf{i}.rating)); %FOR  RATINGS ONLY CONTRAST CONTROL-PLACEBO AVAILABLE
 
 %'wrobel'
-% i=find(strcmp(studies,'wrobel'));
-% df_full.condata{i}=[mean(cat(3,df{(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'early_pain_control_saline'))),varselect},...
-%                           df{(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'late_pain_control_saline'))),varselect}),3);...
-%                mean(cat(3,df{(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'early_pain_control_haldol'))),varselect},...
-%                           df{(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'late_pain_control_haldol'))),varselect}),3);]; 
-% df_full.pladata{i}=[mean(cat(3,df{(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'early_pain_placebo_saline'))),varselect},...
-%                           df{(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'late_pain_placebo_saline'))),varselect}),3);...
-%                mean(cat(3,df{(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'early_pain_placebo_haldol'))),varselect},...
-%                           df{(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'late_pain_placebo_haldol'))),varselect}),3);];
-%         
+% Pain vector was split into early and late pain >> average
+i=find(strcmp(studies,'wrobel'));
+% First get pure pain effect for late pain only to get basic data-frame
+paindf{i}=[df((strcmp(df.studyID,'wrobel')&strcmp(df.cond,'late_pain_control_saline')),varselect);
+           df((strcmp(df.studyID,'wrobel')&strcmp(df.cond,'late_pain_control_haldol')),varselect);
+          df((strcmp(df.studyID,'wrobel')&strcmp(df.cond,'late_pain_placebo_saline')),varselect);
+          df((strcmp(df.studyID,'wrobel')&strcmp(df.cond,'late_pain_placebo_haldol')),varselect)];
+% These variables are available for right and left side and have to be averaged of
+vars2avg={ 'NPSraw','MHEraw','PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw','xSpan',....
+           };      
+% Average variables      
+earlynlate=mean(cat(3,[df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain_control_saline'))),vars2avg};...
+                       df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain_control_haldol'))),vars2avg}
+                       df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain_placebo_saline'))),vars2avg};...
+                       df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain_placebo_haldol'))),vars2avg}],...
+                       [df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain_control_saline'))),vars2avg};...
+                       df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain_control_haldol'))),vars2avg}
+                       df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain_placebo_saline'))),vars2avg};...
+                       df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain_placebo_haldol'))),vars2avg}]),3)
+% Replace placebo condition in df
+paindf{i}{:,vars2avg}=earlynlate;
+paindf{i}.cond=regexprep(paindf{i}.cond,'late_pain_','pain_');
+paindf{i}.meanBlockDur=paindf{i}.meanBlockDur*2;
+
 %'zeidan'
 % i=find(strcmp(studies,'zeidan'));
 % df_full.pladata{i}=df{(strcmp(df.studyID,'zeidan')&strcmp(df.cond,'Pla>Control within painful series')),varselect};
 % df_full.condata{i}=NaN(size(df_full.pladata{i}));
 
+dflong=vertcat(paindf{:});
+
+%% Make all continous variables double precision for mixed model analysis
+
+% Only way that matlab lets me change precision...
+dflong.rating=double(dflong.rating);
+         %% Calculate by-study z-Scores for NPS and Rating-variables to
+% to even differences in variable scaling (mean-centered, standardized by SD)
+
+vars2zscore={'NPSraw','MHEraw','PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw',...
+             'rating','stimInt','age'};
+studies=unique(dflong.studyID);
+for i=1:length(studies)
+    icurrstudy=strcmp(dflong.studyID,studies{i});
+    z=nanzscore(dflong{icurrstudy,vars2zscore});
+    z(isinf(z))=0;
+    z=double(z);
+    dflong(icurrstudy,strcat('z_',vars2zscore))=array2table(z);    
+end
 
 %% Add study/variable descriptions needed for meta-analysis
-
-save('A1_Full_Sample.mat','df_full');
-
-%% INCLUSIVE SAMPLE
-% Difference compared to "ALL":
-% Atlas: None 
-% Bingel06: None
-% Bingel11: None
-% Choi: None
-% Eippert: None
-% Ellingsen: None
-% Elsenbruch: None
-% Freeman: None
-% Geuter: None
-% Kessner: None
-% Kong06: None
-% Kong09: None
-% Ruetgen: Excluded bc of responder selection
-% Schenk: None
-% Theysohn: None
-% Wager06a: None
-% Wager06b: Excluded bc of responder selection
-% Wrobel: None
-% Zeidan: None
-
-%%>> Exclude Ruetgen (responder selection), Wager06b (responder selection),
-% Bingel 2011 (sequence effects)
-
-df_incl=df_full;
-%'kong06'
-i=find(strcmp(studies,'kong06'));
-df_incl.condata{i}=NaN(size(df_full.condata{i}));
-df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
-%'ruetgen'
-i=find(strcmp(studies,'ruetgen'));
-df_incl.condata{i}=NaN(size(df_full.condata{i}));
-df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
-%'wager04b_michigan'
-i=find(strcmp(studies,'wager04b_michigan'));
-df_incl.condata{i}=NaN(size(df_full.condata{i}));
-df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
-%'bingel11'
-i=find(strcmp(studies,'bingel11'));
-df_incl.condata{i}=NaN(size(df_full.condata{i}));
-df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
-%'zeidan'
-i=find(strcmp(studies,'zeidan'));
-df_incl.condata{i}=NaN(size(df_full.condata{i}));
-df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
-save('A2_Inclusive_Sample.mat','df_incl');
+save('dflong.mat','dflong');
