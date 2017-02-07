@@ -170,11 +170,11 @@ i=find(strcmp(studies,'ellingsen'));
 stats(i)=withinMetastats(nanmean([control{:,:},placebo{:,:}],2),0);
 
 %'elsenbruch'
-control=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_placebo_0%_analgesia'))),'NPSraw');
-placebo=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_control_100%_analgesia'))),'NPSraw');
+control=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_control_0%_analgesia'))),'NPSraw');
+placebo=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_placebo_100%_analgesia'))),'NPSraw');
 
-con_rating=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_placebo_0%_analgesia'))),'rating');
-pla_rating=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_control_100%_analgesia'))),'rating');
+con_rating=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_control_0%_analgesia'))),'rating');
+pla_rating=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_placebo_100%_analgesia'))),'rating');
 rating_diff=con_rating{:,1}-pla_rating{:,1};
 responders=rating_diff>0;
 
@@ -396,6 +396,7 @@ ForestPlotter(stats,...
 
 %hgexport(gcf, 'C1_Pain_vs_Baseline_All', hgexport('factorystyle'), 'Format', 'eps'); 
 hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/C1_Pain_vs_Baseline_NPS', hgexport('factorystyle'), 'Format', 'svg');
+hgexport(gcf, '../../Protocol_and_Manuscript/NPS_validation/Figures/Figure1', hgexport('factorystyle'), 'Format', 'svg');
 
 NPS_pos_imgs=vertcat(stats.delta)>0;
 perc_pos_NPS=sum(NPS_pos_imgs)/sum(~isnan(NPS_pos_imgs));

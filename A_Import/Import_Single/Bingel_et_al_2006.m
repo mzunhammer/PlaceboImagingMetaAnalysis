@@ -126,6 +126,17 @@ nImages=vertcat(nImages(:));
 pla=vertcat(pla(:));
 rating=vertcat(rating(:));
 
+
+% Create a version of ratings on a 101pt-(%)Scale (0%, no pain, 100%, maximum pain)
+% Scale was 0 to 4
+% 0: no sensation
+% 1: nonpainful warmth (the last non-painful (0%) rating)
+% 2: pain threshold
+% 3: moderate pain
+% 4: maximum pain used in experiment
+rating101=(rating-1)*100/3;
+rating101(rating101<0)=0;
+
 % Assign "pain condition" to con image
 % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
 pain=~cellfun(@isempty,regexpi(cond,'pain','match'));  
@@ -152,7 +163,8 @@ bingel06.plaForm=repmat({'Topical Cream/Gel/Patch'},size(bingel06.img));
 bingel06.plaInduct=repmat({'Suggestions + Conditioning'},size(bingel06.img));
 bingel06.plaFirst=zeros(size(bingel06.img))+.5; %In this study placebo and control were measured in random sequence, thus placebo first/second does not apply
 bingel06.condSeq=condSeq;
-bingel06.rating=rating;  %Currently unknown            
+bingel06.rating=rating;  %Currently unknown
+bingel06.rating101=rating101;
 bingel06.stimInt=ones(size(bingel06.img)).*0.6; %All had 0.6 Joule             
 bingel06.fieldStrength=ones(size(bingel06.img)).*1.5;
 bingel06.tr           =ones(size(bingel06.img)).*2600;

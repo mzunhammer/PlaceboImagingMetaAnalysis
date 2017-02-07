@@ -111,6 +111,16 @@ for i= 1:length(img)
    
 end
 
+% Create a version of ratings on a 101pt-(%)Scale (0%, no pain, 100%, maximum pain)
+% Scale was 0 to 4
+% 0: no sensation
+% 1: nonpainful warmth (the last non-painful (0%) rating)
+% 2: pain threshold
+% 3: moderate pain
+% 4: maximum pain used in experiment
+rating101=(rating-5)*100/5;
+rating101(rating101<0)=0;
+
 % Create Study-Specific table
 ellingsen=table(img);
 ellingsen.imgType=repmat({'fMRI'},size(ellingsen.img));
@@ -135,6 +145,7 @@ ellingsen.condSeq=ones(size(ellingsen.img));%All runs always first (Day 1)
 ellingsen.condSeq(ellingsen.plaFirst==1&ellingsen.pla==0)=2; %...except placebo 1st no pla
 ellingsen.condSeq(ellingsen.plaFirst==0&ellingsen.pla==1)=2; %...except placebo 2nd pla
 ellingsen.rating=rating; %These are ratings of HEDONIA (pleasant-unpleasant, not PAIN)... The scale in the paper ranged from -5(unpleasant) to 5 (pleasant). The ratings supplied range from 0 (pleasant) to 10 (unpleasant). To transform apply: (Rating*(-1))+5            
+ellingsen.rating101=rating101;
 ellingsen.stimInt=temp; %individual from excel;             
 ellingsen.fieldStrength=ones(size(ellingsen.img)).*3;
 ellingsen.tr           =ones(size(ellingsen.img)).*2000;

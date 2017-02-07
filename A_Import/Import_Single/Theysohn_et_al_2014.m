@@ -63,10 +63,10 @@ nImages=vertcat(nImages(:));
 
 % Assign "placebo condition" according to experimental condition
 % 0= Any Control 1 = Any Placebo  2 = Other
-pla(ismember(beta,5),1)=0;% beta 5
-pla(ismember(beta,6),1)=0;% beta 6
-pla(ismember(beta,8),1)=1;% beta 8
-pla(ismember(beta,9),1)=1;% beta 9
+pla(ismember(beta,5),1)=1;% beta 5
+pla(ismember(beta,6),1)=1;% beta 6
+pla(ismember(beta,8),1)=0;% beta 8
+pla(ismember(beta,9),1)=0;% beta 9
 % Assign "pain condition" to beta image
 % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
 pain(ismember(beta,5),1)=0;
@@ -105,6 +105,7 @@ they.rating=[xlsread(theyrxls,1,'F:F');
              xlsread(theyrxls,1,'F:F');
              xlsread(theyrxls,1,'E:E');
              xlsread(theyrxls,1,'E:E')]; %Mean pain ratings control from xls 
+they.rating101=they.rating; % A 101-scale ranging from "no-pain" to "very much" pain was used.
 they.stimInt=NaN(size(they.img)); %Unfortunately unknown             
 they.fieldStrength=ones(size(they.img)).*1.5;
 they.tr           =ones(size(they.img)).*2400; %Paper and SPM match

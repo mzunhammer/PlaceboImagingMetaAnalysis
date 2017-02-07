@@ -102,7 +102,8 @@ zeidan.plaFirst=zeros(size(img)); %Placebo sessions were always second
 zeidan.condSeq=[ones(size(zeidandir))*1; % Placebo contrasts are Post (Sess 2) - Pre (Sess 1) Placebo = 1
                 ones(size(zeidandir))*1.5; % Pain contrasts are mean of (Sess 1) and (Sess 2) = 1.5
                 ones(size(zeidandir))*1];% Placebo contrasts are Post (Sess 2) - Pre (Sess 1) Placebo = 1
-zeidan.rating=rating; %These are ratings of Pain UNPLEASANTNESS (0-10 pt scale)            
+zeidan.rating=rating; %These are ratings of Pain UNPLEASANTNESS (0-10 pt scale ranging from no pain to most unpleasant pain imaginable)            
+zeidan.rating101=rating*10;
 zeidan.stimInt=temp; %either 49 or 35?C;             
 zeidan.fieldStrength=ones(size(zeidan.img)).*3;
 zeidan.tr           =ones(size(zeidan.img)).*4;

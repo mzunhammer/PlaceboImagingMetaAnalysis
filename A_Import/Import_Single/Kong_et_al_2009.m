@@ -93,6 +93,7 @@ kong09.plaInduct=repmat({'Suggestions + Conditioning'},size(kong09.img));
 kong09.plaFirst=plaFirst; %pre- sentation of these four random sequences alternated between the radial and ulnar sides of the medial surface of the forearm (i.e. the placebo and the control sides)
 kong09.condSeq=ones(size(kong09.img))*2; %All areas were already stimulated before acupuncture. It is not mentioned whether Placebo and Control regions were tested in a particular or random sequence. 
 kong09.rating=rating;
+kong09.rating101=(rating)*100/20; % 20-pt Graceley sensory and affective box ratings were used. Could not find in the references provided which regions on this sensory scale are noxious and which non-noxious...
 kong09.stimInt=stimInt;       
 kong09.fieldStrength=ones(size(kong09.img)).*3;
 kong09.tr           =ones(size(kong09.img)).*2000;

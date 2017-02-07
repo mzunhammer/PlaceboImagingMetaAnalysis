@@ -95,7 +95,7 @@ end
 % (one/block/rating type). This results in three orthogonal types of rating:
 % Ratings-due-to-stimulation, rating-change-due-to-remifentain, rating-change-due-to-expectation-period
 
-ratingfile=load('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Datasets/Atlas_et_al_2012/ratings/for_param_model.mat')
+ratingfile=load('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Datasets/Atlas_et_al_2012/ratings/for_param_model.mat');
 [~,sortratings]=ismember(ratingfile.wh_subjs',subdir);
 ratings_HO=NaN(length(covHH{1}),length(subdir));
 ratings_WO=NaN(length(covHH{1}),length(subdir));
@@ -107,6 +107,25 @@ ratings_HO(:,sortratings)=ratingfile.HO;
 ratings_WO(:,sortratings)=ratingfile.WO;
 ratings_HH(:,sortratings)=ratingfile.HH;
 ratings_WH(:,sortratings)=ratingfile.WH;
+
+% Create a version of ratings on a 101pt-(%)Scale (0%, no pain, 100%, maximum pain)
+% Scale was 0 to 8
+% 0: no sensation
+% 1: nonpainful warmth (the last non-painful (0%) rating)
+% 2: low pain
+% 5: moderate pain
+% 8: maximum tolerable pain
+
+
+ratings_HO101=(ratings_HO-1)*100/7;
+ratings_WO101=(ratings_WO-1)*100/7;
+ratings_HH101=(ratings_HH-1)*100/7;
+ratings_WH101=(ratings_WH-1)*100/7;
+
+ratings_HO101(ratings_HO101<0)=0;
+ratings_WO101(ratings_WO101<0)=0;
+ratings_HH101(ratings_HH101<0)=0;
+ratings_WH101(ratings_WH101<0)=0;
 
 % For each participant calculate linear regression of covariates with
 % ratings (after orthogonalizing predictors just like spm)
@@ -126,12 +145,36 @@ for i = 1:length(subdir)
    yWH=ratings_WH(:,i);
    XWH=spm_orth(covWH{i});
    bWH(i,:)=regress(yWH,XWH);
+   
+   % Same for 101-scale ratings
+   yHO=ratings_HO101(:,i);
+   XHO=spm_orth(covHO{i});
+   bHO101(i,:)=regress(yHO,XHO);
+
+   yWO=ratings_WO101(:,i);
+   XWO=spm_orth(covWO{i});
+   bWO101(i,:)=regress(yWO,XWO);
+   
+   yHH=ratings_HH101(:,i);
+   XHH=spm_orth(covHH{i});
+   bHH101(i,:)=regress(yHH,XHH);
+  
+   yWH=ratings_WH101(:,i);
+   XWH=spm_orth(covWH{i});
+   bWH101(i,:)=regress(yWH,XWH); 
 end
 
+%Original ratings
 rating=[bHO,bWO,bHH,bWH,...% For Stimulation Images
 NaN(size(subdir)),...% For Rating Period Images
 bHO,bWO,bHH,bWH]; % Repeat for Anticipation Period Images
 rating(rating==0)=NaN; %Unfortunately the regress function spits out zeros when getting an all-nan vector
+
+%100% scale ratings
+rating101=[bHO101,bWO101,bHH101,bWH101,...% For Stimulation Images
+NaN(size(subdir)),...% For Rating Period Images
+bHO101,bWO101,bHH101,bWH101]; % Repeat for Anticipation Period Images
+rating101(isnan(rating))=NaN; %Cannot do the same as above, as there are actual 0-ratings on this scale.
 
 % Unfold all variables
         img      = vertcat(img(:));
@@ -143,7 +186,9 @@ rating(rating==0)=NaN; %Unfortunately the regress function spits out zeros when 
         meanBlockDur = vertcat(meanBlockDur(:));
         openFirst= vertcat(openFirst(:));
         rating = vertcat(rating(:));
-        
+        rating101 = vertcat(rating101(:));
+
+
         pla=zeros(size(cond));  
         pla(~cellfun(@isempty, regexp(cond,'Open')))=1; % 0= Any Control 1 = Any Placebo 2 = Other (in this case placebo = treatment expectation)
 
@@ -162,7 +207,7 @@ atlas=table(img);
 atlas.imgType=repmat({'fMRI'},size(atlas.img));
 atlas.studyType=repmat({'within'},size(atlas.img));
 atlas.studyID=repmat({'atlas'},size(atlas.img));
-atlas.subID=strcat(atlas.studyID,'_',[sub{:}]')
+atlas.subID=strcat(atlas.studyID,'_',[sub{:}]');
 atlas.male=ones(size(atlas.img)).*10/21; %male proportion in sample 
 atlas.age=ones(size(atlas.img)).*24.7; %male proportion in sample
 atlas.healthy=ones(size(atlas.img));
@@ -179,6 +224,7 @@ atlas.plaInduct=repmat({'Suggestions'},size(atlas.img));
 atlas.plaFirst=openFirst;
 atlas.condSeq=condSeq;
 atlas.rating=rating;
+atlas.rating101=rating101;
 atlas.stimInt=temp;       
 
 atlas.fieldStrength=ones(size(atlas.img)).*1.5;
@@ -193,6 +239,6 @@ atlas.conSpan      =ones(size(atlas.cond));
 
 %% Save
 outpath=fullfile(basedir,'Atlas_et_al_2012.mat')
-save(outpath,'atlas')
+save(outpath,'atlas');
 
 end

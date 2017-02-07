@@ -107,6 +107,7 @@ wrobel.condSeq(~cellfun(@isempty,regexp(beta_img,'placebo'))&wrobel.plaFirst==0)
 wrobel.condSeq(~cellfun(@isempty,regexp(beta_img,'control'))&wrobel.plaFirst==1)=2;
 wrobel.condSeq(~cellfun(@isempty,regexp(beta_img,'control'))&wrobel.plaFirst==0)=1;
 wrobel.rating=rating;
+wrobel.rating101=rating; % a 101-pt rating scale ranging from 0 no pain to 100 unbearable pain was used.
 wrobel.stimInt=stimInt;       
 wrobel.fieldStrength=ones(size(wrobel.img)).*3;
 wrobel.tr           =ones(size(wrobel.img)).*2580;

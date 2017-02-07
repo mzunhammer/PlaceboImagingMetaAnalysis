@@ -37,7 +37,7 @@ img_pain_placebo_lp_post = {kong_placebo_dir_lp_post(~cellfun(@isempty,regexp({k
 %Suboptimal: Currently only con-images but no non-painful beta-images
 %available
 kong_painHiLo_dir = dir(fullfile(basedir, studydir, 'pre_highpain_vs_lowpain'));
-img_painHiLo = {kong_painHiLo_dir(~cellfun(@isempty,regexp({kong_painHiLo_dir.name},'\w\w\d\d\d\d\d\d.img'))).name}';
+img_painHiLo = {kong_painHiLo_dir(~cellfun(@isempty,regexp({kong_painHiLo_dir.name},'^\w\w\d\d\d\d\d\d.img'))).name}';
 
 % Create image variable
 img=[fullfile(studydir, 'control_hpVSbase_pre', img_pain_control_hp_pre);...
@@ -128,6 +128,7 @@ kong06.plaInduct=repmat({'Suggestions + Conditioning'},size(kong06.img));
 kong06.plaFirst=plaFirst;
 kong06.condSeq=ones(size(kong06.img))*2; %All areas were already stimulated before acupuncture. It is not mentioned whether Placebo and Control regions were tested in a particular or random sequence. 
 kong06.rating=rating;
+kong06.rating101=(rating)*100/20; % 20-pt Graceley sensory and affective box ratings were used. Could not find in the references provided which regions on this sensory scale are noxious and which non-noxious...
 kong06.stimInt=stimInt;       
 kong06.fieldStrength=ones(size(kong06.img)).*3;
 kong06.tr           =ones(size(kong06.img)).*2000;

@@ -167,8 +167,8 @@ df_resp.condata{i}=df{(strcmp(df.studyID,'ellingsen')&~cellfun(@isempty,regexp(d
 df_resp.pladata{i}=df{(strcmp(df.studyID,'ellingsen')&~cellfun(@isempty,regexp(df.cond,'Painful_touch_placebo'))&~df.ex_all),varselect};
 %'elsenbruch'
 i=find(strcmp(studies,'elsenbruch'));
-df_resp.condata{i}=df{(strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_placebo_0%_analgesia'))&~df.ex_all),varselect};
-df_resp.pladata{i}=df{(strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_control_100%_analgesia'))&~df.ex_all),varselect};
+df_resp.condata{i}=df{(strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_control_0%_analgesia'))&~df.ex_all),varselect};
+df_resp.pladata{i}=df{(strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_placebo_100%_analgesia'))&~df.ex_all),varselect};
 %'freeman'
 i=find(strcmp(studies,'freeman'));
 df_resp.condata{i}=df{(strcmp(df.studyID,'freeman')&~cellfun(@isempty,regexp(df.cond,'pain_post_control_high_pain'))&~df.ex_all),varselect};

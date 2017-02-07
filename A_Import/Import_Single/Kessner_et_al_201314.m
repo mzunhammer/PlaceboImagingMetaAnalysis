@@ -99,6 +99,7 @@ kessner.plaFirst=plaFirst;
 kessner.condSeq=condSeq;
 kessner.rating(~cellfun(@isempty,regexp(beta_img,'placebo')),1)=rating_pla_long;
 kessner.rating(~cellfun(@isempty,regexp(beta_img,'control')),1)=rating_bl_long;
+kessner.rating101=kessner.rating; % A 101-pt VAS ranging from "no pain" to "unbearable pain" was used.
 kessner.stimInt=temp_p;
 kessner.stimInt(~cellfun(@isempty,regexp(beta_img,'control')),1)=temp_c(~cellfun(@isempty,regexp(beta_img,'control')),1);         
 kessner.stimInt(~cellfun(@isempty,regexp(beta_img,'anticipation')),1)=32;         

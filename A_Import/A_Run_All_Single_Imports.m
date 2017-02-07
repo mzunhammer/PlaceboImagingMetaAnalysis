@@ -3,6 +3,7 @@ clear
 
 %Run All Single Imports
 impFolder='./Import_Single/'
+run([impFolder,'Atlas_et_al_2012.m'])
 run([impFolder,'Bingel_et_al_2006.m'])
 run([impFolder,'Bingel_et_al_2011.m'])
 run([impFolder,'Choi_et_al_2011.m'])

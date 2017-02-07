@@ -8,13 +8,13 @@ basedir = '/Users/matthiaszunhammer/Dropbox/boulder_essen/Datasets/';
 %and extract/assign experimental conditions from/to image names
 studydir = 'Ruetgen_et_al_2015';
 ruetgendir = dir(fullfile(basedir, studydir));
-con_img = {ruetgendir(~cellfun(@isempty,regexp({ruetgendir.name},'\w\d\d\d.*img'))).name}';
+con_img = {ruetgendir(~cellfun(@isempty,regexp({ruetgendir.name},'^\w\d\d\d.*img'))).name}';
 img=cellfun(@(x) fullfile(studydir, x),con_img,'UniformOutput',0);                                               % The absolute image paths
 
 % Get subjects
-subc=regexp(img,'c(\d\d\d)_con','tokens'); % Make separate IDs for control and placebo group
+subc=regexp(img,'Ruetgen_et_al_2015/c(\d\d\d)_con','tokens'); % Make separate IDs for control and placebo group
 subc=[subc{:}];subc=strcat('c',[subc{:}]');
-subp=regexp(img,'p(\d\d\d)_con','tokens');
+subp=regexp(img,'Ruetgen_et_al_2015/p(\d\d\d)_con','tokens');
 subp=[subp{:}];subp=strcat('p',[subp{:}]');
 sub=[subc;subp];
 
@@ -63,7 +63,7 @@ stimInt(pain==1,1)=xlsread(xls_path,1,'D2:D103');
 stimInt(pain==0,1)=xlsread(xls_path,1,'E2:E103');
 rating(pain==1,1)=xlsread(xls_path,1,'F2:F103');
 rating(pain==0,1)=xlsread(xls_path,1,'G2:G103'); 
-rating=rating*(100/6); % SEVEN POINT RATING SCALE WITH MAX 6!!! >> Scale to 100%
+rating101=rating*(100/6); % SEVEN POINT RATING SCALE WITH MAX 6!!! >> Scale to 100%
 
 
 % Create Study-Specific table
@@ -88,6 +88,7 @@ ruetgen.plaInduct=repmat({'Suggestions + Conditioning'},size(ruetgen.img));
 ruetgen.plaFirst=ones(size(ruetgen.img));% Parallel group design with pill>> placebo always first session
 ruetgen.condSeq=ones(size(ruetgen.img));% Parallel group design with pill>>  only first sessions
 ruetgen.rating=rating;
+ruetgen.rating101=rating101;
 ruetgen.stimInt=stimInt;       
 ruetgen.fieldStrength=ones(size(ruetgen.img)).*3;
 ruetgen.tr           =ones(size(ruetgen.img)).*1800;

@@ -98,6 +98,10 @@ conSpan      =ones(size(cond)).*1;
 nImages=repmat(nImages,1,8)';
 nImages=nImages(:);
 
+
+% In this case the VAS used was a 101-pt scale ranging from no pain to
+% unbearable pain
+rating101=rating;
 %% Collect all Variables in Table
 bingel11=table(img);
 bingel11.imgType=repmat({'fMRI'},size(bingel11.img));
@@ -120,6 +124,7 @@ bingel11.plaInduct=repmat({'Suggestions + Conditioning'},size(bingel11.img));
 bingel11.plaFirst=zeros(size(bingel11.img));%all participants had no expectancy first, the positive expectancy
 bingel11.condSeq=seq;
 bingel11.rating=rating;
+bingel11.rating101=rating101;
 bingel11.stimInt=temps;
 bingel11.fieldStrength=ones(size(cond)).*3;
 bingel11.tr           =ones(size(cond)).*3000;

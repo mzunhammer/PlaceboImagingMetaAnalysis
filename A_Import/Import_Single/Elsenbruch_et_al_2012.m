@@ -14,8 +14,8 @@ studydir= 'Elsenbruch_et_al_2012';
 beta_IDs = [2 6];
 nbeta=length(beta_IDs);
 beta_descriptors= {... % Short version with only the available betas
-    'pain_placebo_0%_analgesia'...
-    'pain_control_100%_analgesia'...
+    'pain_control_0%_analgesia'...
+    'pain_placebo_100%_analgesia'...
     };
 %beta_descriptors= {...
 %    'anticipation_placebo_0%_analgesia'...
@@ -59,19 +59,11 @@ conSpan=vertcat(conSpan(:));
 nImages=vertcat(nImages(:));
 % Assign "placebo condition" according to experimental condition
 % 0= Any Control 1 = Any Placebo  2 = Other
-pla(ismember(beta,1),1)=2;
-pla(ismember(beta,2),1)=2;
-pla(ismember(beta,3),1)=0;
-pla(ismember(beta,4),1)=0;
-pla(ismember(beta,5),1)=1;
+pla(ismember(beta,2),1)=0;
 pla(ismember(beta,6),1)=1;
 % Assign "pain condition" to beta image
 % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
-pain(ismember(beta,1),1)=0;
 pain(ismember(beta,2),1)=1;
-pain(ismember(beta,3),1)=0;
-pain(ismember(beta,4),1)=1;
-pain(ismember(beta,5),1)=0;
 pain(ismember(beta,6),1)=1;          
 
 
@@ -90,7 +82,7 @@ elsenb.age=repmat(xlsread(elsenbrxls,1,'C:C'),nbeta,1);
 elsenb.healthy=ones(size(elsenb.img));
 elsenb.pla=pla;
 elsenb.pain=pain;
-elsenb.predictable=zeros(size(elsenb.img)); %Uncertainty: 7.5±3.873s Distensions in the scanner were preceded by a brief auditory cue (??warning sig- nal??) in the form of a short beep delivered at pseudorandomized intervals (3 seconds, 6 seconds, 9 seconds, 12 seconds) before"
+elsenb.predictable=zeros(size(elsenb.img)); %Uncertainty: 7.5?3.873s Distensions in the scanner were preceded by a brief auditory cue (??warning sig- nal??) in the form of a short beep delivered at pseudorandomized intervals (3 seconds, 6 seconds, 9 seconds, 12 seconds) before"
 elsenb.realTreat=zeros(size(elsenb.img));   %just saline
 elsenb.cond=vertcat(cond(:));
 elsenb.stimtype=repmat({'distension'},size(elsenb.img));
@@ -112,6 +104,7 @@ elsenb.rating=[%xlsread(elsenbrxls,1,'I:I');...
                %NaN(nsubj,1);... % Not in Excel File
                %xlsread(elsenbrxls,1,'J:J');
                xlsread(elsenbrxls,1,'J:J')]; %Mean pain ratings control from xls              
+elsenb.rating101=elsenb.rating; % A 101-scale ranging from "no-pain" to "very much" pain was used.
 elsenb.stimInt=NaN(size(elsenb.img)); %Unfortunately unknown             
 elsenb.fieldStrength=ones(size(elsenb.img)).*1.5;
 elsenb.tr           =ones(size(elsenb.img)).*3100;

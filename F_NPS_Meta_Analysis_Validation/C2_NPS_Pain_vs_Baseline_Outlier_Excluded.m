@@ -170,11 +170,11 @@ i=find(strcmp(studies,'ellingsen'));
 stats(i)=withinMetastats(nanmean([control{:,:},placebo{:,:}],2),0);
 
 %'elsenbruch'
-control=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_placebo_0%_analgesia'))&~df.ex_all),'NPSraw');
-placebo=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_control_100%_analgesia'))&~df.ex_all),'NPSraw');
+control=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_control_0%_analgesia'))&~df.ex_all),'NPSraw');
+placebo=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_placebo_100%_analgesia'))&~df.ex_all),'NPSraw');
 
-con_rating=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_placebo_0%_analgesia'))&~df.ex_all),'rating');
-pla_rating=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_control_100%_analgesia'))&~df.ex_all),'rating');
+con_rating=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_control_0%_analgesia'))&~df.ex_all),'rating');
+pla_rating=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_placebo_100%_analgesia'))&~df.ex_all),'rating');
 rating_diff=con_rating{:,1}-pla_rating{:,1};
 responders=rating_diff>0;
 

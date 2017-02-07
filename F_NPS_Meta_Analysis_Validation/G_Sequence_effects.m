@@ -192,8 +192,8 @@ stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 %'elsenbruch'
 i=find(strcmp(studies,'elsenbruch'));
 
-control=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_placebo_0%_analgesia'))),varselect);
-placebo=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_control_100%_analgesia'))),varselect);
+control=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_control_0%_analgesia'))),varselect);
+placebo=df((strcmp(df.studyID,'elsenbruch')&~cellfun(@isempty,regexp(df.cond,'pain_placebo_100%_analgesia'))),varselect);
 % There were three sessions, so assign 1 and 2 relative to each other
 control.condSeq=(control.condSeq>placebo.condSeq)+1;
 placebo.condSeq=(placebo.condSeq>control.condSeq)+1;

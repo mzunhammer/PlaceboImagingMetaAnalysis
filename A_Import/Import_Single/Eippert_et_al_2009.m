@@ -132,6 +132,7 @@ eippert.plaInduct=repmat({'Suggestions + Conditioning'},size(eippert.img));
 eippert.plaFirst=plaFirst;
 eippert.condSeq=seq;
 eippert.rating=rating;
+eippert.rating101=rating; %was 101 scale in original ranging from no pain to "unbearable"
 eippert.stimInt=temps; 
 
 eippert.fieldStrength=ones(size(cond)).*3;

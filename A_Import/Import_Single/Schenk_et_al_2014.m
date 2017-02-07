@@ -158,6 +158,7 @@ schenk.plaInduct=repmat({'Suggestions'},size(schenk.img));
 schenk.plaFirst=plaFirst;
 schenk.condSeq=seq;
 schenk.rating=rating;
+schenk.rating101=rating*10; %a 11pt rating scale ranging from 0 "no pain" to 10 "unbearable pain" was used.
 schenk.stimInt=temps; 
 
 schenk.fieldStrength=ones(size(cond)).*3;

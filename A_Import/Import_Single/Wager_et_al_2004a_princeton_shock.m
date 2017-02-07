@@ -123,6 +123,7 @@ wager_princeton.plaInduct=repmat({'Suggestions'},size(wager_princeton.img));
 wager_princeton.plaFirst=NaN(size(wager_princeton.img));% Parallel group design with pill>> placebo always first session
 wager_princeton.condSeq=NaN(size(wager_princeton.img));% Parallel group design with pill>>  only first sessions
 wager_princeton.rating=rating;
+wager_princeton.rating101=rating*10; % an 11 pt-scale ranging from 0 (non painful) to 10 (unbearable) was used.
 wager_princeton.stimInt=NaN(size(wager_princeton.img));       
 wager_princeton.fieldStrength=ones(size(wager_princeton.img)).*3;
 wager_princeton.tr           =ones(size(wager_princeton.img)).*1800;

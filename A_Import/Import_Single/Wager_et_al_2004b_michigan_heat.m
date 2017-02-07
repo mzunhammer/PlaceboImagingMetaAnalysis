@@ -79,6 +79,7 @@ wager_michigan.plaInduct=repmat({'Suggestions + Conditioning'},size(wager_michig
 wager_michigan.plaFirst=NaN(size(wager_michigan.img));
 wager_michigan.condSeq=NaN(size(wager_michigan.img));
 wager_michigan.rating=rating;
+wager_michigan.rating101=rating*10; % an 11 pt-scale ranging from 0 (non painful) to 10 (unbearable) was used.
 wager_michigan.stimInt=NaN(size(wager_michigan.img));       
 
 wager_michigan.fieldStrength=ones(size(wager_michigan.img)).*3;
