@@ -84,21 +84,26 @@ run('./E_NPS_Meta_Analysis_Placebo/B3_MetaAnalysis_Responder.m')
 % Correlation NPS vs Ratings
 run('./E_NPS_Meta_Analysis_Placebo/C_Meta_Placebo_NPS_vs_ratings.m')
 
-%% Meta-analysis validation paper (Ratings, NPS, MHE)
+%% Meta-analysis validation paper (Ratings, NPS)
 
 % Validation findings NPS (all inclusive)
 % Pain vs baseline
-run('./F_NPS_Meta_Analysis_Validation/C1_Pain_vs_Baseline_NPS.m')
-run('./F_NPS_Meta_Analysis_Validation/C2_NPS_Pain_vs_Baseline_Outlier_Excluded.m')
+run('./F_NPS_Meta_Analysis_Validation/A1_NPS_pain_vs_baseline.m')
+run('./F_NPS_Meta_Analysis_Validation/A2_NPS_pain_vs_baseline_outlier_excluded.m')
+
+% Sequence effects and reliability
+run('./F_NPS_Meta_Analysis_Validation/B1_NPS_sequence_effects_and_reliability.m')
 
 % High pain vs low pain
-run('./F_NPS_Meta_Analysis_Validation/D1_MetaAnalysis_NPS_High_vs_Low_Pain_All.m')
-run('./F_NPS_Meta_Analysis_Validation/D2_MetaAnalysis_NPS_High_vs_Low_Pain_wo_Excluded.m')
+run('./F_NPS_Meta_Analysis_Validation/C1_NPS_hi_vs_lo_pain_all.m')
+run('./F_NPS_Meta_Analysis_Validation/C2_NPS_hi_vs_lo_pain_wo_outlier.m')
 
-% Medications (NPS)
-run('./F_NPS_Meta_Analysis_Validation/G_MetaAnalysis_NPS_Medication_Effects.m')
-% Medications (Ratings)
-run('./F_NPS_Meta_Analysis_Validation/G2_MetaAnalysis_Rating_Medication_Effects.m')
+% Low pain effects
+run('./F_NPS_Meta_Analysis_Validation/D1_NPS_lo_pain_vs_baseline_all.m')
+
+% Medications effects
+run('./F_NPS_Meta_Analysis_Validation/E1_NPS_medication_effects.m')
+run('./F_NPS_Meta_Analysis_Validation/E2_rating_medication_effects.m')
 
 
 

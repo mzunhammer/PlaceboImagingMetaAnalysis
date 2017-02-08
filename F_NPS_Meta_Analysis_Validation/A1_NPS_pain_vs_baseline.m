@@ -394,8 +394,8 @@ ForestPlotter(stats,...
               'WIsubdata',1,...
               'boxscaling',1);
 
-%hgexport(gcf, 'C1_Pain_vs_Baseline_All', hgexport('factorystyle'), 'Format', 'eps'); 
-hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/C1_Pain_vs_Baseline_NPS', hgexport('factorystyle'), 'Format', 'svg');
+hgexport(gcf, 'A1_NPS_pain_vs_baseline', hgexport('factorystyle'), 'Format', 'svg'); 
+hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Figure1', hgexport('factorystyle'), 'Format', 'svg');
 hgexport(gcf, '../../Protocol_and_Manuscript/NPS_validation/Figures/Figure1', hgexport('factorystyle'), 'Format', 'svg');
 
 NPS_pos_imgs=vertcat(stats.delta)>0;

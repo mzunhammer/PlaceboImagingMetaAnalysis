@@ -138,7 +138,8 @@ ForestPlotter(stats,...
               'WIsubdata',1,...
               'boxscaling',1);
           
-hgexport(gcf, 'F1_NPS_lo_vs_no_pain_all.svg', hgexport('factorystyle'), 'Format', 'svg'); 
+hgexport(gcf, 'D1_NPS_lo_pain_vs_baseline_all.svg', hgexport('factorystyle'), 'Format', 'svg'); 
+hgexport(gcf, '../../Protocol_and_Manuscript/NPS_validation/Figures/Figure5', hgexport('factorystyle'), 'Format', 'svg');
 NPS_pos_imgs=vertcat(stats.delta)>0;
 perc_pos_NPS=sum(NPS_pos_imgs)/sum(~isnan(NPS_pos_imgs));
 

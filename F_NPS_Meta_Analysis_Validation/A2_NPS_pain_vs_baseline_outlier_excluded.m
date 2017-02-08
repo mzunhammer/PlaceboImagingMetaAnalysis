@@ -382,7 +382,7 @@ ForestPlotter(stats,...
               'WIsubdata',1,...
               'boxscaling',1);
 
-hgexport(gcf, 'C2_NPS_Pain_vs_Baseline_outlier_excluded.eps', hgexport('factorystyle'), 'Format', 'eps'); 
+hgexport(gcf, 'A2_NPS_pain_vs_baseline_outlier_excluded', hgexport('factorystyle'), 'Format', 'svg'); 
 
 close all
 NPS_pos_imgs=vertcat(stats.delta)>0;
