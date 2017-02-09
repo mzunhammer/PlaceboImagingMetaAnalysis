@@ -1,15 +1,47 @@
 %% Placebo-response (ratings) vs placebo-response NPS
-
 clear
 % Add folder with Generic Inverse Variance Methods Functions first
 addpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/A_Analysis_GIV_Functions/')
-load('dflong.mat')
+load('G_dflong.mat')
 
 
 dflong=dflong(~isnan(dflong.rating),:);
 dflong=dflong(~dflong.ex_lo_p_ratings,:);
 dflong.suggestions=~cellfun(@isempty,regexp(dflong.plaInduct,'Suggestions'));
 dflong.conditioning=~cellfun(@isempty,regexp(dflong.plaInduct,'Conditioning'));
+
+
+% RESCALE FSL-NPS-values since these are multiplied by 10000 in grand mean
+% scaling (SPM:100)
+dflong.fsl=zeros(size(dflong.subID));
+dflong.fsl(strcmp(dflong.studyID,'ellingsen'))=1;
+dflong.fsl(strcmp(dflong.studyID,'choi'))=1;
+dflong.NPSraw(dflong.fsl==1)=dflong.NPSraw(dflong.fsl==1)./100;
+
+rareplas=strcmp(dflong.plaForm,'Nasal spray')|strcmp(dflong.plaForm,'TENS')|strcmp(dflong.plaForm,'Pill')
+dflong.plaForm_red=dflong.plaForm;
+dflong.plaForm_red(rareplas)={'other'};
+%% 1) Mixed model analysis of NPS raw values. Reasons for scaling differences
+
+% Random intercepts for subjects nested within studies
+
+mx_NPSraw_0 = fitlme(dflong,'NPSraw ~ 1+(1|studyID)+(1|studyID:subID)',...
+              'CheckHessian',true)
+mx_NPSraw_fs = fitlme(dflong,'NPSraw ~ fieldStrength+(1|studyID)+(1|studyID:subID)',...
+              'CheckHessian',true)
+mx_NPSraw_te = fitlme(dflong,'NPSraw ~ te+(1|studyID)+(1|studyID:subID)',...
+              'CheckHessian',true)
+mx_NPSraw_tr = fitlme(dflong,'NPSraw ~ tr+(1|studyID)+(1|studyID:subID)',...
+              'CheckHessian',true)
+mx_NPSraw_vxA = fitlme(dflong,'NPSraw ~ voxelVolAcq+(1|studyID)+(1|studyID:subID)',...
+              'CheckHessian',true)
+mx_NPSraw_xSpan0 = fitlme(dflong,'NPSraw ~ 1+(xSpan-1|studyID)+(1|studyID:subID)',...
+              'CheckHessian',true)
+mx_NPSraw_xSpan = fitlme(dflong,'NPSraw ~ xSpan+(xSpan-1|studyID)+(1|studyID:subID)',...
+              'CheckHessian',true)
+mx_NPSraw_xSpan_r_slope = fitlme(dflong,'NPSraw ~ nImages+(1|studyID)+(1|studyID:subID)',...
+              'CheckHessian',true)                 
+compare(mx_NPSraw_xSpan0,mx_NPSraw_xSpan,'CheckNesting',true)
 %% Mixed model analysis of ratings
 % ACHTUNG! Ratings/NPS values values were z-Transformed on a by-study level to
 % account for (drastic) scaling differences between studies. Therefore the
@@ -19,7 +51,7 @@ mmdlr0 = fitlme(dflong,'z_rating ~ z_stimInt+pla+age+(1|subID)+(pla-1|studyID)',
               'CheckHessian',true);
 mmdlr1 = fitlme(dflong,'z_rating ~ stimtype+(1|subID)+(pla-1|studyID)',...
               'CheckHessian',true)
-mmdlr2 = fitlme(dflong,'z_rating ~ z_stimInt+plaFirst*pla*conditioning+(1|subID)',...
+mmdlr2 = fitlme(dflong,'z_rating ~ plaForm_red+plaFirst*pla*conditioning+(1|subID)',...
               'CheckHessian',true)          
 compare(mmdlr1,mmdlr2)
 anova(mmdlr2)

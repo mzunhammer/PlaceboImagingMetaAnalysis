@@ -91,6 +91,7 @@ wager_michigan.meanBlockDur =ones(size(wager_michigan.img))*20; % According to p
 wager_michigan.nImages      =vertcat(nImages(:)); % Images per Participant
 wager_michigan.xSpan        =xSpan;
 wager_michigan.conSpan      =ones(size(wager_michigan.cond));
+wager_michigan.fsl          =zeros(size(wager_michigan.cond)); %analysis with fsl, rather than SPM
 
 %% Save
 outpath=fullfile(basedir,'Wager_et_al_2004b_michigan_heat.mat')

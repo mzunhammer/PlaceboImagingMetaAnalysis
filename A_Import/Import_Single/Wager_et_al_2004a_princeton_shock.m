@@ -134,6 +134,7 @@ wager_princeton.meanBlockDur =ones(size(cond))*6; % According to paper
 wager_princeton.nImages      =nImages; % Images per Participant
 wager_princeton.xSpan        =xSpan;
 wager_princeton.conSpan      =ones(size(wager_princeton.cond)).*1;
+wager_princeton.fsl          =zeros(size(wager_princeton.cond)); %analysis with fsl, rather than SPM
 
 %% Save
 outpath=fullfile(basedir,'Wager_at_al_2004a_princeton_shock.mat')

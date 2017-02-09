@@ -137,6 +137,7 @@ bingel11.xSpan        =xSpan;
 bingel11.xSpan(strcmp(bingel11.subID,'bingel11_14'))=NaN;
 % For Subj14 (10th subject in array) one onset for pain has been entered in duplicate: the x-Vector is flawed.
 bingel11.conSpan      =conSpan;
+bingel11.fsl          =zeros(size(bingel11.cond)); %analysis with fsl, rather than SPM
 %% Save
 outpath=fullfile(basedir,'Bingel_et_al_2011.mat')
 save(outpath,'bingel11')

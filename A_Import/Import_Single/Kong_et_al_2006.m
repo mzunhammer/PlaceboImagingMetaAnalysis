@@ -139,6 +139,7 @@ kong06.meanBlockDur =blockLength;
 kong06.nImages      =NaN(size(kong06.img)); % Images per Participant currently unknown
 kong06.xSpan        =xSpan;
 kong06.conSpan      =conSpan;
+kong06.fsl          =zeros(size(kong06.cond)); %analysis with fsl, rather than SPM
 
 %% Save
 outpath=fullfile(basedir,'Kong_et_al_2006.mat')

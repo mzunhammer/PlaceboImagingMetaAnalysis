@@ -170,6 +170,7 @@ schenk.meanBlockDur =blockLength;
 schenk.nImages      =nImages; % Images per Participant
 schenk.xSpan        =xSpan;
 schenk.conSpan      =ones(size(cond));
+schenk.fsl          =zeros(size(schenk.cond)); %analysis with fsl, rather than SPM
 
 %% Save
 outpath=fullfile(basedir,'Schenk_et_al_2014.mat')

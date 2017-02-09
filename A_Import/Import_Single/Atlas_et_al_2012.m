@@ -236,7 +236,7 @@ atlas.meanBlockDur =meanBlockDur; % According to paper
 atlas.nImages      =nImages; % Images per Participant
 atlas.xSpan        =xSpan;
 atlas.conSpan      =ones(size(atlas.cond));
-
+atlas.fsl          =zeros(size(atlas.cond)); %analysis with fsl, rather than SPM
 %% Save
 outpath=fullfile(basedir,'Atlas_et_al_2012.mat')
 save(outpath,'atlas');

@@ -115,6 +115,7 @@ elsenb.meanBlockDur =ones(size(elsenb.cond)).*31; % SPM and paper agree
 elsenb.nImages      =nImages; % Images per Participant
 elsenb.xSpan        =xSpan;
 elsenb.conSpan      =ones(size(elsenb.img)); %beta images used
+elsenb.fsl          =zeros(size(elsenb.cond)); %analysis with fsl, rather than SPM
 
 %% Save
 outpath=fullfile(basedir,'Elsenbruch_et_al_2012.mat')

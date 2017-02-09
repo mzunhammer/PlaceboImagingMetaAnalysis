@@ -129,59 +129,59 @@ stats.MHE(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
 end
 
 
-%% Meta-Analysis PPR_pain
-v=find(strcmp(df_full.variables,'PPR_pain_raw'));
-for i=1:length(df_full.studies) % Calculate for all studies except...
-    if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
-        if df_full.BetweenSubject(i)==0 %Within-subject studies
-           stats.PPR_pain_raw(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-           stats.PPR_pain_raw(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        end        
-    end
-end
-% Calculate for those studies where only pla>con contrasts are available
-conOnly=find(df_full.consOnlyNPS==1);
-impu_r=nanmean([stats.PPR_pain_raw.r]); % impute the mean within-subject study correlation observed in all other studies
-for i=conOnly'
-stats.PPR_pain_raw(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
-end
-
-%% Meta-Analysis PPR_anti
-v=find(strcmp(df_full.variables,'PPR_anti_raw'));
-for i=1:length(df_full.studies) % Calculate for all studies except...
-    if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
-        if df_full.BetweenSubject(i)==0 %Within-subject studies
-           stats.PPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-           stats.PPR_anti_raw(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        end        
-    end
-end
-% Calculate for those studies where only pla>con contrasts are available
-conOnly=find(df_full.consOnlyNPS==1);
-impu_r=nanmean([stats.PPR_anti_raw.r]); % impute the mean within-subject study correlation observed in all other studies
-for i=conOnly'
-stats.PPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
-end
-
-%% Meta-Analysis brainPPR_anti
-v=find(strcmp(df_full.variables,'brainPPR_anti_raw'));
-for i=1:length(df_full.studies) % Calculate for all studies except...
-    if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
-        if df_full.BetweenSubject(i)==0 %Within-subject studies
-           stats.brainPPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-           stats.brainPPR_anti_raw(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        end        
-    end
-end
-% Calculate for those studies where only pla>con contrasts are available
-conOnly=find(df_full.consOnlyNPS==1);
-impu_r=nanmean([stats.brainPPR_anti_raw.r]); % impute the mean within-subject study correlation observed in all other studies
-for i=conOnly'
-stats.brainPPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
-end
+% %% Meta-Analysis PPR_pain
+% v=find(strcmp(df_full.variables,'PPR_pain_raw'));
+% for i=1:length(df_full.studies) % Calculate for all studies except...
+%     if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
+%         if df_full.BetweenSubject(i)==0 %Within-subject studies
+%            stats.PPR_pain_raw(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+%         elseif df_full.BetweenSubject(i)==1 %Between-subject studies
+%            stats.PPR_pain_raw(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+%         end        
+%     end
+% end
+% % Calculate for those studies where only pla>con contrasts are available
+% conOnly=find(df_full.consOnlyNPS==1);
+% impu_r=nanmean([stats.PPR_pain_raw.r]); % impute the mean within-subject study correlation observed in all other studies
+% for i=conOnly'
+% stats.PPR_pain_raw(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
+% end
+% 
+% %% Meta-Analysis PPR_anti
+% v=find(strcmp(df_full.variables,'PPR_anti_raw'));
+% for i=1:length(df_full.studies) % Calculate for all studies except...
+%     if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
+%         if df_full.BetweenSubject(i)==0 %Within-subject studies
+%            stats.PPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+%         elseif df_full.BetweenSubject(i)==1 %Between-subject studies
+%            stats.PPR_anti_raw(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+%         end        
+%     end
+% end
+% % Calculate for those studies where only pla>con contrasts are available
+% conOnly=find(df_full.consOnlyNPS==1);
+% impu_r=nanmean([stats.PPR_anti_raw.r]); % impute the mean within-subject study correlation observed in all other studies
+% for i=conOnly'
+% stats.PPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
+% end
+% 
+% %% Meta-Analysis brainPPR_anti
+% v=find(strcmp(df_full.variables,'brainPPR_anti_raw'));
+% for i=1:length(df_full.studies) % Calculate for all studies except...
+%     if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
+%         if df_full.BetweenSubject(i)==0 %Within-subject studies
+%            stats.brainPPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+%         elseif df_full.BetweenSubject(i)==1 %Between-subject studies
+%            stats.brainPPR_anti_raw(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+%         end        
+%     end
+% end
+% % Calculate for those studies where only pla>con contrasts are available
+% conOnly=find(df_full.consOnlyNPS==1);
+% impu_r=nanmean([stats.brainPPR_anti_raw.r]); % impute the mean within-subject study correlation observed in all other studies
+% for i=conOnly'
+% stats.brainPPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
+% end
 %% One Forest plot per variable
 varnames=fieldnames(stats);
 nicevarnames={'Pain ratings',...
@@ -200,7 +200,7 @@ for i = 1:numel(varnames)
                   'WIsubdata',0,...
                   'boxscaling',1,...
                   'textoffset',0);
-    %hgexport(gcf, ['B1_Meta_All_',varnames{i},'.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
+    hgexport(gcf, ['B1_Meta_All_',varnames{i},'.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
     pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
     hgexport(gcf, fullfile(pubpath,['B1_Meta_All_',varnames{i},'.svg']), hgexport('factorystyle'), 'Format', 'svg'); 
     close all;

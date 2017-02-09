@@ -176,6 +176,7 @@ bingel06.nImages      =nImages; % Images per Participant AND SIDE!!! number of i
 bingel06.xSpan        =xSpan;
 bingel06.conSpan      =conSpan; %con images used
 bingel06(cellfun(@isempty,bingel06.img),:)=[]; % Delete missing sessions
+bingel06.fsl          =zeros(size(bingel06.cond)); %analysis with fsl, rather than SPM
 %% Save
 outpath=fullfile(basedir,'Bingel_et_al_2006.mat')
 save(outpath,'bingel06')

@@ -118,6 +118,7 @@ wrobel.meanBlockDur =ones(size(cond))*10; % According to paper (early and late w
 wrobel.nImages      =nImages; % Images per Participant
 wrobel.xSpan        =xSpan;
 wrobel.conSpan      =ones(size(wrobel.cond));
+wrobel.fsl          =zeros(size(wrobel.cond)); %analysis with fsl, rather than SPM
 
 %% Save
 outpath=fullfile(basedir,'Wrobel_et_al_2014.mat')

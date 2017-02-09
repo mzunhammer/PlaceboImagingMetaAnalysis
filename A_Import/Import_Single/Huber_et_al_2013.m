@@ -142,6 +142,7 @@ huber.meanBlockDur =ones(size(huber.cond)).*0; % Paper and SPM agree
 huber.nImages      =nImages; % Images per Participant
 huber.xSpan        =xSpan;
 huber.conSpan      =conSpan(:);
+huber.fsl          =zeros(size(huber.cond)); %analysis with fsl, rather than SPM
 
 %% Save
 outpath=fullfile(basedir,'Huber_et_al_2013.mat')

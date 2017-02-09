@@ -144,6 +144,7 @@ eippert.meanBlockDur =blockLength;
 eippert.nImages      =nImages; % Images per Participant
 eippert.xSpan        =xSpan;
 eippert.conSpan      =conSpan;
+eippert.fsl          =zeros(size(eippert.cond)); %analysis with fsl, rather than SPM
 
 %% Save
 outpath=fullfile(basedir,'Eippert_et_al_2009.mat')

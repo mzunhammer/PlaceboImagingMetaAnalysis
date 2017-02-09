@@ -116,6 +116,7 @@ they.meanBlockDur =ones(size(they.cond)).*16.8; % SPM and paper agree
 they.nImages      =nImages; % Images per Participant
 they.xSpan        =xSpan;
 they.conSpan      =ones(size(they.img)); %beta images used
+they.fsl          =zeros(size(they.cond)); %analysis with fsl, rather than SPM
 
 %% Save
 outpath=fullfile(basedir,'Theysohn_et_al_2014.mat')

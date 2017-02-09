@@ -99,6 +99,7 @@ ruetgen.meanBlockDur =blockLength; %According to SPMs
 ruetgen.nImages      =nImages; % Images per Participant
 ruetgen.xSpan        =xSpan;
 ruetgen.conSpan      =ones(size(ruetgen.cond)).*1;
+ruetgen.fsl          =zeros(size(ruetgen.cond)); %analysis with fsl, rather than SPM
 
 
 %% Save

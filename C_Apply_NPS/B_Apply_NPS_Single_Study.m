@@ -65,7 +65,7 @@ all_imgs= df.img;
 results=apply_patternmask(fullfile(datadir, all_imgs), fullfile(p, 'pattern_masks/weights_NSF_grouppred_cvpcr.img'));
 results(cellfun(@isempty,results))={NaN};
 df.NPSraw=[results{:}]';
-df.NPScorrected=nps_rescale(df.NPSraw,df.voxelVolMat,df.xSpan,df.conSpan);
+df.NPScorrected=nps_rescale(df.NPSraw,df.voxelVolMat,df.xSpan,df.conSpan,df.fsl);
 
 % Push the data in df into a table with the name of the original table
 eval([currtablename{1} '= df']);

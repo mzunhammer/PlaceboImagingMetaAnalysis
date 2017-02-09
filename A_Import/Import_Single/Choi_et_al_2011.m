@@ -143,7 +143,7 @@ choi.meanBlockDur(anti) =ones(size(choi.cond(anti))).*9; % anticipation phase wa
 choi.nImages      =nImages; % Images per Participant: Note that separae GLMs were performed for the different experimental placebo conditions AND that exp 2 seems not to be included in the original publications. Therefore the number of images/participant was 300*2=600
 choi.xSpan        =xSpan;
 choi.conSpan      =ones(size(choi.img));
-
+choi.fsl          =ones(size(choi.cond)); %analysis with fsl, rather than SPM
 %% Save
 outpath=fullfile(basedir,'Choi_et_al_2013.mat');
 save(outpath,'choi')

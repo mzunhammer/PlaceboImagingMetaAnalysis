@@ -133,6 +133,7 @@ geuter.meanBlockDur =ones(size(geuter.cond)).*10; % Paper and SPM agree
 geuter.nImages      =nImages; % Images per Participant
 geuter.xSpan        =xSpan;
 geuter.conSpan      =conSpan;
+geuter.fsl          =zeros(size(geuter.cond)); %analysis with fsl, rather than SPM
 
 %% Save
 outpath=fullfile(basedir,'Geuter_et_al_2013.mat')

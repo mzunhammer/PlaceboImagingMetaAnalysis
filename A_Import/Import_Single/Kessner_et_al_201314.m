@@ -113,6 +113,7 @@ kessner.meanBlockDur(~cellfun(@isempty, (regexp(beta_img,'pain')))) =20; % other
 kessner.nImages      =nImages; % Images per Participant
 kessner.xSpan        =xSpan;
 kessner.conSpan      =ones(size(kessner.cond)).*1;
+kessner.fsl          =zeros(size(kessner.cond)); %analysis with fsl, rather than SPM
 
 %% Save
 outpath=fullfile(basedir,'Kessner_et_al_201314.mat')

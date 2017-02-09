@@ -80,7 +80,7 @@ for j= 1:nsubj
         %Get xSpan from SPM:
         iCon=strcmp(SPM.xX.name,beta_term{i}); % Get index of right betas with correct names
         xSpan(j,i)=sum(xSpanRaw(iCon)); % Gets x-Vextors according to index above
-        conSpan(j,i)=2; % Computed manually above
+        conSpan(j,i)=1; % Simple beta images
         nImages(j,i)=size(SPM.xX.X,1);
         male(j,i)=unimale(str2num(currsubNO));
         age(j,i)=uniage(str2num(currsubNO));
@@ -140,6 +140,7 @@ lui.meanBlockDur =ones(size(lui.cond)).*0; % Paper and SPM agree
 lui.nImages      =nImages; % Images per Participant
 lui.xSpan        =xSpan;
 lui.conSpan      =conSpan(:);
+lui.fsl          =zeros(size(lui.cond)); %analysis with fsl, rather than SPM
 
 %% Save
 outpath=fullfile(basedir,'Lui_et_al_2010.mat')

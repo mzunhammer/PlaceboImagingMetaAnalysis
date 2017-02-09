@@ -68,6 +68,10 @@ uniage=xlsread(xlspath,1,'C2:C29');
 uniplaFirst=xlsread(xlspath,1,'D2:D29');
 unirating_control=xlsread(xlspath,1,'F2:F29');
 unirating_placebo=xlsread(xlspath,1,'E2:E29');
+unirating_control_brush=xlsread(xlspath,1,'I2:I29');
+unirating_placebo_brush=xlsread(xlspath,1,'H2:H29');
+unirating_control_warm=xlsread(xlspath,1,'K2:K29');
+unirating_placebo_warm=xlsread(xlspath,1,'J2:J29');
 unitemp=xlsread(xlspath,1,'G2:G29');
 
 male=NaN(size(img));
@@ -83,19 +87,28 @@ for i= 1:length(img)
     currdes=designmats(i);
     currconfile=confile(i);
     male(i,1)=unimale(currsub);
-    %age(i,1)=uniage(currsub); % Not yet available
+    age(i,1)=uniage(currsub);
     plaFirst(i,1)=uniplaFirst(currsub);
     
-    if pain(i)==1
-        temp(i,1)=unitemp(currsub);
-    else
-        temp(i,1)=NaN;
-    end
     
-    if pain(i)==1 & pla(i)==1
+    if strcmp(con_descriptors(i),'Painful_touch_placebo')
         rating(i,1)=unirating_placebo(currsub);
-    elseif pain(i)==1 & pla(i)==0
+        temp(i,1)=unitemp(currsub);
+    elseif strcmp(con_descriptors(i),'Painful_touch_control')
         rating(i,1)=unirating_control(currsub);
+        temp(i,1)=unitemp(currsub);
+    elseif strcmp(con_descriptors(i),'Brushstroke_placebo')
+        rating(i,1)=unirating_placebo_brush(currsub);
+        temp(i,1)=32; % Skin temperature
+    elseif strcmp(con_descriptors(i),'Brushstroke_control')
+        rating(i,1)=unirating_control_brush(currsub);
+        temp(i,1)=32; % Skin temperature
+    elseif strcmp(con_descriptors(i),'Warm_touch_placebo')
+        rating(i,1)=unirating_placebo_warm(currsub);
+        temp(i,1)=42.5; % Heat pack was ~42.5?C at the start of the fMRI session
+    elseif strcmp(con_descriptors(i),'Warm_touch_control')
+        rating(i,1)=unirating_control_warm(currsub);
+        temp(i,1)=42.5; % Heat pack was ~42.5?C at the start of the fMRI session
     else
         rating(i,1)=NaN;
     end
@@ -127,7 +140,7 @@ ellingsen.imgType=repmat({'fMRI'},size(ellingsen.img));
 ellingsen.studyType=repmat({'within'},size(ellingsen.img));
 ellingsen.studyID=repmat({'ellingsen'},size(ellingsen.img));
 ellingsen.subID=strcat(ellingsen.studyID,'_',sub);
-ellingsen.male=male;%only males
+ellingsen.male=male;
 ellingsen.age=age;
 ellingsen.healthy=ones(size(ellingsen.img));%only healthy
 ellingsen.pla=pla;
@@ -156,6 +169,7 @@ ellingsen.meanBlockDur =ones(size(ellingsen.cond)).*10; % stimulus length accord
 ellingsen.nImages      =nImages; % Images per Participant
 ellingsen.xSpan        =xSpan;
 ellingsen.conSpan      =ones(size(ellingsen.img));
+ellingsen.fsl          =ones(size(ellingsen.cond)); %analysis with fsl, rather than SPM
 
 %% Save
 outpath=fullfile(basedir,'Ellingsen_et_al_2013.mat');

@@ -116,6 +116,7 @@ zeidan.xSpan        =ones(size(zeidan.img));% All X's had a maximum span of 1
 zeidan.conSpan      =[ones(size(zeidandir))*4;
                       ones(size(zeidandir))*4;
                       ones(size(zeidandir))*4]; %Use design calculator in B_Unpack_and_Contrast_Zeidan to get contrast weights.
+zeidan.fsl          =ones(size(zeidan.cond)); %analysis with fsl, rather than SPM
 
 %% Save
 outpath=fullfile(basedir,'Zeidan_et_al_2015.mat')
