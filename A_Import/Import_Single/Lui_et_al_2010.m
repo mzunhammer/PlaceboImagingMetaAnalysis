@@ -98,6 +98,10 @@ nImages=vertcat(nImages(:));
 % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
 pain(ismember(beta,[1 3]),1)=0;     
 pain(ismember(beta,[5 7]),1)=1;
+
+imgsPerBlock(ismember(beta,[1 3]),1)=4; % 4s Anticipation according to SPM and paper
+imgsPerBlock(ismember(beta,[5 7]),1)=0; % Ecent for stimulus according to SPM and paper
+
 cond=vertcat(cond(:));  
 
 condSeq=ones(size(img))*3;         % Third session in row, red and green cues "pseudorandomly alternated" within run.
@@ -108,7 +112,13 @@ temp=NaN(size(img));            % Not yet available
 xSpan=vertcat(xSpan(:));
 
 % Create Study-Specific table
-lui=table(img);
+outpath=fullfile(basedir,'Lui_et_al_2010.mat')
+if exist(outpath)==2
+    load(outpath);
+else
+    lui=table(img);
+end
+lui.img=img;
 lui.imgType=repmat({'fMRI'},size(lui.img));
 lui.studyType=repmat({'within'},size(lui.img));
 lui.studyID=repmat({'lui'},size(lui.img));
@@ -136,14 +146,14 @@ lui.tr           =ones(size(lui.img)).*3014;
 lui.te           =ones(size(lui.img)).*35;
 lui.voxelVolAcq  =ones(size(lui.img)).*(1.875*1.875*3.5);
 lui.voxelVolMat  =ones(size(lui.img)).*(2*2*2);
-lui.meanBlockDur =ones(size(lui.cond)).*0; % Paper and SPM agree
+lui.imgsPerBlock =imgsPerBlock; % Paper and SPM agree
+lui.nBlocks      =ones(size(lui.cond)).*6;
 lui.nImages      =nImages; % Images per Participant
 lui.xSpan        =xSpan;
 lui.conSpan      =conSpan(:);
 lui.fsl          =zeros(size(lui.cond)); %analysis with fsl, rather than SPM
 
 %% Save
-outpath=fullfile(basedir,'Lui_et_al_2010.mat')
 save(outpath,'lui')
 
 end

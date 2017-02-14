@@ -80,7 +80,13 @@ plaFirst=repmat(plaFirst,1,6)';plaFirst=plaFirst(:);
         conSpan      =ones(size(cond)).*1;
 
 % Create Study-Specific table
-wrobel=table(img);
+outpath=fullfile(basedir,'Wrobel_et_al_2014.mat')
+if exist(outpath)==2
+    load(outpath);
+else
+    wrobel=table(img);
+end
+wrobel.img=img;
 wrobel.imgType=repmat({'fMRI'},size(wrobel.img));
 wrobel.studyType=repmat({'within'},size(wrobel.img));
 wrobel.studyID=repmat({'wrobel'},size(wrobel.img));
@@ -114,14 +120,14 @@ wrobel.tr           =ones(size(wrobel.img)).*2580;
 wrobel.te           =ones(size(wrobel.img)).*25;
 wrobel.voxelVolAcq  =ones(size(wrobel.img)).*(2*2*2+1);
 wrobel.voxelVolMat  =ones(size(wrobel.img)).*(2*2*2);
-wrobel.meanBlockDur =ones(size(cond))*10; % According to paper (early and late were each modeled 10 seconds)
+wrobel.imgsPerBlock =ones(size(cond))*10; % According to paper (early and late were each modeled 10 seconds)
+wrobel.nBlocks      =imgsPerBlock; % According to SPM
 wrobel.nImages      =nImages; % Images per Participant
 wrobel.xSpan        =xSpan;
 wrobel.conSpan      =ones(size(wrobel.cond));
 wrobel.fsl          =zeros(size(wrobel.cond)); %analysis with fsl, rather than SPM
 
 %% Save
-outpath=fullfile(basedir,'Wrobel_et_al_2014.mat')
 save(outpath,'wrobel')
 
 end

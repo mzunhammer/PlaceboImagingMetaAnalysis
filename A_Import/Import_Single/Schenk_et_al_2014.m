@@ -137,7 +137,13 @@ stimside=cell(size(img));
 stimside(stimside_raw<=2)={'R'};
 stimside(stimside_raw>=3)={'L'};
 %% Collect all Variables in Table
-schenk=table(img);
+outpath=fullfile(basedir,'Schenk_et_al_2014.mat')
+if exist(outpath)==2
+    load(outpath);
+else
+    schenk=table(img);
+end
+schenk.img=img;
 schenk.imgType=repmat({'fMRI'},size(schenk.img));
 schenk.studyType=repmat({'within'},size(schenk.img));
 schenk.studyID=repmat({'schenk'},size(schenk.img));
@@ -166,14 +172,14 @@ schenk.tr           =ones(size(cond)).*2580; %ACCORDING TO SPM, 2.58 according t
 schenk.te           =ones(size(cond)).*26;
 schenk.voxelVolAcq  =ones(size(schenk.img)).*2*2*2;
 schenk.voxelVolMat  =ones(size(schenk.img)).*(2*2*2);
-schenk.meanBlockDur =blockLength;
+schenk.imgsPerBlock =blockLength;
+schenk.nBlocks      =imgsPerBlock; % According to SPM
 schenk.nImages      =nImages; % Images per Participant
 schenk.xSpan        =xSpan;
 schenk.conSpan      =ones(size(cond));
 schenk.fsl          =zeros(size(schenk.cond)); %analysis with fsl, rather than SPM
 
 %% Save
-outpath=fullfile(basedir,'Schenk_et_al_2014.mat')
 save(outpath,'schenk');
 
 end

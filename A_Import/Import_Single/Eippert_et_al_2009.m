@@ -103,15 +103,21 @@ rating(logical(pla))=repmat(rating_pla,3,1);
 temps=xlsread(xls_path,1,'F2:F41');
 temps=repmat(temps,6,1);
 %Add imaging parameters
-blockLength=NaN(size(cond));
-blockLength(~cellfun(@isempty,regexp(cond,'anticipation')),1)=0;
-blockLength(~cellfun(@isempty,regexp(cond,'pain')),1)=10;
+imgsPerBlock=NaN(size(cond));
+imgsPerBlock(~cellfun(@isempty,regexp(cond,'anticipation')),1)=0;
+imgsPerBlock(~cellfun(@isempty,regexp(cond,'pain')),1)=3.8168; % late and early pain are 10 seconds each
 % Placebo First
 plaFirst=xlsread(xls_path,1,'E2:E41');
 plaFirst=repmat(plaFirst,6,1);
 
 %% Collect all Variables in Table
-eippert=table(img);
+outpath=fullfile(basedir,'Eippert_et_al_2009.mat');
+if exist(outpath)==2
+    load(outpath);
+else
+    eippert=table(img);
+end
+eippert.img=img;
 eippert.imgType=repmat({'fMRI'},size(eippert.img));
 eippert.studyType=repmat({'within'},size(eippert.img));
 eippert.studyID=repmat({'eippert'},size(eippert.img));
@@ -140,14 +146,14 @@ eippert.tr           =ones(size(cond)).*2620; %ACCORDING TO SPM, 2.58 according 
 eippert.te           =ones(size(cond)).*26;
 eippert.voxelVolAcq  =ones(size(eippert.img)).*((208/104) *(208/104) *(2+1));
 eippert.voxelVolMat  =ones(size(eippert.img)).*(2*2*2);
-eippert.meanBlockDur =blockLength;
-eippert.nImages      =nImages; % Images per Participant
+eippert.imgsPerBlock =imgsPerBlock;
+eippert.nBlocks      =ones(size(eippert.img)).*15; % Number of blocks per condition and session
+eippert.nImages      =ones(size(eippert.img)).*(2*2*2); % Images per Participant 
 eippert.xSpan        =xSpan;
 eippert.conSpan      =conSpan;
 eippert.fsl          =zeros(size(eippert.cond)); %analysis with fsl, rather than SPM
 
 %% Save
-outpath=fullfile(basedir,'Eippert_et_al_2009.mat')
 save(outpath,'eippert');
 
 end

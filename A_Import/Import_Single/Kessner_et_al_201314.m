@@ -69,15 +69,35 @@ for i=1:size(kessnerSPMs)
     xSpanRaw=max(SPM.xX.X)-min(SPM.xX.X);
     kessnerxSpans(i,:)=xSpanRaw([1 4 2 5]); % Attention, alphabetic sorting puts anticipation first in image vector!
     nImages(i,:)=size(SPM.xX.X,1);
+    imgsPerBlock_anti_control(i,1)=mean(SPM.Sess(1).U(1).dur);
+    imgsPerBlock_anti_treatment(i,1)=mean(SPM.Sess(2).U(1).dur);
+    imgsPerBlock_pain_control(i,1)=mean(SPM.Sess(1).U(2).dur);
+    imgsPerBlock_pain_treatment(i,1)=mean(SPM.Sess(2).U(2).dur);
+    nBlocks_anti_control(i,1)=length(SPM.Sess(1).U(1).dur);
+    nBlocks_anti_treatment(i,1)=length(SPM.Sess(2).U(1).dur);
+    nBlocks_pain_control(i,1)=length(SPM.Sess(1).U(2).dur);
+    nBlocks_pain_treatment(i,1)=length(SPM.Sess(2).U(2).dur);
 end
+
 kessnerxSpanslong=(kessnerxSpans');
 kessnerxSpanslong=kessnerxSpanslong(:);
 xSpan =kessnerxSpanslong;
 nImages=repmat(nImages,1,4)';
 nImages=nImages(:);
 
+imgsPerBlock=[imgsPerBlock_anti_control,imgsPerBlock_anti_treatment,imgsPerBlock_pain_control,imgsPerBlock_pain_treatment]';
+imgsPerBlock=imgsPerBlock(:);
+nBlocks=[nBlocks_anti_control,nBlocks_anti_treatment,nBlocks_pain_control,nBlocks_pain_treatment]';
+nBlocks=imgsPerBlock(:);
+
 % Create Study-Specific table
-kessner=table(img);
+outpath=fullfile(basedir,'Kessner_et_al_201314.mat')
+if exist(outpath)==2
+    load(outpath);
+else
+    kessner=table(img);
+end
+kessner.img=img;
 kessner.imgType=repmat({'fMRI'},size(kessner.img));
 kessner.studyType=repmat({'between'},size(kessner.img));
 kessner.studyID=repmat({'kessner'},size(kessner.img));
@@ -108,15 +128,14 @@ kessner.tr           =ones(size(kessner.img)).*2580;
 kessner.te           =ones(size(kessner.img)).*26;
 kessner.voxelVolAcq  =ones(size(kessner.img)).*((220/110) *(220/110) *(2+1));
 kessner.voxelVolMat  =ones(size(kessner.img)).*(2*2*2);
-kessner.meanBlockDur =zeros(size(kessner.cond)); % anticipation epochs were zero in length (events)
-kessner.meanBlockDur(~cellfun(@isempty, (regexp(beta_img,'pain')))) =20; % other block durations were 20 seconds
+kessner.imgsPerBlock =imgsPerBlock; % According to SPM
+kessner.nBlocks      =nBlocks; % According to SPM
 kessner.nImages      =nImages; % Images per Participant
 kessner.xSpan        =xSpan;
 kessner.conSpan      =ones(size(kessner.cond)).*1;
 kessner.fsl          =zeros(size(kessner.cond)); %analysis with fsl, rather than SPM
 
 %% Save
-outpath=fullfile(basedir,'Kessner_et_al_201314.mat')
 save(outpath,'kessner')
 
 end

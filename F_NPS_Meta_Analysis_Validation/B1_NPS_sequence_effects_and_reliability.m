@@ -48,7 +48,24 @@ studies=studies([1,2,5,6,7,9,16,19]);
             };
 
         
-
+stats.ImgsPerSession=[
+            990;... %'Atlas et al. 2012:'
+			488;... %'Bingel et al. 2006:'
+			329;... %'Eippert et al. 2009:'
+			510;... %'Ellingsen et al. 2013:'
+            197;... %'Elsenbruch et al. 2012:'
+            284;... %'Geuter et al. 2013:'
+            206;... %'Theysohn et al. 2009:'
+            327.5]%'Wrobel et al. 2014:'
+ stats.painImgsPerSession=stats.ImgsPerSession.*[
+             1;... %'Atlas et al. 2012:' Only pain
+ 			 1;... %'Bingel et al. 2006:'
+ 			 1;... %'Eippert et al. 2009:'
+ 			 0.333;... %'Ellingsen et al. 2013:'
+             1;... %'Elsenbruch et al. 2012:'
+             1;... %'Geuter et al. 2013:'
+             1;... %'Theysohn et al. 2009:'
+             1]%'Wrobel et al. 2014:'
 %% Select data STUDIES
 varselect={'subID','NPSraw','MHEraw','rating','cond','condSeq'};
 

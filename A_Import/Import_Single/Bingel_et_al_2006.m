@@ -13,21 +13,21 @@ basedir = '/Users/matthiaszunhammer/Dropbox/boulder_essen/Datasets/';
 %% Load images paths
 %and extract/assign experimental conditions from/to image names
 studydir= 'Bingel_et_al_2006/';
-con_IDs = [1 4 2 5];
-ncon=length(con_IDs);
-con_descriptors= {...
+beta_IDs = [1 4 2 5];
+nbeta=length(beta_IDs);
+beta_descriptors= {...
     'cuePlacebo'...
     'cueNoPlacebo'...
     'painPlacebo'...
     'painNoPlacebo'...
     };
-con_imgnames= {...
+beta_imgnames= {...
     'beta_0001'...
     'beta_0004'...
     'beta_0002'...
     'beta_0005'...
     };
-con_coding={...
+beta_coding={...
     logical([1 0 0 0 0 0 0 0]),...
     logical([0 0 0 1 0 0 0 0]),...
     logical([0 1 0 0 0 0 0 0]),...
@@ -48,9 +48,9 @@ xls_path=fullfile(basedir, studydir,filesep, 'mean_ratings_oc.xlsx');
 
 %Ratings
 rating_pla_sess1=xlsread(xls_path,1,'B3:B21');
-rating_con_sess1=xlsread(xls_path,1,'C3:C21');
+rating_beta_sess1=xlsread(xls_path,1,'C3:C21');
 rating_pla_sess2=xlsread(xls_path,1,'F3:F21');
-rating_con_sess2=xlsread(xls_path,1,'G3:G21');
+rating_beta_sess2=xlsread(xls_path,1,'G3:G21');
 
 %Quote from the original publication:
 % Subjects were investigated in two scanning sessions. The placebo- cream was applied to the right hand in one session and to the left hand in the other scanning session, with the order randomized across subjects. The non-placebo hand was treated with an ?inactive? control cream
@@ -75,16 +75,26 @@ for j= 1:nsubj
         xSpanRaw=max(SPM.xX.X)-min(SPM.xX.X);
         xLength=size(SPM.xX.X,1);
         %for each contrast
-        for i = 1:length(con_descriptors)
-            %Get filenames in a (subj,con) matrix
-            img{j,i,k}=fullfile(studydir,bingelfolders{j},sidefolders{k}, [con_imgnames{i},'.img']);
-            %Get subject and con ID in the same (subj,con) matrix format
+        for i = 1:length(beta_descriptors)
+            %Get filenames in a (subj,beta) matrix
+            img{j,i,k}=fullfile(studydir,bingelfolders{j},sidefolders{k}, [beta_imgnames{i},'.img']);
+            %Get subject and beta ID in the same (subj,beta) matrix format
             i_sub(j,i,k)=bingelfolders(j);
             nImages(j,i,k)=xLength;
-            xSpan(j,i,k)=sum(xSpanRaw(con_coding{i})); %Approximate predictor scaling 
-            conSpan(j,i,k)=sum(abs(con_coding{i})); %sum(abs(SPMcon));
+            xSpan(j,i,k)=sum(xSpanRaw(beta_coding{i})); %Approximate predictor scaling 
+            conSpan(j,i,k)=sum(abs(beta_coding{i})); %sum(abs(SPMcon));
+            switch i
+                case 1 %'cuePlacebo'
+                    nBlocks(j,i,k)=length(SPM.Sess.U(1).ons);
+                case 2 %'cueNoPlacebo'
+                    nBlocks(j,i,k)=length(SPM.Sess.U(3).ons);
+                case 3 %'painPlacebo'
+                    nBlocks(j,i,k)=length(SPM.Sess.U(2).ons);
+                case 4 %'painNoPlacebo'
+                    nBlocks(j,i,k)=length(SPM.Sess.U(4).ons);
+            end
             %Get description of conditions in a in (subj,con) matrix format
-            cond_raw(j,i,k)={con_descriptors{i}}; 
+            cond_raw(j,i,k)={beta_descriptors{i}}; 
             condSeq(j,i,k)=k; 
             % Assign "placebo condition" according to experimental condition
             % 0= Any Control 1 = Any Placebo  2 = Other
@@ -103,17 +113,18 @@ for j= 1:nsubj
             if pla(j,i,k)==1 && condSeq(j,i,k)==1 
                 rating(j,i,k)=rating_pla_sess1(j); %select rating
             elseif pla(j,i,k)==0 && condSeq(j,i,k)==1
-                rating(j,i,k)=rating_con_sess1(j);
+                rating(j,i,k)=rating_beta_sess1(j);
             elseif pla(j,i,k)==1 && condSeq(j,i,k)==2
                 rating(j,i,k)=rating_pla_sess2(j);
             elseif pla(j,i,k)==0 && condSeq(j,i,k)==2
-                rating(j,i,k)=rating_con_sess2(j);
+                rating(j,i,k)=rating_beta_sess2(j);
             else
                 rating(j,i,k)=NaN;
             end
         end
     end
 end
+
 
 img=vertcat(img(:));
 sub=vertcat(i_sub(:));
@@ -123,6 +134,7 @@ conSpan=vertcat(conSpan(:));
 cond=vertcat(cond(:));
 condSeq=vertcat(condSeq(:));
 nImages=vertcat(nImages(:));
+nBlocks=vertcat(nBlocks(:));
 pla=vertcat(pla(:));
 rating=vertcat(rating(:));
 
@@ -141,9 +153,15 @@ rating101(rating101<0)=0;
 % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
 pain=~cellfun(@isempty,regexpi(cond,'pain','match'));  
 %% Collect all Variables in Table
-
+% If the current table already exists only replace fields (so that NPS values etc. do not have to be re-calculated)
+outpath=fullfile(basedir,'Bingel_et_al_2006.mat')
+if exist(outpath)==2
+    load(outpath);
+else
+    bingel06=table(img);
+end
 % Create Study-Specific table
-bingel06=table(img);
+bingel06.img=img;
 bingel06.imgType=repmat({'fMRI'},size(bingel06.img));
 bingel06.studyType=repmat({'within'},size(bingel06.img));
 bingel06.studyID=repmat({'bingel'},size(bingel06.img));
@@ -171,14 +189,15 @@ bingel06.tr           =ones(size(bingel06.img)).*2600;
 bingel06.te           =ones(size(bingel06.img)).*40;
 bingel06.voxelVolAcq  =ones(size(bingel06.img)).*((210/64)*(210/64)*(3+1));
 bingel06.voxelVolMat  =ones(size(bingel06.img)).*(3*3*3);
-bingel06.meanBlockDur =zeros(size(bingel06.cond)); % All modeled as events
+bingel06.imgsPerBlock =zeros(size(bingel06.cond)); % All modeled as events
+bingel06.nBlocks      =nBlocks; % According to SPM
 bingel06.nImages      =nImages; % Images per Participant AND SIDE!!! number of images/participant is 488*2=976
 bingel06.xSpan        =xSpan;
 bingel06.conSpan      =conSpan; %con images used
 bingel06(cellfun(@isempty,bingel06.img),:)=[]; % Delete missing sessions
 bingel06.fsl          =zeros(size(bingel06.cond)); %analysis with fsl, rather than SPM
 %% Save
-outpath=fullfile(basedir,'Bingel_et_al_2006.mat')
 save(outpath,'bingel06')
+end
 
 end

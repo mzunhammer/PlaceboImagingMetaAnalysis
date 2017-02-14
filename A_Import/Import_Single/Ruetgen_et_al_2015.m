@@ -1,5 +1,7 @@
 function Ruetgen_et_al_2015
 
+HIER WEITER
+
 %% Set working environment
 clear
 basedir = '/Users/matthiaszunhammer/Dropbox/boulder_essen/Datasets/';
@@ -67,7 +69,13 @@ rating101=rating*(100/6); % SEVEN POINT RATING SCALE WITH MAX 6!!! >> Scale to 1
 
 
 % Create Study-Specific table
-ruetgen=table(img);
+outpath=fullfile(basedir,'Ruetgen_et_al_2015.mat');
+if exist(outpath)==2
+    load(outpath);
+else
+    ruetgen=table(img);
+end
+ruetgen.img=img;
 ruetgen.imgType=repmat({'fMRI'},size(ruetgen.img));
 ruetgen.studyType=repmat({'between'},size(ruetgen.img));
 ruetgen.studyID=repmat({'ruetgen'},size(ruetgen.img));
@@ -95,7 +103,8 @@ ruetgen.tr           =ones(size(ruetgen.img)).*1800;
 ruetgen.te           =ones(size(ruetgen.img)).*33;
 ruetgen.voxelVolAcq  =ones(size(ruetgen.img)).*((192/128) *(192/128) *2);
 ruetgen.voxelVolMat  =ones(size(ruetgen.img)).*(2*2*2);
-ruetgen.meanBlockDur =blockLength; %According to SPMs
+ruetgen.imgsPerBlock =blockLength; %According to SPMs
+ruetgen.nBlocks      =imgsPerBlock; % According to SPM
 ruetgen.nImages      =nImages; % Images per Participant
 ruetgen.xSpan        =xSpan;
 ruetgen.conSpan      =ones(size(ruetgen.cond)).*1;
@@ -103,7 +112,6 @@ ruetgen.fsl          =zeros(size(ruetgen.cond)); %analysis with fsl, rather than
 
 
 %% Save
-outpath=fullfile(basedir,'Ruetgen_et_al_2015.mat')
 save(outpath,'ruetgen')
 
 end

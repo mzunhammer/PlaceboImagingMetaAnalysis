@@ -65,6 +65,16 @@ pla= [zeros(size(img_pain_control_hp_pre));... % Importantly, the pre-treatment 
       zeros(size(img_pain_control_lp_post));...
       ones(size(img_pain_placebo_lp_post));...
       zeros(size(img_painHiLo))] ;             % These are the images for all high vs all low contrasts
+
+nBlocks= [ones(size(img_pain_control_hp_pre))*6*4;... % As far as I understand the paper there were 6 high and 6 low pain stimuli at each "Random Sequence" site >>
+          ones(size(img_pain_placebo_hp_pre))*6*4;...
+          ones(size(img_pain_control_lp_pre))*6*4;...
+          ones(size(img_pain_placebo_lp_pre))*6*4;...
+          ones(size(img_pain_control_hp_post))*6*4;...
+          ones(size(img_pain_placebo_hp_post))*6*4;...
+          ones(size(img_pain_control_lp_post))*6*4;...
+          ones(size(img_pain_placebo_lp_post))*6*4;...
+          ones(size(img_painHiLo))*6*4*2] ;   % All pre- high vs low stimuli (high & low)
   
 % Assign "pain condition" to beta image
 % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
@@ -96,24 +106,20 @@ rating=[xlsread(xls_path,1,'H3:H12');...
         xlsread(xls_path,1,'I3:I12');...
         xlsread(xls_path,1,'M3:M12')];
 
-%Stimulus intensities 
-stimInt=NaN(size(img)); %
-
-male=repmat(xlsread(xls_path,1,'B3:B12'),9,1);
-age=repmat(xlsread(xls_path,1,'C3:C12'),9,1);
-plaFirst=ones(size(img))*0.5;    % The pre- sentation of these four random sequences alternated between the radial and ulnar sides of the medial surface of the forearm, it is unknown whether placebo and control were always tested in the same sequence or if sequences were randomised. 
-blockLength=ones(size(img))*5; % stimulus length from paper, no SPM or other source available.
-xSpan =ones(size(img));       % currently unknown(?)   
-conSpan =ones(size(img)); % currently unknown(?)
-
 % Create Study-Specific table
-kong06=table(img);
+outpath=fullfile(basedir,'Kong_et_al_2006.mat');
+if exist(outpath)==2
+    load(outpath);
+else
+    kong06=table(img);
+end
+kong06.img=img;
 kong06.imgType=repmat({'fMRI'},size(kong06.img));
 kong06.studyType=repmat({'within'},size(kong06.img));
 kong06.studyID=repmat({'kong06'},size(kong06.img));
 kong06.subID=sub;
-kong06.male=male;
-kong06.age=age;
+kong06.male=repmat(xlsread(xls_path,1,'B3:B12'),9,1);
+kong06.age=repmat(xlsread(xls_path,1,'C3:C12'),9,1);
 kong06.healthy=ones(size(kong06.img));
 kong06.pla=pla;
 kong06.pain=pain;
@@ -125,24 +131,24 @@ kong06.stimloc=repmat({'R forearm (v)'},size(kong06.img));
 kong06.stimside=repmat({'R'},size(kong06.img));
 kong06.plaForm=repmat({'Acupuncture'},size(kong06.img));
 kong06.plaInduct=repmat({'Suggestions + Conditioning'},size(kong06.img));
-kong06.plaFirst=plaFirst;
+kong06.plaFirst=ones(size(img))*0.5; % The pre- sentation of these four random sequences alternated between the radial and ulnar sides of the medial surface of the forearm, it is unknown whether placebo and control were always tested in the same sequence or if sequences were randomised.
 kong06.condSeq=ones(size(kong06.img))*2; %All areas were already stimulated before acupuncture. It is not mentioned whether Placebo and Control regions were tested in a particular or random sequence. 
 kong06.rating=rating;
 kong06.rating101=(rating)*100/20; % 20-pt Graceley sensory and affective box ratings were used. Could not find in the references provided which regions on this sensory scale are noxious and which non-noxious...
-kong06.stimInt=stimInt;       
+kong06.stimInt=NaN(size(img));       
 kong06.fieldStrength=ones(size(kong06.img)).*3;
 kong06.tr           =ones(size(kong06.img)).*2000;
 kong06.te           =ones(size(kong06.img)).*40;
 kong06.voxelVolAcq  =ones(size(kong06.img)).*(3.13*3.13*(4+1));
 kong06.voxelVolMat  =ones(size(kong06.img)).*(2*2*2);
-kong06.meanBlockDur =blockLength;
+kong06.imgsPerBlock =ones(size(img))*5; % stimulus length from paper 10s / 2 s TR... no SPM or other source available;
+kong06.nBlocks      =nBlocks; % stimulus length from paper 10s / 2 s TR... no SPM or other source available;
 kong06.nImages      =NaN(size(kong06.img)); % Images per Participant currently unknown
-kong06.xSpan        =xSpan;
-kong06.conSpan      =conSpan;
+kong06.xSpan        =NaN(size(img));       % currently unknown(?)   
+kong06.conSpan      =NaN(size(img));       % currently unknown(?) 
 kong06.fsl          =zeros(size(kong06.cond)); %analysis with fsl, rather than SPM
 
 %% Save
-outpath=fullfile(basedir,'Kong_et_al_2006.mat')
 save(outpath,'kong06')
 
 end

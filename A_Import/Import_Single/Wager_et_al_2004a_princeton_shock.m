@@ -102,7 +102,14 @@ conSpan(~cellfun(@isempty, (regexp(img,'0005.img'))),1) =2; % Differential Contr
 conSpan(~cellfun(@isempty, (regexp(img,'0006.img'))),1) =4; % Differential Contrast from betas 2  7 12  17 and 3  8 13 18 -> Contrast weigths add to 0, positive weights add to 4
 
 % Create Study-Specific table
-wager_princeton=table(img);
+outpath=fullfile(basedir,'Wager_at_al_2004a_princeton_shock.mat');
+if exist(outpath)==2
+    load(outpath);
+else
+    wager_princeton=table(img);
+end
+
+wager_princeton.img=img;
 wager_princeton.imgType=repmat({'fMRI'},size(wager_princeton.img));
 wager_princeton.studyType=repmat({'within'},size(wager_princeton.img));
 wager_princeton.studyID=repmat({'wager04a_princeton'},size(wager_princeton.img));
@@ -130,14 +137,14 @@ wager_princeton.tr           =ones(size(wager_princeton.img)).*1800;
 wager_princeton.te           =ones(size(wager_princeton.img)).*22;
 wager_princeton.voxelVolAcq  =ones(size(cond)).*((192/64) *(192/64) *(2.5+1.5));
 wager_princeton.voxelVolMat  =ones(size(cond)).*(2*2*2);
-wager_princeton.meanBlockDur =ones(size(cond))*6; % According to paper
+wager_princeton.imgsPerBlock =ones(size(cond))*6; % According to paper
+wager_princeton.nBlocks      =imgsPerBlock; % According to SPM
 wager_princeton.nImages      =nImages; % Images per Participant
 wager_princeton.xSpan        =xSpan;
 wager_princeton.conSpan      =ones(size(wager_princeton.cond)).*1;
 wager_princeton.fsl          =zeros(size(wager_princeton.cond)); %analysis with fsl, rather than SPM
 
 %% Save
-outpath=fullfile(basedir,'Wager_at_al_2004a_princeton_shock.mat')
 save(outpath,'wager_princeton')
 
 end

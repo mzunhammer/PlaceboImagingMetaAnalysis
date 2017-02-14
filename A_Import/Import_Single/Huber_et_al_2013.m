@@ -102,6 +102,9 @@ pain(ismember(beta,[1 3]),1)=0;
 pain(ismember(beta,[5 7]),1)=1;
 cond=vertcat(cond(:));  
 
+imgsPerBlock(ismember(beta,[1 3]),1)=4; % 4s Anticipation according to SPM and paper
+imgsPerBlock(ismember(beta,[5 7]),1)=0; % Ecent for stimulus according to SPM and paper
+
 condSeq=ones(size(img))*3;         % Third session in row, red and green cues "pseudorandomly alternated" within run.
 plaFirst=ones(size(img))*0.5;        % Completely mixed sequence
 temp=NaN(size(img));            % Not yet available
@@ -110,7 +113,13 @@ temp=NaN(size(img));            % Not yet available
 xSpan=vertcat(xSpan(:));
 
 % Create Study-Specific table
-huber=table(img);
+outpath=fullfile(basedir,'Huber_et_al_2013.mat');
+if exist(outpath)==2
+    load(outpath);
+else
+    huber=table(img);
+end
+huber.img=img;
 huber.imgType=repmat({'fMRI'},size(huber.img));
 huber.studyType=repmat({'within'},size(huber.img));
 huber.studyID=repmat({'huber'},size(huber.img));
@@ -138,14 +147,14 @@ huber.tr           =ones(size(huber.img)).*3014;
 huber.te           =ones(size(huber.img)).*35;
 huber.voxelVolAcq  =ones(size(huber.img)).*(1.875*1.875*3.5);
 huber.voxelVolMat  =ones(size(huber.img)).*(2*2*2);
-huber.meanBlockDur =ones(size(huber.cond)).*0; % Paper and SPM agree
+huber.imgsPerBlock =imgsPerBlock; % Paper and SPM agree
+huber.nBlocks      =ones(size(huber.cond)).*6;
 huber.nImages      =nImages; % Images per Participant
 huber.xSpan        =xSpan;
 huber.conSpan      =conSpan(:);
 huber.fsl          =zeros(size(huber.cond)); %analysis with fsl, rather than SPM
 
 %% Save
-outpath=fullfile(basedir,'Huber_et_al_2013.mat')
 save(outpath,'huber')
 
 end

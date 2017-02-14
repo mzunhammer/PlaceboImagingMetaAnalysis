@@ -135,7 +135,13 @@ rating101=(rating-5)*100/5;
 rating101(rating101<0)=0;
 
 % Create Study-Specific table
-ellingsen=table(img);
+outpath=fullfile(basedir,'Ellingsen_et_al_2013.mat');
+if exist(outpath)==2
+    load(outpath);
+else
+    ellingsen=table(img);
+end
+ellingsen.img=img;
 ellingsen.imgType=repmat({'fMRI'},size(ellingsen.img));
 ellingsen.studyType=repmat({'within'},size(ellingsen.img));
 ellingsen.studyID=repmat({'ellingsen'},size(ellingsen.img));
@@ -165,14 +171,14 @@ ellingsen.tr           =ones(size(ellingsen.img)).*2000;
 ellingsen.te           =ones(size(ellingsen.img)).*30;
 ellingsen.voxelVolAcq  =ones(size(ellingsen.img)).*(3*3*3.3);
 ellingsen.voxelVolMat  =ones(size(ellingsen.img)).*(2*2*2);
-ellingsen.meanBlockDur =ones(size(ellingsen.cond)).*10; % stimulus length according to paper
+ellingsen.imgsPerBlock =ones(size(ellingsen.cond)).*5; % stimulus length (in scans) according to paper
+ellingsen.nBlocks      =ones(size(ellingsen.img)).*9; % Number of blocks per condition and session
 ellingsen.nImages      =nImages; % Images per Participant
 ellingsen.xSpan        =xSpan;
 ellingsen.conSpan      =ones(size(ellingsen.img));
 ellingsen.fsl          =ones(size(ellingsen.cond)); %analysis with fsl, rather than SPM
 
 %% Save
-outpath=fullfile(basedir,'Ellingsen_et_al_2013.mat');
 save(outpath,'ellingsen')
 
 end

@@ -74,11 +74,18 @@ pain(ismember(beta,6),1)=1;
 pain(ismember(beta,8),1)=0;
 pain(ismember(beta,9),1)=1;         
 
-%% Collect all Variables in Table
-% Create Study-Specific table
+
 theyrxls=fullfile(basedir,studydir,'Theysohn_et_al_NMO_2014 bereignigte Reihenfolge.xlsx');
 
-they=table(img);
+%% Collect all Variables in Table
+% Create Study-Specific table
+outpath=fullfile(basedir,'Theysohn_et_al_2014.mat');
+if exist(outpath)==2
+    load(outpath);
+else
+    they=table(img);
+end
+they.img=img;
 they.imgType=repmat({'fMRI'},size(they.img));
 they.studyType=repmat({'within'},size(they.img));
 they.studyID=repmat({'theysohn'},size(they.img));
@@ -112,14 +119,14 @@ they.tr           =ones(size(they.img)).*2400; %Paper and SPM match
 they.te           =ones(size(they.img)).*26;
 they.voxelVolAcq  =ones(size(they.img)).*((240/94) *(240/94) *3);
 they.voxelVolMat  =ones(size(they.img)).*(2*2*2);
-they.meanBlockDur =ones(size(they.cond)).*16.8; % SPM and paper agree
+they.imgsPerBlock =ones(size(they.cond)).*16.8; % SPM and paper agree
+they.nBlocks      =imgsPerBlock; % According to SPM
 they.nImages      =nImages; % Images per Participant
 they.xSpan        =xSpan;
 they.conSpan      =ones(size(they.img)); %beta images used
 they.fsl          =zeros(size(they.cond)); %analysis with fsl, rather than SPM
 
 %% Save
-outpath=fullfile(basedir,'Theysohn_et_al_2014.mat')
 save(outpath,'they')
 
 end

@@ -66,13 +66,16 @@ pla(ismember(beta,6),1)=1;
 pain(ismember(beta,2),1)=1;
 pain(ismember(beta,6),1)=1;          
 
-
-
-%% Import behavioral from Excel-Sheet and Collect all Variables in Table
-
 elsenbrxls=fullfile(basedir,studydir,'Elsenbruch_2012_behavioral.xlsx');
+%% Import behavioral from Excel-Sheet and Collect all Variables in Table
+outpath=fullfile(basedir,'Elsenbruch_et_al_2012.mat')
+if exist(outpath)==2
+    load(outpath);
+else
+    elsenb=table(img);
+end
+elsenb.img=img;
 % Create Study-Specific table
-elsenb=table(img);
 elsenb.imgType=repmat({'fMRI'},size(elsenb.img));
 elsenb.studyType=repmat({'within'},size(elsenb.img));
 elsenb.studyID=repmat({'elsenbruch'},size(elsenb.img));
@@ -111,14 +114,14 @@ elsenb.tr           =ones(size(elsenb.img)).*3100;
 elsenb.te           =ones(size(elsenb.img)).*50;
 elsenb.voxelVolAcq  =ones(size(elsenb.img)).*((240/64) *(240/64) *3.3);
 elsenb.voxelVolMat  =ones(size(elsenb.img)).*(2*2*2);
-elsenb.meanBlockDur =ones(size(elsenb.cond)).*31; % SPM and paper agree
+elsenb.imgsPerBlock =ones(size(elsenb.cond)).*10; % SPM and paper agree
+elsenb.nBlocks      =ones(size(elsenb.img)).*8; % Number of blocks per condition and session
 elsenb.nImages      =nImages; % Images per Participant
 elsenb.xSpan        =xSpan;
 elsenb.conSpan      =ones(size(elsenb.img)); %beta images used
 elsenb.fsl          =zeros(size(elsenb.cond)); %analysis with fsl, rather than SPM
 
 %% Save
-outpath=fullfile(basedir,'Elsenbruch_et_al_2012.mat')
 save(outpath,'elsenb')
 
 end

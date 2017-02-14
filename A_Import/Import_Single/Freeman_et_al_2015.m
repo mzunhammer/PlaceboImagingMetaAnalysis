@@ -42,7 +42,13 @@ cond=[repmat({'pain_post_control_high_pain'},size(img_pain_control));...
 xls_path=fullfile(basedir, studydir, 'Behav-kong-neuroimage2015-withGender.xlsx');
 
 % Create Study-Specific table
-freeman=table(img);
+outpath=fullfile(basedir,'Freeman_et_al_2015.mat');
+if exist(outpath)==2
+    load(outpath);
+else
+    freeman=table(img);
+end
+freeman.img=img;
 freeman.imgType=repmat({'fMRI'},size(freeman.img));
 freeman.studyType=repmat({'within'},size(freeman.img));
 freeman.studyID=repmat({'freeman'},size(freeman.img));
@@ -84,7 +90,11 @@ freeman.tr           =ones(size(freeman.img)).*2000;
 freeman.te           =ones(size(freeman.img)).*40;
 freeman.voxelVolAcq  =ones(size(freeman.img)).*(3.13*3.13*(4+1));
 freeman.voxelVolMat  =ones(size(freeman.img)).*(2*2*2);
-freeman.meanBlockDur =ones(size(img))*7; % stimulus length from paper, no SPM or other source available.;
+freeman.imgsPerBlock =ones(size(img))*6; % stimulus length from paper (12-second stimulu / 2 s TR), no SPM or other source available.;
+freeman.nBlocks      =[ones(size(img_pain_control))*6*2;... % according to  paper two "lidocaine" (placebo) sites were stimulated 6x each and averaged in this regressor (an additional one was presented with a lowered temperature and not part of this regressor)
+                       ones(size(img_pain_placebo))*6*3;... % according to  paper three "control" sites were stimulated 6x each and averaged in this regressor
+                       ones(size(img_painHiLo))*6*2;...         % according to  paper one "lidocaine" and one "capsaicin" site were stimulated with decreased and increased temperatures, 6x each.
+                       ones(size(img_painAllPrevsBL))*6*9]; % stimulus length from paper (12-second stimulu / 2 s TR), no SPM or other source available.;
 freeman.nImages      =NaN(size(img)); % Images per Participant
 freeman.xSpan        =ones(size(img));       % currently unknown(?)
 freeman.conSpan      =[ones(size(img_pain_control));...
@@ -92,10 +102,7 @@ freeman.conSpan      =[ones(size(img_pain_control));...
                        ones(size(img_painHiLo))*2;...
                        ones(size(img_painAllPrevsBL))*2];
 freeman.fsl          =zeros(size(freeman.cond)); %analysis with fsl, rather than SPM
-
-
 %% Save
-outpath=fullfile(basedir,'Freeman_et_al_2015.mat')
 save(outpath,'freeman')
 
 end

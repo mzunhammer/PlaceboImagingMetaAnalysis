@@ -4,23 +4,49 @@ clear
 addpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/A_Analysis_GIV_Functions/')
 load('G_dflong.mat')
 
-
-dflong=dflong(~isnan(dflong.rating),:);
+dflong=dflong(~isnan(dflong.rating101),:);
 dflong=dflong(~dflong.ex_lo_p_ratings,:);
+
+%% Pre-processing
+
+% Calculate by-study z-Scores for NPS, stimInt and rating to
+% to even out scaling differences  (mean-centered, standardized by SD)
+
+vars2zscore={'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw',...
+             'rating','stimInt'};
+studies=unique(dflong.studyID);
+for i=1:length(studies)
+    icurrstudy=strcmp(dflong.studyID,studies{i});
+    z=nanzscore(dflong{icurrstudy,vars2zscore});
+    z(isinf(z))=0;
+    z=double(z);
+    dflong(icurrstudy,strcat('z_',vars2zscore))=array2table(z);    
+end
+
+% Create a dummy-coded variable for all studies using placebo conditioning
 dflong.suggestions=~cellfun(@isempty,regexp(dflong.plaInduct,'Suggestions'));
 dflong.conditioning=~cellfun(@isempty,regexp(dflong.plaInduct,'Conditioning'));
 
-
-% RESCALE FSL-NPS-values since these are multiplied by 10000 in grand mean
-% scaling (SPM:100)
-dflong.fsl=zeros(size(dflong.subID));
-dflong.fsl(strcmp(dflong.studyID,'ellingsen'))=1;
-dflong.fsl(strcmp(dflong.studyID,'choi'))=1;
-dflong.NPSraw(dflong.fsl==1)=dflong.NPSraw(dflong.fsl==1)./100;
-
+% Create a dummy-coded variable for placebo type (only placebo-types used in more than 1 study are included)
 rareplas=strcmp(dflong.plaForm,'Nasal spray')|strcmp(dflong.plaForm,'TENS')|strcmp(dflong.plaForm,'Pill')
 dflong.plaForm_red=dflong.plaForm;
 dflong.plaForm_red(rareplas)={'other'};
+
+% Reduce imaging session numbers to 1 vs >1 
+dflong.condSeq12=dflong.condSeq-1;
+dflong.condSeq12(dflong.condSeq12>0)=1;
+
+% Reduce stimside to left, right ,both/neither
+dflong.stimsideLR=dflong.stimside
+dflong.stimsideLR(~(strcmp(dflong.stimside,'L')|strcmp(dflong.stimside,'R')))={'both_or_midline'};
+
+% Reduce loc to upper-extremty (arm, hand) vs rest
+dflong.stimlocUpperEx=~cellfun(@isempty,regexp(dflong.stimloc,'arm'));
+
+% Center, standardize (across whole sample) to obtain standardized results
+% and to avoid non-convergence
+dflong.age=nanzscore(dflong.age);
+
 %% 1) Mixed model analysis of NPS raw values. Reasons for scaling differences
 
 % Random intercepts for subjects nested within studies

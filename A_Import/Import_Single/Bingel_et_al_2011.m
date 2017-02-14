@@ -78,9 +78,12 @@ temps(~cellfun(@isempty, regexpi(cond','pain_remi_neg_exp')))=temps_bl;
 temps(~cellfun(@isempty, regexpi(cond','pain_remi_no_exp')))=temps_bl;
 temps(~cellfun(@isempty, regexpi(cond','pain_remi_pos_exp')))=temps_bl;
 
-%Add imaging parameters
-blockLength(~cellfun(@isempty,regexp(beta_img,'ant_')),1)=4.8;
-blockLength(~cellfun(@isempty,regexp(beta_img,'pain_')),1)=6;
+%Add imaging parameters (all SPMs used the same number and length of blocks)
+imgsPerBlock(~cellfun(@isempty,regexp(beta_img,'ant_')),1)=1.6;
+imgsPerBlock(~cellfun(@isempty,regexp(beta_img,'pain_')),1)=2;
+nBlocks(~cellfun(@isempty,regexp(beta_img,'ant_')),1)=10;
+nBlocks(~cellfun(@isempty,regexp(beta_img,'pain_')),1)=10;
+
 % Load SPM's to get imaging parameter xSpan/conSpan
 bingelSPMs = {bingeldir(~cellfun(@isempty,regexp({bingeldir.name},'SPM.mat'))).name}';
 for i=1:size(bingelSPMs)
@@ -103,7 +106,13 @@ nImages=nImages(:);
 % unbearable pain
 rating101=rating;
 %% Collect all Variables in Table
-bingel11=table(img);
+outpath=fullfile(basedir,'Bingel_et_al_2011.mat');
+if exist(outpath)==2
+    load(outpath);
+else
+    bingel11=table(img);
+end
+bingel11.img=img;
 bingel11.imgType=repmat({'fMRI'},size(bingel11.img));
 bingel11.studyType=repmat({'within'},size(bingel11.img));
 bingel11.studyID=repmat({'bingel11'},size(bingel11.img));
@@ -131,7 +140,8 @@ bingel11.tr           =ones(size(cond)).*3000;
 bingel11.te           =ones(size(cond)).*30;
 bingel11.voxelVolAcq  =ones(size(cond)).*((224/64) *(224/64) *3);
 bingel11.voxelVolMat  =ones(size(cond)).*(2*2*2);
-bingel11.meanBlockDur  =blockLength;
+bingel11.imgsPerBlock =imgsPerBlock;
+bingel11.nBlocks      =nBlocks; % According to SPM
 bingel11.nImages      =nImages; % Images per Participant
 bingel11.xSpan        =xSpan;
 bingel11.xSpan(strcmp(bingel11.subID,'bingel11_14'))=NaN;
@@ -139,7 +149,6 @@ bingel11.xSpan(strcmp(bingel11.subID,'bingel11_14'))=NaN;
 bingel11.conSpan      =conSpan;
 bingel11.fsl          =zeros(size(bingel11.cond)); %analysis with fsl, rather than SPM
 %% Save
-outpath=fullfile(basedir,'Bingel_et_al_2011.mat')
 save(outpath,'bingel11')
 
-%end
+end

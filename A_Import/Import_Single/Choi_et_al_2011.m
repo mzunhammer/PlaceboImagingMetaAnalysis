@@ -109,8 +109,17 @@ for i= 1:length(beta_img)
     nImages(i,1)=size(xX,1);   
 end
 
-% Create Study-Specific table
-choi=table(img);
+
+
+%% Create Study-Specific table
+% If the current table already exists only replace fields (so that NPS values etc. do not have to be re-calculated)
+outpath=fullfile(basedir,'Choi_et_al_2013.mat');
+if exist(outpath)==2
+    load(outpath);
+else
+    choi=table(img);
+end
+choi.img=img;
 choi.imgType=repmat({'fMRI'},size(choi.img));
 choi.studyType=repmat({'within'},size(choi.img));
 choi.studyID=repmat({'choi'},size(choi.img));
@@ -138,14 +147,14 @@ choi.tr           =ones(size(choi.img)).*3000;
 choi.te           =ones(size(choi.img)).*30;
 choi.voxelVolAcq  =ones(size(choi.img)).*(3.75*3.75*4);
 choi.voxelVolMat  =ones(size(choi.img)).*(2*2*2);
-choi.meanBlockDur =ones(size(choi.cond)).*15; % according to paper
-choi.meanBlockDur(anti) =ones(size(choi.cond(anti))).*9; % anticipation phase was shorter
+choi.imgsPerBlock =ones(size(choi.cond)).*5; % 15 s / 3 s TR = 5 ... according to paper
+choi.imgsPerBlock(anti) =ones(size(choi.cond(anti))).*3; % 9 s / 3 s TR = 5 ... according to paper
+choi.nBlocks      =ones(size(choi.cond)).*5; % According to paper there were 5 stimulus repetitions for each condition.
 choi.nImages      =nImages; % Images per Participant: Note that separae GLMs were performed for the different experimental placebo conditions AND that exp 2 seems not to be included in the original publications. Therefore the number of images/participant was 300*2=600
 choi.xSpan        =xSpan;
 choi.conSpan      =ones(size(choi.img));
 choi.fsl          =ones(size(choi.cond)); %analysis with fsl, rather than SPM
 %% Save
-outpath=fullfile(basedir,'Choi_et_al_2013.mat');
 save(outpath,'choi')
 
 end

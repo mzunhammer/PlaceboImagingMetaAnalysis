@@ -67,8 +67,12 @@ for j= nsubj
     
     if ~isempty(regexp(con_descriptors{i},'anti_'))
         temp(j,i)=35;
+        imgsPerBlock(j,i)=1.937984496124031; % Duration from SPM.Sess.U(1).dur (in scans)
+        nBlocks(j,i)=15;
     elseif ~isempty(regexp(con_descriptors{i},'pain_')) 
         temp(j,i)=meta.temperature(j);
+        imgsPerBlock(j,i)=3.875968992248062; % Duration from SPM.Sess.U(1).dur (in scans)
+        nBlocks(j,i)=15;
     end
     
     end
@@ -97,11 +101,19 @@ temp=vertcat(temp(:));
 %xSpan (from max(SPM.xX.X)-min(SPM.xX.X)) 
 xSpan=vertcat(xSpan(:));
 nImages=vertcat(nImages(:));
+imgsPerBlock=vertcat(imgsPerBlock(:));
+nBlocks=vertcat(nBlocks(:));
 %conSpan for Cons only
 conSpan      =ones(size(cond)).*1;
 
 % Create Study-Specific table
-geuter=table(img);
+outpath=fullfile(basedir,'Geuter_et_al_2013.mat')
+if exist(outpath)==2
+    load(outpath);
+else
+    geuter=table(img);
+end
+geuter.img=img;
 geuter.imgType=repmat({'fMRI'},size(geuter.img));
 geuter.studyType=repmat({'within'},size(geuter.img));
 geuter.studyID=repmat({'geuter'},size(geuter.img));
@@ -129,14 +141,14 @@ geuter.tr           =ones(size(geuter.img)).*2580;
 geuter.te           =ones(size(geuter.img)).*26;
 geuter.voxelVolAcq  =ones(size(geuter.img)).*(2 * 2 *(2+1));
 geuter.voxelVolMat  =ones(size(geuter.img)).*(2*2*2);
-geuter.meanBlockDur =ones(size(geuter.cond)).*10; % Paper and SPM agree
+geuter.imgsPerBlock =imgsPerBlock; % Paper and SPM agree
+geuter.nBlocks      =nBlocks; % According to SPM
 geuter.nImages      =nImages; % Images per Participant
 geuter.xSpan        =xSpan;
 geuter.conSpan      =conSpan;
 geuter.fsl          =zeros(size(geuter.cond)); %analysis with fsl, rather than SPM
 
 %% Save
-outpath=fullfile(basedir,'Geuter_et_al_2013.mat')
 save(outpath,'geuter')
 
 end

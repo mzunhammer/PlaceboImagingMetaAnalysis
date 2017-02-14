@@ -58,7 +58,15 @@ end
         rating(strcmp(cond,'placebo_pain'))=EXPT.behavior; % ATTENTION: Unfortunately for images placebo & control are available as separate conditions, while for behavior only the contrast control-placebo is available...
        
 % Create Study-Specific table
-wager_michigan=table(img);
+
+outpath=fullfile(basedir,'Wager_et_al_2004b_michigan_heat.mat');
+if exist(outpath)==2
+    load(outpath);
+else
+    wager_michigan=table(img);
+end
+
+wager_michigan.img=img;
 wager_michigan.imgType=repmat({'fMRI'},size(wager_michigan.img));
 wager_michigan.studyType=repmat({'within'},size(wager_michigan.img));
 wager_michigan.studyID=repmat({'wager04b_michigan'},size(wager_michigan.img));
@@ -87,14 +95,14 @@ wager_michigan.tr           =ones(size(wager_michigan.img)).*1500;
 wager_michigan.te           =ones(size(wager_michigan.img)).*20;
 wager_michigan.voxelVolAcq  =ones(size(wager_michigan.img)).*(3.75*3.75*5);
 wager_michigan.voxelVolMat  =ones(size(wager_michigan.img)).*(3.75*3.75*5);
-wager_michigan.meanBlockDur =ones(size(wager_michigan.img))*20; % According to paper
+wager_michigan.imgsPerBlock =ones(size(wager_michigan.img))*20; % According to paper
+wager_michigan.nBlocks      =imgsPerBlock; % According to SPM
 wager_michigan.nImages      =vertcat(nImages(:)); % Images per Participant
 wager_michigan.xSpan        =xSpan;
 wager_michigan.conSpan      =ones(size(wager_michigan.cond));
 wager_michigan.fsl          =zeros(size(wager_michigan.cond)); %analysis with fsl, rather than SPM
 
 %% Save
-outpath=fullfile(basedir,'Wager_et_al_2004b_michigan_heat.mat')
 save(outpath,'wager_michigan')
 
 end

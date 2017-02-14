@@ -58,9 +58,9 @@ studyIDtexts={
 %% VARIABLES TO SELECT
 varselect={'studyID','subID','cond','stimtype','stimloc','stimside','plaForm','plaInduct',...
            'pla','pain',...
-           'male','age','plaFirst','condSeq','stimInt','rating',...
+           'male','age','plaFirst','condSeq','stimInt','rating','rating101',...
            'fieldStrength','tr','te','voxelVolAcq','voxelVolMat','meanBlockDur','nImages','xSpan','conSpan'...
-           'NPSraw','MHEraw','PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw',...
+           'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw',...
            'ex_lo_p_ratings','ex_img_artifact','ex_all'};
 %% Get data
 %'Atlas'
@@ -82,10 +82,10 @@ paindf{i}=[df((strcmp(df.studyID,'atlas')&strcmp(df.cond,'StimHiPain_Open_Stimul
 % stimulation, remifentanil and expectation period and have to be re-combined by summing them up
 vars2addup={'rating'
 'NPSraw'
-'MHEraw'
-'PPR_pain_raw'
-'PPR_anti_raw'
-'brainPPR_anti_raw'};
+'MHEraw'}
+%'PPR_pain_raw'
+%'PPR_anti_raw'
+%'brainPPR_anti_raw'};
 pladata=df{(strcmp(df.studyID,'atlas')&~cellfun(@isempty,regexp(df.cond,'StimHiPain_Open_Stimulation'))),vars2addup}+...
         df{(strcmp(df.studyID,'atlas')&~cellfun(@isempty,regexp(df.cond,'StimHiPain_Open_RemiConz'))),vars2addup}+...
         df{(strcmp(df.studyID,'atlas')&~cellfun(@isempty,regexp(df.cond,'StimHiPain_Open_ExpectationPeriod'))),vars2addup};
@@ -93,7 +93,7 @@ condata=df{(strcmp(df.studyID,'atlas')&~cellfun(@isempty,regexp(df.cond,'StimHiP
         df{(strcmp(df.studyID,'atlas')&~cellfun(@isempty,regexp(df.cond,'StimHiPain_Hidden_RemiConz'))),vars2addup}+...
         df{(strcmp(df.studyID,'atlas')&~cellfun(@isempty,regexp(df.cond,'StimHiPain_Hidden_ExpectationPeriod'))),vars2addup};
 % Replace original variables with summed up variables
-paindf{i}{:,vars2addup}=[pladata;condata]
+paindf{i}{:,vars2addup}=[pladata;condata];
 %    
 vars2average={'xSpan'};
 pladata=mean(...
@@ -112,8 +112,7 @@ condata=mean(...
 paindf{i}{:,vars2average}=[pladata;condata];
 
 % Change condition label accordingly
-paindf{i}.cond=strcat(paindf{i}.cond, '&expect&remi')
-    
+paindf{i}.cond=strcat(paindf{i}.cond, '&expect&remi');
 %'bingel06'
 % >> Testing was performed within participants on left and right
 %side... summarizine data across hemispheres for NPS and ratings first.
@@ -126,12 +125,12 @@ paindf{i}=[df((strcmp(df.studyID,'bingel')&strcmp(df.cond,'painNoPlacebo_R')),va
 % These variables are available for right and left side and have to be averaged of
 vars2avg={ 'condSeq','stimInt','rating',...
            'meanBlockDur','nImages','xSpan',...
-           'NPSraw','MHEraw','PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw',...
+           'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw',...
            };
 % Get all Right and Left pain conditions sorted by participant and placebo
 % condition
-R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'pain.+_R'))),[varselect]);
-L=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'pain.+_L'))),[varselect]);
+R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'pain.+_R'))),varselect);
+L=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'pain.+_L'))),varselect);
 R=sortrows(R,{'subID','pla'});
 L=sortrows(L,{'subID','pla'});
 % Make sure basic df is sorted by subID and pla, too
@@ -163,7 +162,7 @@ paindf{i}=[df((strcmp(df.studyID,'choi')&strcmp(df.cond,'Exp1_control_pain_beta3
 % These variables are available for right and left side and have to be averaged of
 vars2avg={ 'condSeq','stimInt','rating',...
            'meanBlockDur','nImages','xSpan',...
-           'NPSraw','MHEraw','PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw',...
+           'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw',...
            };      
 % Average variables
 avgpladata=mean(cat(3,df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp1_100potent_pain_beta3'))),vars2avg},...
@@ -182,7 +181,7 @@ paindf{i}=[df((strcmp(df.studyID,'eippert')&strcmp(df.cond,'pain late: control_s
           df((strcmp(df.studyID,'eippert')&strcmp(df.cond,'pain late: placebo_saline')),varselect);
           df((strcmp(df.studyID,'eippert')&strcmp(df.cond,'pain late: placebo_naloxone')),varselect)];
 % These variables are available for right and left side and have to be averaged of
-vars2avg={ 'NPSraw','MHEraw','PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw','xSpan',....
+vars2avg={ 'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw','xSpan',....
            };      
 % Average variables      
 earlynlate=mean(cat(3,[df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: control_saline'))),vars2avg};...
@@ -192,7 +191,7 @@ earlynlate=mean(cat(3,[df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp
                        [df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: control_saline'))),vars2avg};...
                        df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: control_naloxone'))),vars2avg}
                        df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: placebo_saline'))),vars2avg};...
-                       df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: placebo_naloxone'))),vars2avg}]),3)
+                       df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: placebo_naloxone'))),vars2avg}]),3);
 % Replace placebo condition in df
 paindf{i}{:,vars2avg}=earlynlate;
 paindf{i}.cond=regexprep(paindf{i}.cond,'pain(.*): ','pain: ');
@@ -221,7 +220,7 @@ i=find(strcmp(studies,'geuter'));
 paindf{i}=[df((strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_control_strong')),varselect);
           df((strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_placebo_strong')),varselect)];
 % These variables are available for right and left side and have to be averaged of
-vars2avg={'NPSraw','MHEraw','PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw','xSpan',....
+vars2avg={'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw','xSpan',....
            };      
 % Average variables      
 combined=[mean(cat(3,df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'early_pain_control_weak'))),vars2avg},...
@@ -273,7 +272,7 @@ i=find(strcmp(studies,'schenk'));
 paindf{i}=[df((strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_control')),varselect);
           df((strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_placebo')),varselect)];
 % These variables are available for right and left side and have to be averaged of
-vars2avg={'NPSraw','MHEraw','PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw','xSpan',....
+vars2avg={'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw','xSpan',....
            };      
 % Average variables      
 combined=[mean(cat(3,df{(strcmp(df.studyID,'schenk')&~cellfun(@isempty,regexp(df.cond,'pain_nolidocaine_control'))),vars2avg},...
@@ -312,7 +311,7 @@ paindf{i}=[df((strcmp(df.studyID,'wrobel')&strcmp(df.cond,'late_pain_control_sal
           df((strcmp(df.studyID,'wrobel')&strcmp(df.cond,'late_pain_placebo_saline')),varselect);
           df((strcmp(df.studyID,'wrobel')&strcmp(df.cond,'late_pain_placebo_haldol')),varselect)];
 % These variables are available for right and left side and have to be averaged of
-vars2avg={ 'NPSraw','MHEraw','PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw','xSpan',....
+vars2avg={ 'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw','xSpan',....
            };      
 % Average variables      
 earlynlate=mean(cat(3,[df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain_control_saline'))),vars2avg};...
@@ -322,7 +321,7 @@ earlynlate=mean(cat(3,[df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(
                        [df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain_control_saline'))),vars2avg};...
                        df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain_control_haldol'))),vars2avg}
                        df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain_placebo_saline'))),vars2avg};...
-                       df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain_placebo_haldol'))),vars2avg}]),3)
+                       df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain_placebo_haldol'))),vars2avg}]),3);
 % Replace placebo condition in df
 paindf{i}{:,vars2avg}=earlynlate;
 paindf{i}.cond=regexprep(paindf{i}.cond,'late_pain_','pain_');
@@ -339,19 +338,5 @@ dflong=vertcat(paindf{:});
 
 % Only way that matlab lets me change precision...
 dflong.rating=double(dflong.rating);
-         %% Calculate by-study z-Scores for NPS and Rating-variables to
-% to even differences in variable scaling (mean-centered, standardized by SD)
-
-vars2zscore={'NPSraw','MHEraw','PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw',...
-             'rating','stimInt','age'};
-studies=unique(dflong.studyID);
-for i=1:length(studies)
-    icurrstudy=strcmp(dflong.studyID,studies{i});
-    z=nanzscore(dflong{icurrstudy,vars2zscore});
-    z(isinf(z))=0;
-    z=double(z);
-    dflong(icurrstudy,strcat('z_',vars2zscore))=array2table(z);    
-end
-
 %% Add study/variable descriptions needed for meta-analysis
 save('G_dflong.mat','dflong');

@@ -46,7 +46,8 @@ xSpan=NaN(length(subdir),length(beta_ID));
 nImages=NaN(length(subdir),length(beta_ID));
 cond=cell(length(subdir),length(beta_ID));
 temp=NaN(length(subdir),length(beta_ID));
-meanBlockDur=NaN(length(subdir),length(beta_ID));
+imgsPerBlock=NaN(length(subdir),length(beta_ID));
+nBlocks=NaN(length(subdir),length(beta_ID));
 openFirst=NaN(length(subdir),length(beta_ID));
 
 % Extract parametric-covaritates to compute correct ratings after loop
@@ -74,13 +75,16 @@ for j=1:length(subdir)
         temp(j,i)= EXPT.cov_uncentered(j,3);
         
         if ~cellfun(@isempty, regexp(cond(j,i),'Stim')) %Determine mean block duration on by-participant level. There seems to be some variation of duration of anticipation peroids within subjects!
-            meanBlockDur(j,i)=mean(mean([SPM.Sess.U(1:4).dur])*2); %
+            imgsPerBlock(j,i)=mean(mean([SPM.Sess.U(1:4).dur])); %
+            nBlocks(j,i)=length(vertcat(SPM.Sess.U(1:4).ons))/4;
         elseif ~cellfun(@isempty, regexp(cond(j,i),'RatingPeriod'))
-            meanBlockDur(j,i)=mean(mean([SPM.Sess.U(5).dur])*2); %
+            imgsPerBlock(j,i)=mean(mean([SPM.Sess.U(5).dur])); %
+            nBlocks(j,i)=length(vertcat(SPM.Sess.U(5).ons));
         elseif ~cellfun(@isempty, regexp(cond(j,i),'Antic'))
-            meanBlockDur(j,i)=mean(mean([SPM.Sess.U(6:9).dur])*2); %
+            imgsPerBlock(j,i)=mean(mean([SPM.Sess.U(6:9).dur])); %
+            nBlocks(j,i)=length(vertcat(SPM.Sess.U(6:9).ons));
         else
-            meanBlockDur(j,i)=NaN;
+            imgsPerBlock(j,i)=NaN;
         end
         
         %"Open" corresponds to "placebo" in this study.
@@ -183,7 +187,8 @@ rating101(isnan(rating))=NaN; %Cannot do the same as above, as there are actual 
         xSpan    = vertcat(xSpan(:));
         cond     = vertcat(cond(:));
         temp     = vertcat(temp(:));
-        meanBlockDur = vertcat(meanBlockDur(:));
+        imgsPerBlock = vertcat(imgsPerBlock(:));
+        nBlocks = vertcat(nBlocks(:));
         openFirst= vertcat(openFirst(:));
         rating = vertcat(rating(:));
         rating101 = vertcat(rating101(:));
@@ -203,7 +208,13 @@ rating101(isnan(rating))=NaN; %Cannot do the same as above, as there are actual 
 
 
 % Create Study-Specific table
-atlas=table(img);
+outpath=fullfile(basedir,'Atlas_et_al_2012.mat');
+if exist(outpath)==2
+    load(outpath);
+else
+    atlas=table(img);
+end
+atlas.img=img;
 atlas.imgType=repmat({'fMRI'},size(atlas.img));
 atlas.studyType=repmat({'within'},size(atlas.img));
 atlas.studyID=repmat({'atlas'},size(atlas.img));
@@ -232,13 +243,13 @@ atlas.tr           =ones(size(atlas.img)).*2000;
 atlas.te           =ones(size(atlas.img)).*34;
 atlas.voxelVolAcq  =ones(size(atlas.img)).*(3.5*3.5*4.0);
 atlas.voxelVolMat  =ones(size(atlas.img)).*(2*2*2);
-atlas.meanBlockDur =meanBlockDur; % According to paper
+atlas.imgsPerBlock =imgsPerBlock; % According to SPM
+atlas.nBlocks      =nBlocks; % According to SPM
 atlas.nImages      =nImages; % Images per Participant
 atlas.xSpan        =xSpan;
 atlas.conSpan      =ones(size(atlas.cond));
 atlas.fsl          =zeros(size(atlas.cond)); %analysis with fsl, rather than SPM
 %% Save
-outpath=fullfile(basedir,'Atlas_et_al_2012.mat')
 save(outpath,'atlas');
 
 end

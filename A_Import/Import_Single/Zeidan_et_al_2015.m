@@ -80,7 +80,13 @@ for i= 1:length(img)
  end
 
 % Create Study-Specific table
-zeidan=table(img);
+outpath=fullfile(basedir,'Zeidan_et_al_2015.mat')
+if exist(outpath)==2
+    load(outpath);
+else
+    zeidan=table(img);
+end
+zeidan.img=img;
 zeidan.imgType=repmat({'ASL'},size(zeidan.img));
 zeidan.studyType=repmat({'within'},size(zeidan.img));
 zeidan.studyID=repmat({'zeidan'},size(zeidan.img));
@@ -110,7 +116,8 @@ zeidan.tr           =ones(size(zeidan.img)).*4;
 zeidan.te           =ones(size(zeidan.img)).*12;
 zeidan.voxelVolAcq  =ones(size(zeidan.img)).*(220/64*220/64*5+1);%22*22cm in a 64*64 grid with 5mm slice thickness +1mm gap
 zeidan.voxelVolMat  =ones(size(zeidan.img)).*(2*2*2);% Aligned to the usual 2*2*2 MNI image
-zeidan.meanBlockDur =ones(size(zeidan.cond)).*12; % stimulus length according to paper
+zeidan.imgsPerBlock =ones(size(zeidan.cond)).*12; % stimulus length according to paper
+zeidan.nBlocks      =imgsPerBlock; % According to SPM
 zeidan.nImages      =ones(size(zeidan.cond)).*8; % Images per Participant
 zeidan.xSpan        =ones(size(zeidan.img));% All X's had a maximum span of 1
 zeidan.conSpan      =[ones(size(zeidandir))*4;
@@ -119,7 +126,6 @@ zeidan.conSpan      =[ones(size(zeidandir))*4;
 zeidan.fsl          =ones(size(zeidan.cond)); %analysis with fsl, rather than SPM
 
 %% Save
-outpath=fullfile(basedir,'Zeidan_et_al_2015.mat')
 save(outpath,'zeidan')
 
 end
