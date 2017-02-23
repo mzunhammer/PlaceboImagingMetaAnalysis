@@ -28,7 +28,7 @@ addpath('./pattern_masks/')
 
 runstudies={...
 'Atlas_et_al_2012'
-%'Bingel_et_al_2006'
+'Bingel_et_al_2006'
 'Bingel_et_al_2011'
 'Choi_et_al_2013'
 'Eippert_et_al_2009'
@@ -40,7 +40,7 @@ runstudies={...
 'Kessner_et_al_201314'
 'Kong_et_al_2006'
 'Kong_et_al_2009'
-%'Lui_et_al_2010'
+'Lui_et_al_2010'
 'Ruetgen_et_al_2015'
 'Schenk_et_al_2014'
 'Theysohn_et_al_2014'

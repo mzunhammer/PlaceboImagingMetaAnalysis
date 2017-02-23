@@ -6,7 +6,7 @@ clear
 basepath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis';
 cd(basepath)
 datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Datasets';
-load(fullfile(datapath,'AllData_w_NPS_MHE.mat'))
+load(fullfile(datapath,'AllData.mat'))
 
 
 % Throw out Kessner's anticipation data, they are not on the same scale
@@ -34,7 +34,7 @@ line_width=5;
 
 %Graph each study separately
 studies=unique(df.studyID);
-for i=1:length(studies)
+for i=15%:length(studies)
     
     % Get data for current study
     curr_table=df(strcmp(df.studyID,studies(i)),:);
@@ -51,16 +51,21 @@ for i=1:length(studies)
     hold on
     
     % Calculate by-condition stats for graphing
+    X=[];
     for j=1:ncond
-    curr_data=curr_table.rating(strcmp(curr_table.cond,conditions(j)));
+    curr_data=curr_table.MHEraw(strcmp(curr_table.cond,conditions(j)));
     meanNPS=nanmean(curr_data);
     errbar=nanstd(curr_data)/sqrt(length(curr_data))*1.96;
+    
+    % Plot single data-points
+    plot(j,curr_data,'.')
     
     % Plot lines for mean and error
     line([j-line_length_means j+line_length_means],[meanNPS meanNPS],'LineWidth',line_width);
     line([j j],[meanNPS-errbar meanNPS+errbar],'LineWidth',line_width);
-    
+    %X=[X, curr_data]
     end
+    %boxplot(X)
        % Graph properties
     ax=gca;
       ax=gca;
@@ -75,7 +80,7 @@ for i=1:length(studies)
     
     % Labels
     
-        ylabel('Rating response (VAS[0-8] ± 95%CI)');
+        ylabel('NPS response (arbitrary units +- 95%CI)');
     
         yTicks = get(gca,'ytick');
         xTicks = get(gca, 'xtick');

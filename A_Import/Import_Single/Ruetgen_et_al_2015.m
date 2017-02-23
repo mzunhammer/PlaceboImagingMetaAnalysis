@@ -1,7 +1,5 @@
 function Ruetgen_et_al_2015
 
-HIER WEITER
-
 %% Set working environment
 clear
 basedir = '/Users/matthiaszunhammer/Dropbox/boulder_essen/Datasets/';
@@ -39,12 +37,17 @@ xSpanRaw=max(SPM.xX.X)-min(SPM.xX.X);
 xLength(i,:)=size(SPM.xX.X,1);
 ruetgenxSpansNoPain(i,:)=xSpanRaw(2); % Attention, alphabetic sorting puts anticipation first in image vector!
 ruetgenxSpansPain(i,:)=xSpanRaw(1); % Attention, alphabetic sorting puts anticipation first in image vector!
-ruetgenMeanBlocklengthsNoPain(i,:)=mean(SPM.Sess.U(2).dur);
-ruetgenMeanBlocklengthsPain(i,:)=mean(SPM.Sess.U(1).dur);
+ruetgenMeanimgsPerBlocksNoPain(i,:)=mean(SPM.Sess.U(2).dur)/SPM.xY.RT; % R?tgen used seconds as a unit of analysis  
+ruetgenMeanimgsPerBlocksPain(i,:)=mean(SPM.Sess.U(1).dur)/SPM.xY.RT; % R?tgen used seconds as a unit of analysis
+ruetgennBlocksNoPain(i,:)=length(SPM.Sess.U(2).dur); % R?tgen used seconds as a unit of analysis  
+ruetgennBlocksBlocksPain(i,:)=length(SPM.Sess.U(1).dur); % R?tgen used seconds as a unit of analysis
 end
 
-blockLength(pain==1,1)=ruetgenMeanBlocklengthsPain;
-blockLength(pain==0,1)=ruetgenMeanBlocklengthsNoPain;
+imgsPerBlock(pain==1,1)=ruetgenMeanimgsPerBlocksPain;
+imgsPerBlock(pain==0,1)=ruetgenMeanimgsPerBlocksNoPain;
+
+nBlocks(pain==1,1)=ruetgennBlocksBlocksPain;
+nBlocks(pain==0,1)=ruetgennBlocksNoPain;
 
 xSpan(pain==1,1)=ruetgenxSpansPain;
 xSpan(pain==0,1)=ruetgenxSpansNoPain;
@@ -103,8 +106,8 @@ ruetgen.tr           =ones(size(ruetgen.img)).*1800;
 ruetgen.te           =ones(size(ruetgen.img)).*33;
 ruetgen.voxelVolAcq  =ones(size(ruetgen.img)).*((192/128) *(192/128) *2);
 ruetgen.voxelVolMat  =ones(size(ruetgen.img)).*(2*2*2);
-ruetgen.imgsPerBlock =blockLength; %According to SPMs
-ruetgen.nBlocks      =imgsPerBlock; % According to SPM
+ruetgen.imgsPerBlock =imgsPerBlock; %According to SPMs
+ruetgen.nBlocks      =nBlocks; % According to SPM
 ruetgen.nImages      =nImages; % Images per Participant
 ruetgen.xSpan        =xSpan;
 ruetgen.conSpan      =ones(size(ruetgen.cond)).*1;

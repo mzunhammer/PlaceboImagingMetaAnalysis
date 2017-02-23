@@ -59,7 +59,7 @@ studyIDtexts={
 varselect={'studyID','subID','cond','stimtype','stimloc','stimside','plaForm','plaInduct',...
            'pla','pain',...
            'male','age','plaFirst','condSeq','stimInt','rating','rating101',...
-           'fieldStrength','tr','te','voxelVolAcq','voxelVolMat','meanBlockDur','nImages','xSpan','conSpan'...
+           'fieldStrength','tr','te','voxelVolAcq','voxelVolMat','imgsPerBlock','nBlocks','nImages','xSpan','conSpan'...
            'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw',...
            'ex_lo_p_ratings','ex_img_artifact','ex_all'};
 %% Get data
@@ -124,9 +124,10 @@ paindf{i}=[df((strcmp(df.studyID,'bingel')&strcmp(df.cond,'painNoPlacebo_R')),va
           df((strcmp(df.studyID,'bingel')&strcmp(df.cond,'painPlacebo_R')),varselect)];
 % These variables are available for right and left side and have to be averaged of
 vars2avg={ 'condSeq','stimInt','rating',...
-           'meanBlockDur','nImages','xSpan',...
+           'imgsPerBlock','nImages','xSpan',...
            'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw',...
            };
+vars2sum={'nBlocks'};
 % Get all Right and Left pain conditions sorted by participant and placebo
 % condition
 R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'pain.+_R'))),varselect);
@@ -137,6 +138,7 @@ L=sortrows(L,{'subID','pla'});
 paindf{i}=sortrows(paindf{i},{'subID','pla'});
 % Replace summarized variables
 paindf{i}{:,vars2avg}=nanmean(cat(3,R{:,vars2avg},L{:,vars2avg}),3);
+paindf{i}{:,vars2sum}=nansum(cat(3,R{:,vars2sum},L{:,vars2sum}),3);
 
 % Update Condition name and Stimside
 paindf{i}.cond=strcat(paindf{i}.cond,'&L');
@@ -161,14 +163,20 @@ paindf{i}=[df((strcmp(df.studyID,'choi')&strcmp(df.cond,'Exp1_control_pain_beta3
       
 % These variables are available for right and left side and have to be averaged of
 vars2avg={ 'condSeq','stimInt','rating',...
-           'meanBlockDur','nImages','xSpan',...
+           'imgsPerBlock','nImages','xSpan',...
            'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw',...
-           };      
+           };   
+       
+vars2sum={'nBlocks'}; %Number of blocks going into the statistic increases with averaging
+
 % Average variables
-avgpladata=mean(cat(3,df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp1_100potent_pain_beta3'))),vars2avg},...
+avgpladata=nanmean(cat(3,df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp1_100potent_pain_beta3'))),vars2avg},...
                     df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp1_1potent_pain_beta3'))),vars2avg}),3);
+sumpladata=nansum(cat(3,df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp1_100potent_pain_beta3'))),vars2sum},...
+                    df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp1_1potent_pain_beta3'))),vars2sum}),3);
 % Replace placebo condition in df
 paindf{i}{strcmp(paindf{i}.cond,'Exp1_100potent_pain_beta3'),vars2avg}=avgpladata;
+paindf{i}{strcmp(paindf{i}.cond,'Exp1_100potent_pain_beta3'),vars2sum}=sumpladata;
 
 paindf{i}.cond(strcmp(paindf{i}.cond,'Exp1_100potent_pain_beta3'))=repmat({'Exp1_100&1potent_pain'},15,1);
     
@@ -180,11 +188,12 @@ paindf{i}=[df((strcmp(df.studyID,'eippert')&strcmp(df.cond,'pain late: control_s
            df((strcmp(df.studyID,'eippert')&strcmp(df.cond,'pain late: control_naloxone')),varselect);
           df((strcmp(df.studyID,'eippert')&strcmp(df.cond,'pain late: placebo_saline')),varselect);
           df((strcmp(df.studyID,'eippert')&strcmp(df.cond,'pain late: placebo_naloxone')),varselect)];
-% These variables are available for right and left side and have to be averaged of
+% These variables are available for early and late side and have to be averaged
 vars2avg={ 'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw','xSpan',....
-           };      
+           };  
+vars2sum={'imgsPerBlock'};
 % Average variables      
-earlynlate=mean(cat(3,[df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: control_saline'))),vars2avg};...
+avg_earlynlate=mean(cat(3,[df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: control_saline'))),vars2avg};...
                        df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: control_naloxone'))),vars2avg}
                        df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: placebo_saline'))),vars2avg};...
                        df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: placebo_naloxone'))),vars2avg}],...
@@ -192,10 +201,21 @@ earlynlate=mean(cat(3,[df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp
                        df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: control_naloxone'))),vars2avg}
                        df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: placebo_saline'))),vars2avg};...
                        df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: placebo_naloxone'))),vars2avg}]),3);
+
+sum_earlynlate=sum(cat(3,[df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: control_saline'))),vars2sum};...
+                       df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: control_naloxone'))),vars2sum}
+                       df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: placebo_saline'))),vars2sum};...
+                       df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: placebo_naloxone'))),vars2sum}],...
+                       [df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: control_saline'))),vars2sum};...
+                       df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: control_naloxone'))),vars2sum}
+                       df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: placebo_saline'))),vars2sum};...
+                       df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: placebo_naloxone'))),vars2sum}]),3);                  
+                   
 % Replace placebo condition in df
-paindf{i}{:,vars2avg}=earlynlate;
+paindf{i}{:,vars2avg}=avg_earlynlate;
+paindf{i}{:,vars2sum}=sum_earlynlate;
 paindf{i}.cond=regexprep(paindf{i}.cond,'pain(.*): ','pain: ');
-paindf{i}.meanBlockDur=paindf{i}.meanBlockDur*2;
+paindf{i}.imgsPerBlock=paindf{i}.imgsPerBlock*2;
                    
 %'ellingsen'
 i=find(strcmp(studies,'ellingsen'));
@@ -221,9 +241,11 @@ paindf{i}=[df((strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_control_str
           df((strcmp(df.studyID,'geuter')&strcmp(df.cond,'late_pain_placebo_strong')),varselect)];
 % These variables are available for right and left side and have to be averaged of
 vars2avg={'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw','xSpan',....
-           };      
+           };
+vars2sum={'imgsPerBlock'};
+       
 % Average variables      
-combined=[mean(cat(3,df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'early_pain_control_weak'))),vars2avg},...
+avg_combined=[mean(cat(3,df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'early_pain_control_weak'))),vars2avg},...
                        df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'late_pain_control_weak'))),vars2avg},...
                        df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'early_pain_control_strong'))),vars2avg},...
                        df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'late_pain_control_strong'))),vars2avg}),3);
@@ -231,11 +253,20 @@ combined=[mean(cat(3,df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df
                        df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'late_pain_placebo_weak'))),vars2avg},...
                        df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'early_pain_placebo_strong'))),vars2avg},...
                        df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'late_pain_placebo_strong'))),vars2avg}),3)];
+sum_combined=[sum(cat(3,df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'early_pain_control_weak'))),vars2sum},...
+                       df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'late_pain_control_weak'))),vars2sum},...
+                       df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'early_pain_control_strong'))),vars2sum},...
+                       df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'late_pain_control_strong'))),vars2sum}),3);
+            sum(cat(3,df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'early_pain_placebo_weak'))),vars2sum},...
+                       df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'late_pain_placebo_weak'))),vars2sum},...
+                       df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'early_pain_placebo_strong'))),vars2sum},...
+                       df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'late_pain_placebo_strong'))),vars2sum}),3)];
 % Replace placebo condition in df
-paindf{i}{:,vars2avg}=combined;
+paindf{i}{:,vars2avg}=avg_combined;
+paindf{i}{:,vars2sum}=sum_combined;
 paindf{i}.cond=regexprep(paindf{i}.cond,'late_pain','pain');
 paindf{i}.cond=regexprep(paindf{i}.cond,'_strong','');
-paindf{i}.meanBlockDur=paindf{i}.meanBlockDur*2;
+paindf{i}.imgsPerBlock=paindf{i}.imgsPerBlock*2;
 
 %'kessner'
 i=find(strcmp(studies,'kessner'));
@@ -271,16 +302,22 @@ i=find(strcmp(studies,'schenk'));
 % First get pure pain effect for strong_late only to get basic data-frame
 paindf{i}=[df((strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_control')),varselect);
           df((strcmp(df.studyID,'schenk')&strcmp(df.cond,'pain_nolidocaine_placebo')),varselect)];
-% These variables are available for right and left side and have to be averaged of
+% These variables are available for lidocaine and nolidocaine and have to be averaged of
 vars2avg={'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw','xSpan',....
-           };      
-% Average variables      
-combined=[mean(cat(3,df{(strcmp(df.studyID,'schenk')&~cellfun(@isempty,regexp(df.cond,'pain_nolidocaine_control'))),vars2avg},...
+           };
+vars2sum={'imgsPerBlock'};
+% Average variables
+avg_combined=[mean(cat(3,df{(strcmp(df.studyID,'schenk')&~cellfun(@isempty,regexp(df.cond,'pain_nolidocaine_control'))),vars2avg},...
                        df{(strcmp(df.studyID,'schenk')&~cellfun(@isempty,regexp(df.cond,'pain_lidocaine_control'))),vars2avg}),3);
           mean(cat(3,df{(strcmp(df.studyID,'schenk')&~cellfun(@isempty,regexp(df.cond,'pain_nolidocaine_placebo'))),vars2avg},...
                        df{(strcmp(df.studyID,'schenk')&~cellfun(@isempty,regexp(df.cond,'pain_lidocaine_placebo'))),vars2avg}),3)];
+sum_combined=[sum(cat(3,df{(strcmp(df.studyID,'schenk')&~cellfun(@isempty,regexp(df.cond,'pain_nolidocaine_control'))),vars2sum},...
+                       df{(strcmp(df.studyID,'schenk')&~cellfun(@isempty,regexp(df.cond,'pain_lidocaine_control'))),vars2sum}),3);
+          sum(cat(3,df{(strcmp(df.studyID,'schenk')&~cellfun(@isempty,regexp(df.cond,'pain_nolidocaine_placebo'))),vars2sum},...
+                       df{(strcmp(df.studyID,'schenk')&~cellfun(@isempty,regexp(df.cond,'pain_lidocaine_placebo'))),vars2sum}),3)];
 % Replace placebo condition in df
-paindf{i}{:,vars2avg}=combined;
+paindf{i}{:,vars2avg}=avg_combined;
+paindf{i}{:,vars2sum}=sum_combined;
 paindf{i}.cond=regexprep(paindf{i}.cond,'nolidocaine_','');
 
         
@@ -312,9 +349,10 @@ paindf{i}=[df((strcmp(df.studyID,'wrobel')&strcmp(df.cond,'late_pain_control_sal
           df((strcmp(df.studyID,'wrobel')&strcmp(df.cond,'late_pain_placebo_haldol')),varselect)];
 % These variables are available for right and left side and have to be averaged of
 vars2avg={ 'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw','xSpan',....
-           };      
+           };
+vars2sum={'imgsPerBlock'};
 % Average variables      
-earlynlate=mean(cat(3,[df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain_control_saline'))),vars2avg};...
+avg_earlynlate=mean(cat(3,[df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain_control_saline'))),vars2avg};...
                        df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain_control_haldol'))),vars2avg}
                        df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain_placebo_saline'))),vars2avg};...
                        df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain_placebo_haldol'))),vars2avg}],...
@@ -322,10 +360,20 @@ earlynlate=mean(cat(3,[df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(
                        df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain_control_haldol'))),vars2avg}
                        df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain_placebo_saline'))),vars2avg};...
                        df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain_placebo_haldol'))),vars2avg}]),3);
+                   
+sum_earlynlate=sum(cat(3,[df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain_control_saline'))),vars2sum};...
+                       df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain_control_haldol'))),vars2sum}
+                       df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain_placebo_saline'))),vars2sum};...
+                       df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain_placebo_haldol'))),vars2sum}],...
+                       [df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain_control_saline'))),vars2sum};...
+                       df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain_control_haldol'))),vars2sum}
+                       df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain_placebo_saline'))),vars2sum};...
+                       df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain_placebo_haldol'))),vars2sum}]),3);
 % Replace placebo condition in df
-paindf{i}{:,vars2avg}=earlynlate;
+paindf{i}{:,vars2avg}=avg_earlynlate;
+paindf{i}{:,vars2sum}=sum_earlynlate;
 paindf{i}.cond=regexprep(paindf{i}.cond,'late_pain_','pain_');
-paindf{i}.meanBlockDur=paindf{i}.meanBlockDur*2;
+paindf{i}.imgsPerBlock=paindf{i}.imgsPerBlock*2;
 
 %'zeidan'
 % i=find(strcmp(studies,'zeidan'));

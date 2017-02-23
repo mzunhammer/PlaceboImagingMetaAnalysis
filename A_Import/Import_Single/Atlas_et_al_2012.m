@@ -74,7 +74,7 @@ for j=1:length(subdir)
         nImages(j,i)=size(SPM.xX.X,1);
         temp(j,i)= EXPT.cov_uncentered(j,3);
         
-        if ~cellfun(@isempty, regexp(cond(j,i),'Stim')) %Determine mean block duration on by-participant level. There seems to be some variation of duration of anticipation peroids within subjects!
+        if ~cellfun(@isempty, regexp(cond(j,i),'Stim')) %Determine mean block duration (in scans) on by-participant level. There seems to be some variation of duration of anticipation peroids within subjects!
             imgsPerBlock(j,i)=mean(mean([SPM.Sess.U(1:4).dur])); %
             nBlocks(j,i)=length(vertcat(SPM.Sess.U(1:4).ons))/4;
         elseif ~cellfun(@isempty, regexp(cond(j,i),'RatingPeriod'))

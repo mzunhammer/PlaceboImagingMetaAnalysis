@@ -54,12 +54,28 @@ for j= 1:nsubj
         xSpan(j,i)=xSpanRaw(beta_IDs(i)); %xSpanRaw(logical(SPMcon));
         %conSpan(j,i)=sum(abs(SPMcon)); %sum(abs(SPMcon));
         nImages(j,i)=size(SPM.xX.X,1);
+        switch i
+            case 1 %beta 5 'placebo_anticipation'
+             imgsPerBlock(j,i)=mean(SPM.Sess(2).U(2).dur);
+             nBlocks(j,i)=length(SPM.Sess(2).U(2).dur);
+            case 2 %beta 6 'placebo_pain'
+             imgsPerBlock(j,i)=mean(SPM.Sess(2).U(3).dur);
+             nBlocks(j,i)=length(SPM.Sess(2).U(3).dur);
+            case 3 %beta 8 'control_anticipation'
+             imgsPerBlock(j,i)=mean(SPM.Sess(3).U(2).dur);
+             nBlocks(j,i)=length(SPM.Sess(3).U(2).dur);
+            case 4 %beta 9 'control_pain'
+             imgsPerBlock(j,i)=mean(SPM.Sess(3).U(3).dur);
+             nBlocks(j,i)=length(SPM.Sess(3).U(3).dur);
+        end
     end
 end
 img=vertcat(img(:));
 beta=vertcat(beta(:));
 xSpan=vertcat(xSpan(:));
 nImages=vertcat(nImages(:));
+imgsPerBlock=vertcat(imgsPerBlock(:));
+nBlocks=vertcat(nBlocks(:));
 
 % Assign "placebo condition" according to experimental condition
 % 0= Any Control 1 = Any Placebo  2 = Other
@@ -119,8 +135,8 @@ they.tr           =ones(size(they.img)).*2400; %Paper and SPM match
 they.te           =ones(size(they.img)).*26;
 they.voxelVolAcq  =ones(size(they.img)).*((240/94) *(240/94) *3);
 they.voxelVolMat  =ones(size(they.img)).*(2*2*2);
-they.imgsPerBlock =ones(size(they.cond)).*16.8; % SPM and paper agree
-they.nBlocks      =imgsPerBlock; % According to SPM
+they.imgsPerBlock =imgsPerBlock; % SPM and paper agree
+they.nBlocks      =nBlocks; % According to SPM
 they.nImages      =nImages; % Images per Participant
 they.xSpan        =xSpan;
 they.conSpan      =ones(size(they.img)); %beta images used

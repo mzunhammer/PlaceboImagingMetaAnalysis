@@ -238,3 +238,8 @@ end
 xlabel('Standardized Rating')
 ylabel('Standardized Stimulus Intensity')
 legend show
+
+
+%%
+
+dfbyID=grpstats(dflong,'studyID',{'nanmean','nanvar'},'DataVars',{'NPSraw_ci','nImages','nBlocks','imgsPerBlock'});

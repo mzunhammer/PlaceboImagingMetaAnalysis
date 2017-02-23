@@ -29,5 +29,10 @@ df.ex_img_artifact(strcmp(df.subID,'theysohn_2136'))=1;
 df.ex_img_artifact(strcmp(df.subID,'theysohn_2145'))=1;
 df.ex_img_artifact(strcmp(df.subID,'wrobel_42'))=1;
 
+% Summarize
 df.ex_all=df.ex_lo_p_ratings|df.ex_img_artifact;
+
+% Mark participants with extreme NPS-scores
+df.ex_NPS=
+
 save(fullfile(datapath,[df_name '.mat']), 'df')

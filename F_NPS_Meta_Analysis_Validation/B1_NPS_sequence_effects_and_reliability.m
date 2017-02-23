@@ -47,25 +47,6 @@ studies=studies([1,2,5,6,7,9,16,19]);
             'Wrobel et al. 2014:'
             };
 
-        
-stats.ImgsPerSession=[
-            990;... %'Atlas et al. 2012:'
-			488;... %'Bingel et al. 2006:'
-			329;... %'Eippert et al. 2009:'
-			510;... %'Ellingsen et al. 2013:'
-            197;... %'Elsenbruch et al. 2012:'
-            284;... %'Geuter et al. 2013:'
-            206;... %'Theysohn et al. 2009:'
-            327.5]%'Wrobel et al. 2014:'
- stats.painImgsPerSession=stats.ImgsPerSession.*[
-             1;... %'Atlas et al. 2012:' Only pain
- 			 1;... %'Bingel et al. 2006:'
- 			 1;... %'Eippert et al. 2009:'
- 			 0.333;... %'Ellingsen et al. 2013:'
-             1;... %'Elsenbruch et al. 2012:'
-             1;... %'Geuter et al. 2013:'
-             1;... %'Theysohn et al. 2009:'
-             1]%'Wrobel et al. 2014:'
 %% Select data STUDIES
 varselect={'subID','NPSraw','MHEraw','rating','cond','condSeq'};
 
@@ -376,14 +357,116 @@ hgexport(gcf, '../../Protocol_and_Manuscript/NPS_validation/Figures/Figure3', hg
 
 %% Check NPS reliability vs images/participant
 
+% For event related designs, images per block are basically determined by
+% the length of the HRF
+df.imgsPerBlock(df.imgsPerBlock==0)=15000./df.tr(df.imgsPerBlock==0);
+
+rs=[stats.NPSraw.r]';
+
 for i=1:length(studies)
     currstudy=strcmp(df.studyID,studies(i))
     nImages(i,1)=mean(df.nImages(currstudy))
-    meanBlockDur(i,1)=mean(df.meanBlockDur(currstudy))
+    nBlocks(i,1)=mean(df.nBlocks(currstudy));
+    imgsPerBlock(i,1)=mean(df.imgsPerBlock(currstudy));
+    xSpan(i,1)=mean(df.imgsPerBlock(currstudy));
 end
 
-rs=[stats.NPSraw.r]';
-[R,P,RLO,RUP]=corrcoef(nImages,rs);
+[R,P,RLO,RUP]=corrcoef(nImages,rs)
+[R,P,RLO,RUP]=corrcoef(nBlocks,rs)
+[R,P,RLO,RUP]=corrcoef(imgsPerBlock,rs)
+[R,P,RLO,RUP]=corrcoef(imgsPerBlock.*nBlocks,rs)
+
 disp(['Correlation between re-test reliability (within-subject correlations) and number of images per participant: r?= ',...
     num2str(R(2)),...
     ', p?=?',num2str(P(2))]);
+
+
+%% Plot stimulus-repetitions/session vs reliability estimates
+% Plot single-study values
+figure %('units','normalized','position',[0 0 1.5 sqrt(1.5)]);
+colormapping=cbrewer('qual','Accent',20);
+axis([0 max(nBlocks) 0 1])
+hold on
+for i=1:length(rs)
+
+plot(nBlocks(i),rs(i),'.',...
+   'MarkerSize',20,...
+   'DisplayName',studyIDtexts{i},...
+   'MarkerEdgeColor',colormapping(i,:),...
+   'MarkerFaceColor',colormapping(i,:));
+end
+
+xlabel('Number of pain stimulus repetitions/session')
+ylabel('Correlation (r) Session 1 vs 2')
+legend show
+ hold off
+
+%% Plot total number of images in design-matrix vs reliability estimates
+% Plot single-study values
+figure %('units','normalized','position',[0 0 1.5 sqrt(1.5)]);
+colormapping=cbrewer('qual','Accent',20);
+axis([0 max(nImages) 0 1])
+hold on
+for i=1:length(rs)
+
+plot(nImages(i),rs(i),'.',...
+   'MarkerSize',20,...
+   'DisplayName',studyIDtexts{i},...
+   'MarkerEdgeColor',colormapping(i,:),...
+   'MarkerFaceColor',colormapping(i,:));
+end
+
+xlabel('Mean number of images acquired/subject')
+ylabel('Correlation (r) Session 1 vs 2')
+legend show
+ hold off 
+
+%% Plot images/session vs reliability estimates
+imgsPerSession=[
+            990;... %'Atlas et al. 2012:'
+			488;... %'Bingel et al. 2006:'
+			329;... %'Eippert et al. 2009:'
+			510;... %'Ellingsen et al. 2013:'
+            197;... %'Elsenbruch et al. 2012:'
+            284;... %'Geuter et al. 2013:'
+            206;... %'Theysohn et al. 2009:'
+            327.5]%'Wrobel et al. 2014:'
+% Plot single-study values
+figure %('units','normalized','position',[0 0 1.5 sqrt(1.5)]);
+colormapping=cbrewer('qual','Accent',20);
+axis([0 max(imgsPerSession) 0 1])
+hold on
+for i=1:length(rs)
+
+plot(imgsPerSession(i),rs(i),'.',...
+   'MarkerSize',20,...
+   'DisplayName',studyIDtexts{i},...
+   'MarkerEdgeColor',colormapping(i,:),...
+   'MarkerFaceColor',colormapping(i,:));
+end
+
+xlabel('Number of images/session')
+ylabel('Correlation (r) Session 1 vs 2')
+legend show
+ hold off 
+
+ 
+% Plot overall fixed effects regression line
+% t=table(nBlocks,rs);
+% t.sqrt_nBlocks=sqrt(nBlocks);
+% mmdl1 = fitlm(t,'rs ~ sqrt_nBlocks');
+% fixedB0=mmdl1.Coefficients.Estimate(1);
+% fixedB1=mmdl1.Coefficients.Estimate(2);
+% 
+% xl=[0 50];
+% x=linspace(xl(1),xl(2),100);
+% overally=sqrt(x).*(fixedB1)+(fixedB0);
+% overally=overally.^2;
+% plot(x,overally,'--black','LineWidth',2.5)
+% 
+
+
+
+%hgexport(gcf, ['C_Ratings_vs_NPS.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
+%pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
+%hgexport(gcf, fullfile(pubpath,'C_Ratings_vs_NPS.svg'), hgexport('factorystyle'), 'Format', 'svg');

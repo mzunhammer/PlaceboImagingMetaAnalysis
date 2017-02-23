@@ -199,5 +199,3 @@ bingel06.fsl          =zeros(size(bingel06.cond)); %analysis with fsl, rather th
 %% Save
 save(outpath,'bingel06')
 end
-
-end

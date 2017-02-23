@@ -96,9 +96,9 @@ temps=xlsread(xls_path,1,'BH2:BH33');
 temps=repmat(temps,nbetas,1);
 
 %Add imaging parameters
-blockLength=NaN(size(cond));
-blockLength(~cellfun(@isempty,regexp(cond,'anti')),1)=5;
-blockLength(~cellfun(@isempty,regexp(cond,'pain')),1)=20;
+imgsPerBlock=NaN(size(cond));
+imgsPerBlock(~cellfun(@isempty,regexp(cond,'anti')),1)=1.937984496124031;
+imgsPerBlock(~cellfun(@isempty,regexp(cond,'pain')),1)=7.751937984496124;
 
 % Sequence
 seq_LN=xlsread(xls_path,1,'BB2:BB33');
@@ -172,8 +172,8 @@ schenk.tr           =ones(size(cond)).*2580; %ACCORDING TO SPM, 2.58 according t
 schenk.te           =ones(size(cond)).*26;
 schenk.voxelVolAcq  =ones(size(schenk.img)).*2*2*2;
 schenk.voxelVolMat  =ones(size(schenk.img)).*(2*2*2);
-schenk.imgsPerBlock =blockLength;
-schenk.nBlocks      =imgsPerBlock; % According to SPM
+schenk.imgsPerBlock =imgsPerBlock; % According to SPM
+schenk.nBlocks      =ones(size(cond))*12; % According to SPM
 schenk.nImages      =nImages; % Images per Participant
 schenk.xSpan        =xSpan;
 schenk.conSpan      =ones(size(cond));

@@ -34,29 +34,47 @@ for j=1:length(subdir)
         sub(j,i)=subdir(j); % The subject number (study specific)
         xSpan(j,i)=xSpanRaw(beta_ID(j,i)); % Gets xSpan for betas one at a time
         nImages(j,i)=size(xX.X,1);
+        switch beta_ID(j,i)
+            case 2
+            imgsPerBlock(j,i)=4/1.5; %not sure where to find block duration in SPM99, using information from paper
+            nBlocks(j,i)=length(Sess{1,1}.ons{1,2}); 
+            case 4
+            imgsPerBlock(j,i)=10/1.5; %not sure where to find block duration in SPM99, using information from paper
+            nBlocks(j,i)=length(Sess{1,1}.ons{1,4});
+            case 8
+            imgsPerBlock(j,i)=4/1.5;
+            nBlocks(j,i)=length(Sess{1,2}.ons{1,2});
+            case 10
+            imgsPerBlock(j,i)=10/1.5;
+            nBlocks(j,i)=length(Sess{1,2}.ons{1,4});
+        end
     end
 end
-        pla(1:length(subdir),[1 3])=1;    % 0= Any Control 1 = Any Placebo 2 = Other
-        pla(1:length(subdir),[2 4])=0;    % 0= Any Control 1 = Any Placebo 2 = Other
-        pain(1:length(subdir),[1 2])=1;   % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
-        pain(1:length(subdir),[3 4])=0;   % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
-        
-        cond(1:length(subdir),1)={'placebo_pain'};         % A string describing the experimental condition
-        cond(1:length(subdir),2)={'control_pain'};         % A string describing the experimental condition
-        cond(1:length(subdir),3)={'placebo_anticipation'};         % A string describing the experimental condition
-        cond(1:length(subdir),4)={'control_anticipation'};         % A string describing the experimental condition
-        
-        img      = vertcat(img(:)); 
-        sub      = vertcat(sub(:));
-        pla      = vertcat(pla(:));
-        pain     = vertcat(pain(:));
-        xSpan    = vertcat(xSpan(:));
-        cond     = vertcat(cond(:));
-        
-        placebo_first=NaN(size(cond));        
-        rating= NaN(size(cond));
-        rating(strcmp(cond,'placebo_pain'))=EXPT.behavior; % ATTENTION: Unfortunately for images placebo & control are available as separate conditions, while for behavior only the contrast control-placebo is available...
-       
+
+pla(1:length(subdir),[1 3])=1;    % 0= Any Control 1 = Any Placebo 2 = Other
+pla(1:length(subdir),[2 4])=0;    % 0= Any Control 1 = Any Placebo 2 = Other
+pain(1:length(subdir),[1 2])=1;   % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
+pain(1:length(subdir),[3 4])=0;   % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
+
+cond(1:length(subdir),1)={'placebo_pain'};         % A string describing the experimental condition
+cond(1:length(subdir),2)={'control_pain'};         % A string describing the experimental condition
+cond(1:length(subdir),3)={'placebo_anticipation'};         % A string describing the experimental condition
+cond(1:length(subdir),4)={'control_anticipation'};         % A string describing the experimental condition
+
+img      = vertcat(img(:)); 
+sub      = vertcat(sub(:));
+pla      = vertcat(pla(:));
+pain     = vertcat(pain(:));
+xSpan    = vertcat(xSpan(:));
+cond     = vertcat(cond(:));
+nBlocks  = vertcat(nBlocks(:));
+imgsPerBlock = vertcat(imgsPerBlock(:));
+
+
+placebo_first=NaN(size(cond));        
+rating= NaN(size(cond));
+rating(strcmp(cond,'placebo_pain'))=EXPT.behavior; % ATTENTION: Unfortunately for images placebo & control are available as separate conditions, while for behavior only the contrast control-placebo is available...
+
 % Create Study-Specific table
 
 outpath=fullfile(basedir,'Wager_et_al_2004b_michigan_heat.mat');
@@ -65,7 +83,6 @@ if exist(outpath)==2
 else
     wager_michigan=table(img);
 end
-
 wager_michigan.img=img;
 wager_michigan.imgType=repmat({'fMRI'},size(wager_michigan.img));
 wager_michigan.studyType=repmat({'within'},size(wager_michigan.img));
@@ -95,8 +112,8 @@ wager_michigan.tr           =ones(size(wager_michigan.img)).*1500;
 wager_michigan.te           =ones(size(wager_michigan.img)).*20;
 wager_michigan.voxelVolAcq  =ones(size(wager_michigan.img)).*(3.75*3.75*5);
 wager_michigan.voxelVolMat  =ones(size(wager_michigan.img)).*(3.75*3.75*5);
-wager_michigan.imgsPerBlock =ones(size(wager_michigan.img))*20; % According to paper
-wager_michigan.nBlocks      =imgsPerBlock; % According to SPM
+wager_michigan.imgsPerBlock =imgsPerBlock;
+wager_michigan.nBlocks      =nBlocks; % According to SPM
 wager_michigan.nImages      =vertcat(nImages(:)); % Images per Participant
 wager_michigan.xSpan        =xSpan;
 wager_michigan.conSpan      =ones(size(wager_michigan.cond));

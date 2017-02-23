@@ -58,26 +58,29 @@ age=repmat(age,1,6)';age=age(:);age(age==999)=NaN;
 plaFirst=xlsread(xls_path,1,'G:G');
 plaFirst=repmat(plaFirst,1,6)';plaFirst=plaFirst(:);
 
-        blockLength(~cellfun(@isempty,regexp(beta_img,'pain')),1)            =10;
-        blockLength(~cellfun(@isempty,regexp(beta_img,'anticipation')),1)    =0;
-        
-        %xSpan (from max(SPM.xX.X)-min(SPM.xX.X))
-        wrobelSPMs = {wrobeldir(~cellfun(@isempty,regexp({wrobeldir.name},'SPM.mat'))).name}';
-        for i=1:size(wrobelSPMs)
-        load(fullfile(basedir, studydir,wrobelSPMs{i,1}));
-        xSpanRaw=max(SPM.xX.X)-min(SPM.xX.X);
-        wrobelxSpans(i,:)=xSpanRaw([2 10 4 12 6 14]);
-        nImages(i,:)=size(SPM.xX.X,1);
-        end
-        nImages=repmat(nImages,1,6)';
-        nImages=nImages(:);
-        wrobelxSpanslong=(wrobelxSpans');
-        wrobelxSpanslong=wrobelxSpanslong(:);
-        xSpan =wrobelxSpanslong;
+imgsPerBlock(~cellfun(@isempty,regexp(beta_img,'pain')),1)            =3.8760;
+imgsPerBlock(~cellfun(@isempty,regexp(beta_img,'anticipation')),1)    =0;
 
-        
-        %conSpan for Cons only
-        conSpan      =ones(size(cond)).*1;
+nBlocks(~cellfun(@isempty,regexp(beta_img,'pain')),1)            =13;
+nBlocks(~cellfun(@isempty,regexp(beta_img,'anticipation')),1)    =13;
+
+%xSpan (from max(SPM.xX.X)-min(SPM.xX.X))
+wrobelSPMs = {wrobeldir(~cellfun(@isempty,regexp({wrobeldir.name},'SPM.mat'))).name}';
+for i=1:size(wrobelSPMs)
+    load(fullfile(basedir, studydir,wrobelSPMs{i,1}));
+    xSpanRaw=max(SPM.xX.X)-min(SPM.xX.X);
+    wrobelxSpans(i,:)=xSpanRaw([2 10 4 12 6 14]);
+    nImages(i,:)=size(SPM.xX.X,1);
+end
+nImages=repmat(nImages,1,6)';
+nImages=nImages(:);
+wrobelxSpanslong=(wrobelxSpans');
+wrobelxSpanslong=wrobelxSpanslong(:);
+xSpan =wrobelxSpanslong;
+
+
+%conSpan for Cons only
+conSpan      =ones(size(cond)).*1;
 
 % Create Study-Specific table
 outpath=fullfile(basedir,'Wrobel_et_al_2014.mat')
@@ -120,8 +123,8 @@ wrobel.tr           =ones(size(wrobel.img)).*2580;
 wrobel.te           =ones(size(wrobel.img)).*25;
 wrobel.voxelVolAcq  =ones(size(wrobel.img)).*(2*2*2+1);
 wrobel.voxelVolMat  =ones(size(wrobel.img)).*(2*2*2);
-wrobel.imgsPerBlock =ones(size(cond))*10; % According to paper (early and late were each modeled 10 seconds)
-wrobel.nBlocks      =imgsPerBlock; % According to SPM
+wrobel.imgsPerBlock =imgsPerBlock; % According to paper (early and late were each modeled 10 seconds)
+wrobel.nBlocks      =nBlocks; % According to SPM
 wrobel.nImages      =nImages; % Images per Participant
 wrobel.xSpan        =xSpan;
 wrobel.conSpan      =ones(size(wrobel.cond));
