@@ -77,38 +77,54 @@ WIsubdata=p.Results.WIsubdata;
 textoffset=p.Results.textoffset;
 boxscaling=p.Results.boxscaling;
 NOsummary=p.Results.NOsummary;
-% Summarize standardized means by using the generic inverse-variance method
-
-if strcmp(summarystat,'mu')
-    eff=[MetaStats.mu]';% Currently uses Hedge's g
-    se_eff=[MetaStats.se_mu]'; % Currently uses Hedge's g
-    n=[MetaStats.n]';
-elseif strcmp(summarystat,'d')
-    eff=[MetaStats.d]';% Currently uses Hedge's g
-    se_eff=[MetaStats.se_d]'; % Currently uses Hedge's g
-    n=[MetaStats.n]';
-elseif strcmp(summarystat,'r')
-    eff=[MetaStats.r]';
-    n=[MetaStats.n]';
-    seZ_eff=sqrt(1./(n-3));% Note that variance of r will be computed anew using Fisher's Z for GIVsummary
-    se_eff=fishersZ2r(seZ_eff);
-    WIsubdata=0;
-else
-    eff=[MetaStats.g]';% Currently uses Hedge's g
-    se_eff=[MetaStats.se_g]'; % Currently uses Hedge's g
-    n=[MetaStats.n]';
-end
 
 %% Summarize all studies, weighted by se_summary_total
-[summary_total,~,rel_weight,z,p,summary_ciLo,summary_ciHi,chisq,tausq,df,p_het,Isq]=GIVsummary(eff,se_eff,summarystat,type);
+% Summarize standardized using the generic inverse-variance weighting method
+summary=GIVsummary(MetaStats);
 
-if strcmp(summarystat,'r')
-    ciLo=fishersZ2r(r2fishersZ(eff)-seZ_eff.*1.96);
-    ciHi=fishersZ2r(r2fishersZ(eff)+seZ_eff.*1.96);
-else
-    ciLo=eff-se_eff.*1.96;
-    ciHi=eff+se_eff.*1.96;
+% Select the desired statistics
+if strcmp(summarystat,'mu')
+        short_summary= summary.mu;
+        eff=vertcat(MetaStats.mu);
+        se_eff=vertcat(MetaStats.se_mu);   
+    elseif strcmp(summarystat,'d')
+        short_summary= summary.d;
+        eff=vertcat(MetaStats.d);
+        se_eff=vertcat(MetaStats.se_d);
+    elseif strcmp(summarystat,'g')
+        short_summary= summary.g;
+        eff=vertcat(MetaStats.g);
+        se_eff=vertcat(MetaStats.se_g);
+    elseif strcmp(summarystat,'r') 
+        short_summary= summary.r;
+        eff=vertcat(MetaStats.r);
+        se_eff=vertcat(MetaStats.se_r);
 end
+
+chisq=short_summary.heterogeneity.chisq;
+p_het=short_summary.heterogeneity.p_het;
+Isq=short_summary.heterogeneity.Isq;
+
+if strcmp(type,'fixed')
+    tausq=[];
+    short_summary=short_summary.fixed;
+elseif strcmp(type,'random')
+    tausq=short_summary.heterogeneity.tausq;
+    short_summary=short_summary.random;
+end
+
+df=short_summary.df;
+rel_weight=vertcat(short_summary.rel_weight);
+n=vertcat(MetaStats.n);
+summary_total=short_summary.summary;
+z=short_summary.z;
+p=short_summary.p;
+summary_ciLo=short_summary.CI_lo;
+summary_ciHi=short_summary.CI_hi;
+
+ciLo=eff-se_eff.*1.96;
+ciHi=eff+se_eff.*1.96;
+
  %% Forest Plot for Standardized Effect Sizes:
 %FIGURE WINDOW
 figure_width=printwidth;
