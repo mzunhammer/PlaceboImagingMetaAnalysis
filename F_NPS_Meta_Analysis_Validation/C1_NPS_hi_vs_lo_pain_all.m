@@ -187,3 +187,31 @@ NPS_pos_imgs=vertcat(statsNPS.delta)>0;
 perc_pos_NPS=sum(NPS_pos_imgs)/sum(~isnan(NPS_pos_imgs));
 
 disp([num2str(perc_pos_NPS*100),'% of participants showed a positive NPS response.'])
+
+%% Plot Standardized NPS vs Standardized Rating response
+statsRating=[stats.rating];
+
+figure
+hold on
+x=[statsRating.g];
+y=[statsNPS.g];
+yneg=([statsNPS.se_g].*1.96);
+ypos=([statsNPS.se_g].*1.96);
+xneg=([statsRating.se_g].*1.96);
+xpos=([statsRating.se_g].*1.96);
+errorbar(x,y,yneg,ypos,xneg,xpos,'o')
+plot(x,y,'.')
+lsline
+%
+
+x_pla=0.65;
+y_pla=0.08;
+yneg_pla=0.08;
+ypos_pla=0.08;
+xneg_pla=0.13;
+xpos_pla=0.13;
+
+errorbar(x_pla,y_pla,yneg_pla,ypos_pla,xneg_pla,xpos_pla,'o')
+hold off
+ylabel('Effect of changed stimulus intensity on NPS (Hedges''g)')
+xlabel('Effect of changed stimulus intensity on pain ratings (Hedges''g)')

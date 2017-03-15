@@ -33,6 +33,6 @@ df.ex_img_artifact(strcmp(df.subID,'wrobel_42'))=1;
 df.ex_all=df.ex_lo_p_ratings|df.ex_img_artifact;
 
 % Mark participants with extreme NPS-scores
-df.ex_NPS=
+%df.ex_NPS=
 
 save(fullfile(datapath,[df_name '.mat']), 'df')
