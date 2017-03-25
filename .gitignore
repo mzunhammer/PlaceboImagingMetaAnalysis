@@ -31,3 +31,9 @@ octave-workspace
 */*.eps/*
 */*.svg/*
 */*.png/*
+
+# Mat-files
+*.mat
+*/*.mat
+*/.mat/*
+*/*/*.mat

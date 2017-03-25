@@ -211,6 +211,12 @@ end
 bayesfactor(0.08,0.04,1,[0,0.2]) % Bayes factor for negligible results
 bayesfactor(0.08,0.04,1,[0.2,0.5]) % Bayes factor for small results
 
+%% Save study-level meta-stats for comparison with other contrasts (see: effects of hi vs lo temperature)
+stats.studies=df_full.studies;
+save('Full_Sample_Study_Level_Results_Placebo.mat','stats');
+
+
+
 
 % % Plot Wager-Studies, Pain-Pla prediction vs ratings
 % % Princeton

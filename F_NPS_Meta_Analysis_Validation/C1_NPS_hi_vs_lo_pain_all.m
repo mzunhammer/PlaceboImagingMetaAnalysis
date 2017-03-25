@@ -190,8 +190,8 @@ disp([num2str(perc_pos_NPS*100),'% of participants showed a positive NPS respons
 
 %% Plot Standardized NPS vs Standardized Rating response
 statsRating=[stats.rating];
-
 figure
+% First plot effects of changes in stimulus intensity on NPS/ratings in red
 hold on
 x=[statsRating.g];
 y=[statsNPS.g];
@@ -199,19 +199,40 @@ yneg=([statsNPS.se_g].*1.96);
 ypos=([statsNPS.se_g].*1.96);
 xneg=([statsRating.se_g].*1.96);
 xpos=([statsRating.se_g].*1.96);
-errorbar(x,y,yneg,ypos,xneg,xpos,'o')
+errorbar(x,y,yneg,ypos,xneg,xpos,'ro')
 plot(x,y,'.')
 lsline
-%
 
-x_pla=0.65;
-y_pla=0.08;
-yneg_pla=0.08;
-ypos_pla=0.08;
-xneg_pla=0.13;
-xpos_pla=0.13;
+%Then plot effects of placebos
+PlaceboStats=load('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/E_NPS_Meta_Analysis_Placebo/Full_Sample_Study_Level_Results_Placebo.mat');
+pla_studies={'atlas'
+             'ellingsen'
+             'freeman'
+             'kessner'
+             'kong06'
+             'kong09'
+             'ruetgen'
+             'wager04a_princeton'};
+ipla_studies=ismember(PlaceboStats.stats.studies,pla_studies);
+statsRating_pla=[PlaceboStats.stats.rating(ipla_studies)];
+statsNPS_pla=[PlaceboStats.stats.NPS(ipla_studies)];
+x=abs([statsRating_pla.g]);
+y=abs([statsNPS_pla.g]);
+yneg=([statsNPS_pla.se_g].*1.96);
+ypos=([statsNPS_pla.se_g].*1.96);
+xneg=([statsRating_pla.se_g].*1.96);
+xpos=([statsRating_pla.se_g].*1.96);
+errorbar(x,y,yneg,ypos,xneg,xpos,'bo')
+plot(x,y,'.')
 
-errorbar(x_pla,y_pla,yneg_pla,ypos_pla,xneg_pla,xpos_pla,'o')
+% Overall results
+% x_pla=0.65;
+% y_pla=0.08;
+% yneg_pla=0.08;
+% ypos_pla=0.08;
+% xneg_pla=0.13;
+% xpos_pla=0.13;
+%errorbar(x_pla,y_pla,yneg_pla,ypos_pla,xneg_pla,xpos_pla,'o')
 hold off
-ylabel('Effect of changed stimulus intensity on NPS (Hedges''g)')
-xlabel('Effect of changed stimulus intensity on pain ratings (Hedges''g)')
+ylabel('Absolute effect on NPS response (Hedges''g)')
+xlabel('Absolute effect on pain ratings (Hedges''g)')

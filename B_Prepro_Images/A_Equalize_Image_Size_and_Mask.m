@@ -15,16 +15,18 @@ outheader.fname=maskpath;
 spm_write_vol(outheader,mask);
 
 %% By default, SPM will change matrix and voxel size to the first image entered in Imagecalc
+
+df.norm_img=cell(size(df.img));
 for i=1:length(df.img)
 infile=fullfile(datapath,df.img{i});
 [path,filename,ext]=fileparts(infile);
-outfile=fullfile(path,['r_',filename,ext])
-disp(['Masking ',outfile])    
+df.norm_img{i}=fullfile(path,['r_',filename,ext]);
+disp(['Masking ',df.norm_img{i}])    
 matlabbatch{1}.spm.util.imcalc.input = {
                                         maskpath
                                         infile
                                         };
-matlabbatch{1}.spm.util.imcalc.output = outfile;
+matlabbatch{1}.spm.util.imcalc.output = df.norm_img{i};
 matlabbatch{1}.spm.util.imcalc.outdir = {};
 matlabbatch{1}.spm.util.imcalc.expression = 'logical(i1).*i2';
 matlabbatch{1}.spm.util.imcalc.var = struct('name', {}, 'value', {});
@@ -34,3 +36,4 @@ matlabbatch{1}.spm.util.imcalc.options.interp = 1;
 matlabbatch{1}.spm.util.imcalc.options.dtype = 4;
 spm_jobman('run', matlabbatch);
 end
+save(fullfile(datapath,'AllData.mat'),'df');
