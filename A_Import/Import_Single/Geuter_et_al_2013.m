@@ -27,6 +27,9 @@ con_descriptors= {...
     'anti_control_strong'};
 
 load(fullfile(basedir,studydir,'metadata_geuter.mat')); % Load behavioral data
+%data in meta is in single-format in some cases!!!
+meta.vas=double(meta.vas)
+meta.temperature=double(meta.temperature)
 
 for j= nsubj
     geuterSPMs{j} = fullfile(studydir, ['sub' num2str(j,'%02d')],'SPM.mat');
