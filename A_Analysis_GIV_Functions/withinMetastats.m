@@ -129,4 +129,5 @@ StudyStat.g=g;
 StudyStat.se_g=se_g;
 StudyStat.delta=delta;
 StudyStat.std_delta=bsxfun(@rdivide,delta,sd_pooled);
+StudyStat.ICC=[];%empty field needed for reliablity analysis
 end
