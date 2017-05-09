@@ -21,16 +21,19 @@ octave-workspace
 # Mac's store
 .DS_store
 
-# Figures
+# Figures & Documents
 *.eps
 *.svg
 *.png
+*.pdf
 */*.eps
 */*.svg
 */*.png
+*/*.pdf
 */*.eps/*
 */*.svg/*
 */*.png/*
+*/*.pdf/*
 
 # Mat-files
 *.mat
