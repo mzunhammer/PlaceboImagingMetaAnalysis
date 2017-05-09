@@ -58,7 +58,7 @@ studyIDtexts={
 %% VARIABLES TO SELECT
 
 varselect={'NPSraw','rating','MHEraw',... %'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw'...
-           'stimInt'};%,...
+           'stimInt', 'rating101'};%,...
            %'ex_lo_p_ratings','ex_img_artifact','ex_all'};
 
 %% Study-level data
@@ -203,6 +203,8 @@ i=find(strcmp(studies,'wager04b_michigan'));
 df_full.condata{i}=df{(strcmp(df.studyID,'wager04b_michigan')&strcmp(df.cond,'control_pain')),varselect};
 df_full.pladata{i}=df{(strcmp(df.studyID,'wager04b_michigan')&strcmp(df.cond,'placebo_pain')),varselect};
 df_full.pladata{i}(:,find(strcmp(varselect,'rating')))=(-1)*df_full.pladata{i}(:,find(strcmp(varselect,'rating')));
+df_full.pladata{i}(:,find(strcmp(varselect,'rating101')))=(-1)*df_full.pladata{i}(:,find(strcmp(varselect,'rating101')));
+
 %'wrobel'
 i=find(strcmp(studies,'wrobel'));
 df_full.condata{i}=[mean(cat(3,df{(strcmp(df.studyID,'wrobel')&(strcmp(df.cond,'early_pain_control_saline'))),varselect},...

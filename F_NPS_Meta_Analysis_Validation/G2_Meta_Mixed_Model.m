@@ -11,7 +11,6 @@ dflong=dflong(~dflong.ex_lo_p_ratings,:);
 
 % Calculate by-study z-Scores for NPS, stimInt and rating to
 % to even out scaling differences  (mean-centered, standardized by SD)
-
 vars2zscore={'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw',...
              'rating','stimInt'};
 studies=unique(dflong.studyID);
@@ -23,12 +22,25 @@ for i=1:length(studies)
     dflong(icurrstudy,strcat('z_',vars2zscore))=array2table(z);    
 end
 
+% Calculate by-study standardized effect sizes for NPS, stimInt and rating to
+% to even out scaling differences  (standardized by SD)
+vars2stand={'NPSraw','MHEraw',...%'PPR_pain_raw','PPR_anti_raw','brainPPR_anti_raw',...
+             'rating','stimInt'};
+studies=unique(dflong.studyID);
+for i=1:length(studies)
+    icurrstudy=strcmp(dflong.studyID,studies{i});
+    d=dflong{icurrstudy,vars2stand}./nanstd(dflong{icurrstudy,vars2stand});
+    d(isinf(d))=0;
+    d=double(d);
+    dflong(icurrstudy,strcat('d_',vars2stand))=array2table(d);    
+end
+
 % Create a dummy-coded variable for all studies using placebo conditioning
 dflong.suggestions=~cellfun(@isempty,regexp(dflong.plaInduct,'Suggestions'));
 dflong.conditioning=~cellfun(@isempty,regexp(dflong.plaInduct,'Conditioning'));
 
 % Create a dummy-coded variable for placebo type (only placebo-types used in more than 1 study are included)
-rareplas=strcmp(dflong.plaForm,'Nasal spray')|strcmp(dflong.plaForm,'TENS')|strcmp(dflong.plaForm,'Pill')
+rareplas=strcmp(dflong.plaForm,'Nasal spray')|strcmp(dflong.plaForm,'TENS')|strcmp(dflong.plaForm,'Pill');
 dflong.plaForm_red=dflong.plaForm;
 dflong.plaForm_red(rareplas)={'other'};
 
@@ -37,7 +49,7 @@ dflong.condSeq12=dflong.condSeq-1;
 dflong.condSeq12(dflong.condSeq12>0)=1;
 
 % Reduce stimside to left, right ,both/neither
-dflong.stimsideLR=dflong.stimside
+dflong.stimsideLR=dflong.stimside;
 dflong.stimsideLR(~(strcmp(dflong.stimside,'L')|strcmp(dflong.stimside,'R')))={'both_or_midline'};
 
 % Reduce loc to upper-extremty (arm, hand) vs rest

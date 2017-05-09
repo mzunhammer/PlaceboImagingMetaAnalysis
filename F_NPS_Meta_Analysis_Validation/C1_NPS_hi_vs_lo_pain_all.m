@@ -9,13 +9,13 @@ load(fullfile(datapath,'AllData.mat'))
 % !!!!! These must be in the same order as listed under "studies" !!!!
 studies={  'atlas'
            'ellingsen_warm'
-           'ellingsen_brush'
-           'freeman'
+           %'ellingsen_brush'
+           'freeman'              % NO RATINGS FOR HI VS LOW AVAILABLE
            'kessner'
            'kong06'
-           'kong09'
+           'kong09'               % NO RATINGS FOR HI VS LOW AVAILABLE
            'ruetgen'
-           'wager04a_princeton'}; % Duplicate Ellingsen
+           'wager04a_princeton'}; % NO RATINGS FOR HI VS LOW AVAILABLE
 % studyIDtexts={
 %             'Atlas et al. 2012: High (VAS 100%, ?47.1?C) vs low (VAS 25%, 41.2?C) heat';...
 %             'Ellingsen et al. 2013: Painful hot (VAS 50%, ?47.1?C) vs warm touch (VAS 0%, ~42.5?C)';...
@@ -29,13 +29,13 @@ studies={  'atlas'
 studyIDtexts={
             'Atlas et al. 2012: High vs low noxious heat';...
             'Ellingsen et al. 2013: Noxious heat vs non-noxious warm touch';...
-            'Ellingsen et al. 2013: Noxious heat vs non-noxious brushstroke';...
+            %'Ellingsen et al. 2013: Noxious heat vs non-noxious brushstroke';...
             'Freeman et al. 2015: High vs low noxious heat';...
             'Kessner et al. 2006: High vs moderate noxious heat';...
             'Kong et al. 2006: High vs low noxious heat';...
-            'Kong et al. 2009: High vs low noxious heat';...
+            'Kong et al. 2009: High vs low noxious heat';... % NO RATINGS FOR HI VS LOW AVAILABLE
             'Ruetgen et al. 2015: High vs mild noxious electrical shocks'
-            'Wager et al. 2004, Study 1: High vs mild noxious electrical shocks';...
+            'Wager et al. 2004, Study 1: High vs mild noxious electrical shocks';... % NO RATINGS FOR HI VS LOW AVAILABLE
             };
 % studyIDtexts={
 %             'Atlas et al. 2012:';...
@@ -60,6 +60,7 @@ df_hilo.studies=studies;
 
 iNPS=find(strcmp(df_hilo.variables,'NPSraw'));
 iR=find(strcmp(df_hilo.variables,'rating'));
+iS=find(strcmp(df_hilo.variables,'stimInt'));
 
 %'Atlas'
 i=find(strcmp(studies,'atlas'));
@@ -76,6 +77,7 @@ df_hilo.lo{i}=mean(...
 
 stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
 stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
+stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
 
     
 %'Ellingsen Heat vs Warm'
@@ -92,27 +94,29 @@ df_hilo.lo{i}=mean(...
         3);
 stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
 stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
+stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
 
 %'Ellingsen Heat vs Brushstroke'
-i=find(strcmp(studies,'ellingsen_brush'));
-df_hilo.hi{i}=mean(...
-        cat(3,...
-        df{(strcmp(df.studyID,'ellingsen')&strcmp(df.cond,'Painful_touch_placebo')),varselect},...
-         df{(strcmp(df.studyID,'ellingsen')&strcmp(df.cond,'Painful_touch_control')),varselect}),...
-        3);
-df_hilo.lo{i}=mean(...
-        cat(3,...
-        df{(strcmp(df.studyID,'ellingsen')&strcmp(df.cond,'Brushstroke_placebo')),varselect},...
-         df{(strcmp(df.studyID,'ellingsen')&strcmp(df.cond,'Brushstroke_control')),varselect}),...
-        3);
-stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
-stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
+% i=find(strcmp(studies,'ellingsen_brush'));
+% df_hilo.hi{i}=mean(...
+%         cat(3,...
+%         df{(strcmp(df.studyID,'ellingsen')&strcmp(df.cond,'Painful_touch_placebo')),varselect},...
+%          df{(strcmp(df.studyID,'ellingsen')&strcmp(df.cond,'Painful_touch_control')),varselect}),...
+%         3);
+% df_hilo.lo{i}=mean(...
+%         cat(3,...
+%         df{(strcmp(df.studyID,'ellingsen')&strcmp(df.cond,'Brushstroke_placebo')),varselect},...
+%          df{(strcmp(df.studyID,'ellingsen')&strcmp(df.cond,'Brushstroke_control')),varselect}),...
+%         3);
+% stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
+% stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
 
 %'Freeman High vs Lowpain'
 i=find(strcmp(studies,'freeman'));
 df_hilo.hi{i}= df{(strcmp(df.studyID,'freeman')&strcmp(df.cond,'post-HighpainVsLowpain')),varselect};
 stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),0);
 stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),0);
+stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),0);
 
 % 'Kessner Hi (VAS 80) vs Lo (VAS 50) stimulation'
 % Since Kessner et al simulated a treatment effect witnin participants,
@@ -125,6 +129,7 @@ df_hilo.lo{i}=[df{(strcmp(df.studyID,'kessner')&strcmp(df.cond,'pain_placebo_neg
          df{(strcmp(df.studyID,'kessner')&strcmp(df.cond,'pain_placebo_pos')),varselect}];
 stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
 stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
+stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
 
 %'Kong06 Heat vs Warm'
 i=find(strcmp(studies,'kong06'));
@@ -144,12 +149,14 @@ df_hilo.lo{i}=mean(...
         3);
 stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
 stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
+stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
 
 %'Kong09 High vs Lowpain'
 i=find(strcmp(studies,'kong09'));
 df_hilo.hi{i}= df{(strcmp(df.studyID,'kong09')&strcmp(df.cond,'allHighpainVSLowPain')),varselect};
 stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),0);
 stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),0);
+stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),0);
 
 %'R?tgen Hi vs Low shock'
 i=find(strcmp(studies,'ruetgen'));
@@ -160,27 +167,32 @@ df_hilo.lo{i}=[df{(strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_NoPain_Cont
 
 stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
 stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
+stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
 
 %'wager_princeton High vs Lowpain'
 i=find(strcmp(studies,'wager04a_princeton'));
 df_hilo.hi{i}= df{(strcmp(df.studyID,'wager04a_princeton')&strcmp(df.cond,'intense-mild')),varselect};
 stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),0);
 stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),0);
+stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),0);
 
 %% Summarize all studies, weigh by SE
 % Summary analysis+ Forest Plot
 statsNPS=[stats.NPS];
+statsStimInt=[stats.stimInt];
+
 ForestPlotter(statsNPS,...
               'studyIDtexts',studyIDtexts,...
               'outcomelabel','NPS-Response (Hedge''s g)',...
               'type','random',...
               'summarystat','g',...
-              'textoffset',0.1,...
+              'textoffset',0,...
               'withoutlier',0,...
-              'WIsubdata',1,...
+              'WIsubdata',0,...
               'boxscaling',1);
           
 hgexport(gcf, 'C1_NPS_hi_vs_lo_pain_all.svg', hgexport('factorystyle'), 'Format', 'svg'); 
+hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Fig_S3_NPS_hi_vs_lo.svg', hgexport('factorystyle'), 'Format', 'svg');
 hgexport(gcf, '../../Protocol_and_Manuscript/NPS_validation/Figures/Figure4', hgexport('factorystyle'), 'Format', 'svg');
 
 NPS_pos_imgs=vertcat(statsNPS.delta)>0;
@@ -236,3 +248,22 @@ plot(x,y,'.')
 hold off
 ylabel('Absolute effect on NPS response (Hedges''g)')
 xlabel('Absolute effect on pain ratings (Hedges''g)')
+
+%% Plot Standardized NPS vs Standardized Rating response
+
+statsRating_pla=[PlaceboStats.stats.rating(ipla_studies)]
+stats_pla_not_empty=~cellfun(@isempty,{statsRating_pla.std_delta}');
+rating_diff_pla=vertcat(statsRating_pla.std_delta)
+rating_diff_temp=vertcat(statsRating(stats_pla_not_empty).std_delta)
+
+plot(rating_diff_pla,rating_diff_temp,'.')
+ylabel('Effect of temperature change on ratings')
+xlabel('Effect of placebo on ratings')
+axis([max(abs(rating_diff_pla))*-1
+      max(abs(rating_diff_pla))
+      max(abs(rating_diff_temp))*-1
+      max(abs(rating_diff_temp))])
+ax = gca;
+ax.XAxisLocation = 'origin';
+ax.YAxisLocation = 'origin';
+refline(1,0)

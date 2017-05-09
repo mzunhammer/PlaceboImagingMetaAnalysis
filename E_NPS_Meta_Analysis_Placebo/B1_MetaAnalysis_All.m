@@ -92,6 +92,34 @@ for i=conOnly'
 stats.rating(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
 end
 
+%% Meta-Analysis Ratings on 101 VAS scale
+v=find(strcmp(df_full.variables,'rating101'));
+for i=1:length(df_full.studies) % Calculate for all studies except...
+    if df_full.consOnlyRating(i)==0 %...data-sets where both pla and con is available
+        if df_full.BetweenSubject(i)==0 %Within-subject studies
+           stats.rating101(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
+           stats.rating101(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+        end        
+    end
+end
+% Calculate for those studies where only pla>con contrasts are available
+conOnly=find(df_full.consOnlyRating==1);
+impu_r=nanmean([stats.rating101.r]); % impute the mean within-subject study correlation observed in all other studies
+for i=conOnly'
+stats.rating101(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
+end
+
+
+%% Meta-Analysis Ratings on 101 VAS scale ? MEAN BASELINE RATING
+v=find(strcmp(df_full.variables,'rating101'));
+for i=1:length(df_full.studies) % Calculate for all studies except...
+    if df_full.consOnlyRating(i)==0 %...only for data-sets where both pla and con is available
+           all_control_pain_ratings{i}=df_full.condata{i}(:,v);        
+    end
+end
+% Calculate grand mean
+control_mean_rating101=nanmean(vertcat(all_control_pain_ratings{:}))
 %% Meta-Analysis NPS
 v=find(strcmp(df_full.variables,'NPSraw'));
 for i=1:length(df_full.studies) % Calculate for all studies except...
@@ -128,6 +156,23 @@ for i=conOnly'
 stats.MHE(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
 end
 
+%% Meta-Analysis stimInt
+v=find(strcmp(df_full.variables,'stimInt'));
+for i=1:length(df_full.studies) % Calculate for all studies except...
+    if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
+        if df_full.BetweenSubject(i)==0 %Within-subject studies
+           stats.stimInt(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
+           stats.stimInt(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+        end        
+    end
+end
+% Calculate for those studies where only pla>con contrasts are available
+conOnly=find(df_full.consOnlyNPS==1);
+impu_r=nanmean([stats.stimInt.r]); % impute the mean within-subject study correlation observed in all other studies
+for i=conOnly'
+stats.stimInt(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
+end
 
 % %% Meta-Analysis PPR_pain
 % v=find(strcmp(df_full.variables,'PPR_pain_raw'));
@@ -183,15 +228,15 @@ end
 % stats.brainPPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
 % end
 %% One Forest plot per variable
-varnames=fieldnames(stats);
+varnames={'rating'
+          'NPS'
+          'MHE'};
 nicevarnames={'Pain ratings',...
               'NPS response',...
-              'MHE response',...
-              'PPR-pain response',...
-              'PPR-anti response',...
-              'brainPPR-anti-score'};
+              'MHE response'};
+summary=[];
 for i = 1:numel(varnames)
-    ForestPlotter([stats.(varnames{i})],...
+    summary.(varnames{i})=ForestPlotter([stats.(varnames{i})],...
                   'studyIDtexts',studyIDtexts,...
                   'outcomelabel',[nicevarnames{i},' (Hedges'' g)'],...
                   'type','random',...
@@ -203,31 +248,86 @@ for i = 1:numel(varnames)
     hgexport(gcf, ['B1_Meta_All_',varnames{i},'.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
     pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
     hgexport(gcf, fullfile(pubpath,['B1_Meta_All_',varnames{i},'.svg']), hgexport('factorystyle'), 'Format', 'svg'); 
-    close all;
+    %close all;
 end
 
-%% Obtain Bayesian Factors
+%% Additional forest plot for pain ratings standardized to 101pt VAS
+varnames={'rating101'};
+nicevarnames={'Pain ratings'};
+for i = 1:numel(varnames)
+    summary.(varnames{i})=ForestPlotter([stats.(varnames{i})],...
+                  'studyIDtexts',studyIDtexts,...
+                  'outcomelabel',[nicevarnames{i},' (VAS_1_0_1)'],...
+                  'type','random',...
+                  'summarystat','mu',...
+                  'withoutlier',0,...
+                  'WIsubdata',0,...
+                  'boxscaling',1,...
+                  'textoffset',0);
+    hgexport(gcf, ['B1_Meta_All_',varnames{i},'.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
+    pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
+    hgexport(gcf, fullfile(pubpath,['B1_Meta_All_',varnames{i},'.svg']), hgexport('factorystyle'), 'Format', 'svg'); 
+    %close all;
+end
 
-bayesfactor(0.08,0.04,1,[0,0.2]) % Bayes factor for negligible results
-bayesfactor(0.08,0.04,1,[0.2,0.5]) % Bayes factor for small results
+
+%% Obtain Bayesian Factors
+effect=abs(summary.NPS.g.random.summary)
+SEeffect=summary.NPS.g.random.SEsummary
+
+bayesfactor(effect,SEeffect,1,[0,0.2]) % Bayes factor for negligible to small
+bayesfactor(effect,SEeffect,1,[0.2,0.5]) % Bayes factor for small to moderate results
+bayesfactor(effect,SEeffect,0,[0,0.5,2]) % Bayes factor for normal (two-tailed) null prior placing 95% probability for the mean effect being between -1 and 1
 
 %% Save study-level meta-stats for comparison with other contrasts (see: effects of hi vs lo temperature)
 stats.studies=df_full.studies;
 save('Full_Sample_Study_Level_Results_Placebo.mat','stats');
 
 
+%% Funnel plot for ratings (by SE)
+mean_g=mean([stats.rating.g]);
+scatter([stats.rating.g],[stats.rating.se_g],[stats.rating.n].*2)
+set(gca,'Ydir','reverse')
+hold on
+% Get y-axis extremes to calculate CIs
+ylims=get(gca,'Ylim');
+funnel95_h0=0+ylims(2)*icdf('normal',[0.025,0.975],0,1);
+funnel95_h1=mean_g+ylims(2)*icdf('normal',[0.025,0.975],0,1);
+funnel99_h1=mean_g+ylims(2)*icdf('normal',[0.01,0.99],0,1);
 
+h=patch([funnel95_h0(1),0,0],...%X
+     [ylims(2),ylims(2),0],[0.9, 0.9, 0.9],...%Y
+     'LineStyle','none');
+uistack(h,'bottom');
+ 
+line([funnel95_h1(1),mean_g],[ylims(2),0]);
+line([funnel95_h1(2),mean_g],[ylims(2),0]);
+line([funnel99_h1(1),mean_g],[ylims(2),0],'LineStyle','--');
+line([funnel99_h1(2),mean_g],[ylims(2),0],'LineStyle','--');
 
-% % Plot Wager-Studies, Pain-Pla prediction vs ratings
-% % Princeton
-% hold on
-% studyIDtexts{18}
-% %plot(df_full.pladata{18}(:,find(strcmp(df_full.variables,'PPR_pain_raw'))),df_full.pladata{18}(:,find(strcmp(df_full.variables,'rating'))),'.')
-% plot(stats.PPR_pain_raw(18).std_delta*-1,stats.rating(18).std_delta*-1,'.b');
-% 
-% % Michigan
-% studyIDtexts{19}
-% %plot(df_full.pladata{19}(:,find(strcmp(df_full.variables,'PPR_pain_raw'))),df_full.pladata{19}(:,find(strcmp(df_full.variables,'rating'))),'.')
-% plot(stats.PPR_pain_raw(19).std_delta*-1,stats.rating(19).std_delta*-1,'.r');
-% lsline;
-% hold off
+line([mean_g,mean_g],...
+      [0,ylims(2)],...
+  'Color','red','LineStyle','--');
+
+line([0,0],...
+      [0,ylims(2)],...
+  'Color',' black');
+
+ylabel('Standard error (g)')
+xlabel('Effect size (g)')
+hold off
+hgexport(gcf, fullfile(pubpath,['Funnel_plot_ratings','.svg']), hgexport('factorystyle'), 'Format', 'svg'); 
+%close all;
+
+% The analysis of funnel plot asymmetry is computed via regression of
+% SND = b1*precision+b0 (Egger 1997, BMJ)
+% Whereas:
+% SND =standard normal deviate = effect_size / SE_effect
+% precision= 1/SE_effect
+% b0 = the intercept used as a measure of asymmetry.
+
+SND=([stats.rating.g]./[stats.rating.se_g])';
+precision=(1./[stats.rating.se_g])';
+mdl_unweighted = fitlm(precision,SND);
+disp(['Egger''s test: Funnel_Plot_Assymetry: p = '])
+mdl_unweighted.Coefficients.pValue(1)

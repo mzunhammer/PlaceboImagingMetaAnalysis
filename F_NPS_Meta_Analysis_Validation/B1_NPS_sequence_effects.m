@@ -210,7 +210,7 @@ stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
 stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 %'freeman'
-% NOT USEFUL >> Sequence of testing random within only within sessions
+% NOT USEFUL >> Sequence of testing random within sessions
 
 
 %'geuter' (FOUR SEQUENTIAL SESSIONS!!!! FOR NOW ONLY TAKE TWO)
