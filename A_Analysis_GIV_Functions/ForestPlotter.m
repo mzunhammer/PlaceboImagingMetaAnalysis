@@ -1,4 +1,4 @@
-function ForestPlotter(MetaStats,varargin)
+function summary=ForestPlotter(MetaStats,varargin)
 
 %% Function to create Forest Plots for meta-analysis
 % by Matthias Zunhammer November 2016
@@ -86,19 +86,37 @@ summary=GIVsummary(MetaStats);
 if strcmp(summarystat,'mu')
         short_summary= summary.mu;
         eff=vertcat(MetaStats.mu);
-        se_eff=vertcat(MetaStats.se_mu);   
+        se_eff=vertcat(MetaStats.se_mu);
+        ciLo=eff-se_eff.*1.96;
+        ciHi=eff+se_eff.*1.96;
     elseif strcmp(summarystat,'d')
         short_summary= summary.d;
         eff=vertcat(MetaStats.d);
         se_eff=vertcat(MetaStats.se_d);
+        ciLo=eff-se_eff.*1.96;
+        ciHi=eff+se_eff.*1.96;
     elseif strcmp(summarystat,'g')
         short_summary= summary.g;
         eff=vertcat(MetaStats.g);
         se_eff=vertcat(MetaStats.se_g);
+        ciLo=eff-se_eff.*1.96;
+        ciHi=eff+se_eff.*1.96;
     elseif strcmp(summarystat,'r') 
         short_summary= summary.r;
         eff=vertcat(MetaStats.r);
-        se_eff=vertcat(MetaStats.se_r);
+        se_eff_Z=sqrt(1./(vertcat(MetaStats.n)-3)); % SE for FISHER's
+        ciLo_Z=r2fishersZ(eff)-se_eff_Z.*1.96;
+        ciHi_Z=r2fishersZ(eff)+se_eff_Z.*1.96;
+        ciLo=fishersZ2r(ciLo_Z);
+        ciHi=fishersZ2r(ciHi_Z);
+    elseif strcmp(summarystat,'ICC') 
+        short_summary= summary.ICC;
+        eff=vertcat(MetaStats.ICC);
+        se_eff_Z=sqrt(1./(vertcat(MetaStats.n)-3)); % SE for FISHER's
+        ciLo_Z=r2fishersZ(eff)-se_eff_Z.*1.96;
+        ciHi_Z=r2fishersZ(eff)+se_eff_Z.*1.96;
+        ciLo=fishersZ2r(ciLo_Z);
+        ciHi=fishersZ2r(ciHi_Z);
 end
 
 chisq=short_summary.heterogeneity.chisq;
@@ -122,8 +140,7 @@ p=short_summary.p;
 summary_ciLo=short_summary.CI_lo;
 summary_ciHi=short_summary.CI_hi;
 
-ciLo=eff-se_eff.*1.96;
-ciHi=eff+se_eff.*1.96;
+
 
  %% Forest Plot for Standardized Effect Sizes:
 %FIGURE WINDOW
@@ -152,7 +169,7 @@ elseif WIsubdata && ~withoutlier % plot full range of wi-single subj data. x-axi
     x_axis_size=max([double(ceil(max(abs(vertcat(MetaStats.std_delta))))),3]); 
 end    
 
-if strcmp(summarystat,'r')
+if strcmp(summarystat,'r')|strcmp(summarystat,'ICC')
     x_axis_size=1;
 end
 
