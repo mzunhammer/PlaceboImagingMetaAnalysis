@@ -1,10 +1,9 @@
 function v=nii2vector(nii_imgs)
 
-%% Step 2: Import all images in 2d vector, masked with brainmask.
-%% USE THE IMAGES (r attached to name) THAT WERE EQUALZED IN DIMENSIONS WITH A_Equalize_Image_Size_and_Mask.m
-
+%Function to read nii images as double vector (brainmasked)
+maskdir=fullfile('../pattern_masks/brainmask.nii');
 % Load mask
-maskheader=spm_vol('mask_min_10_percent_of_all.nii,1');
+maskheader=spm_vol(maskdir);
 mask=logical(spm_read_vols(maskheader));
 masking=mask(:);
 
@@ -19,7 +18,7 @@ for i=1:nimg
     [currdat,~]=spm_read_vols(headers{i});
     v(i,:)=currdat(mask)';
 end
-toc/60
+toc/60;
 
 % Replace NaN-Voxels with 0
 % I'd prefer NaNs, but in most images this was done beforehand.

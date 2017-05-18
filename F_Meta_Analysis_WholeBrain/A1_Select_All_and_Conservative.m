@@ -1,8 +1,11 @@
 %% Preprocess data for meta-analysis study-wise (summarize equivalent conditions)
 
 clear
+tic
 % Add folder with Generic Inverse Variance Methods Functions first
 addpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/A_Analysis_GIV_Functions/')
+addpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/A_Analysis_GIV_Functions/')
+
 datapath='../../Datasets';
 
 load(fullfile(datapath,'AllData.mat'))
@@ -87,7 +90,7 @@ df_full.consOnlyRating(strcmp(studies,'zeidan'))=1;
 % 0.043 micro-g/kg/min (individual) OR 0.884 ng/ml (absolute)
 % across hidden and open administration periods
 i=find(strcmp(studies,'atlas'));
-df_full.pladata{i}=nii2vector(df{(strcmp(df.studyID,'atlas')&~cellfun(@isempty,regexp(df.cond,'StimHiPain_Open_Stimulation'))),'norm_img'})+...
+df_full.pladata{i}=nii2vector(df{(strcmp(df.studyID,'atlas')&~cellfun(@isempty,regexp(df.cond,'StimHiPain_Open_Stimulation'))),'norm_img'})+... %If norm_img not in df, run B_Prepro_Images/A_Equalize_Image_Size_and_Mask first.
         nii2vector(df{(strcmp(df.studyID,'atlas')&~cellfun(@isempty,regexp(df.cond,'StimHiPain_Open_RemiConz'))),'norm_img'})+...
         nii2vector(df{(strcmp(df.studyID,'atlas')&~cellfun(@isempty,regexp(df.cond,'StimHiPain_Open_ExpectationPeriod'))),'norm_img'});
 df_full.condata{i}=nii2vector(df{(strcmp(df.studyID,'atlas')&~cellfun(@isempty,regexp(df.cond,'StimHiPain_Hidden_Stimulation'))),'norm_img'})+...
@@ -214,7 +217,7 @@ df_full.condata{i}=NaN(size(df_full.pladata{i}));
 
 save('A1_Full_Sample_Img_Data.mat','df_full');
 
-%% INCLUSIVE SAMPLE
+%% Conservative SAMPLE
 % Difference compared to "ALL":
 % Atlas: None 
 % Bingel06: None
@@ -239,39 +242,26 @@ save('A1_Full_Sample_Img_Data.mat','df_full');
 %%>> Exclude Ruetgen (responder selection), Wager06b (responder selection),
 % Bingel 2011 (sequence effects)
 
-df_incl=df_full;
+df_conserv=df_full;
 %'kong06'
 i=find(strcmp(studies,'kong06'));
-df_incl.condata{i}=NaN(size(df_full.condata{i}));
-df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
+df_conserv.condata{i}=NaN(size(df_full.condata{i}));
+df_conserv.pladata{i}=NaN(size(df_full.pladata{i}));
 %'ruetgen'
 i=find(strcmp(studies,'ruetgen'));
-df_incl.condata{i}=NaN(size(df_full.condata{i}));
-df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
+df_conserv.condata{i}=NaN(size(df_full.condata{i}));
+df_conserv.pladata{i}=NaN(size(df_full.pladata{i}));
 %'wager04b_michigan'
 i=find(strcmp(studies,'wager04b_michigan'));
-df_incl.condata{i}=NaN(size(df_full.condata{i}));
-df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
+df_conserv.condata{i}=NaN(size(df_full.condata{i}));
+df_conserv.pladata{i}=NaN(size(df_full.pladata{i}));
 %'bingel11'
 i=find(strcmp(studies,'bingel11'));
-df_incl.condata{i}=NaN(size(df_full.condata{i}));
-df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
+df_conserv.condata{i}=NaN(size(df_full.condata{i}));
+df_conserv.pladata{i}=NaN(size(df_full.pladata{i}));
 %'zeidan'
 i=find(strcmp(studies,'zeidan'));
-df_incl.condata{i}=NaN(size(df_full.condata{i}));
-df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
-save('A1_Inclusive_Sample_Img_Data.mat','df_incl');
+df_conserv.condata{i}=NaN(size(df_full.condata{i}));
+df_conserv.pladata{i}=NaN(size(df_full.pladata{i}));
+save('A1_Conservative_Sample_Img_Data.mat','df_conserv');
 
-% Only once to get a mask excluding all voxels where signal == 0 in more
-% than 10% of cases.
-alldata=[vertcat(df_full.pladata{:});vertcat(df_full.condata{:})];
-null_voxels=sum(alldata==0)/size(alldata,1);
-null_trshld=0.1;
-mask_exvoxels=null_voxels<null_trshld;
-sum(mask_exvoxels)/length(mask_exvoxels)
-hist(null_voxels,50);
-hold on
-vline(null_trshld)
-hold off
-
-printImage(mask_exvoxels,'mask_min_10_percent_of_all')

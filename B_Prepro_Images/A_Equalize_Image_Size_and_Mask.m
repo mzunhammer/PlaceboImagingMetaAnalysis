@@ -14,7 +14,8 @@ outheader=maskheader;
 outheader.fname=maskpath;
 spm_write_vol(outheader,mask);
 
-%% By default, SPM will change matrix and voxel size to the first image entered in Imagecalc
+%% By default, imcalc will change matrix and voxel size to 
+% the size of the first image entered... here: the mask's
 
 df.norm_img=cell(size(df.img));
 for i=1:length(df.img)
