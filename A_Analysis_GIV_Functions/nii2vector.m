@@ -1,11 +1,15 @@
-function v=nii2vector(nii_imgs)
+function v=nii2vector(nii_imgs,mask_img)
 
-%Function to read nii images as double vector (brainmasked)
-maskdir=fullfile('../../pattern_masks/brainmask.nii');
-% Load mask
-maskheader=spm_vol(maskdir);
-mask=logical(spm_read_vols(maskheader));
+if (exist('mask_img'))
+    % Load mask
+    maskheader=spm_vol(mask_img);
+    mask=logical(spm_read_vols(maskheader)); 
+else
+    sample_img=spm_read_vols(spm_vol(nii_imgs{1}));
+    mask=ones(size(sample_img));
+end
 masking=mask(:);
+
 
 %Load image headers
 headers=spm_vol(nii_imgs);
@@ -16,7 +20,7 @@ tic
 for i=1:nimg
     %Load image data
     [currdat,~]=spm_read_vols(headers{i});
-    v(i,:)=currdat(mask)';
+    v(i,:)=currdat(masking)';
 end
 toc/60;
 

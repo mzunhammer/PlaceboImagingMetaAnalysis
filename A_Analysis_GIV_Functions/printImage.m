@@ -1,7 +1,7 @@
-function printImage(masked_stats,outbasename)
+function printImage(masked_stats,maskpath,outbasename)
 
 % Backtransform to image
-maskheader=spm_vol('../../pattern_masks/brainmask_logical.nii,1');
+maskheader=spm_vol(maskpath);
 mask=logical(spm_read_vols(maskheader));
 masking=mask(:);
 outImg=zeros(size(mask));
