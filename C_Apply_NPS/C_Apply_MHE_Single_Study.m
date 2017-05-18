@@ -3,7 +3,8 @@ p = mfilename('fullpath'); %CANlab's apply mask do not like lists with relative 
 [p,~,~]=fileparts(p);
 splitp=strsplit(p,'/');
 datadir=fullfile(filesep,splitp{1:end-2},'Datasets');
-addpath('./pattern_masks/')
+maskdir=fullfile(filesep,splitp{1:end-2},'pattern_masks');
+addpath(maskdir)
 % 'Atlas_et_al_2012'
 % 'Bingel_et_al_2006'
 % 'Bingel_et_al_2011'
