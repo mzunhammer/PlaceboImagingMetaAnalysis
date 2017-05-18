@@ -106,7 +106,7 @@ df=df(idf,:);
 %% USE THE IMAGES (r attached to name) THAT WERE EQUALZED IN DIMENSIONS WITH A_Equalize_Image_Size_and_Mask.m
 
 % Load mask
-maskheader=spm_vol('../C_Apply_NPS/pattern_masks/brainmask_logical.nii,1');
+maskheader=spm_vol('../../pattern_masks/brainmask_logical.nii,1');
 mask=logical(spm_read_vols(maskheader));
 masking=mask(:);
 

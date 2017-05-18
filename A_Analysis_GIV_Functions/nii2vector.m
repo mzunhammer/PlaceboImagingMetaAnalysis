@@ -1,7 +1,7 @@
 function v=nii2vector(nii_imgs)
 
 %Function to read nii images as double vector (brainmasked)
-maskdir=fullfile('../pattern_masks/brainmask.nii');
+maskdir=fullfile('../../pattern_masks/brainmask.nii');
 % Load mask
 maskheader=spm_vol(maskdir);
 mask=logical(spm_read_vols(maskheader));

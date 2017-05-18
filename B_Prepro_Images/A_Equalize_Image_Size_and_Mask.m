@@ -6,10 +6,10 @@ load(fullfile(datapath,'AllData.mat'));
 
 %Create logical mask
 %Load mask
-maskheader=spm_vol('../C_Apply_NPS/pattern_masks/brainmask.nii');
+maskheader=spm_vol('../../pattern_masks/brainmask.nii');
 mask=spm_read_vols(maskheader);
 mask=mask>0.5;
-maskpath='../C_Apply_NPS/pattern_masks/brainmask_logical.nii';
+maskpath='../../pattern_masks/brainmask_logical.nii';
 outheader=maskheader;
 outheader.fname=maskpath;
 spm_write_vol(outheader,mask);
