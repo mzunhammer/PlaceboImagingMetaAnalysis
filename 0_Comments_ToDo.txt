@@ -3,9 +3,11 @@
 #### DISCUSS WITH TOR & ULRIKE
 
 1.) Updated data-sharing agreement
-2.) 
+2.) Open questions NEJM paper:
 
-3.) What is the target journal?
+
+
+3.) Target journal:
 Medical Journal/Translational Journal
 	1.) NEJM
 	– STM
@@ -13,8 +15,6 @@ Medical Journal/Translational Journal
 	– Neuroimage
 	– HBM
 	– PAIN
-
-
 
 2.) Validation paper 50%:
 	Example of validation reliablity, cooperation
