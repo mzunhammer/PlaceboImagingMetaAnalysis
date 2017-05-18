@@ -4,7 +4,7 @@ clear
 datapath='/Volumes/Transcend/Boulder_Essen/Datasets/';
 tic
 load(fullfile(datapath,'dfMaskedBasicImg.mat'));
-addpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/A_Analysis_GIV_Functions/')
+addpath('../A_Analysis_GIV_Functions/')
 addpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/E_Meta_Analysis_SPM')
 addpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/MontagePlot')
 

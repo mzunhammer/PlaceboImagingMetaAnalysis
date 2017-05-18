@@ -6,4 +6,4 @@ p = mfilename('fullpath'); %CANlab's apply mask do not like lists with relative 
 splitp=strsplit(p,'/');
 maskdir=fullfile(filesep,splitp{1:end-2},'pattern_masks');
 
-v=nii2vector(nii_imgs,fullfile(maskdir,'brainmask_logical.nii'));
+v=nii2vector(nii_imgs,fullfile(maskdir,'brainmask_logical_50.nii')); % brainmask thresholded at a cut-off of 50% brain tissue probability

@@ -1,7 +1,7 @@
 %% Meta-Analysis & Forest Plot
 clear
 % Add folder with Generic Inverse Variance Methods Functions first
-addpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/A_Analysis_GIV_Functions/')
+addpath('../A_Analysis_GIV_Functions/')
 datapath='../../Datasets';
 
 load(fullfile(datapath,'AllData.mat'))

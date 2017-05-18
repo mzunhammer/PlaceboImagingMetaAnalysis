@@ -24,7 +24,7 @@
 
 clear
 % Add folder with Generic Inverse Variance Methods Functions first
-addpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/A_Analysis_GIV_Functions/')
+addpath('../A_Analysis_GIV_Functions/')
 load('A1_Full_Sample.mat')
 
 % !!!!! These must be in the same order as listed under "studies" !!!!

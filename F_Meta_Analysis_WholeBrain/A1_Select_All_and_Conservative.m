@@ -5,11 +5,8 @@
 clear
 tic
 % Add folder with Generic Inverse Variance Methods Functions first
-addpath('.../A_Analysis_GIV_Functions/')
-addpath('.../A_Analysis_GIV_Functions/')
-
+addpath('../A_Analysis_GIV_Functions/')
 datapath='../../Datasets';
-
 load(fullfile(datapath,'AllData.mat'))
 
 studies=unique(df.studyID);   %Get all studies in df

@@ -2,8 +2,8 @@
 % Script analog to the full meta-analysis of NPS results
 clear
 % Add folder with Generic Inverse Variance Methods Functions first
-addpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/A_Analysis_GIV_Functions/')
-load('A1_Full_Img_Data.mat')
+addpath('../A_Analysis_GIV_Functions/')
+load('A1_Full_Sample_Img_Data_Masked_10_percent.mat')
 
 % !!!!! These must be in the same order as listed under "studies" !!!!
 
@@ -55,7 +55,7 @@ studyIDtexts={
 %% Meta-Analysis: Run once for plain analysis
 tic
 %Preallocate stats for speed
-n_studies=length(df_full.studies);
+n_studies=length(df_full_masked.studies);
 stats(n_studies).mu=[];
 stats(n_studies).sd_diff=[];
 stats(n_studies).sd_pooled=[];
@@ -68,33 +68,33 @@ stats(n_studies).g=[];
 stats(n_studies).se_g=[];
 stats(n_studies).delta=[];
 stats(n_studies).std_delta=[];
+stats(n_studies).ICC=[];
 
-
-for i=1:length(df_full.studies) % Calculate for all studies except...
-    if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
-        if df_full.BetweenSubject(i)==0 %Within-subject studies
-           stats(i)=withinMetastats(df_full.pladata{i},df_full.condata{i});
-        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-           stats(i)=betweenMetastats(df_full.pladata{i},df_full.condata{i});
+for i=1:length(df_full_masked.studies) % Calculate for all studies except...
+    if df_full_masked.consOnlyImg(i)==0 %...data-sets where both pla and con is available
+        if df_full_masked.BetweenSubject(i)==0 %Within-subject studies
+           stats(i)=withinMetastats(df_full_masked.pla_img{i},df_full_masked.con_img{i});
+        elseif df_full_masked.BetweenSubject(i)==1 %Between-subject studies
+           stats(i)=betweenMetastats(df_full_masked.pla_img{i},df_full_masked.con_img{i});
         end        
     end
 end
 % Calculate for those studies where only pla>con contrasts are available
-conOnly=find(df_full.consOnlyNPS==1);
+conOnly=find(df_full_masked.consOnlyImg==1);
 impu_r=nanmean([stats.r]); % impute the mean within-subject study correlation observed in all other studies
 for i=conOnly'
-stats(i)=withinMetastats(df_full.pladata{i},impu_r);
+stats(i)=withinMetastats(df_full_masked.pla_img{i},impu_r);
 end
 % Calculate meta-analysis summary
 summary=GIVsummary(stats);
 toc
 
-printImage(summary.g.random.z,'Full_Sample_Pla_min10perc_z')
-printImage(summary.g.random.summary,'Full_Sample_Pla_min10perc_g')
+printImage(summary.g.random.z,fullfile('./nii_results','Full_Sample_Pla_min10perc_z'))
+printImage(summary.g.random.summary,fullfile('./nii_results','Full_Sample_Pla_min10perc_g'))
 %% Meta-Analysis: Run repeatedly for permutation test
 tic
 %Preallocate stats for speed
-n_studies=length(df_full.studies);
+n_studies=length(df_full_masked.studies);
 stats_perm(n_studies).mu=[];
 stats_perm(n_studies).sd_diff=[];
 stats_perm(n_studies).sd_pooled=[];
@@ -107,6 +107,7 @@ stats_perm(n_studies).g=[];
 stats_perm(n_studies).se_g=[];
 stats_perm(n_studies).delta=[];
 stats_perm(n_studies).std_delta=[];
+stats_perm(n_studies).ICC=[];
 
 n_studies=length(stats_perm);
 n_multiple=size(stats_perm(1).std_delta,2);
@@ -115,32 +116,32 @@ g_random_z_min=NaN(n_perms,1);
 g_random_z_max=NaN(n_perms,1);
 
 for p=1:n_perms    
-    for i=1:length(df_full.studies) % Calculate for all studies except...
-        if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
-            if df_full.BetweenSubject(i)==0 %Within-subject studies   
+    for i=1:length(df_full_masked.studies) % Calculate for all studies except...
+        if df_full_masked.consOnlyImg(i)==0 %...data-sets where both pla and con is available
+            if df_full_masked.BetweenSubject(i)==0 %Within-subject studies   
                 %randomly inverse or not inverse contrasts for each participant
-                curr_n=size(df_full.pladata{i},1);
+                curr_n=size(df_full_masked.pla_img{i},1);
                 relabel=logical(random('Discrete Uniform',2,curr_n,1)-1);
-                curr_pla=vertcat(df_full.pladata{i}(relabel,:),df_full.condata{i}(~relabel,:));
-                curr_con=vertcat(df_full.pladata{i}(~relabel,:),df_full.condata{i}(relabel,:));
-                stats_perm(i)=withinMetastats(df_full.pladata{i},df_full.condata{i});
-            elseif df_full.BetweenSubject(i)==1 %Between-subject studies
+                curr_pla=vertcat(df_full_masked.pla_img{i}(relabel,:),df_full_masked.con_img{i}(~relabel,:));
+                curr_con=vertcat(df_full_masked.pla_img{i}(~relabel,:),df_full_masked.con_img{i}(relabel,:));
+                stats_perm(i)=withinMetastats(df_full_masked.pla_img{i},df_full_masked.con_img{i});
+            elseif df_full_masked.BetweenSubject(i)==1 %Between-subject studies
                
-               sample=vertcat(df_full.pladata{i},df_full.condata{i}); %pool groups
+               sample=vertcat(df_full_masked.pla_img{i},df_full_masked.con_img{i}); %pool groups
                sample=sample(randperm(size(sample,1)),:); %shuffle groups
-               curr_pla=sample(1:size(df_full.pladata{i},1),:);
-               curr_con=sample(size(df_full.pladata{i},1)+1:end,:);
+               curr_pla=sample(1:size(df_full_masked.pla_img{i},1),:);
+               curr_con=sample(size(df_full_masked.pla_img{i},1)+1:end,:);
                stats_perm(i)=betweenMetastats(curr_pla,curr_con); %redraw and summarize
             end        
         end
     end
     % Calculate for those studies where only pla>con contrasts are available
-    conOnly=find(df_full.consOnlyNPS==1);
+    conOnly=find(df_full_masked.consOnlyImg==1);
     impu_r=nanmean([stats_perm.r]); % impute the mean within-subject study correlation observed in all other studies
     for i=conOnly'
-    curr_n=size(df_full.pladata{i},1);
+    curr_n=size(df_full_masked.pla_img{i},1);
     relabel=(random('Discrete Uniform',2,curr_n,1)*2-3); %randomly invert contrasts
-    curr_pla=df_full.pladata{i}.*relabel;
+    curr_pla=df_full_masked.pla_img{i}.*relabel;
     stats_perm(i)=withinMetastats(curr_pla,impu_r);
     end
     % Calculate meta-analysis summary
