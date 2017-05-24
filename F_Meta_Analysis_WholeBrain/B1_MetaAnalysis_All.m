@@ -89,20 +89,74 @@ end
 summary=GIVsummary(stats);
 toc
 
-outimg_z=zeros(size(df_full_masked.brainmask));
-outimg_z(df_full_masked.brainmask)=summary.g.random.z;
-printImage(outimg_z,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_z'))
 
+
+%heterogeneity: Fazit looks ok. df=19 in most grey matter areas of the brain, but 17 in white matter
+%areas
+hist(summary.g.heterogeneity.Isq)
+hist(summary.g.heterogeneity.p_het)
+
+%I^2 unthresholded. Fazit: Foci at left hippocampus, parietal areas, medial
+%and dorsolateral prefrontal cortices
+outimg_Isq=zeros(size(df_full_masked.brainmask));
+outimg_Isq(df_full_masked.brainmask)=summary.g.heterogeneity.Isq;
+printImage(outimg_Isq,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_Isq'))
+
+%I^2 thresholded at p<.001 uncorrected. Fazit: 
+outimg_Isq_p001=zeros(size(df_full_masked.brainmask));
+p001=summary.g.heterogeneity.Isq;
+p001(summary.g.heterogeneity.p_het>.001)=0;
+outimg_Isq_p001(df_full_masked.brainmask)=p001;
+printImage(outimg_Isq_p001,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_Isq_p001'))
+
+%tau^2 unthresholded. Fazit: Foci at left hippocampus, parietal areas, medial
+%and dorsolateral prefrontal cortices
+outimg_tausq=zeros(size(df_full_masked.brainmask));
+outimg_tausq(df_full_masked.brainmask)=summary.g.heterogeneity.tausq;
+printImage(outimg_tausq,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_tausq'))
+
+%df: Fazit looks ok. df=19 in most grey matter areas of the brain, but 17 in white matter
+%areas
+hist(summary.g.random.df)
+outimg_df=zeros(size(df_full_masked.brainmask));
+outimg_df(df_full_masked.brainmask)=summary.g.random.df;
+printImage(outimg_df,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_df'))
+
+%SE g: Fazit: 
+outimg_SE_g=zeros(size(df_full_masked.brainmask));
+outimg_SE_g(df_full_masked.brainmask)=summary.g.random.SEsummary;
+printImage(outimg_SE_g,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_SE_g'))
+
+%g: Fazit: 
 outimg_g=zeros(size(df_full_masked.brainmask));
 outimg_g(df_full_masked.brainmask)=summary.g.random.summary;
 printImage(outimg_g,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_g'))
 
+%z: Fazit: 
+outimg_z=zeros(size(df_full_masked.brainmask));
+outimg_z(df_full_masked.brainmask)=summary.g.random.z;
+printImage(outimg_z,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_z'))
+
+%z-thresholded at p<.001 uncorrected. Fazit: 
+outimg_z_p001=zeros(size(df_full_masked.brainmask));
+p001=summary.g.random.z;
+p001(summary.g.random.p>.001)=0;
+outimg_z_p001(df_full_masked.brainmask)=p001;
+printImage(outimg_z_p001,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_z_p001'))
+
+%z-thresholded at p<.001 uncorrected FIXED EFFECTS. Fazit: 
+outimg_z_p001=zeros(size(df_full_masked.brainmask));
+p001=summary.g.fixed.z;
+p001(summary.g.fixed.p>.001)=0;
+outimg_z_p001(df_full_masked.brainmask)=p001;
+printImage(outimg_z_p001,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_z_fixed_p001'))
+
 %% Explore peak results
 
 % Best peak around left hippocampus
-max_z=find(summary.g.random.z==max(summary.g.random.z))
-max_z_stats=stat_reduce(stats,max_z);
-max_z_summary=ForestPlotter(max_z_stats,...
+VOI=find(summary.g.random.z==min(summary.g.random.z));
+VOI_stats=stat_reduce(stats,VOI);
+VOI_summary=ForestPlotter(VOI_stats,...
                   'studyIDtexts',studyIDtexts,...
                   'outcomelabel','Maximum z Voxel: Hedges'' g)',...
                   'type','random',...
@@ -112,13 +166,12 @@ max_z_summary=ForestPlotter(max_z_stats,...
                   'boxscaling',1,...
                   'textoffset',0);
 
-outimg_mark_max_z=zeros(size(df_full_masked.brainmask));
-out_mark=zeros(size(summary.g.random.summary));
-out_mark(max_z)=1;
-outimg_mark_max_z(df_full_masked.brainmask)=out_mark;
-printImage(outimg_mark_max_z,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','max_z'))
+outimg_mark_VOI=zeros(size(df_full_masked.brainmask));
+out_mark=zeros(size(summary.g.random.z));
+out_mark(VOI)=1;
+outimg_mark_VOI(df_full_masked.brainmask)=out_mark;
+printImage(outimg_mark_VOI,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','VOI'))
 
-hist(all_g(:,max_z));
 %% Meta-Analysis: Run repeatedly for permutation test
 tic
 %Preallocate stats for speed
@@ -139,9 +192,11 @@ stats_perm(n_studies).ICC=[];
 
 n_studies=length(stats_perm);
 n_multiple=size(stats_perm(1).std_delta,2);
-n_perms=20;
+n_perms=200;
 g_random_z_min=NaN(n_perms,1);
 g_random_z_max=NaN(n_perms,1);
+
+summary_perm(n_perms)=struct('g',[]);
 
 for p=1:n_perms    
     for i=1:length(df_full_masked.studies) % Calculate for all studies except...
@@ -173,17 +228,19 @@ for p=1:n_perms
     stats_perm(i)=withinMetastats(curr_pla,impu_r);
     end
     % Calculate meta-analysis summary
-    summary_perm=GIVsummary(stats_perm);
-    g_random_z_min(p)=min(summary_perm.g.random.z);
-    g_random_z_max(p)=max(summary_perm.g.random.z);
+    s=GIVsummary(stats_perm,{'g'});           % use output-argument to only compute stats for "g"
+    s.g.fixed=[]; % remove fixed effects to reduce size of results matrix
+    summary_perm(p)=s;
+    g_random_z_min(p)=min(summary_perm(p).g.random.z);
+    g_random_z_max(p)=max(summary_perm(p).g.random.z);
     toc
 end
 
 hist(g_random_z_max);
-quantile(g_random_z_min,0.05);
-quantile(g_random_z_max,0.95);
+quantile(g_random_z_min,0.025)
+quantile(g_random_z_max,0.975)
 
-printImage(summary_perm.g.random.z,'Full_Sample_pla_min10perc_z_permuted_null')
+printImage(summary_perm(p).g.random.z,'../../pattern_masks/brainmask_logical_50.nii','Full_Sample_pla_min10perc_z_permuted_null')
 % z-max at 95% Quantile w mask 10% no-signal voxels = 6.1620 (100 perms);
 % 6.2 (20 perms)
 %% Obtain Bayesian Factors
