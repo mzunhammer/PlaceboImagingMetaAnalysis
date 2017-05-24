@@ -39,7 +39,7 @@ function [summary]=GIVsummary(stats)
 % of The Cochrane Collaboration
 % August 2010
 
-%Globals variables (true for all statistics computed)
+%Global variables (true for all statistics computed)
 
 %means
 [summary.mu.fixed,...
@@ -86,34 +86,38 @@ if ~isempty([stats.ICC])
      summary.ICC.random.CI_hi=fishersZ2r(summary.ICC.random.CI_hi);
 end 
 % Actual GIV function, used since same formula applies for all outcomes... (means,d,g,r)
-function [fixed,random,heterogeneity]=GIV_weight(effects,SEs) 
+function [fixed,random,heterogeneity]=GIV_weight(effects,SEs)
+   z_CI=abs(icdf('normal',0.025,0,1));% z-Value for confidence intervals
    % Fixed effects statistics are calculated first
    fixed.weight=1./SEs.^2; % weight derived from every SE
-   fixed.df=sum(~isnan(effects))-1; %degrees of freedom
-   fixed.rel_weight=fixed.weight/nansum(fixed.weight); %normalized weight in %
-   fixed.summary=nansum(effects.*fixed.weight)./nansum(fixed.weight); %Formula 7 in Deeks&Higgins
-   fixed.SEsummary=1./sqrt(nansum(fixed.weight)); %Formula 8 in Deeks&Higgins
+   fixed.df=sum(~isnan(effects),1)-1; %degrees of freedom
+   total_weight=nansum(fixed.weight);
+   fixed.rel_weight=fixed.weight./total_weight; %normalized weight in %
+   fixed.summary=nansum(effects.*fixed.weight)./total_weight; %Formula 7 in Deeks&Higgins
+   fixed.SEsummary=1./sqrt(total_weight); %Formula 8 in Deeks&Higgins
    % Heterogeneity statistic (same for random & fixed, tausq is required as an addition for random)
    heterogeneity.chisq=nansum(fixed.weight.*(bsxfun(@minus,effects,fixed.summary)).^2);
    heterogeneity.p_het=1-chi2cdf(heterogeneity.chisq,fixed.df);
-   heterogeneity.Isq=max([100*((heterogeneity.chisq-fixed.df)/heterogeneity.chisq),0]);
+   heterogeneity.Isq=max([100.*((heterogeneity.chisq-fixed.df)./heterogeneity.chisq)
+                          zeros(size(heterogeneity.chisq))],[],1);
    % Test for overall effect (Deeks&Higgins, page 9ff)
    fixed.z=fixed.summary./fixed.SEsummary; % Standardized overall effect (z-Value)
    % Normal t-value (based on normal distribution, uncorrected for multiple comparisons)
-   fixed.p = normcdf(-abs(fixed.z),0,1)*2; % p of z-Value assuming a normal distribution (two-tailed!)
-   fixed.CI_lo=fixed.summary-fixed.SEsummary*1.96;
-   fixed.CI_hi=fixed.summary+fixed.SEsummary*1.96;
+   fixed.p = normcdf(-abs(fixed.z),0,1).*2; % p of z-Value assuming a normal distribution (two-tailed!)
+   fixed.CI_lo=fixed.summary-fixed.SEsummary.*z_CI;
+   fixed.CI_hi=fixed.summary+fixed.SEsummary.*z_CI;
    
    % Random effects statistics differ in weight, rel_weight, summary and SEsummary, and heterogeneity
-   heterogeneity.tausq=max([(heterogeneity.chisq-fixed.df)/(nansum(fixed.weight)-(nansum(fixed.weight.^2)/nansum(fixed.weight))),0]); %Page 8 in in Deeks&Higgins
+   heterogeneity.tausq=max([(heterogeneity.chisq-fixed.df)./(total_weight-(nansum(fixed.weight.^2)./total_weight)),
+                            zeros(size(heterogeneity.chisq))],[],1); %Page 8 in in Deeks&Higgins
    random.df=fixed.df;
    random.weight=1./(SEs.^2+heterogeneity.tausq);
-   random.rel_weight=random.weight/nansum(random.weight);
+   random.rel_weight=random.weight./nansum(random.weight);
    random.summary=nansum(effects.*random.weight)./nansum(random.weight); %Formula 13 in Deeks&Higgins
    random.SEsummary=1./sqrt(nansum(random.weight)); %Formula 14 in Deeks&Higgins
    random.z=random.summary./random.SEsummary; % Standardized overall effect (z-Value)
-   random.p = normcdf(-abs(random.z),0,1)*2; % p of z-Value assuming a normal distribution (two-tailed!)
-   random.CI_lo=random.summary-random.SEsummary*1.96;
-   random.CI_hi=random.summary+random.SEsummary*1.96;
+   random.p = normcdf(-abs(random.z),0,1).*2; % p of z-Value assuming a normal distribution (two-tailed!)
+   random.CI_lo=random.summary-random.SEsummary.*z_CI;
+   random.CI_hi=random.summary+random.SEsummary.*z_CI;
 end
 end

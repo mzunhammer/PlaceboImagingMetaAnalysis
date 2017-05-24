@@ -69,6 +69,9 @@ run('./D_Exploratory_Analyses/E_demographics.m')
 
 %% Meta-analysis placebo paper (Ratings, NPS, MHE)
 
+%First run unit-test to assert validity of GIV functions (withinMetastats, betweenMetastats, GIVsummary):
+run('./A_Analysis_GIV_Functions/Check_GIV_Validity.m')
+
 %Assemble full data-set and inclusive/conservative data-set
 run('./E_NPS_Meta_Analysis_Placebo/A1_Select_All_and_Inclusive.m')
 %Assemble responder data-set

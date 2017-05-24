@@ -89,8 +89,36 @@ end
 summary=GIVsummary(stats);
 toc
 
-printImage(summary.g.random.z,fullfile('./nii_results','Full_Sample_Pla_min10perc_z'))
-printImage(summary.g.random.summary,fullfile('./nii_results','Full_Sample_Pla_min10perc_g'))
+outimg_z=zeros(size(df_full_masked.brainmask));
+outimg_z(df_full_masked.brainmask)=summary.g.random.z;
+printImage(outimg_z,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_z'))
+
+outimg_g=zeros(size(df_full_masked.brainmask));
+outimg_g(df_full_masked.brainmask)=summary.g.random.summary;
+printImage(outimg_g,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_g'))
+
+%% Explore peak results
+
+% Best peak around left hippocampus
+max_z=find(summary.g.random.z==max(summary.g.random.z))
+max_z_stats=stat_reduce(stats,max_z);
+max_z_summary=ForestPlotter(max_z_stats,...
+                  'studyIDtexts',studyIDtexts,...
+                  'outcomelabel','Maximum z Voxel: Hedges'' g)',...
+                  'type','random',...
+                  'summarystat','g',...
+                  'withoutlier',0,...
+                  'WIsubdata',0,...
+                  'boxscaling',1,...
+                  'textoffset',0);
+
+outimg_mark_max_z=zeros(size(df_full_masked.brainmask));
+out_mark=zeros(size(summary.g.random.summary));
+out_mark(max_z)=1;
+outimg_mark_max_z(df_full_masked.brainmask)=out_mark;
+printImage(outimg_mark_max_z,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','max_z'))
+
+hist(all_g(:,max_z));
 %% Meta-Analysis: Run repeatedly for permutation test
 tic
 %Preallocate stats for speed

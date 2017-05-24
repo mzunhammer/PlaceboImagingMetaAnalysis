@@ -40,3 +40,17 @@ octave-workspace
 */*.mat
 */.mat/*
 */*/*.mat
+
+# nifti-images
+*.nii
+*/*.nii
+*/.nii/*
+*/*/*.nii
+*.img
+*/*.img
+*/.img/*
+*/*/*.img
+*.hdr
+*/*.hdr
+*/.hdr/*
+*/*/*.hdr
