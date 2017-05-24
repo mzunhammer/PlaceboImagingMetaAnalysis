@@ -1,14 +1,20 @@
-function [summary]=GIVsummary(stats)
+function [summary]=GIVsummary(stats, outputs)
 % Generic inverse-variance (GIV) method to summarize continuous statistics across studies 
 % Input:
-% stats objects from withinMetastats or betweenMetastats with N studies.
+% stats: objects from withinMetastats or betweenMetastats with N studies.
+% outputs: OPTIONAL! will default to: outputs={'mu','d','g','r'}
+%          if fewer arguments are desired (e.g. to speed up computation and
+%          limit size of results for whole-brain imaging analysis), those
+%          can be specified explicitly (e.g. as {'g'})
 
 % Output:
-% Adds "summary" field to stats objects with fixed and random summaries for
-% unstandardized (raw) means
-% Cohen's d
-% Hedges' g
-% r
+% Per default the "summary" output object will contain fixed and random summaries for
+% 'mu': unstandardized (raw) means
+% 'd': Cohen's d
+% 'g': Hedges' g
+% 'r':
+
+% By specifying "outputs" are specified explicitly, only 
 
 % Further adds "weight_d","weight_g" and "weight_r" fields to stats object
 % for reviewing the weights used by the GIV method.
@@ -39,22 +45,33 @@ function [summary]=GIVsummary(stats)
 % of The Cochrane Collaboration
 % August 2010
 
+if ~exist('outputs')
+    outputs={'mu','d','g','r'};
+end
+
 %Global variables (true for all statistics computed)
 
 %means
+if any(strcmp(outputs,'mu'))
 [summary.mu.fixed,...
  summary.mu.random,...
  summary.mu.heterogeneity]=GIV_weight(vertcat(stats.mu),vertcat(stats.se_mu));
+end
 %d
+if any(strcmp(outputs,'d'))
 [summary.d.fixed,...
  summary.d.random,...
  summary.d.heterogeneity]=GIV_weight(vertcat(stats.d),vertcat(stats.se_d));
+end
 %g
+if any(strcmp(outputs,'g'))
 [summary.g.fixed,...
  summary.g.random,...
  summary.g.heterogeneity]=GIV_weight(vertcat(stats.g),vertcat(stats.se_g));
+end
 %r
 % For correlations all r-values have to be transformed to Fisher's Z before summary and back to r after.
+if any(strcmp(outputs,'r'))
 [summary.r.fixed,...
  summary.r.random,...
  summary.r.heterogeneity]=GIV_weight(r2fishersZ(vertcat(stats.r)),sqrt(1./(vertcat(stats.n)-3))); %For Fisher's Z the SE of correlations only depends on n sqrt(1./(n-3))
@@ -68,23 +85,26 @@ function [summary]=GIVsummary(stats)
  summary.r.random.SEsummary=fishersZ2r(summary.r.random.SEsummary);
  summary.r.random.CI_lo=fishersZ2r(summary.r.random.CI_lo);
  summary.r.random.CI_hi=fishersZ2r(summary.r.random.CI_hi);
- 
- % For ICC all r-values have to be transformed to Fisher's Z before summary and back to r after.
-if ~isempty([stats.ICC])
-    [summary.ICC.fixed,...
-     summary.ICC.random,...
-     summary.ICC.heterogeneity]=GIV_weight(r2fishersZ(vertcat(stats.ICC)),sqrt(1./(vertcat(stats.n)-3))); %For Fisher's Z the SE of correlations only depends on n sqrt(1./(n-3))
 
-    % Back-transform from fishersZ to r
-     summary.ICC.fixed.summary=fishersZ2r(summary.ICC.fixed.summary);
-     summary.ICC.fixed.SEsummary=fishersZ2r(summary.ICC.fixed.SEsummary);
-     summary.ICC.fixed.CI_lo=fishersZ2r(summary.ICC.fixed.CI_lo);
-     summary.ICC.fixed.CI_hi=fishersZ2r(summary.ICC.fixed.CI_hi);
-     summary.ICC.random.summary=fishersZ2r(summary.ICC.random.summary);
-     summary.ICC.random.SEsummary=fishersZ2r(summary.ICC.random.SEsummary);
-     summary.ICC.random.CI_lo=fishersZ2r(summary.ICC.random.CI_lo);
-     summary.ICC.random.CI_hi=fishersZ2r(summary.ICC.random.CI_hi);
 end 
+ % For ICC all r-values have to be transformed to Fisher's Z before summary and back to r after.
+if any(strcmp(outputs,'ICC'))
+    if ~isempty([stats.ICC])
+        [summary.ICC.fixed,...
+         summary.ICC.random,...
+         summary.ICC.heterogeneity]=GIV_weight(r2fishersZ(vertcat(stats.ICC)),sqrt(1./(vertcat(stats.n)-3))); %For Fisher's Z the SE of correlations only depends on n sqrt(1./(n-3))
+
+        % Back-transform from fishersZ to r
+         summary.ICC.fixed.summary=fishersZ2r(summary.ICC.fixed.summary);
+         summary.ICC.fixed.SEsummary=fishersZ2r(summary.ICC.fixed.SEsummary);
+         summary.ICC.fixed.CI_lo=fishersZ2r(summary.ICC.fixed.CI_lo);
+         summary.ICC.fixed.CI_hi=fishersZ2r(summary.ICC.fixed.CI_hi);
+         summary.ICC.random.summary=fishersZ2r(summary.ICC.random.summary);
+         summary.ICC.random.SEsummary=fishersZ2r(summary.ICC.random.SEsummary);
+         summary.ICC.random.CI_lo=fishersZ2r(summary.ICC.random.CI_lo);
+         summary.ICC.random.CI_hi=fishersZ2r(summary.ICC.random.CI_hi);
+    end 
+end
 % Actual GIV function, used since same formula applies for all outcomes... (means,d,g,r)
 function [fixed,random,heterogeneity]=GIV_weight(effects,SEs)
    z_CI=abs(icdf('normal',0.025,0,1));% z-Value for confidence intervals

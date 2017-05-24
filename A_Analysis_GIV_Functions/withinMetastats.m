@@ -21,7 +21,6 @@ function StudyStat=withinMetastats(cond1,cond2)
 %d, se_d: Standardized mean difference (COHEN's d), standardized standard error
 %g, se_g: Standardized mean difference (HEDGE's g), standardized standard error
 
-
 % For convenience, if cond1 or cond2 were entered as a table, convert to arrays 
 if istable(cond1)
 cond1=cond1{:,:};
@@ -57,10 +56,15 @@ if size(cond1)==size(cond2) % Check if arrays of equal size were provided
     
     %Correlation between paired conditions
     r=NaN(1,size(cond1,2));
-    for i=1:size(cond1,2)
-        r_raw=corrcoef(cond1(:,i),cond2(:,i),'rows','complete');
-        r(1,i)=r_raw(2);
-    end
+    r=fastcorrcoef(cond1,cond2); % MATLABs corrcoef is slow... when using this function for whole-brain
+    % analysis it is the main time-consuming step.
+   
+
+% Old and slow:    
+%     for i=1:size(cond1,2)
+%         r_raw=corrcoef(cond1(:,i),cond2(:,i),'rows','complete');
+%         r(1,i)=r_raw(2);
+%     end
     
     % Unstandardized mean outcomes
     mu=nanmean(delta);      %by-study mean difference
