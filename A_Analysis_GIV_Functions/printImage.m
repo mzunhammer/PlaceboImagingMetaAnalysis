@@ -11,7 +11,9 @@ outImg(masking)=masked_stats;
 outpath=fullfile([outbasename,'.nii']);
 outheader=maskheader;
 outheader.fname=outpath;
+outheader.dt=[4,0]; %data_type (see: spm_type) should be at least int16 to allow for negative values
 outheader=rmfield(outheader,'pinfo'); %remove pinfo otherwise there may be scaling problems with the data
+outheader.descrip='spm - algebra';
 spm_write_vol(outheader,outImg);
 
 % Print Pain positive effects only
@@ -20,15 +22,17 @@ outImg(outImg<0)=0;
 outpath=fullfile([outbasename,'_pos.nii']);
 outheader=maskheader;
 outheader.fname=outpath;
+outheader.dt=[4,0]; %data_type (see: spm_type) should be at least int16 to allow for negative values
 outheader=rmfield(outheader,'pinfo'); %remove pinfo otherwise there may be scaling problems with the data
 spm_write_vol(outheader,outImg);
 
 % Print Pain negative effects only
 outImg(masking)=masked_stats.*-1;
-outImg(outImg<0)=0;
+outImg(outImg<=0)=0;
 outpath=fullfile([outbasename,'_neg.nii']);
 outheader=maskheader;
 outheader.fname=outpath;
+outheader.dt=[4,0]; %data_type (see: spm_type) should be at least int16 to allow for negative values
 outheader=rmfield(outheader,'pinfo'); %remove pinfo otherwise there may be scaling problems with the data
 spm_write_vol(outheader,outImg);
 
