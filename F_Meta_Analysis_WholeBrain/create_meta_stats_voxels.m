@@ -1,4 +1,4 @@
-function stats=create_meta_stats(df)
+function stats=create_meta_stats_voxels(df)
 %Preallocate stats for speed
 n_studies=length(df.studies);
 stats(n_studies).mu=[];
@@ -14,6 +14,8 @@ stats(n_studies).se_g=[];
 stats(n_studies).delta=[];
 stats(n_studies).std_delta=[];
 stats(n_studies).ICC=[];
+stats(n_studies).corr_external=[];
+stats(n_studies).n_corr_external=[];
 
 for i=1:length(df.studies) % Calculate for all studies except...
     if df.consOnlyImg(i)==0 %...data-sets where only contrasts are available

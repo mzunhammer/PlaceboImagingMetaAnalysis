@@ -1,0 +1,20 @@
+=====[ /Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_Sample_Pla_min10perc_z_neg.nii | Harvard-Oxford Cortical Structural Atlas ]=====
+ClusterIndex	Voxels	MAX	MAX X (mm)	MAX Y (mm)	MAX Z (mm)	COG X (mm)	COG Y (mm)	COG Z (mm)
+2	6	4.23	38	8	0	37.3	7.03	-0.00745
+1	3	4.05	-40	-64	-24	-39.3	-63.3	-23.3
+------------------------------------------
+Structures to which each center of mass belongs to:
+2,37.3,7.03,-0.00745,Harvard-Oxford Cortical Structural Atlas,53% Insular Cortex
+1,-39.3,-63.3,-23.3,Harvard-Oxford Cortical Structural Atlas,5% Temporal Occipital Fusiform Cortex, 2% Occipital Fusiform Gyrus
+------------------------------------------
+Structures to which each cluster belongs to:
+
+Cluster #2
+Insular Cortex:52.8333
+Frontal Operculum Cortex:0.166667
+Central Opercular Cortex:0.166667
+
+Cluster #1
+Lateral Occipital Cortex, inferior division:1.66667
+Temporal Occipital Fusiform Cortex:11.3333
+Occipital Fusiform Gyrus:5.33333

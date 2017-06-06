@@ -4,10 +4,11 @@ clear
 
 null_trshld=0.1; %PROPORTION OF MISSING CASES NECESSARY TO EXCLUDE A VOXEL
 
-%% Add folder with Generic Inverse Variance Methods Functions first
+% Add folder with Generic Inverse Variance Methods Functions first
 addpath('../A_Analysis_GIV_Functions/MontagePlot')
 load('A1_Full_Sample_Img_Data.mat')
 
+%% Concatenate brainmasked image vectors
 alldata=[vertcat(df_full.pla_img{:});vertcat(df_full.con_img{:})];
 null_voxels=sum(alldata==0)./size(alldata,1);%get proportions of participants with a value of 0 for each voxel.
 mask_exvoxels=null_voxels<null_trshld;

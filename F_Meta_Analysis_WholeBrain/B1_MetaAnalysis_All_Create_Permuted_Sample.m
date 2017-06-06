@@ -1,7 +1,7 @@
 %% Meta-Analysis for FULL BRAIN ANALYSIS
 % Script analog to the full meta-analysis of NPS results
 % for creating a permuted (null) distribution of statistics
-% Duration for 1000 permutations: ~210 minutes! Size of saved distribution is ~12 GB
+% Duration for 100 permutations: ~21.333 minutes! Size of saved distribution is ~12 GB
 % 
 clear
 % Add folder with Generic Inverse Variance Methods Functions first
@@ -11,7 +11,7 @@ tic
 load('A1_Full_Sample_Img_Data_Masked_10_percent.mat')
 
 %parpool % comment out in case parallel processing is not possible
-n_perms=1000; %number of permutations smallest p possible is 1/n_perms
+n_perms=100; %number of permutations smallest p possible is 1/n_perms
 summary_perm(n_perms)=struct('g',[],'r_external',[]); %preallocate growing struct
 for p=1:n_perms %exchange parfor with for if parallel processing is not possible
     curr_df_null=relabel_df_for_perm(df_full_masked);
@@ -58,9 +58,10 @@ for p=1:n_perms %exchange parfor with for if parallel processing is not possible
     summary_perm(p)=curr_perm_summary_stats;
 end
 
-% SAVE PERMUTED SUMMARY (... COMPUTE ONLY ONCE)
-%save('Full_Sample_Permuted_Summary_Results.mat','summary_perm','-v7.3');
 toc
+% SAVE PERMUTED SUMMARY (... COMPUTE ONLY ONCE)
+save('Full_Sample_Permuted_Summary_Results.mat','summary_perm','-v7.3');
+
 
 %% Create thresholds:
 gstats=squeeze(struct2cell(summary_perm));
