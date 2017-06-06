@@ -4,6 +4,7 @@ clear
 % Add folder with Generic Inverse Variance Methods Functions first
 addpath('../A_Analysis_GIV_Functions/')
 load('A1_Full_Sample_Img_Data_Masked_10_percent.mat')
+load('Full_Sample_Permuted_Thresholds.mat')
 
 % !!!!! These must be in the same order as listed under "studies" !!!!
 
@@ -52,105 +53,132 @@ studyIDtexts={
             'Wrobel et al. 2014:';...
             'Zeidan et al. 2015:';...
             };
-%% Meta-Analysis: Run once for plain analysis
-stats=create_meta_stats(df_full_masked)
+%% Meta-Analysis: Effect of placebo treatment on voxel-by-voxel bold response
+voxel_stats=create_meta_stats_voxels(df_full_masked);
 % Calculate meta-analysis summary
-summary=GIVsummary(stats);
 
-%% Meta-Analysis: Run repeatedly for permutation test
-n_perms=1000;
-%g_random_z_min=NaN(n_perms,1);
-%g_random_z_max=NaN(n_perms,1);
-summary_perm(n_perms)=struct('g',[]);
-for p=1:n_perms    
-    curr_df_null=relabel_df_for_perm(df_full_masked);
-    curr_null_stats=create_meta_stats(curr_df_null);
-    % Calculate meta-analysis summary
-    curr_perm_summary_stats=GIVsummary(curr_null_stats,{'g'});           % use output-argument to only compute stats for "g"
-    curr_perm_summary_stats.g.fixed=[]; % remove fixed effects to reduce size of results matrix
-    curr_perm_summary_stats.g.random.weight=[]; % remove weight to reduce size of results matrix
-    curr_perm_summary_stats.g.random.rel_weight=[]; % remove rel_weight effects to reduce size of results matrix   
-    summary_perm(p)=curr_perm_summary_stats;
+%% Meta-Analysis: Correlation of behavioral effect and voxel-by-voxel bold response
+rating_stats=create_meta_stats_behavior(df_full_masked);
+
+for i=1:length(voxel_stats)
+    voxel_stats(i).corr_external=fastcorrcoef(voxel_stats(i).delta,rating_stats(i).delta,true); % correlate single-subject effect of behavior and voxel signal 
+    voxel_stats(i).n_corr_external=sum(~(isnan(voxel_stats(i).delta)|... % the n for the correlation is the n of subjects showing non-nan values at that particular voxels
+                                         isnan(rating_stats(i).delta))); % AND non nan-ratings
 end
+    voxel_stats(10).n_corr_external=[]; % exclude between-subject studies
+    voxel_stats(14).n_corr_external=[]; % exclude between-subject studies
 
-% SAVE PERMUTED SUMMARY (... COMPUTE ONLY ONCE)
-save('Full_Sample_Permuted_Summary_Results.mat','summary_perm','-v7.3');
+%% Summarize
+summary=GIVsummary(voxel_stats,{'g','corr_external'});
+save('B1_Full_Sample_Summary_Results.mat','summary','-v7.3');
 
+%% Explore Results
+%% Sanity check dfs
 
+%df: Fazit: looks ok. df=19 in most grey matter areas of the brain, 18 in
+%white matter.
+% A minority of voxels (<143) has  df's of 17 or 16. These voxels showed no variance in single
+% within-subject studies. No variance estimates could be obtained for these
+% studies >> NaN values are set in GIVsummary in these cases.
+hist(summary.g.random.df)
+outimg_df=zeros(size(df_full_masked.brainmask));
+outimg_df(df_full_masked.brainmask)=summary.g.random.df;
+printImage(outimg_df,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_df'))
 
-%g_random_z_min(p)=min(summary_perm(p).g.random.z);
-%g_random_z_max(p)=max(summary_perm(p).g.random.z);
+%% Heterogeneity: Looks legit, INTERESTING maps!
+% Fazit:
+%   Foci at
+%       MPFC/Cingulate
+%       medial parietal
+%       right parietal
+%       DLPFC
+%       insula/operculum left
+%       SII right
+%       Brainstem
+%       Striatal/Thalamic
+%       Cerebellum
+%       left hippocampus, parietal areas, medial
+%and dorsolateral prefrontal cortices
 
-%hist(g_random_z_max);
-%quantile(g_random_z_min,0.025)
-%quantile(g_random_z_max,0.975)
-%printImage(summary_perm(p).g.random.z,'../../pattern_masks/brainmask_logical_50.nii','Full_Sample_pla_min10perc_z_permuted_null')
-% z-max at 95% Quantile w mask 10% no-signal voxels = 6.1620 (100 perms);
-% 6.2 (20 perms)
-% %% Obtain Bayesian Factors
-% 
-% bayesfactor(0.08,0.04,1,[0,0.2]) % Bayes factor for negligible results
-% bayesfactor(0.08,0.04,1,[0.2,0.5]) % Bayes factor for small results
-% 
-% 
-% 
-% 
-% 
-% 
-% %% Explore Results
-% 
-% %heterogeneity: Fazit looks ok. df=19 in most grey matter areas of the brain, but 17 in white matter
-% %areas
-% hist(summary.g.heterogeneity.Isq)
-% hist(summary.g.heterogeneity.p_het)
-% 
-% %I^2 unthresholded. Fazit: Foci at left hippocampus, parietal areas, medial
-% %and dorsolateral prefrontal cortices
-% outimg_Isq=zeros(size(df_full_masked.brainmask));
-% outimg_Isq(df_full_masked.brainmask)=summary.g.heterogeneity.Isq;
-% printImage(outimg_Isq,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_Isq'))
-% 
-% %I^2 thresholded at p<.001 uncorrected. Fazit: 
-% outimg_Isq_p001=zeros(size(df_full_masked.brainmask));
-% p001=summary.g.heterogeneity.Isq;
-% p001(summary.g.heterogeneity.p_het>.001)=0;
-% outimg_Isq_p001(df_full_masked.brainmask)=p001;
-% printImage(outimg_Isq_p001,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_Isq_p001'))
-% 
-% %tau^2 unthresholded. Fazit: Foci at left hippocampus, parietal areas, medial
-% %and dorsolateral prefrontal cortices
-% outimg_tausq=zeros(size(df_full_masked.brainmask));
-% outimg_tausq(df_full_masked.brainmask)=summary.g.heterogeneity.tausq;
-% printImage(outimg_tausq,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_tausq'))
-% 
-% %df: Fazit looks ok. df=19 in most grey matter areas of the brain, but 17 in white matter
-% %areas
-% hist(summary.g.random.df)
-% outimg_df=zeros(size(df_full_masked.brainmask));
-% outimg_df(df_full_masked.brainmask)=summary.g.random.df;
-% printImage(outimg_df,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_df'))
-% 
-% %SE g: Fazit: 
-% outimg_SE_g=zeros(size(df_full_masked.brainmask));
-% outimg_SE_g(df_full_masked.brainmask)=summary.g.random.SEsummary;
-% printImage(outimg_SE_g,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_SE_g'))
-% 
-% %g: Fazit: 
-% outimg_g=zeros(size(df_full_masked.brainmask));
-% outimg_g(df_full_masked.brainmask)=summary.g.random.summary;
-% printImage(outimg_g,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_g'))
-% 
-% %z: Fazit: 
-% outimg_z=zeros(size(df_full_masked.brainmask));
-% outimg_z(df_full_masked.brainmask)=summary.g.random.z;
-% printImage(outimg_z,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_z'))
-% 
-% %z-thresholded at p<.001 uncorrected. Fazit: 
-% outimg_z_p001=zeros(size(df_full_masked.brainmask));
-% p001=summary.g.random.z;
-% p001(summary.g.random.p>.001)=0;
-% outimg_z_p001(df_full_masked.brainmask)=p001;
-% printImage(outimg_z_p001,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_z_p001'))
+hist(summary.g.heterogeneity.Isq)
+%I^2 unthresholded.
+outimg_Isq=zeros(size(df_full_masked.brainmask));
+outimg_Isq(df_full_masked.brainmask)=summary.g.heterogeneity.Isq;
+printImage(outimg_Isq,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_Isq'))
+
+%I^2 thresholded at p<.001 uncorrected. 
+outimg_Isq_p001=zeros(size(df_full_masked.brainmask));
+p001=summary.g.heterogeneity.Isq;
+p001(summary.g.heterogeneity.p_het>.001)=0;
+outimg_Isq_p001(df_full_masked.brainmask)=p001;
+printImage(outimg_Isq_p001,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_Isq_p001'))
+
+%I^2 thresholded with permuted Chi^2 values at p<.05, corrected for multiple comparisons at whole-brain level. 
+i2=summary.g.heterogeneity.Isq;
+i2(summary.g.heterogeneity.chisq<=trshld.het)=0;
+outimg_Isq_pperm05=zeros(size(df_full_masked.brainmask));
+outimg_Isq_pperm05(df_full_masked.brainmask)=i2;
+printImage(outimg_Isq_pperm05,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_Isq_pperm05'))
+
+%tau^2 unthresholded. Fazit: Foci at left hippocampus, parietal areas, medial
+%and dorsolateral prefrontal cortices
+outimg_tausq=zeros(size(df_full_masked.brainmask));
+outimg_tausq(df_full_masked.brainmask)=summary.g.heterogeneity.tausq;
+printImage(outimg_tausq,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_tausq'))
+
+%% Standard error of g in general
+%Fazit:
+%SE's of g are mostly between 0.03 and 0.10
+%The distribution of SE's is skewed towards higher errors
+
+median(summary.g.random.SEsummary)
+hist(summary.g.random.SEsummary,50)
+
+%SE g:  
+outimg_SE_g=zeros(size(df_full_masked.brainmask));
+outimg_SE_g(df_full_masked.brainmask)=summary.g.random.SEsummary;
+printImage(outimg_SE_g,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_SE_g'))
+%% MAIN RESULTS: g and z values >> thresholded using minima and maxima of permuted z-Values
+
+%g: Fazit: 
+outimg_g=zeros(size(df_full_masked.brainmask));
+outimg_g(df_full_masked.brainmask)=summary.g.random.summary;
+printImage(outimg_g,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_g'))
+
+%z: Fazit: 
+outimg_z=zeros(size(df_full_masked.brainmask));
+outimg_z(df_full_masked.brainmask)=summary.g.random.z;
+printImage(outimg_z,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_z'))
+
+%g-thresholded at p<.001 uncorrected. Fazit: 
+outimg_g_p001=zeros(size(df_full_masked.brainmask));
+p001=summary.g.random.summary;
+p001(summary.g.random.p>.001)=0;
+outimg_g_p001(df_full_masked.brainmask)=p001;
+printImage(outimg_g_p001,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_g_p001'))
+
+%z-thresholded at p<.001 uncorrected. Fazit: 
+outimg_z_p001=zeros(size(df_full_masked.brainmask));
+p001=summary.g.random.z;
+p001(summary.g.random.p>.001)=0;
+outimg_z_p001(df_full_masked.brainmask)=p001;
+printImage(outimg_z_p001,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_z_p001'))
+
+%g thresholded at pperm<.05 (corrected for multiple comparisons). Fazit: 
+pperm05=summary.g.random.summary;
+sub_supra_treshold=summary.g.random.z<trshld.min_z|summary.g.random.z>trshld.max_z;
+pperm05(~sub_supra_treshold)=0;
+outimg_g_pperm05=zeros(size(df_full_masked.brainmask));
+outimg_g_pperm05(df_full_masked.brainmask)=pperm05;
+printImage(outimg_g_pperm05,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_g_pperm05'))
+
+%z thresholded at pperm<.05 (corrected for multiple comparisons). Fazit: 
+pperm05=summary.g.random.z;
+sub_supra_treshold=summary.g.random.z<trshld.min_z|summary.g.random.z>trshld.max_z;
+pperm05(~sub_supra_treshold)=0;
+outimg_z_pperm05=zeros(size(df_full_masked.brainmask));
+outimg_z_pperm05(df_full_masked.brainmask)=pperm05;
+printImage(outimg_z_pperm05,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_z_pperm05'))
 % 
 % %z-thresholded at p<.001 uncorrected FIXED EFFECTS. Fazit: 
 % outimg_z_p001=zeros(size(df_full_masked.brainmask));
@@ -158,24 +186,49 @@ save('Full_Sample_Permuted_Summary_Results.mat','summary_perm','-v7.3');
 % p001(summary.g.fixed.p>.001)=0;
 % outimg_z_p001(df_full_masked.brainmask)=p001;
 % printImage(outimg_z_p001,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_z_fixed_p001'))
-% 
-% %% Explore peak results
-% 
-% % Best peak around left hippocampus
-% VOI=find(summary.g.random.z==max(summary.g.random.z));
-% VOI_stats=stat_reduce(stats,VOI);
-% VOI_summary=ForestPlotter(VOI_stats,...
-%                   'studyIDtexts',studyIDtexts,...
-%                   'outcomelabel','Maximum z Voxel: Hedges'' g)',...
-%                   'type','random',...
-%                   'summarystat','g',...
-%                   'withoutlier',0,...
-%                   'WIsubdata',0,...
-%                   'boxscaling',1,...
-%                   'textoffset',0);
-% 
-% outimg_mark_VOI=zeros(size(df_full_masked.brainmask));
-% out_mark=zeros(size(summary.g.random.z));
-% out_mark(VOI)=1;
-% outimg_mark_VOI(df_full_masked.brainmask)=out_mark;
-% printImage(outimg_mark_VOI,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','VOI'))
+
+%% MAIN RESULTS: correlation (r) of activity with behavioral placebo effect
+
+outimg_behav=zeros(size(df_full_masked.brainmask));
+outimg_behav(df_full_masked.brainmask)=summary.r_external.random.summary;
+printImage(outimg_behav,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_rating_corr'));
+
+outimg_behav=zeros(size(df_full_masked.brainmask));
+outimg_behav(df_full_masked.brainmask)=summary.r_external.random.SEsummary;
+printImage(outimg_behav,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_rating_SEcorr'));
+
+%z-thresholded at p<.001 uncorrected. Fazit: 
+outimg_behav_p001=zeros(size(df_full_masked.brainmask));
+p001=summary.r_external.random.summary;
+p001(summary.r_external.random.p>.001)=0;
+outimg_behav_p001(df_full_masked.brainmask)=p001;
+printImage(outimg_behav_p001,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_rating_corr_p001'))
+
+outimg_behav=zeros(size(df_full_masked.brainmask));
+outimg_behav(df_full_masked.brainmask)=summary.r_external.random.SEsummary;
+printImage(outimg_behav,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','Full_Sample_Pla_min10perc_rating_SEcorr'));
+
+%% Explore VOI
+
+% Best peak around left hippocampus
+VOI=65228;%find(summary.g.random.z==min(summary.g.random.z));
+VOI_stats=stat_reduce(voxel_stats,VOI);
+VOI_summary=ForestPlotter(VOI_stats,...
+                  'studyIDtexts',studyIDtexts,...
+                  'outcomelabel','Maximum z Voxel: Hedges'' g)',...
+                  'type','random',...
+                  'summarystat','g',...
+                  'withoutlier',0,...
+                  'WIsubdata',0,...
+                  'boxscaling',1,...
+                  'textoffset',0);
+
+outimg_mark_VOI=zeros(size(df_full_masked.brainmask));
+out_mark=zeros(size(summary.g.random.z));
+out_mark(VOI)=1;
+outimg_mark_VOI(df_full_masked.brainmask)=out_mark;
+printImage(outimg_mark_VOI,'../../pattern_masks/brainmask_logical_50.nii',fullfile('./nii_results','VOI'))
+
+
+%% Create results table
+

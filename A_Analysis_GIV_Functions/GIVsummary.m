@@ -86,7 +86,26 @@ if any(strcmp(outputs,'r'))
  summary.r.random.CI_lo=fishersZ2r(summary.r.random.CI_lo);
  summary.r.random.CI_hi=fishersZ2r(summary.r.random.CI_hi);
 
-end 
+end
+
+%r external
+% Same as above: all r-values have to be transformed to Fisher's Z before summary and back to r after.
+if any(strcmp(outputs,'corr_external'))
+[summary.r_external.fixed,...
+ summary.r_external.random,...
+ summary.r_external.heterogeneity]=GIV_weight(r2fishersZ(vertcat(stats.corr_external)),sqrt(1./(vertcat(stats.n_corr_external)-3))); %For Fisher's Z the SE of correlations only depends on n sqrt(1./(n-3))
+
+% Back-transform from fishersZ to r
+ summary.r_external.fixed.summary=fishersZ2r(summary.r_external.fixed.summary);
+ summary.r_external.fixed.SEsummary=fishersZ2r(summary.r_external.fixed.SEsummary);
+ summary.r_external.fixed.CI_lo=fishersZ2r(summary.r_external.fixed.CI_lo);
+ summary.r_external.fixed.CI_hi=fishersZ2r(summary.r_external.fixed.CI_hi);
+ summary.r_external.random.summary=fishersZ2r(summary.r_external.random.summary);
+ summary.r_external.random.SEsummary=fishersZ2r(summary.r_external.random.SEsummary);
+ summary.r_external.random.CI_lo=fishersZ2r(summary.r_external.random.CI_lo);
+ summary.r_external.random.CI_hi=fishersZ2r(summary.r_external.random.CI_hi);
+end
+
  % For ICC all r-values have to be transformed to Fisher's Z before summary and back to r after.
 if any(strcmp(outputs,'ICC'))
     if ~isempty([stats.ICC])
@@ -107,6 +126,12 @@ if any(strcmp(outputs,'ICC'))
 end
 % Actual GIV function, used since same formula applies for all outcomes... (means,d,g,r)
 function [fixed,random,heterogeneity]=GIV_weight(effects,SEs)
+   %Exclude invalid values...
+   effects(isinf(effects))=NaN; % exclude studies with infinite values (can occur in fisher's z transformation of perfect correlations (r=1 or r=-1) >> e.g. due to a lack of variance
+   SEs(isinf(effects))=NaN;         % exclude studies with 0 error (due to lack of variance), otherwise we will get inf values
+   effects(SEs==0)=NaN;         % exclude studies with 0 error (due to lack of variance), otherwise we will get inf values
+   SEs(SEs==0)=NaN;         % exclude studies with 0 error (due to lack of variance), otherwise we will get inf values
+
    z_CI=abs(icdf('normal',0.025,0,1));% z-Value for confidence intervals
    % Fixed effects statistics are calculated first
    fixed.weight=1./SEs.^2; % weight derived from every SE

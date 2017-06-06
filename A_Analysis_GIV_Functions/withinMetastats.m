@@ -134,4 +134,6 @@ StudyStat.se_g=se_g;
 StudyStat.delta=delta;
 StudyStat.std_delta=bsxfun(@rdivide,delta,sd_pooled);
 StudyStat.ICC=[];%empty field needed for reliablity analysis
+StudyStat.corr_external=[];%empty field needed for correlation analysis with other variables
+StudyStat.n_corr_external=[];%empty field needed for correlation analysis with other variables
 end

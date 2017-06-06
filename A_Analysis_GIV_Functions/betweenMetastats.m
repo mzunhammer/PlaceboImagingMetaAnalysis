@@ -94,4 +94,6 @@ StudyStat.se_g=se_g;
 StudyStat.delta=delta; %Paired difference (single subj values), only makes sense for single-group case, not for between-subj designs.
 StudyStat.std_delta=std_delta; %Standardized paired difference (single subj values), only makes sense for single-group case, not for between-subj designs.
 StudyStat.ICC=[];%empty field needed for reliablity analysis
+StudyStat.corr_external=[];%empty field needed for correlation analysis with other variables
+StudyStat.n_corr_external=[];%empty field needed for correlation analysis with other variables
 end
