@@ -80,31 +80,35 @@ NOsummary=p.Results.NOsummary;
 
 %% Summarize all studies, weighted by se_summary_total
 % Summarize standardized using the generic inverse-variance weighting method
-summary=GIVsummary(MetaStats);
+summary=GIVsummary(MetaStats,summarystat);
 
 % Select the desired statistics
 if strcmp(summarystat,'mu')
         short_summary= summary.mu;
         eff=vertcat(MetaStats.mu);
+        n=vertcat(MetaStats.n);
         se_eff=vertcat(MetaStats.se_mu);
         ciLo=eff-se_eff.*1.96;
         ciHi=eff+se_eff.*1.96;
     elseif strcmp(summarystat,'d')
         short_summary= summary.d;
         eff=vertcat(MetaStats.d);
+        n=vertcat(MetaStats.n);
         se_eff=vertcat(MetaStats.se_d);
         ciLo=eff-se_eff.*1.96;
         ciHi=eff+se_eff.*1.96;
     elseif strcmp(summarystat,'g')
         short_summary= summary.g;
         eff=vertcat(MetaStats.g);
+        n=vertcat(MetaStats.n);
         se_eff=vertcat(MetaStats.se_g);
         ciLo=eff-se_eff.*1.96;
         ciHi=eff+se_eff.*1.96;
     elseif strcmp(summarystat,'r') 
         short_summary= summary.r;
         eff=vertcat(MetaStats.r);
-        se_eff_Z=sqrt(1./(vertcat(MetaStats.n)-3)); % SE for FISHER's
+        n=vertcat(MetaStats.n);
+        se_eff_Z=sqrt(1./(n-3)); % SE for FISHER's
         ciLo_Z=r2fishersZ(eff)-se_eff_Z.*1.96;
         ciHi_Z=r2fishersZ(eff)+se_eff_Z.*1.96;
         ciLo=fishersZ2r(ciLo_Z);
@@ -112,7 +116,17 @@ if strcmp(summarystat,'mu')
     elseif strcmp(summarystat,'ICC') 
         short_summary= summary.ICC;
         eff=vertcat(MetaStats.ICC);
-        se_eff_Z=sqrt(1./(vertcat(MetaStats.n)-3)); % SE for FISHER's
+        n=vertcat(MetaStats.n);
+        se_eff_Z=sqrt(1./(n-3)); % SE for FISHER's
+        ciLo_Z=r2fishersZ(eff)-se_eff_Z.*1.96;
+        ciHi_Z=r2fishersZ(eff)+se_eff_Z.*1.96;
+        ciLo=fishersZ2r(ciLo_Z);
+        ciHi=fishersZ2r(ciHi_Z);
+    elseif strcmp(summarystat,'r_external')        
+        short_summary= summary.r_external;
+        eff=vertcat(MetaStats.r_external);
+        n=vertcat(MetaStats.n_r_external);
+        se_eff_Z=sqrt(1./(n-3)); % SE for FISHER's
         ciLo_Z=r2fishersZ(eff)-se_eff_Z.*1.96;
         ciHi_Z=r2fishersZ(eff)+se_eff_Z.*1.96;
         ciLo=fishersZ2r(ciLo_Z);
@@ -133,7 +147,6 @@ end
 
 df=short_summary.df;
 rel_weight=vertcat(short_summary.rel_weight);
-n=vertcat(MetaStats.n);
 summary_total=short_summary.summary;
 z=short_summary.z;
 p=short_summary.p;

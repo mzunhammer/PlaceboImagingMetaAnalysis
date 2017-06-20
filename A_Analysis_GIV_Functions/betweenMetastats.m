@@ -40,6 +40,8 @@ StudyStat.d=NaN;
 StudyStat.se_d=NaN;
 StudyStat.g=NaN;
 StudyStat.se_g=NaN;
+StudyStat.r_external=[];
+StudyStat.n_r_external=[];
 end
 
 % VERSION A: COMPUTE IF TWO SAMPLES ARE PROVIDED
@@ -93,7 +95,7 @@ StudyStat.g=g;
 StudyStat.se_g=se_g;
 StudyStat.delta=delta; %Paired difference (single subj values), only makes sense for single-group case, not for between-subj designs.
 StudyStat.std_delta=std_delta; %Standardized paired difference (single subj values), only makes sense for single-group case, not for between-subj designs.
-StudyStat.ICC=[];%empty field needed for reliablity analysis
-StudyStat.corr_external=[];%empty field needed for correlation analysis with other variables
-StudyStat.n_corr_external=[];%empty field needed for correlation analysis with other variables
+StudyStat.ICC=NaN;
+StudyStat.r_external=[];
+StudyStat.n_r_external=[];
 end

@@ -12,9 +12,10 @@ function [summary]=GIVsummary(stats, outputs)
 % 'mu': unstandardized (raw) means
 % 'd': Cohen's d
 % 'g': Hedges' g
-% 'r':
-
-% By specifying "outputs" are specified explicitly, only 
+% 'r': Correlation between repeated measures (only within-metastats)
+% 'r': Correlation between repeated measures (only within-metastats)
+% 'r_external': Correlation of original data with external data (used to
+% correlate voxel activation changes with behavioral changes)
 
 % Further adds "weight_d","weight_g" and "weight_r" fields to stats object
 % for reviewing the weights used by the GIV method.
@@ -90,10 +91,12 @@ end
 
 %r external
 % Same as above: all r-values have to be transformed to Fisher's Z before summary and back to r after.
-if any(strcmp(outputs,'corr_external'))
+if any(strcmp(outputs,'r_external'))
+% Empty fields have to be filled with nans
+
 [summary.r_external.fixed,...
  summary.r_external.random,...
- summary.r_external.heterogeneity]=GIV_weight(r2fishersZ(vertcat(stats.corr_external)),sqrt(1./(vertcat(stats.n_corr_external)-3))); %For Fisher's Z the SE of correlations only depends on n sqrt(1./(n-3))
+ summary.r_external.heterogeneity]=GIV_weight(r2fishersZ(vertcat(stats.r_external)),sqrt(1./(vertcat(stats.n_r_external)-3))); %For Fisher's Z the SE of correlations only depends on n sqrt(1./(n-3))
 
 % Back-transform from fishersZ to r
  summary.r_external.fixed.summary=fishersZ2r(summary.r_external.fixed.summary);

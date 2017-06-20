@@ -44,6 +44,8 @@ if (isscalar(cond1)&&isscalar(cond1))&&(isnan(cond1)||isnan(cond2))
     StudyStat.se_g=NaN;
     StudyStat.delta=[];
     StudyStat.std_delta=[];
+    StudyStat.r_external=[];
+    StudyStat.n_r_external=[];
     return
 end
 
@@ -55,8 +57,7 @@ if size(cond1)==size(cond2) % Check if arrays of equal size were provided
     df=n-1;
     
     %Correlation between paired conditions
-    r=NaN(1,size(cond1,2));
-    r=fastcorrcoef(cond1,cond2); % MATLABs corrcoef is slow... when using this function for whole-brain
+    r=fastcorrcoef(cond1,cond2,'exclude_nan'); % MATLABs corrcoef is slow... when using this function for whole-brain
     % analysis it is the main time-consuming step.
    
 
@@ -104,12 +105,16 @@ elseif length(cond2)==1
        %Un-standardized outcome 1: Cohen's d... this is tricky, because no SD of
        % the basic condition is available
         r=cond2; %IMPUTED R
+        if r==0
+            %fprintf('WARNING BY withinMetastats.m: r=0 was used >> one-sample test.\n');
+        else
+            sprintf('WARNING BY withinMetastats.m: r=%0.2f was imputed for this dataset.\n',r);
+        end
         sd_pooled=sd_diff./sqrt(2.*(1-r)); %see: [1] Borenstein M, Hedges L V, Higgins JPT, Rothstein HR. Effect Sizes Based on Means. Introduction to Meta-Analysis.2009. FORMULA 4.27
 
         d=mu./sd_pooled; % ATTENTION: Imputed r affects d!!! see: [1] or better Cochrane handbook 16.4.6.2  Standardized mean difference
         var_d=(1./n+((d.^2)./(2.*n))).*2.*(1-r); %same as above
         se_d=sqrt(var_d) ; %same as above
-        fprintf('WARNING BY withinMetastats.m: r was imputed for this dataset.\n')
        % Standardized outcome 2: Hedge's adjusted g
         df=n-1;
         J=1-(3./(4.*df-1)); %Approximation to Hedge's correction factor J according to [1]
@@ -133,7 +138,7 @@ StudyStat.g=g;
 StudyStat.se_g=se_g;
 StudyStat.delta=delta;
 StudyStat.std_delta=bsxfun(@rdivide,delta,sd_pooled);
-StudyStat.ICC=[];%empty field needed for reliablity analysis
-StudyStat.corr_external=[];%empty field needed for correlation analysis with other variables
-StudyStat.n_corr_external=[];%empty field needed for correlation analysis with other variables
+StudyStat.ICC=NaN;
+StudyStat.r_external=[];
+StudyStat.n_r_external=[];
 end

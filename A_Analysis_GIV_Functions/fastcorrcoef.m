@@ -11,7 +11,7 @@ function r=fastcorrcoef(A,B,exclude_nan)
     
     if  any([isempty(A),isempty(B)])
        r=[] ; % If A or B is empty return empty instead of nan
-    elseif exclude_nan==1 % If nans should be excluded
+    elseif exclude_nan==1|strcmp(exclude_nan,'exclude_nan') % If nans should be excluded
         An=bsxfun(@minus,A,nanmean(A,1)); %%% zero-mean
         Bn=bsxfun(@minus,B,nanmean(B,1)); %%% zero-mean
         An=bsxfun(@times,An,1./realsqrt(nansum(An.^2,1))); %% L2-normalization

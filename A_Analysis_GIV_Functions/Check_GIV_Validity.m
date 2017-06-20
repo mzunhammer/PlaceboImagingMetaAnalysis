@@ -11,11 +11,11 @@ tol=0.001; % absolute tolerance for deviations for all values tested
 
 % Define desired target values as taken from [1]:
 BWtarget.mu=3.0000;
-BWtarget.sd_diff=NaN; %Not applicable, since betwee-subj
+BWtarget.sd_diff=[]; %Not applicable, since betwee-subj
 BWtarget.sd_pooled=5.0249;
 BWtarget.se_mu=1.0050;
 BWtarget.n=100;
-BWtarget.r=NaN; %Not applicable, since betwee-subj
+BWtarget.r=[]; %Not applicable, since betwee-subj
 BWtarget.d=0.5970;
 BWtarget.se_d=0.2044;
 BWtarget.g=0.5924;
@@ -23,6 +23,8 @@ BWtarget.se_g=0.2028;
 BWtarget.delta=[]; %Not applicable, since betwee-subj
 BWtarget.std_delta=[]; %Not applicable, since betwee-subj
 BWtarget.ICC=[]; %Not applicable, since betwee-subj
+BWtarget.r_external=[]; %Not applicable, since betwee-subj
+BWtarget.n_r_external=[]; %Not applicable, since betwee-subj
 
 % Create data-set as described in [1]:
 mu1=103.00;
@@ -71,6 +73,8 @@ WItarget.se_g=0.1126;
 WItarget.delta=[]; %Will vary according to sampling
 WItarget.std_delta=[]; %Will vary according to sampling
 WItarget.ICC=[]; %Not applicable, since betwee-subj
+WItarget.r_external=[]; %Not applicable, placeholder to store correlations w external var
+WItarget.n_r_external=[]; %Not applicable, placeholder to store correlations w external var
 
 
 % Create data-set as described in [1]:
