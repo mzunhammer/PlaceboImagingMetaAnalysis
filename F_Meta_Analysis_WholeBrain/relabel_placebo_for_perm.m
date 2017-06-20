@@ -1,13 +1,12 @@
-function df_null=relabel_df_for_perm(df)
+function df_null=relabel_placebo_for_perm(df)
 df_null=df;
 % randomly relabel IMAGE data in df to generate data-set under the null
  for i=1:length(df.studies) % Calculate for all studies except...
         if df.consOnlyImg(i)==0 %...data-sets where only contrasts are available
             if df.BetweenSubject(i)==0 %For within-subject studies...
                 % randomly inverse contrasts for each
-                % participant by multiplying with 1 or -1
                 curr_n=size(df.pla_img{i},1);
-                relabel=logical(random('Discrete Uniform',2,curr_n,1)-1); % randomly generate -1 or 1 to invert contrasts
+                relabel=logical(random('Discrete Uniform',2,curr_n,1)-1); % randomly generate 0 or 1 to invert contrasts
                 df_null.pla_img{i}=vertcat(df.pla_img{i}(relabel,:),df.con_img{i}(~relabel,:));
                 df_null.con_img{i}=vertcat(df.pla_img{i}(~relabel,:),df.con_img{i}(relabel,:));
             elseif df.BetweenSubject(i)==1 %Between-subject studies

@@ -302,9 +302,10 @@ i=find(strcmp(studies,'wager04a_princeton'));
 c_df=df(strcmp(df.studyID,'wager04a_princeton'),:);%current df
 
 df_full.pla_img{i}=(-1).*v_masked(c_df{strcmp(c_df.cond,'(intense-none)control-placebo'),'norm_img'});
-df_full.con_img{i}=NaN(size(df_full.pla_img{i}));
+df_full.con_img{i}=v_masked(c_df{strcmp(c_df.cond,'intense-none'),'norm_img'}); % BASELINE PAIN IS ADDED ADDED AS A CONTROL CONDITION HERE FOR PAIN vs BASELINE ANALYSIS, BUT NOT USED IN PLACEBO VS CONTROL ANALYSIS 
 df_full.pla_rating{i}=(-1).*c_df{strcmp(c_df.cond,'(intense-none)control-placebo'),'rating'};
-df_full.con_rating{i}=NaN(size(df_full.pla_rating{i}));
+df_full.con_rating{i}=c_df{strcmp(c_df.cond,'intense-none'),'rating'}; % BASELINE PAIN IS ADDED ADDED AS A CONTROL CONDITION HERE FOR PAIN vs BASELINE ANALYSIS, BUT NOT USED IN PLACEBO VS CONTROL ANALYSIS
+
 %'wager04b_michigan':  FOR  RATINGS ONLY CONTRAST CONTROL-PLACEBO AVAILABLE
 % contrasts are Con>Pla, therefore INVERSE RATNGS: *(-1)
 i=find(strcmp(studies,'wager04b_michigan'));
@@ -342,10 +343,10 @@ i=find(strcmp(studies,'zeidan'));
 c_df=df(strcmp(df.studyID,'zeidan'),:);%current df
 
 df_full.pla_img{i}=v_masked(c_df{strcmp(c_df.cond,'Pla>Control within painful series'),'norm_img'});
-df_full.con_img{i}=NaN(size(df_full.pla_img{i}));
+df_full.con_img{i}=v_masked(c_df{strcmp(c_df.cond,'Pain>NoPain controlling for placebo&interaction'),'norm_img'});
 
 df_full.pla_rating{i}=c_df{strcmp(c_df.cond,'Pla>Control within painful series'),'rating'};
-df_full.con_rating{i}=NaN(size(df_full.pla_rating{i}));
+df_full.con_rating{i}=c_df{strcmp(c_df.cond,'Pain>NoPain controlling for placebo&interaction'),'rating'};
 %% Add study/variable descriptions needed for meta-analysis
 
 save('A1_Full_Sample_Img_Data.mat','df_full','-v7.3');
@@ -378,34 +379,44 @@ save('A1_Full_Sample_Img_Data.mat','df_full','-v7.3');
 df_conserv=df_full;
 %'kong06'
 i=find(strcmp(studies,'kong06'));
-df_conserv.con_img{i}=NaN(size(df_full.con_img{i}));
-df_conserv.pla_img{i}=NaN(size(df_full.pla_img{i}));
-df_conserv.con_rating{i}=NaN(size(df_full.con_rating{i}));
-df_conserv.pla_rating{i}=NaN(size(df_full.pla_rating{i}));
+df_conserv.con_img{i}=[]%NaN(size(df_full.con_img{i}));
+df_conserv.pla_img{i}=[]%NaN(size(df_full.pla_img{i}));
+df_conserv.con_rating{i}=[]%NaN(size(df_full.con_rating{i}));
+df_conserv.pla_rating{i}=[]%NaN(size(df_full.pla_rating{i}));
 %'ruetgen'
 i=find(strcmp(studies,'ruetgen'));
-df_conserv.con_img{i}=NaN(size(df_full.con_img{i}));
-df_conserv.pla_img{i}=NaN(size(df_full.pla_img{i}));
-df_conserv.con_rating{i}=NaN(size(df_full.con_rating{i}));
-df_conserv.pla_rating{i}=NaN(size(df_full.pla_rating{i}));
+df_conserv.con_img{i}=[]%NaN(size(df_full.con_img{i}));
+df_conserv.pla_img{i}=[]%NaN(size(df_full.pla_img{i}));
+df_conserv.con_rating{i}=[]%NaN(size(df_full.con_rating{i}));
+df_conserv.pla_rating{i}=[]%NaN(size(df_full.pla_rating{i}));
 %'wager04b_michigan'
 i=find(strcmp(studies,'wager04b_michigan'));
-df_conserv.con_img{i}=NaN(size(df_full.con_img{i}));
-df_conserv.pla_img{i}=NaN(size(df_full.pla_img{i}));
-df_conserv.con_rating{i}=NaN(size(df_full.con_rating{i}));
-df_conserv.pla_rating{i}=NaN(size(df_full.pla_rating{i}));
+df_conserv.con_img{i}=[]%NaN(size(df_full.con_img{i}));
+df_conserv.pla_img{i}=[]%NaN(size(df_full.pla_img{i}));
+df_conserv.con_rating{i}=[]%NaN(size(df_full.con_rating{i}));
+df_conserv.pla_rating{i}=[]%NaN(size(df_full.pla_rating{i}));
 %'bingel11'
 i=find(strcmp(studies,'bingel11'));
-df_conserv.con_img{i}=NaN(size(df_full.con_img{i}));
-df_conserv.pla_img{i}=NaN(size(df_full.pla_img{i}));
-df_conserv.con_rating{i}=NaN(size(df_full.con_rating{i}));
-df_conserv.pla_rating{i}=NaN(size(df_full.pla_rating{i}));
+df_conserv.con_img{i}=[]%NaN(size(df_full.con_img{i}));
+df_conserv.pla_img{i}=[]%NaN(size(df_full.pla_img{i}));
+df_conserv.con_rating{i}=[]%NaN(size(df_full.con_rating{i}));
+df_conserv.pla_rating{i}=[]%NaN(size(df_full.pla_rating{i}));
 %'zeidan'
 i=find(strcmp(studies,'zeidan'));
-df_conserv.con_img{i}=NaN(size(df_full.con_img{i}));
-df_conserv.pla_img{i}=NaN(size(df_full.pla_img{i}));
-df_conserv.con_rating{i}=NaN(size(df_full.con_rating{i}));
-df_conserv.pla_rating{i}=NaN(size(df_full.pla_rating{i}));
+df_conserv.con_img{i}=[]%NaN(size(df_full.con_img{i}));
+df_conserv.pla_img{i}=[]%NaN(size(df_full.pla_img{i}));
+df_conserv.con_rating{i}=[]%NaN(size(df_full.con_rating{i}));
+df_conserv.pla_rating{i}=[]%NaN(size(df_full.pla_rating{i}));
+
+excluded=cellfun(@isempty,df_conserv.pla_rating);
+df_conserv.studies=df_conserv.studies(~excluded);
+df_conserv.BetweenSubject=df_conserv.BetweenSubject(~excluded);
+df_conserv.consOnlyImg=df_conserv.consOnlyImg(~excluded);
+df_conserv.consOnlyRating=df_conserv.consOnlyRating(~excluded);
+df_conserv.pla_img=df_conserv.pla_img(~excluded);
+df_conserv.con_img=df_conserv.con_img(~excluded);
+df_conserv.pla_rating=df_conserv.pla_rating(~excluded);
+df_conserv.con_rating=df_conserv.con_rating(~excluded);
+
 
 save('A1_Conservative_Sample_Img_Data.mat','df_conserv','-v7.3');
-
