@@ -10,7 +10,8 @@ load(fullfile(datapath,'AllData.mat'))
 studies={  'atlas'
            'ellingsen_warm'
            %'ellingsen_brush'
-           'freeman'              % NO RATINGS FOR HI VS LOW AVAILABLE
+           %'freeman'              %STRANGE PAIN IMAGE, CANNOT VERIFY
+           %CONTRAST!
            'kessner'
            'kong06'
            'kong09'               % NO RATINGS FOR HI VS LOW AVAILABLE
@@ -30,7 +31,7 @@ studyIDtexts={
             'Atlas et al. 2012: High vs low noxious heat';...
             'Ellingsen et al. 2013: Noxious heat vs non-noxious warm touch';...
             %'Ellingsen et al. 2013: Noxious heat vs non-noxious brushstroke';...
-            'Freeman et al. 2015: High vs low noxious heat';...
+            %'Freeman et al. 2015: High vs low noxious heat';...
             'Kessner et al. 2006: High vs moderate noxious heat';...
             'Kong et al. 2006: High vs low noxious heat';...
             'Kong et al. 2009: High vs low noxious heat';... % NO RATINGS FOR HI VS LOW AVAILABLE
@@ -112,11 +113,11 @@ stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
 % stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
 
 %'Freeman High vs Lowpain'
-i=find(strcmp(studies,'freeman'));
-df_hilo.hi{i}= df{(strcmp(df.studyID,'freeman')&strcmp(df.cond,'post-HighpainVsLowpain')),varselect};
-stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),0);
-stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),0);
-stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),0);
+% i=find(strcmp(studies,'freeman'));
+% df_hilo.hi{i}= df{(strcmp(df.studyID,'freeman')&strcmp(df.cond,'post-HighpainVsLowpain')),varselect};
+% stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),0);
+% stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),0);
+% stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),0);
 
 % 'Kessner Hi (VAS 80) vs Lo (VAS 50) stimulation'
 % Since Kessner et al simulated a treatment effect witnin participants,
@@ -193,6 +194,8 @@ ForestPlotter(statsNPS,...
           
 hgexport(gcf, 'C1_NPS_hi_vs_lo_pain_all.svg', hgexport('factorystyle'), 'Format', 'svg'); 
 hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Fig_S3_NPS_hi_vs_lo.svg', hgexport('factorystyle'), 'Format', 'svg');
+hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Fig_S3_NPS_hi_vs_lo.png', hgexport('factorystyle'), 'Format', 'png');
+
 hgexport(gcf, '../../Protocol_and_Manuscript/NPS_validation/Figures/Figure4', hgexport('factorystyle'), 'Format', 'svg');
 
 NPS_pos_imgs=vertcat(statsNPS.delta)>0;
@@ -219,7 +222,7 @@ lsline
 PlaceboStats=load('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/E_NPS_Meta_Analysis_Placebo/Full_Sample_Study_Level_Results_Placebo.mat');
 pla_studies={'atlas'
              'ellingsen'
-             'freeman'
+             %'freeman'
              'kessner'
              'kong06'
              'kong09'

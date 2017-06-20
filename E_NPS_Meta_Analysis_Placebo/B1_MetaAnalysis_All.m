@@ -247,7 +247,8 @@ for i = 1:numel(varnames)
                   'textoffset',0);
     hgexport(gcf, ['B1_Meta_All_',varnames{i},'.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
     pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
-    hgexport(gcf, fullfile(pubpath,['B1_Meta_All_',varnames{i},'.svg']), hgexport('factorystyle'), 'Format', 'svg'); 
+    hgexport(gcf, fullfile(pubpath,['B1_Meta_All_',varnames{i},'.svg']), hgexport('factorystyle'), 'Format', 'svg');
+    hgexport(gcf, fullfile(pubpath,['B1_Meta_All_',varnames{i},'.png']), hgexport('factorystyle'), 'Format', 'png'); 
     %close all;
 end
 
@@ -275,9 +276,12 @@ end
 effect=abs(summary.NPS.g.random.summary)
 SEeffect=summary.NPS.g.random.SEsummary
 
-bayesfactor(effect,SEeffect,1,[0,0.2]) % Bayes factor for negligible to small
-bayesfactor(effect,SEeffect,1,[0.2,0.5]) % Bayes factor for small to moderate results
 bayesfactor(effect,SEeffect,0,[0,0.5,2]) % Bayes factor for normal (two-tailed) null prior placing 95% probability for the mean effect being between -1 and 1
+bayesfactor(effect,SEeffect,0,[0.2,0.2,2]) % Bayes factor for normal (two-tailed) null prior placing 95% probability for the mean effect being between -1 and 1
+bayesfactor(effect,SEeffect,0,[0.5,0.2,2]) % Bayes factor for normal (two-tailed) null prior placing 95% probability for the mean effect being between -1 and 1
+
+
+bayesfactor(effect,SEeffect,0,[0.66,0.07,2]) % Bayes factor for normal null prior identical with overall behavioral effect
 
 %% Save study-level meta-stats for comparison with other contrasts (see: effects of hi vs lo temperature)
 stats.studies=df_full.studies;

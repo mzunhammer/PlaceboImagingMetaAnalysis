@@ -145,6 +145,7 @@ for i = 1:numel(varnames)
     %hgexport(gcf, ['B2_Meta_Incl_',varnames{i},'.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
     pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
     hgexport(gcf, fullfile(pubpath,['B2_Meta_Incl_',varnames{i},'.svg']), hgexport('factorystyle'), 'Format', 'svg'); 
-  
+    hgexport(gcf, fullfile(pubpath,['B2_Meta_Incl_',varnames{i},'.png']), hgexport('factorystyle'), 'Format', 'png'); 
+
     close all;
 end
