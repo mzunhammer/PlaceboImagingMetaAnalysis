@@ -130,7 +130,7 @@ conserv_mask_exvoxels=prop_nan_overall<null_trshld;
 df_conserv_masked=df_conserv;
 df_conserv_masked.pla_img=cellfun(@(x) x(:,conserv_mask_exvoxels),df_conserv.pla_img,'UniformOutput',0);
 df_conserv_masked.con_img=cellfun(@(x) x(:,conserv_mask_exvoxels),df_conserv.con_img,'UniformOutput',0);
-df_full_masked.brainmask=conserv_mask_exvoxels;
+df_conserv_masked.brainmask=conserv_mask_exvoxels;
 
 save('A1_Conservative_Sample_Img_Data_Masked_10_percent.mat','df_conserv_masked');
 printImage(conserv_mask_exvoxels,'../../pattern_masks/brainmask_logical_50.nii','./nii_results/Conservative_Sample_10_percent_mask')

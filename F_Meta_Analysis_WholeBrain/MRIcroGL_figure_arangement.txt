@@ -1,0 +1,274 @@
+var SPECS : string;
+var SPECS_N : string;
+var SPECS_r_sig : string;
+
+var over1 : integer;
+var over2 : integer;
+
+
+BEGIN
+
+// Set background image specs for all images and load image
+RESETDEFAULTS;
+BACKCOLOR (255,255,255);
+LOADIMAGE('/Users/matthiaszunhammer/Documents/MATLAB/spm12/canonical/fsl_standards/MNI152_T1_1mm_brain.nii');
+
+
+// Set overlay specs for all overlays
+OVERLAYTRANSPARENCYONBACKGROUND(40);
+OVERLAYCOLORFROMZERO(false);
+OVERLAYLOADSMOOTH(true);
+COLORBARCOORD(0.95,0.96,0.99,0.70); // Left_limit Top_limit Right_limit Bottom_limit
+//SHADERFORMVISIBLE(false);
+//CUTOUTFORMVISIBLE(false);
+//CLIPFORMVISIBLE(false);
+
+// Slicing layout for all overlays
+// MIND THE GAPS: USE SPACES TO MAKE SURE ARGUMENTS ARE SEPARATED
+SPECS:='A'+ //subsequent axial slices
+	   ' L+'+ //slice labels on (L- for off)
+       ' H -0.200'+ // horizontal overlap
+	   ' V 0.0'+ // vertical overlap
+	   ' -44.5 -23.5 -19.5 -9.5 0.5; '+ //Row one (semicolon defines end of row!)
+	   ' 10.5 20.5 30.5 50.5 67.5'+ //Row two
+	   ' S 0.5' ; //MidSagittal slice
+
+SPECS_N :='A'+ //subsequent axial slices
+	   ' L+'+ //slice labels on (L- for off)
+       ' H -0.200'+ // horizontal overlap
+	   ' V 0.0'+ // vertical overlap
+	   ' -49.5 -44.5 -29.5 -9.5 0.5; '+ //Row one (semicolon defines end of row!)
+	   ' 10.5 30.5 50.5 65.5 70.5'+ //Row two
+	   ' S 0.5' ; //MidSagittal slice
+
+
+// ######## FULL SAMPLE #############
+	   
+// n full sample
+OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Percent_Missing.nii');
+OVERLAYCOLORNAME(1,'0_green');
+OVERLAYMINMAX(1,0,0.3);
+MOSAIC(SPECS_N);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_S2_Missing_Voxels');
+OVERLAYCLOSEALL;
+
+// DEGREES OF FREEDOM FULL SAMPLE
+OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_pla_g_df.nii');
+OVERLAYCOLORNAME(1,'4colors');
+OVERLAYMINMAX(1,17,19);
+MOSAIC(SPECS_N);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_S3_df');
+OVERLAYCLOSEALL;
+
+// Main effect pain — Full sample
+OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_pain_g_unthresh.nii');
+OVERLAYCOLORNAME(1,'blue_0_red');
+OVERLAYMINMAX(1,-1.5,1.5);
+MOSAIC(SPECS);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_S4_g_pain');
+OVERLAYCLOSEALL;
+
+// g Main effect placebo — Full sample
+over1 := OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_pla_g_unthresh.nii');
+OVERLAYCOLORNAME(over1,'blue_0_red');
+OVERLAYMINMAX(over1,-0.2,0.2);
+MOSAIC(SPECS);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_1_g_placebo');
+OVERLAYCLOSEALL;
+
+// g Main effect placebo — Full sample
+over1 := OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_pla_g_unthresh.nii');
+OVERLAYCOLORNAME(over1,'blue_0_red');
+OVERLAYMINMAX(over1,-0.2,0.2);
+OVERLAYLOADSMOOTH(false);
+over2 := OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_pla_g_pperm05.nii');
+OVERLAYCOLORNAME(over2,'0_cyan');
+OVERLAYMINMAX(over2,-0.18,0);
+OVERLAYLOADSMOOTH(true);
+MOSAIC(SPECS);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_1_g_placebo_w_perm05');
+OVERLAYCLOSEALL;
+
+// z Main effect placebo — Full sample
+OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_pla_g_z.nii');
+OVERLAYCOLORNAME(1,'blue_0_red');
+OVERLAYMINMAX(1,-4,4);
+MOSAIC(SPECS);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_S5_z_placebo');
+OVERLAYCLOSEALL;
+
+// Heterogeneity — Full sample
+// OVERLAY 1
+OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_pla_g_Isq.nii');
+OVERLAYCOLORNAME(1,'0_indigo');
+OVERLAYMINMAX(1,0,100);
+MOSAIC(SPECS);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_S6_Isq_placebo');
+OVERLAYCLOSEALL;
+
+// Correlation w behaviour placebo — Full sample
+OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_pla_rrating_unthresh.nii');
+OVERLAYCOLORNAME(1,'red_0_blue');
+OVERLAYMINMAX(1,-0.2,0.2);
+MOSAIC(SPECS);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_2_r_placebo');
+OVERLAYCLOSEALL;
+
+// z Main effect placebo — Full sample
+OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_pla_rrating_z.nii');
+OVERLAYCOLORNAME(1,'red_0_blue');
+OVERLAYMINMAX(1,-4,4);
+MOSAIC(SPECS);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_S6_r_placebo_z');
+OVERLAYCLOSEALL;
+
+// Correlation w behaviour placebo — Full sample SIGNIFICANT
+OVERLAYTRANSPARENCYONOVERLAY(0);
+OVERLAYHIDEZEROS(true);
+
+SPECS_r_sig :='A'+ //subsequent axial slices
+	   ' L+'+ //slice labels on (L- for off)
+       ' H -0.100'+ // horizontal overlap
+	   ' V 0.0'+ // vertical overlap
+	   ' -34.5 -28.5 -15.5 -6.5 0.5; '+ //Row one (semicolon defines end of row!)
+	   ' 8.5 27.5 41.5 60.5 67.5;'+ //Row two
+	   ' S -5.5 0.5 5.5 10.5 15.5' ; //MidSagittal slice
+
+over1 := OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_pla_rrating_p001.nii');
+OVERLAYCOLORNAME(over1,'0_blue');
+OVERLAYMINMAX(over1,0,0.2);
+over2 := OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_pla_rrating_pperm05.nii');
+OVERLAYCOLORNAME(over2,'0_magenta');
+OVERLAYMINMAX(over2,0,0.2);
+MOSAIC(SPECS_r_sig);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_2_r_placebo_w_perm05');
+OVERLAYCLOSEALL;
+OVERLAYHIDEZEROS(false);
+
+// Heterogeneity — Full sample CORRELATION
+// OVERLAY 1
+OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_pla_rrating_Isq.nii');
+OVERLAYCOLORNAME(1,'0_indigo');
+OVERLAYMINMAX(1,0,100);
+MOSAIC(SPECS);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_S8_Isq_placebo_correlation_w_behavior');
+OVERLAYCLOSEALL;
+
+
+// ######## CONSERVATIVE SAMPLE #############
+
+// g Main effect placebo — Conservative sample
+over1 := OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Conservative_pla_g_unthresh.nii');
+OVERLAYCOLORNAME(over1,'blue_0_red');
+OVERLAYMINMAX(over1,-0.2,0.2);
+MOSAIC(SPECS);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_S9_g_placebo_conserv');
+OVERLAYCLOSEALL;
+
+// g Main effect placebo — Conservative sample
+over1 := OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Conservative_pla_g_unthresh.nii');
+OVERLAYCOLORNAME(over1,'blue_0_red');
+OVERLAYMINMAX(over1,-0.2,0.2);
+OVERLAYLOADSMOOTH(false);
+over2 := OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Conservative_pla_g_pperm05.nii');
+OVERLAYCOLORNAME(over2,'0_cyan');
+OVERLAYMINMAX(over2,-0.18,0);
+OVERLAYLOADSMOOTH(true);
+MOSAIC(SPECS);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_S10_g_placebo_conserv_w_perm05');
+OVERLAYCLOSEALL;
+
+// Heterogeneity — Conservative sample
+// OVERLAY 1
+OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Conservative_pla_g_Isq.nii');
+OVERLAYCOLORNAME(1,'0_indigo');
+OVERLAYMINMAX(1,0,100);
+MOSAIC(SPECS);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_S11_Isq_placebo_conserv');
+OVERLAYCLOSEALL;
+
+// Correlation w behaviour placebo — Conservative sample
+OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Conservative_pla_rrating_unthresh.nii');
+OVERLAYCOLORNAME(1,'red_0_blue');
+OVERLAYMINMAX(1,-0.2,0.2);
+MOSAIC(SPECS);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_S12_r_placebo_conserv');
+OVERLAYCLOSEALL;
+
+// Correlation w behaviour placebo — Conservative sample SIGNIFICANT
+OVERLAYTRANSPARENCYONOVERLAY(0);
+OVERLAYHIDEZEROS(true);
+
+SPECS_r_sig :='A'+ //subsequent axial slices
+	   ' L+'+ //slice labels on (L- for off)
+       ' H -0.100'+ // horizontal overlap
+	   ' V 0.0'+ // vertical overlap
+	   ' -34.5 -28.5 -15.5 -6.5 0.5; '+ //Row one (semicolon defines end of row!)
+	   ' 8.5 27.5 41.5 60.5 67.5;'+ //Row two
+	   ' S -5.5 0.5 5.5 10.5 15.5' ; //MidSagittal slice
+
+over1 := OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Conservative_pla_rrating_p001.nii');
+OVERLAYCOLORNAME(over1,'0_blue');
+OVERLAYMINMAX(over1,0,0.2);
+over2 := OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Conservative_pla_rrating_pperm05.nii');
+OVERLAYCOLORNAME(over2,'0_magenta');
+OVERLAYMINMAX(over2,0,0.2);
+MOSAIC(SPECS_r_sig);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_S13_r_placebo_conserv_w_perm05');
+OVERLAYCLOSEALL;
+OVERLAYHIDEZEROS(false);
+
+END.
+
+
+
+// ######## THRESHOLDED #############
+
+// Main effect pain — Full sample
+// Main effect placebo — Full sample
+// Correlation w behaviour placebo — Full sample
+// Heterogeneity — Full sample
+
+// Main effect pain — Conservative sample
+// Main effect placebo — Conservative sample
+// Correlation w behaviour placebo — Conservative sample
+// Heterogeneity — Conservative sample
+
+
+
+
+
+
+
+
+
+
+// EXPLORATORY
+BEGIN
+	RESETDEFAULTS;
+	// MNI152 (fsl 1mm) 10% complete subjects mask
+	// LOADIMAGE('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/s4MNI152_1mm_10percent_masked.nii');
+	LOADIMAGE('/Users/matthiaszunhammer/Documents/MATLAB/spm12/canonical/fsl_standards/MNI152_T1_1mm_brain.nii');
+	BACKCOLOR (255,255,255);
+	CONTRASTMINMAX(6200, 6500);
+	SHADERNAME('edge_phong');
+	
+	OVERLAYTRANSPARENCYONBACKGROUND(30)
+	OVERLAYCOLORFROMZERO(false)
+	OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_pla_rating_corr_neg.nii')
+	OVERLAYCOLORNAME(1,'Red')
+	OVERLAYMINMAX(1,0.001,0.2)
+	OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_pla_rating_corr_pos.nii')
+	OVERLAYCOLORNAME(2,'Blue')
+	OVERLAYMINMAX(2,0.001,0.2)
+	
+	SHADERADJUST('lightAmount', 0.5);
+	SHADERADJUST('ambient', 0.35);
+	SHADERADJUST('diffuse', 0.8);
+	SHADERADJUST('specular', 0);
+	SHADERADJUST('shininess', 0);
+	SHADERADJUST('edgeThresh', 0);
+	SHADERADJUST('edgeExp', 1);
+	SHADERADJUST('boundExp', 0);
+
+END.

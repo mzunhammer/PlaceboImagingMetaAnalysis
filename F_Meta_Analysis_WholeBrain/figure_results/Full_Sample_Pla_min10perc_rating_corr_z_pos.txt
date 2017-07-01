@@ -1,0 +1,41 @@
+=====[ ./nii_results/Full_Sample_Pla_min10perc_rating_corr_z_pos.nii | Harvard-Oxford Cortical Structural Atlas ]=====
+ClusterIndex	Voxels	MAX	MAX X (mm)	MAX Y (mm)	MAX Z (mm)	COG X (mm)	COG Y (mm)	COG Z (mm)
+5	79	5.53	6	6	60	6.85	6.37	60.8
+4	4	4.79	-4	8	42	-3.5	6.51	41.5
+3	3	4.87	10	-16	8	10.7	-16.7	8
+2	1	4.66	14	-16	42	14	-16	42
+1	1	4.69	40	-2	58	40	-2	58
+------------------------------------------
+Structures to which each center of mass belongs to:
+5,6.85,6.37,60.8,Harvard-Oxford Cortical Structural Atlas,49% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex), 10% Superior Frontal Gyrus, 3% Paracingulate Gyrus
+4,-3.5,6.51,41.5,Harvard-Oxford Cortical Structural Atlas,70% Cingulate Gyrus, anterior division, 14% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex), 7% Paracingulate Gyrus
+3,10.7,-16.7,8,Harvard-Oxford Cortical Structural Atlas,No label found!
+2,14,-16,42,Harvard-Oxford Cortical Structural Atlas,21% Precentral Gyrus, 11% Cingulate Gyrus, posterior division, 10% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex), 4% Cingulate Gyrus, anterior division
+1,40,-2,58,Harvard-Oxford Cortical Structural Atlas,39% Precentral Gyrus, 28% Middle Frontal Gyrus, 2% Superior Frontal Gyrus
+------------------------------------------
+Structures to which each cluster belongs to:
+
+Cluster #5
+Superior Frontal Gyrus:15.1392
+Precentral Gyrus:0.0632911
+Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex):41.8987
+Paracingulate Gyrus:3.44304
+Cingulate Gyrus, anterior division:0.0886076
+
+Cluster #4
+Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex):17.5
+Paracingulate Gyrus:18
+Cingulate Gyrus, anterior division:52.5
+
+Cluster #3
+
+Cluster #2
+Precentral Gyrus:21
+Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex):10
+Cingulate Gyrus, anterior division:4
+Cingulate Gyrus, posterior division:11
+
+Cluster #1
+Superior Frontal Gyrus:2
+Middle Frontal Gyrus:28
+Precentral Gyrus:39

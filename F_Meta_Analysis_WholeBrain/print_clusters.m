@@ -37,25 +37,13 @@ command= ['/usr/local/fsl/bin/autoaq',...
              ' -i ', in_img,...
              ' -t ', num2str(threshold),...
              ' -a "', atlas,'"'...
-             ' -o ', out_file];
+             ' -o ', out_file,...
+             ' -p']; %Forces peak values instead of "center of mass"
 
 % set FSL environment
 setenv('FSLDIR','/usr/local/fsl');  % this to tell where FSL folder is
 setenv('FSLOUTPUTTYPE', 'NIFTI_GZ'); % this to tell what the output type would be
 system(command);
 disp(['Cluster results printed to: ' out_file])
-
-
-%% for some reason fsl's "cluster" function foes not supply voxel stats...
-% add peak g, z, and p values manually
-clustertxt=fileread(out_file);
-txt_parts=regexp(clustertxt,'--+','split');
-tbl_hdr=textscan(txt_parts{1},'%s %s %s %s %s %s %s %s %s',1,'HeaderLines',1)
-tbl_data=textscan(txt_parts{1},'%f %f %f %f %f %f %f %f %f','HeaderLines',2)
-mni_coorinates=[tbl_data{4:6}];
-
-get_val_from_nii(image,mni_coorinates)
-get_val_from_nii(image,mni_coorinates)
-get_val_from_nii(image,mni_coorinates)
 
 end

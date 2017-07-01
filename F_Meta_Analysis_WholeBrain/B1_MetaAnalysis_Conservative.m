@@ -1,19 +1,20 @@
+
 %% Meta-Analysis for FULL BRAIN ANALYSIS
 % Script analog to the full meta-analysis of NPS results
 clear
 % Add folder with Generic Inverse Variance Methods Functions first
 addpath('../A_Analysis_GIV_Functions/')
-load('A1_Full_Sample_Img_Data_Masked_10_percent.mat')
+load('A1_Conservative_Sample_Img_Data_Masked_10_percent.mat')
 
 %% Meta-analysis: Effect of pain vs baseline on voxel-by-voxel bold response (sanity check)
-pain_stats=create_meta_stats_voxels_pain(df_full_masked);
+pain_stats=create_meta_stats_voxels_pain(df_conserv_masked);
 
 %% Meta-Analysis: Effect of placebo treatment on voxel-by-voxel bold response
-placebo_stats=create_meta_stats_voxels_placebo(df_full_masked);
+placebo_stats=create_meta_stats_voxels_placebo(df_conserv_masked);
 % Calculate meta-analysis summary
 
 %% Meta-Analysis: Correlation of behavioral effect and voxel-by-voxel bold response
-rating_stats=create_meta_stats_behavior(df_full_masked);
+rating_stats=create_meta_stats_behavior(df_conserv_masked);
 
 for i=1:length(placebo_stats)
     placebo_stats(i).r_external=fastcorrcoef(placebo_stats(i).delta,rating_stats(i).delta,true); % correlate single-subject effect of behavior and voxel signal 
@@ -24,10 +25,10 @@ for i=1:length(placebo_stats)
 end
 %% Summarize
 summary_placebo=GIVsummary(placebo_stats,{'g','r_external'});
-%save('B1_Full_Sample_Summary_Placebo.mat','summary_placebo','placebo_stats','rating_stats','-v7.3');
+save('B1_Conservative_Sample_Summary_Placebo.mat','summary_placebo','placebo_stats','rating_stats','-v7.3');
 
 summary_pain=GIVsummary(pain_stats,{'g'});
-%save('B1_Full_Sample_Summary_Pain.mat','summary_pain','pain_stats','-v7.3');
+save('B1_Conservative_Sample_Summary_Pain.mat','summary_pain','pain_stats','-v7.3');
 
 
 n_pain=vertcat(pain_stats.n);

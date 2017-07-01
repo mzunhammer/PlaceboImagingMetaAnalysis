@@ -8,13 +8,13 @@ clear
 addpath('../A_Analysis_GIV_Functions/')
 %% Create permuted sample for thresholding meta-analysis maps
 tic
-load('A1_Full_Sample_Img_Data_Masked_10_percent.mat')
+load('A1_Conservative_Sample_Img_Data_Masked_10_percent.mat')
 
 n_perms=1000; %number of permutations smallest p possible is 1/n_perms
 summary_perm(n_perms)=struct('g',[],'r_external',[]); %preallocate growing struct
 parfor p=1:n_perms %exchange parfor with for if parallel processing is not possible
     % Shuffle placebo/baseline labels 
-    curr_df_null=relabel_placebo_for_perm(df_full_masked);
+    curr_df_null=relabel_placebo_for_perm(df_conserv_masked);
     
     % Analyze as in original
     curr_null_stats_voxels_placebo=create_meta_stats_voxels_placebo(curr_df_null);
@@ -40,7 +40,6 @@ parfor p=1:n_perms %exchange parfor with for if parallel processing is not possi
     curr_perm_summary_stats.g.fixed.p=[]; % remove rel_weight effects to reduce size of results matrix   
     curr_perm_summary_stats.g.fixed.CI_lo=[]; % remove rel_weight effects to reduce size of results matrix   
     curr_perm_summary_stats.g.fixed.CI_hi=[]; % remove rel_weight effects to reduce size of results matrix   
-        
     
     curr_perm_summary_stats.g.random.df=[]; % remove rel_weight effects to reduce size of results matrix   
     curr_perm_summary_stats.g.random.weight=[]; % remove weight to reduce size of results matrix
@@ -55,7 +54,6 @@ parfor p=1:n_perms %exchange parfor with for if parallel processing is not possi
     curr_perm_summary_stats.g.heterogeneity.Isq=[];
     curr_perm_summary_stats.g.heterogeneity.tausq=[];
     
-    
     curr_perm_summary_stats.r_external.fixed.df=[]; % remove rel_weight effects to reduce size of results matrix   
     curr_perm_summary_stats.r_external.fixed.weight=[]; % remove weight to reduce size of results matrix
     curr_perm_summary_stats.r_external.fixed.rel_weight=[]; % remove rel_weight effects to reduce size of results matrix   
@@ -64,7 +62,7 @@ parfor p=1:n_perms %exchange parfor with for if parallel processing is not possi
     curr_perm_summary_stats.r_external.fixed.p=[]; % remove rel_weight effects to reduce size of results matrix   
     curr_perm_summary_stats.r_external.fixed.CI_lo=[]; % remove rel_weight effects to reduce size of results matrix   
     curr_perm_summary_stats.r_external.fixed.CI_hi=[]; % remove rel_weight effects to reduce size of results matrix   
-
+    
     curr_perm_summary_stats.r_external.random.df=[]; % remove rel_weight effects to reduce size of results matrix   
     curr_perm_summary_stats.r_external.random.weight=[]; % remove weight to reduce size of results matrix
     curr_perm_summary_stats.r_external.random.rel_weight=[]; % remove rel_weight effects to reduce size of results matrix   
@@ -73,7 +71,6 @@ parfor p=1:n_perms %exchange parfor with for if parallel processing is not possi
     curr_perm_summary_stats.r_external.random.p=[]; % remove rel_weight effects to reduce size of results matrix   
     curr_perm_summary_stats.r_external.random.CI_lo=[]; % remove rel_weight effects to reduce size of results matrix   
     curr_perm_summary_stats.r_external.random.CI_hi=[]; % remove rel_weight effects to reduce size of results matrix   
-    
     curr_perm_summary_stats.r_external.heterogeneity.p_het=[];
     curr_perm_summary_stats.r_external.heterogeneity.Isq=[];
     curr_perm_summary_stats.r_external.heterogeneity.tausq=[];
@@ -83,7 +80,7 @@ end
 
 toc
 % SAVE PERMUTED SUMMARY (... COMPUTE ONLY ONCE)
-%save('Full_Sample_Permuted_Summary_Results.mat','summary_perm','-v7.3');
+%save('Conservative_Sample_Permuted_Summary_Results.mat','summary_perm','-v7.3');
 
 %% Create thresholds:
 gstats=squeeze(struct2cell(summary_perm));
@@ -117,7 +114,7 @@ hold off
 g_het_max_chi=cellfun(@(x) max(x.heterogeneity.chisq),stats_g);
 r_external_het_max_chi=cellfun(@(x) max(x.heterogeneity.chisq),stats_r_external);
 
-load('B1_Full_Sample_Summary_Placebo.mat')
+load('B1_Conservative_Sample_Summary_Placebo.mat')
 summary_placebo.g.fixed.perm.min_z=quantile(g_min_z_fixed,0.025); %two-tailed!
 summary_placebo.g.fixed.perm.max_z=quantile(g_max_z_fixed,0.975); %two-tailed!
 summary_placebo.g.fixed.perm.min_z_dist=g_min_z_fixed; %two-tailed!
@@ -150,4 +147,5 @@ summary_placebo.r_external.random.perm.p=p_perm(summary_placebo.r_external.rando
 summary_placebo.r_external.heterogeneity.perm.max_chi=quantile(r_external_het_max_chi,0.95); %one-tailed!
 summary_placebo.r_external.heterogeneity.perm.max_chi_dist=r_external_het_max_chi; %one-tailed!
 summary_placebo.r_external.heterogeneity.perm.p=p_perm(summary_placebo.r_external.heterogeneity.chisq,r_external_het_max_chi,'monte-carlo','one-tailed-larger');
-save('B1_Full_Sample_Summary_Placebo.mat','summary_placebo','-append');
+save('B1_Conservative_Sample_Summary_Placebo.mat','summary_placebo','-append');
+
