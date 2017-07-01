@@ -20,7 +20,7 @@ function summary=ForestPlotter(MetaStats,varargin)
 %boxscaling: Scalar indicating how study weight and box-size relate: box
 %size = one y-unit * weight
 %printwidth: Two-element numeric vector indicating the desired with of image in px [x,y].
-
+%Xscale: Scalar indicating the maximum scale value for X
 %Example:
 % ForestPlotter(stats,studyIDtexts,'NPS-Response (Hedge''s g)','random','g');
 
@@ -62,6 +62,9 @@ addParameter(p,'WIsubdata',defWIsubdata,@isnumeric);
 %Supress summary
 defNOsummary = 0;
 addParameter(p,'NOsummary',defNOsummary,@isnumeric);
+%Xscale 
+defXscale = NaN;%per default the scale is chosen based on the largest absolute single subject value: round(max(abs(val))).
+addParameter(p,'Xscale',defXscale,@isnumeric);
 
 parse(p,MetaStats,varargin{:});
 % Re-format inputs for convenience
@@ -77,6 +80,7 @@ WIsubdata=p.Results.WIsubdata;
 textoffset=p.Results.textoffset;
 boxscaling=p.Results.boxscaling;
 NOsummary=p.Results.NOsummary;
+Xscale=p.Results.Xscale;
 
 %% Summarize all studies, weighted by se_summary_total
 % Summarize standardized using the generic inverse-variance weighting method
@@ -174,14 +178,17 @@ font_name='Arial';
 x_graphW=0.33; %relative size of x-axis in normalized space (rel to the whole graph)
     
 %AXIS SCALE
-if ~WIsubdata % no-single subj data-points >> scale x-axis to max(summary?CI) but at least 3
-    x_axis_size=max([double(ceil(max(abs([ciLo;ciHi])))),3]);
-elseif WIsubdata && withoutlier % single subj data-points (for WI-studies), yet points beyond max(summary?CI) not plotted > outliermarks instead
-    x_axis_size=max([double(ceil(max(abs([ciLo;ciHi])))),3]); 
-elseif WIsubdata && ~withoutlier % plot full range of wi-single subj data. x-axis are scaled to max(abs(indiv datapoint))
-    x_axis_size=max([double(ceil(max(abs(vertcat(MetaStats.std_delta))))),3]); 
-end    
-
+if isnan(Xscale)
+    if ~WIsubdata % no-single subj data-points >> scale x-axis to max(summary?CI) but at least Xscale
+        x_axis_size=double(ceil(max(abs([ciLo;ciHi]))));
+    elseif WIsubdata && withoutlier % single subj data-points (for WI-studies), yet points beyond max(summary?CI) not plotted > outliermarks instead
+        x_axis_size=double(ceil(max(abs([ciLo;ciHi])))); 
+    elseif WIsubdata && ~withoutlier % plot full range of wi-single subj data. x-axis are scaled to max(abs(indiv datapoint))
+        x_axis_size=double(ceil(max(abs(vertcat(MetaStats.std_delta))))); 
+    end    
+else
+    x_axis_size=Xscale;
+end
 if strcmp(summarystat,'r')|strcmp(summarystat,'ICC')
     x_axis_size=1;
 end
