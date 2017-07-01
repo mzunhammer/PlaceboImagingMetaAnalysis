@@ -1,2 +1,0 @@
-=====[ ./nii_results/Full_Sample_Pla_min10perc_rating_corr_z_neg.nii | Harvard-Oxford Cortical Structural Atlas ]=====
-ClusterIndex	Voxels	MAX	MAX X (mm)	MAX Y (mm)	MAX Z (mm)	COG X (mm)	COG Y (mm)	COG Z (mm)
