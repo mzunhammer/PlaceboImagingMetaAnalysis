@@ -3,10 +3,12 @@
 clear
 % Setup: Load df with paths and variables
 datapath='../../../Datasets/';
+maskpath='../../../pattern_masks/';
+
 tic
 outpath='./C_Exploratory_Analyses/A_Check_Image_Alignment/';
 
-load(fullfile(datapath,'AllData_w_NPS_MHE.mat'));
+load(fullfile(datapath,'AllData.mat'));
 
 studies=unique(df.studyID);
 masking_tol=0.00001;

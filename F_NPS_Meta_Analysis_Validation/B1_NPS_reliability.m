@@ -6,9 +6,11 @@
 clear
 % Add folder with Generic Inverse Variance Methods Functions first
 addpath('../A_Analysis_GIV_Functions/')
+addpath('/Users/matthiaszunhammer/Documents/MATLAB/ICC/')
 datapath='../../Datasets';
 
 load(fullfile(datapath,'AllData.mat'))
+
 
 studies=unique(df.studyID);   %Get all studies in df
 % !!!!! These must be in the same order as listed under "studies" !!!!
@@ -527,7 +529,7 @@ ylabel('Correlation (r) Session 1 vs 2')
 legend show
  hold off 
 
- 
+ rmpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/ICC'))
 % Plot overall fixed effects regression line
 % t=table(nBlocks,rs);
 % t.sqrt_nBlocks=sqrt(nBlocks);

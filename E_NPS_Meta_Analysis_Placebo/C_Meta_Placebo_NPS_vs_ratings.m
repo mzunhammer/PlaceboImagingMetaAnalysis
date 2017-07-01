@@ -70,7 +70,7 @@ for i=conOnly'
 stats.rating(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
 end
 
-[summary_total,se_summary_total,rel_weight,z,p,CI_lo,CI_hi,chisq,tausq,df,p_het,Isq]=GIVsummary([stats.rating.g]',[stats.rating.se_g]','g','random');
+summary=GIVsummary(stats.rating,'g');
 
 %% Second calculate meta-stats as usual for NPS
 v=find(strcmp(df_full.variables,'NPSraw'));

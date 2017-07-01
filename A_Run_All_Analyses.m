@@ -14,7 +14,7 @@ addpath(genpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/'))
 % behavioral/demografic/imaging data
 
 run('./A_Import/A_Run_All_Single_Imports.m')
-%run('./A_Import/B_Collect_All_Data_Tables.m') % Collects all data-tables in one big df
+run('./A_Import/B_Collect_All_Data_Tables.m') % Collects all data-tables in one big df
 
 %% B Create one big matrix holding all image data for (inclusive) analysis
 % and a corresponding df
@@ -43,18 +43,18 @@ run('./C_Apply_NPS/E_Collect_All_Data_Tables_NPS.m')            %Collect all stu
 rmpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/CanlabCore/CanlabCore')) % avoid conflict-messages with SPM
 %% Quality control and demographic results
 
-% Check brain coverage and alignment
+% Check brain coverage and alignment >> see whole brain analysis
 % Create a global coverage image including all files >> visual coverage check
-run('./D_Exploratory_Analyses/A_Check_Image_Alignment/A_Check_Coverage.m')
-% Create a coverage image for each study separately >> visual realignment check
-run('./D_Exploratory_Analyses/A_Check_Image_Alignment/B_Check_Registrations_single_study.m')
-% Calculate coverage of NPS based on global coverage image and NPS-mask
-run('./D_Exploratory_Analyses/A_Check_Image_Alignment/C_Check_Coverage_NPS.m') 
+% run('./D_Exploratory_Analyses/A_Check_Image_Alignment/A_Check_Coverage.m')
+% % Create a coverage image for each study separately >> visual realignment check
+% run('./D_Exploratory_Analyses/A_Check_Image_Alignment/B_Check_Registrations_single_study.m')
+% % Calculate coverage of NPS based on global coverage image and NPS-mask
+% run('./D_Exploratory_Analyses/A_Check_Image_Alignment/C_Check_Coverage_NPS.m') 
 
 % Study-level: Plot relative signal intensities for white/gray, csf/gray, nobrain/brain (for painful images)
-run('./D_Exploratory_Analyses/B_Outlier_Search/A_by_study_tissue_signal_outlier_detection.m') 
-% Subject-level (within studies): Plot relative signal intensities for white/gray, csf/gray, nobrain/brain (for painful images)
-run('./D_Exploratory_Analyses/B_Outlier_Search/B_by_subject_tissue_signal_outlier_detection.m') 
+% run('./D_Exploratory_Analyses/B_Outlier_Search/A_by_study_tissue_signal_outlier_detection.m') 
+% % Subject-level (within studies): Plot relative signal intensities for white/gray, csf/gray, nobrain/brain (for painful images)
+% run('./D_Exploratory_Analyses/B_Outlier_Search/B_by_subject_tissue_signal_outlier_detection.m') 
 % File in which the excluded subjects (for responder analysis) are defined
 run('./D_Exploratory_Analyses/C_Mark_Excluded_Subjects.m') 
 
@@ -67,7 +67,7 @@ run('./D_Exploratory_Analyses/E_demographics.m')
 %ratings was performed by hand on a single-study basis in the original
 %tables
 
-%% Meta-analysis placebo paper (Ratings, NPS, MHE)
+%% Meta-analysis NPS paper (Ratings, NPS)
 
 %First run unit-test to assert validity of GIV functions (withinMetastats, betweenMetastats, GIVsummary):
 run('./A_Analysis_GIV_Functions/Check_GIV_Validity.m')
@@ -95,7 +95,8 @@ run('./F_NPS_Meta_Analysis_Validation/A1_NPS_pain_vs_baseline.m')
 run('./F_NPS_Meta_Analysis_Validation/A2_NPS_pain_vs_baseline_outlier_excluded.m')
 
 % Sequence effects and reliability
-run('./F_NPS_Meta_Analysis_Validation/B1_NPS_sequence_effects_and_reliability.m')
+run('./F_NPS_Meta_Analysis_Validation/B1_NPS_sequence_effects.m')
+run('./F_NPS_Meta_Analysis_Validation/B1_NPS_reliability.m')
 
 % High pain vs low pain
 run('./F_NPS_Meta_Analysis_Validation/C1_NPS_hi_vs_lo_pain_all.m')
