@@ -57,18 +57,21 @@ if any(strcmp(outputs,'mu'))
 [summary.mu.fixed,...
  summary.mu.random,...
  summary.mu.heterogeneity]=GIV_weight(vertcat(stats.mu),vertcat(stats.se_mu));
+ summary.mu.n=nansum(vertcat(stats(:).n));
 end
 %d
 if any(strcmp(outputs,'d'))
 [summary.d.fixed,...
  summary.d.random,...
  summary.d.heterogeneity]=GIV_weight(vertcat(stats.d),vertcat(stats.se_d));
+ summary.d.n=nansum(vertcat(stats(:).n));
 end
 %g
 if any(strcmp(outputs,'g'))
 [summary.g.fixed,...
  summary.g.random,...
  summary.g.heterogeneity]=GIV_weight(vertcat(stats.g),vertcat(stats.se_g));
+ summary.g.n=nansum(vertcat(stats(:).n));
 end
 %r
 % For correlations all r-values have to be transformed to Fisher's Z before summary and back to r after.
@@ -76,6 +79,7 @@ if any(strcmp(outputs,'r'))
 [summary.r.fixed,...
  summary.r.random,...
  summary.r.heterogeneity]=GIV_weight(r2fishersZ(vertcat(stats.r)),sqrt(1./(vertcat(stats.n)-3))); %For Fisher's Z the SE of correlations only depends on n sqrt(1./(n-3))
+ summary.r.n=nansum(vertcat(stats(:).n));
 
 % Back-transform from fishersZ to r
  summary.r.fixed.summary=fishersZ2r(summary.r.fixed.summary);
@@ -97,6 +101,7 @@ if any(strcmp(outputs,'r_external'))
 [summary.r_external.fixed,...
  summary.r_external.random,...
  summary.r_external.heterogeneity]=GIV_weight(r2fishersZ(vertcat(stats.r_external)),sqrt(1./(vertcat(stats.n_r_external)-3))); %For Fisher's Z the SE of correlations only depends on n sqrt(1./(n-3))
+ summary.r_external.n=nansum(vertcat(stats(:).n_r_external)); % N where both observations are available!
 
 % Back-transform from fishersZ to r
  summary.r_external.fixed.summary=fishersZ2r(summary.r_external.fixed.summary);
