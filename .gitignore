@@ -26,35 +26,21 @@ octave-workspace
 *.svg
 *.png
 *.pdf
-*/*.eps
-*/*.svg
-*/*.png
-*/*.pdf
-*/*.eps/*
-*/*.svg/*
-*/*.png/*
-*/*.pdf/*
+**/*.eps
+**/*.svg
+**/*.png
+**/*.pdf
 
 # Mat-files
 *.mat
-*/*.mat
-*/*.mat/*
-*/*/*.mat
+**/*.mat
 
 # nifti-images
 *.nii
-*/*.nii
-*/*.nii/*
-*/*/*.nii
+**/*.nii
 *.nii.gz
-*/*.nii.gz
-*/*.nii.gz/*
-*/*/*.nii.gz
+**/*.nii.gz
 *.img
-*/*.img
-*/*.img/*
-*/*/*.img
+**/*.img
 *.hdr
-*/*.hdr
-*/*.hdr/*
-*/*/*.hdr
+**/*.hdr
