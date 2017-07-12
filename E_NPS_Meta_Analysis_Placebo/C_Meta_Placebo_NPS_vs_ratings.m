@@ -138,17 +138,40 @@ mdl0 = fitlm(df_lm,'rating ~ studyID');
 mdl1 = fitlm(df_lm,'rating ~ studyID+NPS');
 
 %% Mixed model analysis
-mmdl0 = fitlme(df_lm,'rating ~ 1+(1+NPS|studyID)',...
+var0=var(df_lm.rating)
+mmdl0 = fitlme(df_lm,'rating ~ 1',...
               'CheckHessian',true);
-mmdl1 = fitlme(df_lm,'rating ~ NPS+(1+NPS|studyID)',...
+mmdl_randintercept = fitlme(df_lm,'rating ~ 1+(1|studyID)',...
+              'CheckHessian',true);
+mmdl_randslope = fitlme(df_lm,'rating ~ 1+(1+NPS|studyID)',...
+              'CheckHessian',true);
+mmdl_full = fitlme(df_lm,'rating ~ NPS+(1+NPS|studyID)',...
               'CheckHessian',true)
           
-compare(mmdl0,mmdl1)
-anova(mmdl1)
-[~,~,lmefixed] =  fixedEffects(mmdl1);
-[~,~,lmerandom] = randomEffects(mmdl1);
+compare(mmdl_randslope,mmdl_full)
+anova(mmdl_full)
+[~,~,lmefixed] =  fixedEffects(mmdl_full);
+[~,~,lmerandom] = randomEffects(mmdl_full);
 fixedB0=lmefixed.Estimate(1);
 fixedB1=lmefixed.Estimate(2);
+
+% The R^2 estimates from MATLABs fitlme do not match what is described by 
+% Nakagawa & Schielzeth 2013 and Johnson 2014
+
+% >> Export table and use marginal and conditional R^2 obtained with lmer4 and MuMIn in R
+writetable(df_lm);
+
+% >> Rmarginal obtained by MuMIn was 0.03960617
+% Converting to g according to Borenstein
+% % Estimating effect size of association 
+ R2marginal=0.03960617; 
+ r_marginal=sqrt(R2marginal);
+ d_marginal=2*r_marginal./sqrt(1-R2marginal);
+ J=1-(3./(4.* 458-1));
+ g_marginal=d_marginal.*J;
+ disp(['Marginal (fixed effects only) R^2: ',num2str(R2marginal),' , corresponding g = ', num2str(g_marginal)])
+
+
 %% Plot standardized single-subject delta ratings vs NPS
 % This is only possible for within-subject studies
 % Plot single-study values
@@ -189,8 +212,9 @@ xlabel('Standardized NPS difference (placebo-control)')
 ylabel('Standardized rating difference (placebo-control)')
 legend show
 
-
-       
+R_overall=corrcoef(df_lm.rating,df_lm.NPS)
+disp(['Overall correlation: ', num2str(R_overall(2))])
+disp(['Mean correlation: ', num2str(mean(corrs(i)))])
 
 % Plot overall fixed effects regression line
 xl=[min(vertcat(stats.NPS(:).std_delta))
@@ -212,3 +236,6 @@ hold off
 %hgexport(gcf, ['C_Ratings_vs_NPS.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
 pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
 hgexport(gcf, fullfile(pubpath,'C_Ratings_vs_NPS.svg'), hgexport('factorystyle'), 'Format', 'svg');
+hgexport(gcf, fullfile(pubpath,'C_Ratings_vs_NPS.png'), hgexport('factorystyle'), 'Format', 'png');
+
+crop(fullfile(pubpath,'C_Ratings_vs_NPS.png'));

@@ -134,7 +134,7 @@ nicevarnames={'Pain ratings',...
               'NPS-score',...
               'VAS-score'};
 for i = 1:numel(varnames)
-    ForestPlotter(stats.(varnames{i}),...
+    summary.(varnames{i})=ForestPlotter(stats.(varnames{i}),...
                   'studyIDtexts',studyIDtexts,...
                   'outcomelabel',[nicevarnames{i},' (Hedges'' g)'],...
                   'type','random',...
@@ -146,5 +146,21 @@ for i = 1:numel(varnames)
     pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
     hgexport(gcf, fullfile(pubpath,['B4_Meta_Resp_',varnames{i},'.svg']), hgexport('factorystyle'), 'Format', 'svg');
     hgexport(gcf, fullfile(pubpath,['B4_Meta_Resp_',varnames{i},'.png']), hgexport('factorystyle'), 'Format', 'png'); 
+    crop(fullfile(pubpath,['B4_Meta_Resp_',varnames{i},'.png']));
     close all;
 end
+
+%% Obtain Bayesian Factors
+disp('BAYES FACTORS RATINGS')
+effect=abs(summary.rating.g.random.summary);
+SEeffect=summary.rating.g.random.SEsummary;
+bayesfactor(effect,SEeffect,0,[0,0.5,2])
+
+disp('BAYES FACTORS NPS')
+effect=abs(summary.NPS.g.random.summary);
+SEeffect=summary.NPS.g.random.SEsummary;
+
+bayesfactor(effect,SEeffect,0,[0,0.5,2]) % Bayes factor for normal (two-tailed) null prior placing 95% probability for the mean effect being between -1 and 1
+bayesfactor(effect,SEeffect,0,[0,0.5,1]) % "Enthusiast" Bayes factor for normal (one-tailed) null prior placing 95% probability for the mean effect being between -1 and 0
+bayesfactor(effect,SEeffect,0,[abs(summary.rating.g.random.summary),...
+                               summary.rating.g.random.SEsummary,2]) % Bayes factor for normal null prior identical with overall behavioral effect
