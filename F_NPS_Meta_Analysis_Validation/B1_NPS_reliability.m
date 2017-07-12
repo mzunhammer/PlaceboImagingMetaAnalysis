@@ -429,6 +429,7 @@ ForestPlotter(stats.NPSraw,...
 
 hgexport(gcf, 'B2_NPS_reliability.svg', hgexport('factorystyle'), 'Format', 'svg'); 
 hgexport(gcf, '../../Protocol_and_Manuscript/NPS_validation/Figures/Figure3', hgexport('factorystyle'), 'Format', 'svg');
+crop('../../Protocol_and_Manuscript/NPS_validation/Figures/Figure3.png');
 
 
 %% Check NPS reliability vs images/participant

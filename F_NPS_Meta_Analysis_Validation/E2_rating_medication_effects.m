@@ -1,6 +1,7 @@
 %% Meta-Analysis & Forest Plot
 
 clear
+
 % Add folder with Generic Inverse Variance Methods Functions first
 addpath('../A_Analysis_GIV_Functions/')
 datapath='../../Datasets';

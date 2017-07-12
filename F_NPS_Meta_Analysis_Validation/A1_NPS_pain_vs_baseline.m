@@ -397,6 +397,7 @@ ForestPlotter(stats,...
 hgexport(gcf, 'A1_NPS_pain_vs_baseline', hgexport('factorystyle'), 'Format', 'svg'); 
 hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Figure2', hgexport('factorystyle'), 'Format', 'svg');
 hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Figure2', hgexport('factorystyle'), 'Format', 'png');
+crop('../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Figure2.png');
 
 hgexport(gcf, '../../Protocol_and_Manuscript/NPS_validation/Figures/Figure1', hgexport('factorystyle'), 'Format', 'svg');
 
