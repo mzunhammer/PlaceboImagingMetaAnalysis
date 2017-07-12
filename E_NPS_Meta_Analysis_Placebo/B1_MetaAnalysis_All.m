@@ -119,7 +119,7 @@ for i=1:length(df_full.studies) % Calculate for all studies except...
     end
 end
 % Calculate grand mean
-control_mean_rating101=nanmean(vertcat(all_control_pain_ratings{:}))
+control_mean_rating101=nanmean(vertcat(all_control_pain_ratings{:}));
 %% Meta-Analysis NPS
 v=find(strcmp(df_full.variables,'NPSraw'));
 for i=1:length(df_full.studies) % Calculate for all studies except...
@@ -249,9 +249,9 @@ for i = 1:numel(varnames)
     pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
     hgexport(gcf, fullfile(pubpath,['B1_Meta_All_',varnames{i},'.svg']), hgexport('factorystyle'), 'Format', 'svg');
     hgexport(gcf, fullfile(pubpath,['B1_Meta_All_',varnames{i},'.png']), hgexport('factorystyle'), 'Format', 'png'); 
-    %close all;
+    crop(fullfile(pubpath,['B1_Meta_All_',varnames{i},'.png']));
 end
-
+close all;
 %% Additional forest plot for pain ratings standardized to 101pt VAS
 varnames={'rating101'};
 nicevarnames={'Pain ratings'};
@@ -268,20 +268,25 @@ for i = 1:numel(varnames)
     hgexport(gcf, ['B1_Meta_All_',varnames{i},'.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
     pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
     hgexport(gcf, fullfile(pubpath,['B1_Meta_All_',varnames{i},'.svg']), hgexport('factorystyle'), 'Format', 'svg'); 
-    %close all;
+    hgexport(gcf, fullfile(pubpath,['B1_Meta_All_',varnames{i},'.png']), hgexport('factorystyle'), 'Format', 'png'); 
+    crop(fullfile(pubpath,['B1_Meta_All_',varnames{i},'.png']));
 end
 
-
+close all
 %% Obtain Bayesian Factors
+disp('BAYES FACTORS RATINGS')
+effect=abs(summary.rating.g.random.summary)
+SEeffect=summary.rating.g.random.SEsummary
+bayesfactor(effect,SEeffect,0,[0,0.5,2])
+
+disp('BAYES FACTORS NPS')
 effect=abs(summary.NPS.g.random.summary)
 SEeffect=summary.NPS.g.random.SEsummary
 
 bayesfactor(effect,SEeffect,0,[0,0.5,2]) % Bayes factor for normal (two-tailed) null prior placing 95% probability for the mean effect being between -1 and 1
-bayesfactor(effect,SEeffect,0,[0.2,0.2,2]) % Bayes factor for normal (two-tailed) null prior placing 95% probability for the mean effect being between -1 and 1
-bayesfactor(effect,SEeffect,0,[0.5,0.2,2]) % Bayes factor for normal (two-tailed) null prior placing 95% probability for the mean effect being between -1 and 1
-
-
-bayesfactor(effect,SEeffect,0,[0.66,0.07,2]) % Bayes factor for normal null prior identical with overall behavioral effect
+bayesfactor(effect,SEeffect,0,[0,0.5,1]) % "Enthusiast" Bayes factor for normal (one-tailed) null prior placing 95% probability for the mean effect being between -1 and 0
+bayesfactor(effect,SEeffect,0,[abs(summary.rating.g.random.summary),...
+                               summary.rating.g.random.SEsummary,2]) % Bayes factor for normal null prior identical with overall behavioral effect
 
 %% Save study-level meta-stats for comparison with other contrasts (see: effects of hi vs lo temperature)
 stats.studies=df_full.studies;
@@ -321,6 +326,9 @@ ylabel('Standard error (g)')
 xlabel('Effect size (g)')
 hold off
 hgexport(gcf, fullfile(pubpath,['Funnel_plot_ratings','.svg']), hgexport('factorystyle'), 'Format', 'svg'); 
+hgexport(gcf, fullfile(pubpath,['Funnel_plot_ratings','.png']), hgexport('factorystyle'), 'Format', 'png'); 
+crop(fullfile(pubpath,['Funnel_plot_ratings','.png']));
+
 %close all;
 
 % The analysis of funnel plot asymmetry is computed via regression of
