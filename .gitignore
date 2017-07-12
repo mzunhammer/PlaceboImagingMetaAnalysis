@@ -44,3 +44,7 @@ octave-workspace
 **/*.img
 *.hdr
 **/*.hdr
+
+# excel-Tables
+*.xlsx
+**/*.xlsx
