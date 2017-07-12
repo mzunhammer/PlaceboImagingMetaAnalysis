@@ -14,8 +14,8 @@ img_pain_control = {freeman_control_dir(~cellfun(@isempty,regexp({freeman_contro
 freeman_placebo_dir = dir(fullfile(basedir, studydir, 'post-pain-placebo'));
 img_pain_placebo = {freeman_placebo_dir(~cellfun(@isempty,regexp({freeman_placebo_dir.name},'^L.*img'))).name}';
 
-%Suboptimal: Currently only con-images but no non-painful beta-images
-%available
+% Unfortunately only con-images but no non-painful beta-images
+% available
 freeman_painHiLo_dir = dir(fullfile(basedir, studydir, 'post-HighpainVsLowpain'));
 img_painHiLo = {freeman_painHiLo_dir(~cellfun(@isempty,regexp({freeman_painHiLo_dir.name},'^L.*img'))).name}';
 
@@ -77,13 +77,13 @@ freeman.plaFirst=[ones(size(img_pain_control));...
                   nan(size(img_painAllPrevsBL))];    % The pre- sentation of these four random sequences alternated between the radial and ulnar sides of the medial surface of the forearm
 freeman.condSeq=[ones(size(img_pain_control))*5;...%Placebo and control regions were tested in a 3x3 field (placebo,control,nocebo) with the following order: 
                  ones(size(img_pain_placebo))*4;...%"To balance the design, we started the administra- tion of sequences of heat pain stimuli at the most lateral column and moved medially across all subjects." 
-                 nan(size(img_painHiLo));...       %Thus, mean sequence position of placebo conditions was 4 and control conditions was 5!!!
+                 nan(size(img_painHiLo));...       %Thus, mean sequence position of placebo conditions was 4 and control conditions was 5.
                  nan(size(img_painAllPrevsBL))]; 
 freeman.rating=[xlsread(xls_path,'BetaSummary','H2:H25');...
         xlsread(xls_path,'BetaSummary','F2:F25');...
         NaN(size(img_painHiLo));...
         NaN(size(img_painAllPrevsBL))];
-freeman.rating101=(freeman.rating)*100/20; % 20-pt Graceley sensory and affective box ratings were used. Could not find in the references provided which regions on this sensory scale are noxious and which non-noxious...
+freeman.rating101=(freeman.rating)*100/20; % 20-pt Graceley sensory and affective box ratings were used. Could not find in the references provided which regions on this sensory scale are noxious and which non-noxious.
 freeman.stimInt=NaN(size(img));    % Currently unknown   
 freeman.fieldStrength=ones(size(freeman.img)).*3;
 freeman.tr           =ones(size(freeman.img)).*2000;
@@ -94,7 +94,7 @@ freeman.imgsPerBlock =ones(size(img))*6; % stimulus length from paper (12-second
 freeman.nBlocks      =[ones(size(img_pain_control))*6*2;... % according to  paper two "lidocaine" (placebo) sites were stimulated 6x each and averaged in this regressor (an additional one was presented with a lowered temperature and not part of this regressor)
                        ones(size(img_pain_placebo))*6*3;... % according to  paper three "control" sites were stimulated 6x each and averaged in this regressor
                        ones(size(img_painHiLo))*6*2;...         % according to  paper one "lidocaine" and one "capsaicin" site were stimulated with decreased and increased temperatures, 6x each.
-                       ones(size(img_painAllPrevsBL))*6*9]; % stimulus length from paper (12-second stimulu / 2 s TR), no SPM or other source available.;
+                       ones(size(img_painAllPrevsBL))*6*9]; % stimulus length from paper (12-second stimulu / 2 s TR), no SPM or other source available.
 freeman.nImages      =NaN(size(img)); % Images per Participant
 freeman.xSpan        =ones(size(img));       % currently unknown(?)
 freeman.conSpan      =[ones(size(img_pain_control));...

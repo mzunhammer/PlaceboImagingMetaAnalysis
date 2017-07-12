@@ -96,8 +96,8 @@ elsenb.plaInduct=repmat({'Suggestions'},size(elsenb.img));
 elsenb.plaFirst=repmat(xlsread(elsenbrxls,1,'H:H'),nbeta,1);
 
 [~,condSeqRaw]=xlsread(elsenbrxls,1,'F2:F37');
-conpos=cell2mat(strfind(condSeqRaw,'P')); %confusingly the control condition is called "placebo" in the excel file
-plapos=cell2mat(strfind(condSeqRaw,'M')); %confusingly the placebo condition is called "medication" in the excel file
+conpos=cell2mat(strfind(condSeqRaw,'P')); %the control condition is called "placebo" in the excel file
+plapos=cell2mat(strfind(condSeqRaw,'M')); %the placebo condition is called "medication" in the excel file
 elsenb.condSeq=[conpos;...
                plapos];
 

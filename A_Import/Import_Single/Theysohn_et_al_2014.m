@@ -90,7 +90,6 @@ pain(ismember(beta,6),1)=1;
 pain(ismember(beta,8),1)=0;
 pain(ismember(beta,9),1)=1;         
 
-
 theyrxls=fullfile(basedir,studydir,'Theysohn_et_al_NMO_2014 bereignigte Reihenfolge.xlsx');
 
 %% Collect all Variables in Table

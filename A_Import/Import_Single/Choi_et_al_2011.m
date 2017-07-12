@@ -55,16 +55,10 @@ expcon=[expcon{:}];expcon=[expcon{:}]';
 %'5' no_pain_anticipation_beta5;
 %'7' no_pain_beta7;
 
-% Strangely it seems as if separate GLM's have been performed at first level
-% for each of the experimental conditions...:
-%"control"
-%"1 potent Placebo"
-%"100 potent Placebo"
 
-% Even more strangely, Choi explained that there were two repetitions of
-% the fMRI experiment/subject with 15 stimuli each, although the paper
-% only mentions one repetition. Ratings were given by-condition after all
-% scanning was finished.
+% According to Choi the data-include a second run of the experiment that was unpublished.
+% Since we defined inclusion criteria stating that we include only
+% published studies, only the first run will be analyzed.
 
 con_descriptors= regexp(beta_img,'^Subj_\w_(.+?).nii','tokens');
 con_descriptors=[con_descriptors{:}];con_descriptors=[con_descriptors{:}]';
