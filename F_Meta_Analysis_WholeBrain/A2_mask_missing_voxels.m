@@ -95,7 +95,7 @@ load('A1_Conservative_Sample_Img_Data.mat')
 n_nan=NaN(length(df_conserv.studies),size(df_conserv.pla_img{1},2));
 n_subj=NaN(length(df_conserv.studies),1);
 for i=1:length(df_conserv.studies) % Calculate for all studies except...
-    if df_full.consOnlyImg(i)==0 %...data-sets where only contrasts are available
+    if df_conserv.consOnlyImg(i)==0 %...data-sets where only contrasts are available
         if df_conserv.BetweenSubject(i)==0 %Calculate for within-subject studies
            cdata=mean(cat(3,df_conserv.pla_img{i},df_conserv.con_img{i}),3);
            % Note that no extra loop for (within-subject) studies where only
@@ -132,7 +132,7 @@ df_conserv_masked.pla_img=cellfun(@(x) x(:,conserv_mask_exvoxels),df_conserv.pla
 df_conserv_masked.con_img=cellfun(@(x) x(:,conserv_mask_exvoxels),df_conserv.con_img,'UniformOutput',0);
 df_conserv_masked.brainmask=conserv_mask_exvoxels;
 
-save('A1_Conservative_Sample_Img_Data_Masked_10_percent.mat','df_conserv_masked');
+%save('A1_Conservative_Sample_Img_Data_Masked_10_percent.mat','df_conserv_masked');
 printImage(conserv_mask_exvoxels,'../../pattern_masks/brainmask_logical_50.nii','./nii_results/Conservative_Sample_10_percent_mask')
 
 

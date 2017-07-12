@@ -47,7 +47,7 @@ SPECS_N :='A'+ //subsequent axial slices
 // n full sample
 OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Percent_Missing.nii');
 OVERLAYCOLORNAME(1,'0_green');
-OVERLAYMINMAX(1,0,0.3);
+OVERLAYMINMAX(1,0,0.2);
 MOSAIC(SPECS_N);
 SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_S2_Missing_Voxels');
 OVERLAYCLOSEALL;
@@ -144,6 +144,23 @@ MOSAIC(SPECS_r_sig);
 SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_2_r_placebo_w_perm05');
 OVERLAYCLOSEALL;
 OVERLAYHIDEZEROS(false);
+
+// Correlation w behaviour placebo — Full sample SIGNIFICANT Version 2
+OVERLAYTRANSPARENCYONOVERLAY(0);
+OVERLAYHIDEZEROS(true);
+
+over1 := OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_pla_g_unthresh.nii');
+OVERLAYCOLORNAME(over1,'blue_0_red');
+OVERLAYMINMAX(over1,-0.2,0.2);
+OVERLAYLOADSMOOTH(false);
+over2 := OVERLAYLOAD('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/Full_pla_rrating_pperm05.nii');
+OVERLAYCOLORNAME(over2,'0_cyan');
+OVERLAYMINMAX(over2,0,0.2);
+OVERLAYLOADSMOOTH(true);
+MOSAIC(SPECS_r_sig);
+SAVEBMP('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/Figure_2_r_placebo_w_perm05_v2');
+OVERLAYCLOSEALL;
+
 
 // Heterogeneity — Full sample CORRELATION
 // OVERLAY 1

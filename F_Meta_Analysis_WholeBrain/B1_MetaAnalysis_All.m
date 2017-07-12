@@ -24,10 +24,10 @@ for i=1:length(placebo_stats)
 end
 %% Summarize
 summary_placebo=GIVsummary(placebo_stats,{'g','r_external'});
-%save('B1_Full_Sample_Summary_Placebo.mat','summary_placebo','placebo_stats','rating_stats','-v7.3');
+%save('B1_Full_Sample_Summary_Placebo.mat','summary_placebo','placebo_stats','rating_stats','-v7.3','append');
 
 summary_pain=GIVsummary(pain_stats,{'g'});
-%save('B1_Full_Sample_Summary_Pain.mat','summary_pain','pain_stats','-v7.3');
+%save('B1_Full_Sample_Summary_Pain.mat','summary_pain','pain_stats','-v7.3','append');
 
 
 n_pain=vertcat(pain_stats.n);

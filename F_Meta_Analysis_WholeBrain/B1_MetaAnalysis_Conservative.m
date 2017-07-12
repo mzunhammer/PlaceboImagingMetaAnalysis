@@ -2,6 +2,7 @@
 %% Meta-Analysis for FULL BRAIN ANALYSIS
 % Script analog to the full meta-analysis of NPS results
 clear
+
 % Add folder with Generic Inverse Variance Methods Functions first
 addpath('../A_Analysis_GIV_Functions/')
 load('A1_Conservative_Sample_Img_Data_Masked_10_percent.mat')

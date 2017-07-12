@@ -36,7 +36,7 @@ print_summary_niis(summary_pain.g,df_full_masked.brainmask,'Full_pain_g')
 %% Placebo ALL
 print_summary_niis(summary_placebo.g,df_full_masked.brainmask,'Full_pla_g')
 print_summary_niis(summary_placebo.r_external,df_full_masked.brainmask,'Full_pla_rrating')
-%% Pain Conservative
+% %% Pain Conservative
 load('A1_Conservative_Sample_Img_Data_Masked_10_percent.mat')
 load('B1_Conservative_Sample_Summary_Pain.mat')
 load('B1_Conservative_Sample_Summary_Placebo.mat')
