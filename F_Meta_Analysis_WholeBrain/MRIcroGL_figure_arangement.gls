@@ -1,0 +1,415 @@
+var BASEPATH_NII : string;
+var BASEPATH_FIG : string;
+
+var SPECS_n : string;
+var SPECS_standard : string;
+var SPECS_sig_pain : string;
+var SPECS_sig_pla_g : string;
+var SPECS_sig_pla_r : string;
+var SPECS_sig_pla_g_fixed : string;
+var SPECS_sig_pla_r_fixed : string;
+
+var over1 : integer;
+var over2 : integer;
+var over3 : integer;
+var over4 : integer;
+
+
+BEGIN
+
+BASEPATH_NII:='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/'
+BASEPATH_FIG:='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/'
+
+// Set background image specs for all images and load image
+RESETDEFAULTS;
+BACKCOLOR (255,255,255);
+LOADIMAGE('/Users/matthiaszunhammer/Documents/MATLAB/spm12/canonical/fsl_standards/MNI152_T1_1mm_brain.nii');
+
+
+// Set overlay specs for all overlays
+OVERLAYTRANSPARENCYONBACKGROUND(40);
+OVERLAYTRANSPARENCYONOVERLAY(0);
+
+OVERLAYCOLORFROMZERO(false);
+OVERLAYLOADSMOOTH(true);
+OVERLAYHIDEZEROS(false);
+COLORBARCOORD(0.4,0.85,0.6,0.8); // Left_limit Top_limit Right_limit Bottom_limit
+//SHADERFORMVISIBLE(false);
+//CUTOUTFORMVISIBLE(false);
+//CLIPFORMVISIBLE(false);
+
+// Slicing layout for all overlays
+// MIND THE GAPS: USE SPACES TO MAKE SURE ARGUMENTS ARE SEPARATED
+
+SPECS_n :='A'+ //subsequent axial slices
+	   ' L+'+ //slice labels on (L- for off)
+       ' H -0.200'+ // horizontal overlap
+	   ' V 0.0'+ // vertical overlap
+	   ' A -49.5 -44.5 -29.5 -9.5 0.5 S -4.5; '+ //Row one (semicolon defines end of row!)
+	   ' A 10.5 30.5 50.5 65.5 70.5 S 5.5' //Row two + MidSagittal slice
+SPECS_standard:='A'+ //subsequent axial slices
+	   ' L+'+ //slice labels on (L- for off)
+       ' H -0.200'+ // horizontal overlap
+	   ' V 0.0'+ // vertical overlap
+	   ' A -44.5 -29.5 -14.5 -9.5 0.5 S -4.5; '+ //Row one (semicolon defines end of row!)
+	   ' A 10.5 15.5 30.5 45.5 60.5 S 5.5' //Row two  //MidSagittal slice
+SPECS_sig_pain:='A'+ //subsequent axial slices
+	   ' L+'+ //slice labels on (L- for off)
+       ' H -0.200'+ // horizontal overlap
+	   ' V 0.0'+ // vertical overlap
+	   ' A -34.5 -30.5 -20.5 -10.5 -4.5	0.5 S -4.5; '+ //Row one (semicolon defines end of row!)
+	   ' A 4.5 8.5 26.5 38.5 44.5 58.5 S 5.5' //Row two  //MidSagittal slice
+SPECS_sig_pla_g:='A'+ //subsequent axial slices
+	   ' L+'+ //slice labels on (L- for off)
+       ' H -0.200'+ // horizontal overlap
+	   ' V 0.0'+ // vertical overlap
+	   ' A -25.5 -23.5 0.5 6.5 12.5 68.5' //Row one (semicolon defines end of row!)
+SPECS_sig_pla_g_fixed:='A'+ //subsequent axial slices
+	   ' L+'+ //slice labels on (L- for off)
+       ' H -0.200'+ // horizontal overlap
+	   ' V 0.0'+ // vertical overlap
+	   ' A -23.5 -17.5 -5.5 -3.5 0.5 4.5; '+ //Row one (semicolon defines end of row!)
+	   ' A 20.5 24.5 32.5 36.5 42.5 52.5' //Row two  //MidSagittal slice
+SPECS_sig_pla_r:='A'+ //subsequent axial slices
+	   ' L+'+ //slice labels on (L- for off)
+       ' H -0.200'+ // horizontal overlap
+	   ' V 0.0'+ // vertical overlap
+	   ' A -44.5 -29.5 -14.5 -9.5 0.5 S -4.5; '+ //Row one (semicolon defines end of row!)
+	   ' A 10.5 15.5 30.5 45.5 60.5 S 5.5' //Row two  //MidSagittal slice
+SPECS_sig_pla_r_fixed:='A'+ //subsequent axial slices
+	   ' L+'+ //slice labels on (L- for off)
+       ' H -0.200'+ // horizontal overlap
+	   ' V 0.0'+ // vertical overlap
+	   ' A -44.5 -29.5 -14.5 -9.5 0.5 S -4.5; '+ //Row one (semicolon defines end of row!)
+	   ' A 10.5 15.5 30.5 45.5 60.5 S 5.5' //Row two  //MidSagittal slice
+
+
+// ######## FULL SAMPLE #############
+// #### AUXILIARY #####   
+// n full sample
+OVERLAYLOAD(BASEPATH_NII+'Percent_Missing.nii');
+OVERLAYCOLORNAME(1,'0_green');
+OVERLAYMINMAX(1,0,0.2);
+MOSAIC(SPECS_n);
+SAVEBMP(BASEPATH_FIG+'Figure_S2_Missing_Voxels');
+OVERLAYCLOSEALL;
+
+// DEGREES OF FREEDOM FULL SAMPLE
+OVERLAYLOAD(BASEPATH_NII+'full/pla/g/Full_pla_g_df.nii');
+OVERLAYCOLORNAME(1,'4colors');
+OVERLAYMINMAX(1,16,19);
+MOSAIC(SPECS_n);
+SAVEBMP(BASEPATH_FIG+'Figure_S3_df');
+OVERLAYCLOSEALL;
+
+// #### PAIN ####
+
+// Main effect pain — Full sample
+OVERLAYLOAD(BASEPATH_NII+'full/pain/g/random/Full_pain_g_unthresh.nii');
+OVERLAYCOLORNAME(1,'blue_0_red');
+OVERLAYMINMAX(1,-1.5,1.5);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_1_g_pain_A');
+OVERLAYCLOSEALL;
+
+// Main effect pain — Full sample significant
+OVERLAYHIDEZEROS(True);
+OVERLAYLOAD(BASEPATH_NII+'full/pain/g/random/Full_pain_g_pperm05.nii');
+OVERLAYCOLORNAME(1,'blue_0_red');
+OVERLAYMINMAX(1,-1.5,1.5);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_1_g_pain_B_pperm05');
+OVERLAYCLOSEALL;
+OVERLAYHIDEZEROS(false);
+
+
+// Heterogeneity pain — Full sample
+// OVERLAY 1
+OVERLAYLOAD(BASEPATH_NII+'full/pain/g/heterogeneity/Full_pain_g_tau.nii');
+OVERLAYCOLORNAME(1,'0_indigo');
+OVERLAYMINMAX(1,0,0.6);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_S4_tau_pain_A');
+OVERLAYCLOSEALL;
+
+// Heterogeneity pain — Full sample significant
+OVERLAYLOAD(BASEPATH_NII+'full/pain/g/heterogeneity/Full_pain_g_tau_pperm05.nii');
+OVERLAYCOLORNAME(1,'0_indigo');
+OVERLAYMINMAX(1,0,0.6);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_S4_tau_pain_B_pperm05');
+OVERLAYCLOSEALL;
+
+
+
+
+
+
+// #### PLACEBO G ####
+
+// g Main effect placebo — Full sample
+over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/random/Full_pla_g_unthresh.nii');
+OVERLAYCOLORNAME(over1,'blue_0_red');
+OVERLAYMINMAX(over1,-0.2,0.2);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_2_g_placebo_A');
+OVERLAYCLOSEALL;
+
+// g significant only
+// Slicing layout for all overlays
+OVERLAYHIDEZEROS(true);
+OVERLAYLOADSMOOTH(false);
+OVERLAYLOAD(BASEPATH_NII+'full/pla/g/random/Full_pla_g_pperm05.nii');
+OVERLAYCOLORNAME(1,'0_blue');
+OVERLAYMINMAX(1,-0.2,0);
+MOSAIC(SPECS_sig_pla_g);
+SAVEBMP(BASEPATH_FIG+'Figure_2_g_placebo_B_perm05');
+OVERLAYCLOSEALL;
+OVERLAYLOADSMOOTH(true);
+OVERLAYHIDEZEROS(false);
+
+
+// g Main effect placebo — Full sample
+over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/random/Full_pla_g_unthresh.nii');
+OVERLAYCOLORNAME(over1,'blue_0_red');
+OVERLAYMINMAX(over1,-0.2,0.2);
+OVERLAYLOADSMOOTH(false);
+over2 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/random/Full_pla_g_pperm05.nii');
+OVERLAYCOLORNAME(over2,'0_cyan');
+OVERLAYMINMAX(over2,-0.2,0);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_2_g_placebo_v2');
+OVERLAYCLOSEALL;
+OVERLAYLOADSMOOTH(true);
+
+// z Main effect placebo — Full sample
+OVERLAYLOAD(BASEPATH_NII+'full/pla/g/random/Full_pla_g_z.nii');
+OVERLAYCOLORNAME(1,'blue_0_red');
+OVERLAYMINMAX(1,-4,4);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_SX_z_placebo');
+OVERLAYCLOSEALL;
+
+// Placebo g Heterogeneity
+// Unthresholded
+over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/heterogeneity/Full_pla_g_tau.nii');
+OVERLAYCOLORNAME(over1,'0_indigo');
+OVERLAYMINMAX(1,0,0.3);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_S6_tau_placebo_A_pperm05');
+OVERLAYCLOSEALL;
+// Thresholded
+OVERLAYHIDEZEROS(true);
+OVERLAYLOADSMOOTH(false);
+over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/heterogeneity/Full_pla_g_tau_pperm05.nii');
+OVERLAYCOLORNAME(over1,'0_indigo');
+OVERLAYMINMAX(1,0,0.3);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_S6_tau_placebo_B_pperm05');
+OVERLAYCLOSEALL;
+OVERLAYLOADSMOOTH(true);
+OVERLAYHIDEZEROS(false);
+
+// g Main effect placebo — Full sample FIXED
+over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/fixed/Full_pla_g_unthresh.nii');
+OVERLAYCOLORNAME(over1,'blue_0_red');
+OVERLAYMINMAX(over1,-0.2,0.2);
+
+OVERLAYLOADSMOOTH(false);
+over2 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/fixed/Full_pla_g_pperm05_neg.nii');
+OVERLAYCOLORNAME(over2,'0_cyan');
+OVERLAYMINMAX(over2,0.0001,0.22);
+
+over3 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/fixed/Full_pla_g_pperm05_pos.nii');
+OVERLAYCOLORNAME(over3,'0_magenta');
+OVERLAYMINMAX(over3,0.0001,0.22);
+
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_6_g_placebo_w_perm05_FIXED_v2');
+OVERLAYCLOSEALL;
+OVERLAYLOADSMOOTH(true);
+
+
+// g significant only
+over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/fixed/Full_pla_g_unthresh.nii');
+OVERLAYCOLORNAME(over1,'blue_0_red');
+OVERLAYMINMAX(over1,-0.2,0.2);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_S8_g_placebo_A_FIXED');
+OVERLAYCLOSEALL;
+
+
+// g significant only v1
+OVERLAYHIDEZEROS(true);
+OVERLAYLOADSMOOTH(false);
+
+over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/fixed/Full_pla_g_pperm05_pos.nii');
+OVERLAYCOLORNAME(over1,'0_red');
+OVERLAYMINMAX(over1,0,0.2);
+
+over2 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/fixed/Full_pla_g_pperm05_neg.nii');
+OVERLAYCOLORNAME(over2,'0_blue');
+OVERLAYMINMAX(over2,0,0.2);
+
+MOSAIC(SPECS_sig_pla_g_fixed);
+SAVEBMP(BASEPATH_FIG+'Figure_S8_g_placebo_B_perm05_FIXED');
+OVERLAYCLOSEALL;
+
+OVERLAYLOADSMOOTH(true);
+OVERLAYHIDEZEROS(false);
+
+
+// g significant only v2 with p.001 uncorrected
+OVERLAYHIDEZEROS(true);
+OVERLAYLOADSMOOTH(false);
+COLORBARVISIBLE(false);
+
+over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/fixed/Full_pla_g_p001_pos.nii');
+OVERLAYCOLORNAME(over1,'0_red');
+OVERLAYMINMAX(over1,0,0.2);
+
+over2 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/fixed/Full_pla_g_pperm05_pos.nii');
+OVERLAYCOLORNAME(over2,'0_magenta');
+OVERLAYMINMAX(over2,0,0.2);
+
+over3 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/fixed/Full_pla_g_p001_neg.nii');
+OVERLAYCOLORNAME(over3,'0_blue');
+OVERLAYMINMAX(over3,0,0.2);
+
+over4 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/fixed/Full_pla_g_pperm05_neg.nii');
+OVERLAYCOLORNAME(over4,'0_cyan');
+OVERLAYMINMAX(over4,0,0.2);
+
+MOSAIC(SPECS_sig_pla_g_fixed);
+SAVEBMP(BASEPATH_FIG+'Figure_S8_g_placebo_B_perm05_FIXED_v2');
+OVERLAYCLOSEALL;
+
+COLORBARVISIBLE(true);
+OVERLAYLOADSMOOTH(true);
+OVERLAYHIDEZEROS(false);
+
+
+
+
+//  #### Placebo R — CORRELATION W BEHAVIORAL PLACEBO  #### 
+
+// Correlation w behaviour placebo — Full sample
+over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/rrating/random/Full_pla_rrating_unthresh_pos.nii');
+OVERLAYCOLORNAME(over1,'0_red');
+OVERLAYMINMAX(over1,0,0.25);
+MOSAIC(SPECS_standard);
+over2 := OVERLAYLOAD(BASEPATH_NII+'full/pla/rrating/random/Full_pla_rrating_unthresh_neg.nii');
+OVERLAYCOLORNAME(over2,'0_blue');
+OVERLAYMINMAX(over2,0.001,0.25);
+SAVEBMP(BASEPATH_FIG+'Figure_3_r_placebo_A');
+OVERLAYCLOSEALL;
+
+// g significant only
+// Slicing layout for all overlays
+OVERLAYHIDEZEROS(true);
+OVERLAYLOADSMOOTH(false);
+OVERLAYLOAD(BASEPATH_NII+'full/pla/rrating/random/Full_pla_rrating_pperm05_neg.nii');
+OVERLAYCOLORNAME(1,'0_blue');
+OVERLAYMINMAX(1,0.001,0.1);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_3_r_placebo_B_perm05');
+OVERLAYCLOSEALL;
+OVERLAYLOADSMOOTH(true);
+OVERLAYHIDEZEROS(false);
+
+// Correlation w behaviour placebo — Full sample SIGNIFICANT Version 2
+over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/rrating/random/Full_pla_rrating_unthresh.nii');
+OVERLAYCOLORNAME(over1,'blue_0_red');
+OVERLAYMINMAX(over1,-0.20,0.20);
+OVERLAYLOADSMOOTH(false);
+OVERLAYHIDEZEROS(true);
+
+over2 := OVERLAYLOAD(BASEPATH_NII+'full/pla/rrating/random/Full_pla_rrating_pperm05_neg.nii');
+OVERLAYCOLORNAME(over2,'0_cyan');
+OVERLAYMINMAX(over2,0,0.20);
+
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_2_r_placebo_w_perm05_v2');
+OVERLAYCLOSEALL;
+OVERLAYLOADSMOOTH(true);
+OVERLAYHIDEZEROS(false);
+
+// Heterogeneity — Full sample CORRELATION
+// OVERLAY 1
+// Heterogeneity — Full sample
+// OVERLAY 1
+over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/rrating/heterogeneity/Full_pla_rrating_tau.nii');
+OVERLAYCOLORNAME(over1,'0_indigo');
+OVERLAYMINMAX(1,0,0.3);
+
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_S11_tau_placebo_correlation_w_behavior');
+OVERLAYCLOSEALL;
+
+
+// ######## CONSERVATIVE SAMPLE #############
+
+// g Main effect placebo — Conservative sample
+over1 := OVERLAYLOAD(BASEPATH_NII+'conservative/pla/g/random/Conservative_pla_g_unthresh.nii');
+OVERLAYCOLORNAME(over1,'blue_0_red');
+OVERLAYMINMAX(over1,-0.2,0.2);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_S10_g_placebo_conserv');
+OVERLAYCLOSEALL;
+
+// g Main effect placebo — Conservative sample
+over1 := OVERLAYLOAD(BASEPATH_NII+'conservative/pla/g/random/Conservative_pla_g_unthresh.nii');
+OVERLAYCOLORNAME(over1,'blue_0_red');
+OVERLAYMINMAX(over1,-0.2,0.2);
+OVERLAYLOADSMOOTH(false);
+over2 := OVERLAYLOAD(BASEPATH_NII+'conservative/pla/g/random/Conservative_pla_g_pperm05.nii');
+OVERLAYCOLORNAME(over2,'0_cyan');
+OVERLAYMINMAX(over2,-0.2,0);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_S11_g_placebo_conserv_w_perm05');
+OVERLAYCLOSEALL;
+OVERLAYLOADSMOOTH(true);
+
+// Heterogeneity — Conservative sample
+// OVERLAY 1
+OVERLAYLOAD(BASEPATH_NII+'conservative/pla/g/heterogeneity/Conservative_pla_g_tau.nii');
+OVERLAYCOLORNAME(1,'0_indigo');
+OVERLAYMINMAX(1,0,0.3);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_S12_tau_placebo_conserv');
+OVERLAYCLOSEALL;
+
+// Correlation w behaviour placebo — Conservative sample
+OVERLAYLOAD(BASEPATH_NII+'conservative/pla/rrating/random/Conservative_pla_rrating_unthresh.nii');
+OVERLAYCOLORNAME(1,'blue_0_red');
+OVERLAYMINMAX(1,-0.2,0.2);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_S13_r_placebo_conserv');
+OVERLAYCLOSEALL;
+
+// Correlation w behaviour placebo — Conservative sample SIGNIFICANT
+over1 := OVERLAYLOAD(BASEPATH_NII+'conservative/pla/rrating/random/Conservative_pla_rrating_unthresh.nii');
+OVERLAYCOLORNAME(over1,'blue_0_red');
+OVERLAYMINMAX(over1,-0.2,0.2);
+OVERLAYLOADSMOOTH(false);
+
+over2 := OVERLAYLOAD(BASEPATH_NII+'conservative/pla/rrating/random/Conservative_pla_rrating_pperm05.nii');
+OVERLAYCOLORNAME(over2,'0_cyan');
+OVERLAYMINMAX(over2,0.001,0.2);
+
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_S14_r_placebo_conserv_w_perm05');
+OVERLAYCLOSEALL;
+OVERLAYLOADSMOOTH(true);
+
+
+
+// z Main effect placebo — Full sample
+OVERLAYLOAD(BASEPATH_NII+'full/pla/rrating/random/Full_pla_rrating_z.nii');
+OVERLAYCOLORNAME(1,'blue_0_red');
+OVERLAYMINMAX(1,-4,4);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_S8_r_placebo_z');
+OVERLAYCLOSEALL;
+
+END.

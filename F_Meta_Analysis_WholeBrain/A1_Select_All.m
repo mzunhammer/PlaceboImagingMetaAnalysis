@@ -1,7 +1,6 @@
 %% Preprocess data for meta-analysis study-wise
 % >> sorts image and rating data into struct
 % >> summarizes equivalent conditions
-
 clear
 tic
 % Add folder with Generic Inverse Variance Methods Functions first

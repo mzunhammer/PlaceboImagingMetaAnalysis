@@ -1,4 +1,4 @@
-=====[ ./nii_results/Full_pla_g_pperm05_pos.nii | Harvard-Oxford Subcortical Structural Atlas ]=====
+=====[ ./nii_results/conservative/pla/rrating/random/Conservative_pla_rrating_pperm05_pos.nii | Harvard-Oxford Subcortical Structural Atlas ]=====
 ClusterIndex	Voxels	MAX	MAX X (mm)	MAX Y (mm)	MAX Z (mm)	COG X (mm)	COG Y (mm)	COG Z (mm)
 1	902629	0	90	-126	-72	nan	nan	nan
 ------------------------------------------

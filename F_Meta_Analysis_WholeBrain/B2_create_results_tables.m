@@ -1,5 +1,6 @@
 %% Print and label results cluster-wise
 clear
+
 % Available atlases (see: https://brainder.org/2012/07/30/automatic-atlas-queries-in-fsl/, or atlasquery --dumpatlases)
 %     ?Cerebellar Atlas in MNI152 space after normalization with FLIRT?
 %     ?Cerebellar Atlas in MNI152 space after normalization with FNIRT?
@@ -15,8 +16,8 @@ clear
 %     ?Oxford-Imanova Striatal Structural Atlas?
 %     ?Talairach Daemon Labels?
 
-atlases={'Talairach Daemon Labels','Harvard-Oxford Cortical Structural Atlas','Harvard-Oxford Subcortical Structural Atlas'};
-satlases={'TD','Hrvrd_Cort','Hrvrd_Subcort'};
+atlases={'Harvard-Oxford Subcortical Structural Atlas'}; %'Talairach Daemon Labels','Harvard-Oxford Cortical Structural Atlas',
+satlases={'Hrvrd_Subcort'}; %'TD','Hrvrd_Cort',
 %% Read all nii results images, filter thresholded ones
  nii_results=dir('./nii_results/');
  nii_results={nii_results.name}';
@@ -31,32 +32,66 @@ satlases={'TD','Hrvrd_Cort','Hrvrd_Subcort'};
 % [~,imgs_pperm05,~]=cellfun(@fileparts,imgs_pperm05,'UniformOutput',0);
 
 %select tables manually (thresholded Isquare maps for pain contain too many clusters to tabulate)
-imgs_pperm05={%'Conservative_pain_g_Isq_pperm05';
- %'Conservative_pain_g_pperm05';
- %'Conservative_pla_g_Isq_pperm05';
- 'Conservative_pla_g_pperm05';
- %'Conservative_pla_rrating_Isq_pperm05';
- 'Conservative_pla_rrating_pperm05';
- %'Full_pain_g_Isq_pperm05';
- 'Full_pain_g_pperm05';
- %'Full_pla_g_Isq_pperm05';
- 'Full_pla_g_pperm05';
- %'Full_pla_rrating_Isq_pperm05';
- 'Full_pla_rrating_pperm05'};
+img_path_pperm05={
+ %'conservative/pla/g/heterogeneity/Conservative_pain_g_Isq_pperm05';
+ %'conservative/pla/g/random/Conservative_pain_g_pperm05';
+ %'conservative/pla/g/heterogeneity/Conservative_pla_g_Isq_pperm05';
+ 
+ % NO SIGNIFICANT CLUSTER
+ %'conservative/pla/g/random/Conservative_pla_g_pperm05';
+ %'conservative/pla/rrating/heterogeneity/Conservative_pla_rrating_Isq_pperm05';
+ %'full/pain/g/heterogeneity/Full_pain_g_Isq_pperm05';
+ %'./nii_results/full/pla/g/heterogeneity/Full_pla_g_tau_pperm05';
+ %'./nii_results/full/pla/rrating/heterogeneity/Full_pla_rrating_tau_pperm05';
+
+ './nii_results/full/pain/g/random/Full_pain_g_pperm05';
+
+ './nii_results/full/pla/g/random/Full_pla_g_pperm05';
+ './nii_results/full/pla/g/fixed/Full_pla_g_pperm05Fixed';
+ 
+ './nii_results/full/pla/rrating/random/Full_pla_rrating_pperm05'
+ './nii_results/full/pla/rrating/fixed/Full_pla_rrating_pperm05Fixed';
+
+ './nii_results/conservative/pla/g/random/Conservative_pla_g_pperm05';
+ './nii_results/conservative/pla/rrating/random/Conservative_pla_rrating_pperm05';
+
+ 
+  
+%  
+%  ;
+
+% './nii_results/full/pla/g/random/Full_pla_g_g15';
+% './nii_results/full/pla/g/fixed/Full_pla_g_g15Fixed';
+% 
+% './nii_results/full/pla/rrating/random/Full_pla_rrating_g10pos'
+% './nii_results/full/pla/rrating/fixed/Full_pla_rrating_g20neg';
+% './nii_results/full/pla/rrating/random/Full_pla_rrating_g10Fixedpos'
+% './nii_results/full/pla/rrating/fixed/Full_pla_rrating_g20Fixedneg';
+% 
+% './nii_results/conservative/pla/g/random/Conservative_pla_g_g15';
+% './nii_results/conservative/pla/g/fixed/Conservative_pla_g_g15Fixed';
+% 
+% './nii_results/conservative/pla/rrating/random/Conservative_pla_rrating_g10pos'
+% './nii_results/conservative/pla/rrating/fixed/Conservative_pla_rrating_g20neg';
+% './nii_results/conservative/pla/rrating/random/Conservative_pla_rrating_g10Fixedpos'
+% './nii_results/conservative/pla/rrating/fixed/Conservative_pla_rrating_g20Fixedneg';
+ };
 
 %% Print tables for p<0.05 permutation test based results
 % Tabulate and label results full sample, negative and positive
 for k=1:length(atlases)
-    for i=1:length(imgs_pperm05)
-        curr_img=imgs_pperm05{i};
+    for i=1:length(img_path_pperm05)
+        curr_img=img_path_pperm05{i};
         curr_img_pos=[curr_img,'_pos.nii'];
         curr_img_neg=[curr_img,'_neg.nii'];
-        if any(strcmp(nii_results,curr_img_pos)) %if there is a pos/neg version for the current image
-            print_clusters(fullfile('./nii_results/',curr_img_pos),...
+        curr_img_name=strsplit(curr_img,'/');
+        curr_img_name=char(curr_img_name(end));
+        if exist(curr_img_pos)==2 %if there is a pos/neg version for the current image
+            print_clusters(curr_img_pos,...
                        eps,... %threshold cannot be 0
                        atlases{k},...
                        './figure_results/temp_pos.txt');
-            print_clusters(fullfile('./nii_results/',curr_img_neg),...
+            print_clusters(curr_img_neg,...
                        eps,... %threshold cannot be 0
                        atlases{k},...
                        './figure_results/temp_neg.txt');
@@ -65,21 +100,24 @@ for k=1:length(atlases)
             negtbl=refine_cluster_table('./figure_results/temp_neg.txt');
             outtbl=[postbl;negtbl];
         else
-            print_clusters(fullfile('./nii_results/',curr_img),...
+            print_clusters([curr_img,'.nii'],...
                        eps,... %threshold cannot be 0
                        atlases{k},...
                        './figure_results/temp.txt');
            outtbl=refine_cluster_table('./figure_results/temp.txt');
         end
-        outtblcells=table2cell(outtbl);
-        outtblcells(:,3:7)=cellfun(@(x) sprintf('%0.0f',x), outtblcells(:,3:7),'UniformOutput',0);
-        outtblcells(:,8)=cellfun(@(x) sprintf('%0.0f%%',x), outtblcells(:,8),'UniformOutput',0);
-        outtblcells(:,9:11)=cellfun(@(x) sprintf('%0.2f',x), outtblcells(:,9:11),'UniformOutput',0);
-        outtblcells(:,12)=cellfun(@(x) sprintf('%0.3f',x), outtblcells(:,12),'UniformOutput',0);
-        outtblcells(:,12)=cellfun(@(x) strrep(x,'0.','.'), outtblcells(:,12),'UniformOutput',0);
-        outtblcells(:,12)=cellfun(@(x) strrep(x,'.000','<.001'), outtblcells(:,12),'UniformOutput',0);
-        outtxt=cell2table(outtblcells,'VariableNames',outtbl.Properties.VariableNames);
+        if ~isempty(outtbl)
+            outtblcells=table2cell(outtbl);
+            outtblcells(:,3:7)=cellfun(@(x) sprintf('%0.0f',x), outtblcells(:,3:7),'UniformOutput',0);
+            outtblcells(:,8)=cellfun(@(x) sprintf('%0.2f',x), outtblcells(:,8),'UniformOutput',0);
+            outtblcells(:,9:11)=cellfun(@(x) sprintf('%0.2f',x), outtblcells(:,9:11),'UniformOutput',0);
+            outtblcells(:,12)=cellfun(@(x) sprintf('%0.3f',x), outtblcells(:,12),'UniformOutput',0);
+            outtblcells(:,12)=cellfun(@(x) strrep(x,'0.','.'), outtblcells(:,12),'UniformOutput',0);
+            outtblcells(:,12)=cellfun(@(x) strrep(x,'^.000','<.001'), outtblcells(:,12),'UniformOutput',0);
+            outtxt=cell2table(outtblcells,'VariableNames',outtbl.Properties.VariableNames);
 
-        writetable(outtxt,['./figure_results/',satlases{k},'_',curr_img,'.xlsx']);
+            delete(['./figure_results/',satlases{k},'_',curr_img_name,'.xlsx']); % Otherwise excel files will only be overwritten partially
+            writetable(outtxt,['./figure_results/',satlases{k},'_',curr_img_name,'.xlsx']);
+        end
     end
 end

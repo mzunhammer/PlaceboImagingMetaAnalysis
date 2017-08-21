@@ -31,18 +31,18 @@ studyIDtexts={
             };
 
 %% Pain ALL
-print_summary_niis(summary_pain.g,df_full_masked.brainmask,'Full_pain_g')
+print_summary_niis(summary_pain.g,df_full_masked.brainmask,'Full_pain_g', './nii_results/full/pain/g/')
 
 %% Placebo ALL
-print_summary_niis(summary_placebo.g,df_full_masked.brainmask,'Full_pla_g')
-print_summary_niis(summary_placebo.r_external,df_full_masked.brainmask,'Full_pla_rrating')
+print_summary_niis(summary_placebo.g,df_full_masked.brainmask,'Full_pla_g', './nii_results/full/pla/g/')
+print_summary_niis(summary_placebo.r_external,df_full_masked.brainmask,'Full_pla_rrating', './nii_results/full/pla/rrating/')
 % %% Pain Conservative
 load('A1_Conservative_Sample_Img_Data_Masked_10_percent.mat')
 load('B1_Conservative_Sample_Summary_Pain.mat')
 load('B1_Conservative_Sample_Summary_Placebo.mat')
 
-print_summary_niis(summary_pain.g,df_conserv_masked.brainmask,'Conservative_pain_g')
+print_summary_niis(summary_pain.g,df_conserv_masked.brainmask,'Conservative_pain_g', './nii_results/conservative/pain/g/')
 
 %% Placebo Conservative
-print_summary_niis(summary_placebo.g,df_conserv_masked.brainmask,'Conservative_pla_g')
-print_summary_niis(summary_placebo.r_external,df_conserv_masked.brainmask,'Conservative_pla_rrating')
+print_summary_niis(summary_placebo.g,df_conserv_masked.brainmask,'Conservative_pla_g', './nii_results/conservative/pla/g/')
+print_summary_niis(summary_placebo.r_external,df_conserv_masked.brainmask,'Conservative_pla_rrating', './nii_results/conservative/pla/rrating/')

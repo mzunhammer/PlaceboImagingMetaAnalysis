@@ -21,9 +21,9 @@ stats(n_studies).n_r_external=[];
 for i=1:length(df.studies) % Calculate for all studies except...
     if df.consOnlyRating(i)==0 %...data-sets where only contrasts are available
         if df.BetweenSubject(i)==0 %Calculate within-subject studies
-           stats(i)=withinMetastats(df.pla_rating{i},df.con_rating{i});
+           stats(i)=withinMetastats(df.con_rating{i},df.pla_rating{i}); %Note: Contrast is inversed compared to brain imaging data on purpose: this way results can be interpreted as "placebo analgesia" straightforward instead of "changes in pain ratings"
         elseif df.BetweenSubject(i)==1 %Calculate between-group studies
-           stats(i)=betweenMetastats(df.pla_rating{i},df.con_rating{i});
+           stats(i)=betweenMetastats(df.con_rating{i},df.pla_rating{i});  %Note: Contrast is inversed compared to brain imaging data on purpose: this way results can be interpreted as "placebo analgesia" straightforward instead of "changes in pain ratings"
         end        
     end
 end
@@ -31,7 +31,7 @@ end
 conOnly=find(df.consOnlyRating==1);
 impu_r=nanmean([stats.r]); % ... impute the mean within-subject study correlation observed in all other studies
 for i=conOnly'
-    stats(i)=withinMetastats(df.pla_rating{i},impu_r);
+    stats(i)=withinMetastats(df.pla_rating{i}.*-1,impu_r);  %Note: Contrast is inversed compared to brain imaging data on purpose: this way results can be interpreted as "placebo analgesia" straightforward instead of "changes in pain ratings"
 end
 
 end

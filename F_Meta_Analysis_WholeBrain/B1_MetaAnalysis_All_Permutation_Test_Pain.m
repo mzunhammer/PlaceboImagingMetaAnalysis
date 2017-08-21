@@ -55,4 +55,4 @@ summary_pain.g.random.perm.p=p_perm(summary_pain.g.random.z,[g_min_z_random;g_ma
 summary_pain.g.heterogeneity.perm.max_chi=quantile(g_het_max_chi,0.95); %one-tailed!
 summary_pain.g.heterogeneity.perm.max_chi_dist=g_het_max_chi; %one-tailed!
 summary_pain.g.heterogeneity.perm.p=p_perm(summary_pain.g.heterogeneity.chisq,g_het_max_chi,'monte-carlo','one-tailed-larger');
-save('B1_Full_Sample_Summary_Pain.mat','summary_pain','append');
+save('B1_Full_Sample_Summary_Pain.mat','summary_pain','-append');

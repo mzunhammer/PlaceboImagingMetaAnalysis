@@ -3,6 +3,12 @@ function outtable=refine_cluster_table(intable)
 txt=fileread(intable);
 txt=regexp(txt,'------------------------------------------+?', 'split');
 raw_rtable=txt{1}; %actual table
+
+if length(txt)==1 % In case there were no clusters
+    outtable =[]
+    return
+end
+
 raw_peak_lbls=txt{2}; %peak labels
 raw_cluster_lbls=txt{3}; %cluster labels
 
@@ -10,6 +16,9 @@ raw_cluster_lbls=txt{3}; %cluster labels
 header=regexp(txt,'\=\=\=\=\=\[\s(.+?)\s\|\s(.+?)\s\]\=\=\=\=\=','tokens'); 
 imgpath=header{1}{1}{1};
 [path,imgname,~]=fileparts(imgpath);
+subpath=strsplit(path,'/');
+stattype=subpath(end);
+subpath=char(join(subpath(1:end-1),'/'));
 imgnameparts=strsplit(imgname,'_');
 
 atlas=header{1}{1}{2};
@@ -63,17 +72,33 @@ rtable=array2table(tblcontent,'VariableNames',genvarname(tblhdr));
 rtable.labels=clustertxt_clean'; %add lalbels
 
 %For each cluster get n,SE,Isq,t-val,p-val(uncorr),p-val(perm)
-paramOfInterest={'n','SE','Isq','z','pmap001','pmapperm05'};
+switch stattype{:}
+    case 'heterogeneity'
+    paramOfInterest={'n','chisq','phet','phetperm','unthresh','SE'};
+    mainstat='random';
+    otherwise
+    paramOfInterest={'n','SE','tau','z','pmap001','pmapperm05'};
+    mainstat=stattype;
+end
 addtable=array2table(NaN(height(rtable),length(paramOfInterest)),'VariableNames',paramOfInterest);
 for i=1:height(rtable)
     MNI=[rtable.MAXX(i),rtable.MAXY(i),rtable.MAXZ(i)];
     for j=1:length(paramOfInterest)
-        cimg=strcat(join([imgnameparts(1:3),paramOfInterest(j)],'_'),'.nii');
-        cimg=fullfile(path,char(cimg));
+        cparam=paramOfInterest(j);
+        cimg=strcat(join([imgnameparts(1:3),cparam],'_'),'.nii');
+        switch cparam{:}
+            case 'n'
+                cpath=subpath;
+            case {'Isq','chisq','tau','phetperm','phet'}
+                cpath=fullfile(subpath,'heterogeneity');
+            case {'unthresh','SE','z','pmap001','pmapperm05'}
+                cpath=fullfile(subpath,mainstat);
+        end
+        cimg=fullfile(char(cpath),char(cimg));
         chdr=spm_vol(cimg);
         vxl=mni2mat(MNI,cimg);
         cdat=spm_read_vols(chdr);
-        addtable{i,paramOfInterest(j)}=cdat(vxl(1),vxl(2),vxl(3));
+        addtable{i,cparam}=cdat(vxl(1),vxl(2),vxl(3));
     end
 end
 
@@ -84,7 +109,17 @@ end
 
 outtable=[rtable, addtable]; % Merge tables
 outtable.ClusterIndex=flipud(outtable.ClusterIndex); % Number by cluster size
-oldnames={'ClusterIndex','MAX','MAXX','MAXY','MAXZ','COGX','COGY','COGZ','pmap001','pmapperm05'};
-newnames={'No',imgnameparts{3},'X','Y','Z','COG_X','COG_Y','COG_Z','p001_uncorr','p05perm'};
-outtable.Properties.VariableNames(oldnames)=newnames; %Rename columns
-outtable = outtable(:,[1 10 4:6 2 11 13 3 12 14 16]); %Reorder columns
+
+switch stattype{:}
+    case 'heterogeneity'
+        oldnames={'ClusterIndex','MAX','MAXX','MAXY','MAXZ','COGX','COGY','COGZ','phet','phetperm'};
+        newnames={'No',imgnameparts{4},'X','Y','Z','COG_X','COG_Y','COG_Z','p_uncorr','p_perm'};
+        outtable.Properties.VariableNames(oldnames)=newnames; %Rename columns
+        outtable = outtable(:,[1 10 4:6 2 11 3 15 16 12 14]); %Reorder columns
+    otherwise
+        oldnames={'ClusterIndex','MAX','MAXX','MAXY','MAXZ','COGX','COGY','COGZ','pmap001','pmapperm05'};
+        newnames={'No',imgnameparts{3},'X','Y','Z','COG_X','COG_Y','COG_Z','p001_uncorr','p05perm'};
+        outtable.Properties.VariableNames(oldnames)=newnames; %Rename columns
+        outtable = outtable(:,[1 10 4:6 2 11 13 3 12 14 16]); %Reorder columns
+end
+
