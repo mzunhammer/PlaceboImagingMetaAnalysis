@@ -37,7 +37,7 @@ runstudies={...
 'Elsenbruch_et_al_2012'
 'Freeman_et_al_2015'
 'Geuter_et_al_2013'
-%'Huber_et_al_2013'
+'Huber_et_al_2013'
 'Kessner_et_al_201314'
 'Kong_et_al_2006'
 'Kong_et_al_2009'
@@ -52,31 +52,36 @@ runstudies={...
 };
 
 tic
-h = waitbar(0,'Calculating PPR, studies completed:')
+h = waitbar(0,'Calculating SIIPS, studies completed:')
 for i=1:length(runstudies)
-%Load table into a struct
-varload=load(fullfile(datadir,[runstudies{i},'.mat']));
-%Every table will be named differently, so get the name
-currtablename=fieldnames(varload);
-%Load the variably named table into "df"
-df=varload.(currtablename{:});
+    %Load table into a struct
+    varload=load(fullfile(datadir,[runstudies{i},'.mat']));
+    %Every table will be named differently, so get the name
+    currtablename=fieldnames(varload);
+    %Load the variably named table into "df"
+    df=varload.(currtablename{:});
 
-% Compute PPR (The CAN Toolbox must be added to path!!!!)
-all_imgs= df.img;
-    results=apply_patternmask(fullfile(datadir, all_imgs), fullfile(p, 'pattern_masks/Wager_JNeuro2011_PlaceboPredict_PainPeriod.img'));
-    results(cellfun(@isempty,results))={NaN};
-    df.PPR_pain_raw=[results{:}]';
-    df.PPR_pain_corrected=nps_rescale(df.PPR_pain_raw,df.voxelVolMat,df.xSpan,df.conSpan);
+    % Compute SIIPS (The CAN Toolbox and the "Neuroimaging_Pattern_Masks" folders must be added to path!!!!)
+    all_imgs= df.img;
+    [siips_values, image_names, data_objects, siipspos_exp_by_region, siipsneg_exp_by_region, clpos, clneg] = apply_siips(fullfile(datadir, all_imgs));
 
-    results2=apply_patternmask(fullfile(datadir, all_imgs), fullfile(p, 'pattern_masks/Wager_JNeuro2011_PlaceboPredict_Anticipation.img'));
-    results2(cellfun(@isempty,results2))={NaN};
-    df.PPR_anti_raw=[results2{:}]';
-    df.PPR_anti_corrected=nps_rescale(df.PPR_anti_raw,df.voxelVolMat,df.xSpan,df.conSpan);
+    siips_pos=vertcat(siipspos_exp_by_region{:});
+    siips_pos_names=strcat('SIIPS_Pos_',...
+                           strtrim({clpos.title}'),'_',...
+                           strtrim({clpos.shorttitle}'));
+    siips_pos_names=matlab.lang.makeValidName(siips_pos_names);
+    siips_pos=array2table(siips_pos,'VariableNames',siips_pos_names);
 
-    results3=apply_patternmask(fullfile(datadir, all_imgs), fullfile(p, 'pattern_masks/Wager_JNeuro2011_PlaceboBrainPredict_Anticipation.img'));
-    results3(cellfun(@isempty,results3))={NaN};
-    df.brainPPR_anti_raw=[results3{:}]';
-    df.brainPPR_anti_corrected=nps_rescale(df.brainPPR_anti_raw,df.voxelVolMat,df.xSpan,df.conSpan);
+    siips_neg=vertcat(siipsneg_exp_by_region{:});
+    siips_neg_names=strcat('SIIPS_Neg_',...
+                           strtrim({clneg.title}'),'_',...
+                           strtrim({clneg.shorttitle}'));
+    siips_neg_names=matlab.lang.makeValidName(siips_neg_names);
+    siips_neg=array2table(siips_neg,'VariableNames',siips_neg_names);
+
+    df.SIIPS=[siips_values{:}]';
+    df=[df,siips_pos];
+    df=[df,siips_neg];
 
     % Push the data in df into a table with the name of the original table
     eval([currtablename{1} '= df']);
