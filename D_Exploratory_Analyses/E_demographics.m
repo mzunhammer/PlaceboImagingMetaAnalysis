@@ -62,7 +62,7 @@ gender(strcmp(dfs.studyID,'atlas'))=[ones(10,1);zeros(11,1)];
 gender(strcmp(dfs.studyID,'bingel'))=[ones(15,1);zeros(4,1)];
 gender(isnan(gender))=2;
 
-genderlabels={'female';'male';'unknown'}
+genderlabels={'Female';'Male';'Unknown'}
 % 
 a=categorical(gender);
 a=renamecats(a ,genderlabels);
