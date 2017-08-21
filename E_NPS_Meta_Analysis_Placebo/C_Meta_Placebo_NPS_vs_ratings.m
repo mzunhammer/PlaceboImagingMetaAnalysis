@@ -239,3 +239,104 @@ hgexport(gcf, fullfile(pubpath,'C_Ratings_vs_NPS.svg'), hgexport('factorystyle')
 hgexport(gcf, fullfile(pubpath,'C_Ratings_vs_NPS.png'), hgexport('factorystyle'), 'Format', 'png');
 
 crop(fullfile(pubpath,'C_Ratings_vs_NPS.png'));
+
+
+
+%% Additionally: Regression analysis based on NPS and Rating data (not difference scores)
+
+studyID=[];
+subID=[];
+treat=[];
+data=[];
+zdata=[];
+std_data=[];
+for i=1:length(df_full.studies)
+    if ~(df_full.consOnlyNPS(i)||df_full.consOnlyRating(i)) %Studies for which only contrasts are available are of no use here
+        n_con=size(df_full.condata{1,i},1);
+        n_pla=size(df_full.pladata{1,i},1);
+        n=n_con+n_pla;
+        studyID=vertcat(studyID, repmat(df_full.studies(i),n,1));
+        if df_full.BetweenSubject(i)
+           subID= vertcat(subID,[1:n]');
+        else
+           subID= vertcat(subID,[(1:n_con)';(1:n_pla)']);
+        end
+        treat=vertcat(treat,[zeros(n_con,1);ones(n_pla,1)]);
+        data=vertcat(data,[df_full.condata{1,i};df_full.pladata{1,i}]);
+        zdata=vertcat(zdata,[nanzscore(df_full.condata{1,i});nanzscore(df_full.pladata{1,i})]);
+        std_data=vertcat(std_data,[df_full.condata{1,i}./nanstd(df_full.condata{1,i});
+                                   df_full.pladata{1,i}./nanstd(df_full.pladata{1,i})]);
+    end
+end
+
+dfl=table(studyID);
+dfl=[dfl,table(subID)];
+dfl=[dfl,table(treat)];
+dfl=[dfl,array2table(data,'VariableNames',df_full.variables)];
+dfl=[dfl,array2table(zdata,'VariableNames',strcat('z_',df_full.variables))];
+dfl=[dfl,array2table(std_data,'VariableNames',strcat('s_',df_full.variables))];
+dfl.subID=strrep(strcat(dfl.studyID,num2str(dfl.subID)),' ','_');
+
+plot(dfl.z_rating(dfl.treat==0),dfl.z_NPSraw(dfl.treat==0),'.k')
+lsline
+hold on
+plot(dfl.z_rating(dfl.treat==1),dfl.z_NPSraw(dfl.treat==1),'.b')
+lsline
+hold off
+
+%% Plot with lm lines
+studies=unique(dfl.studyID);
+figure
+hold on
+for i=1:numel(studies) % Calculate for all studies except...  
+    %Get current studyname & standardized ratings, NPS values
+       for currtreat=[0,1]
+       currstudy=studies(i);
+       rating101=dfl.rating101(strcmp(dfl.studyID,currstudy)&dfl.treat==currtreat);
+       NPS=dfl.s_NPSraw(strcmp(dfl.studyID,currstudy)&dfl.treat==currtreat);
+       %Plot single data-points
+       c=[0,0,1*currtreat];
+        plot(rating101,NPS,'.',...
+               'MarkerSize',5,...
+               'DisplayName',studyIDtexts{i},...
+               'MarkerEdgeColor',c,...
+               'MarkerFaceColor',c);   
+       %Plot simple regression lines
+       xl=[min(rating101);max(rating101)]; % Limit regression line to range(min,max)
+       x=linspace(xl(1),xl(2),100); % Limit regression line to range(min,max)
+       
+       currfit=fitlm(rating101,NPS);
+       curry=x.*(currfit.Coefficients.Estimate(2))+(currfit.Coefficients.Estimate(1));
+       % for model checking: plot BLUPS from linear mixed model (regression lines predicted by fixed+random effects)
+%        currBLUPs=lmerandom.Estimate(strcmp(lmerandom.Level,currstudy));
+%        curry=x.*(currBLUPs(2)+fixedB1)+(currBLUPs(1)+fixedB0);
+       plot(x,curry,'LineWidth',1.5,...
+           'DisplayName','',...
+           'Color',c,...
+           'MarkerEdgeColor',c,...
+           'MarkerFaceColor',c);
+    end        
+end
+hold off
+%%
+mmdl0 = fitlme(dfl,'s_rating ~ 1',...
+              'CheckHessian',true);
+mmdl_randintercept = fitlme(dfl,'s_rating ~ 1+(1|studyID:subID)',...
+              'CheckHessian',true);
+mmdl_randslope = fitlme(dfl,'z_rating ~ 1+(1+z_NPSraw|studyID:subID)',...
+              'CheckHessian',true);
+
+mmdl_NPS_like_meta = fitlme(dfl,'s_NPSraw ~ 1+treat+(1+treat|studyID)+(1|subID)',...
+              'CheckHessian',true); % The mixed model estimates an even smaller effect of placebo treatment (-.045) ... but note that it excludes contrast-only studies.    
+ 
+          
+mmdl_full = fitlme(dfl,'rating101 ~ 1+s_NPSraw+treat+s_NPSraw:treat+(1+s_NPSraw|studyID:subID)',...
+              'CheckHessian',true);
+mmdl_full1 = fitlme(dfl,'rating101 ~ 1+s_NPSraw+treat+s_NPSraw:treat+(1+s_NPSraw|studyID)+(1|subID)',...
+              'CheckHessian',true);
+
+mmdl_full2 = fitlme(dfl,'rating101 ~ 1+s_NPSraw+treat+s_NPSraw:treat+(1+s_NPSraw|studyID)+(1+s_NPSraw|studyID:subID)',...
+              'CheckHessian',true);
+compare(mmdl_full,mmdl_full1)
+compare(mmdl_full,mmdl_full2)
+compare(mmdl_full1,mmdl_full2)

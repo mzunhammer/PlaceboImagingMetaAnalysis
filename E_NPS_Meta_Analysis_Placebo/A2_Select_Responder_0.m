@@ -1,7 +1,7 @@
 %% Preprocess data for meta-analysis study-wise (summarize equivalent conditions)
 % Difference compared to "ALL/Inclusive":
 
-% 1.) Only participants with placeby-control ratings < study median are selected
+% 1.) Only participants with placeby-control ratings <0 are selected
 % 2.) Only participants that were not marked as outliers are selected (df.ex_all)
 % 3.) Only experimental conditions with max-chance of placebo effect were
 % selected, i.e.:
@@ -75,8 +75,7 @@ studyIDtexts={
             'Kong et al. 2006:';...
             'Kong et al. 2009:';...
             'Lui et al. 2010:';...
-            %'Ruetgen et al. 2015:' Cannot be included as no median split
-            %possible
+            'Ruetgen et al. 2015:'
             'Schenk et al. 2015:'
             'Theysohn et al. 2009:';...
             'Wager et al. 2004, Study 1:';...
@@ -196,8 +195,7 @@ df_resp.pladata{i}=df{(strcmp(df.studyID,'kong09')&strcmp(df.cond,'pain_post_pla
 i=find(strcmp(studies,'lui'));
 df_resp.condata{i}=df{(strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_control')&~df.ex_all),varselect};
 df_resp.pladata{i}=df{(strcmp(df.studyID,'lui')&strcmp(df.cond,'pain_placebo')&~df.ex_all),varselect};
-% %'ruetgen' % cannot be included as between-subject study and will be
-% excluded in responder selection later (no median-split possible)
+%'ruetgen'
 i=find(strcmp(studies,'ruetgen'));
 df_resp.condata{i}=df{(strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_Pain_Control_Group')&~df.ex_all),varselect};
 df_resp.pladata{i}=df{(strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_Pain_Placebo_Group')&~df.ex_all),varselect};
@@ -236,21 +234,20 @@ df_resp.condata{i}=NaN(size(df_resp.pladata{i}));
 %% Replace placebo-non-responders with nan
 % Define responders
 v=find(strcmp(df_resp.variables,'rating'));
-for i=1:length(df_resp.studies) % Calculate for all studies ...
+for i=1:length(df_resp.studies) % Calculate for all studies except...
     if df_resp.consOnlyRating(i)==0 %...data-sets where only rating contrasts are available
         if df_resp.BetweenSubject(i)==0 %For within-subject studies
-            rating_diff=(df_resp.pladata{i}(:,v)-df_resp.condata{i}(:,v));
-            df_resp.responder{i}=rating_diff<nanmedian(rating_diff);
+           df_resp.responder{i}=(df_resp.pladata{i}(:,v)-df_resp.condata{i}(:,v))<0;
         elseif df_resp.BetweenSubject(i)==1 %Between-subject studies
            % Responder-selection according to ratings not possible post-hoc in between-subject studies 
         end
     elseif df_resp.consOnlyRating(i)==1 %... for data-sets where only rating contrasts are available
-           df_resp.responder{i}=(df_resp.pladata{i}(:,v))<median(df_resp.pladata{i}(:,v)); % contrast was already computed
+           df_resp.responder{i}=(df_resp.pladata{i}(:,v))<0; % contrast was already computed
     end
 end
 
 % Exclude non-responders
-for i=1:length(df_resp.studies)
+for i=1:length(df_resp.studies) % Calculate for all studies except...
     df_resp.pladata{i}(~df_resp.responder{i},:)=NaN;
     df_resp.condata{i}(~df_resp.responder{i},:)=NaN;
 end
@@ -259,10 +256,6 @@ end
 % (Ruetgen et al was also between subject, but with responder pre-selection
 % and so it is included
 i=find(strcmp(studies,'kessner'));
-df_resp.condata{i}=NaN(size(df_resp.condata{i}));
-df_resp.pladata{i}=NaN(size(df_resp.pladata{i}));
-
-i=find(strcmp(studies,'ruetgen'));
 df_resp.condata{i}=NaN(size(df_resp.condata{i}));
 df_resp.pladata{i}=NaN(size(df_resp.pladata{i}));
 %% Add study/variable descriptions needed for meta-analysis
