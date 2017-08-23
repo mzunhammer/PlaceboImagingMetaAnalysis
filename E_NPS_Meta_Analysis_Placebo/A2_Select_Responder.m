@@ -87,7 +87,7 @@ studyIDtexts={
 %% VARIABLES TO SELECT
 
 varselect={'NPSraw','rating','MHEraw',...
-           'stimInt'};
+           'stimInt','SIIPS'};
            %'ex_lo_p_ratings','ex_img_artifact','ex_all'};
 
 %% Study-level data

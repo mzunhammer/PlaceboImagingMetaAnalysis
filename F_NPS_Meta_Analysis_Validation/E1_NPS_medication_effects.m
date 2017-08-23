@@ -133,5 +133,7 @@ ForestPlotter(stats,...
           
 hgexport(gcf, 'E1_NPS_medication_effects.svg', hgexport('factorystyle'), 'Format', 'svg'); 
 hgexport(gcf, '../../Protocol_and_Manuscript/NPS_validation/Figures/Figure6', hgexport('factorystyle'), 'Format', 'svg');
+hgexport(gcf, '../../Protocol_and_Manuscript/NPS_validation/Figures/Figure6_NPS', hgexport('factorystyle'), 'Format', 'png');
+crop('../../Protocol_and_Manuscript/NPS_validation/Figures/Figure6_NPS.png');
 
 close all;

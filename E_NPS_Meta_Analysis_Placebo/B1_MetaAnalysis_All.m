@@ -174,6 +174,25 @@ for i=conOnly'
 stats.stimInt(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
 end
 
+%% Meta-Analysis SIIPS
+v=find(strcmp(df_full.variables,'SIIPS'));
+for i=1:length(df_full.studies) % Calculate for all studies except...
+    if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
+        if df_full.BetweenSubject(i)==0 %Within-subject studies
+           stats.SIIPS(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
+           stats.SIIPS(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+        end        
+    end
+end
+% Calculate for those studies where only pla>con contrasts are available
+conOnly=find(df_full.consOnlyNPS==1);
+impu_r=nanmean([stats.SIIPS.r]); % impute the mean within-subject study correlation observed in all other studies
+for i=conOnly'
+stats.SIIPS(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
+end
+
+
 % %% Meta-Analysis PPR_pain
 % v=find(strcmp(df_full.variables,'PPR_pain_raw'));
 % for i=1:length(df_full.studies) % Calculate for all studies except...
@@ -230,10 +249,12 @@ end
 %% One Forest plot per variable
 varnames={'rating'
           'NPS'
-          'MHE'};
+          'MHE'
+          'SIIPS'};
 nicevarnames={'Pain ratings',...
               'NPS response',...
-              'MHE response'};
+              'MHE response',...
+              'SIIPS response'};
 summary=[];
 for i = 1:numel(varnames)
     summary.(varnames{i})=ForestPlotter([stats.(varnames{i})],...

@@ -55,7 +55,7 @@ studies=studies([1,2,3,4,5,6,7,9,15,16,19]);
             };
 
 %% Select data STUDIES
-varselect={'subID','NPSraw','SIIPS','rating','cond','condSeq','plaFirst'};
+varselect={'subID','NPSraw','MHEraw','rating','cond','condSeq','plaFirst'};
 
 %'Atlas'
 %?Pain Placebo NoRemi"      = HiPain Open Stimulation + HiPain Open ExpectationPeriod
@@ -74,12 +74,12 @@ sess1=sortrows(sess1,'subID');
 sess2=sortrows(sess2,'subID');
 strcmp(sess1.subID,sess2.subID);
 stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
-stats.SIIPS(i)=withinMetastats(sess2.SIIPS,sess1.SIIPS);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
 stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 % Add ICC
 stats.NPSraw(i).ICC=ICC([sess1.NPSraw,sess2.NPSraw],'C-1',0.05,0);
-stats.SIIPS(i).ICC=ICC([sess1.SIIPS,sess2.SIIPS],'C-1',0.05,0);
+stats.MHEraw(i).ICC=ICC([sess1.MHEraw,sess2.MHEraw],'C-1',0.05,0);
 stats.rating(i).ICC=ICC([sess1.rating,sess2.rating],'C-1',0.05,0);
 
 %'bingel06'
@@ -113,16 +113,16 @@ end
 % combined control_R and placebo_L
 labelscombi1=control_R(:, {'subID','cond'});            
 combi1=array2table(...
-        mean(cat(3,control_R{:, {'NPSraw','SIIPS','rating','condSeq'}},...
-              placebo_L{:, {'NPSraw','SIIPS','rating','condSeq'}}),3),...
-              'VariableNames',{'NPSraw','SIIPS','rating','condSeq'});
+        mean(cat(3,control_R{:, {'NPSraw','MHEraw','rating','condSeq'}},...
+              placebo_L{:, {'NPSraw','MHEraw','rating','condSeq'}}),3),...
+              'VariableNames',{'NPSraw','MHEraw','rating','condSeq'});
 combi1=[labelscombi1,combi1];
 % combined control_L and placebo_R
 labelscombi2=placebo_R(:, {'subID','cond'});            
 combi2=array2table(...
-        mean(cat(3,placebo_R{:, {'NPSraw','SIIPS','rating','condSeq'}},...
-              control_L{:, {'NPSraw','SIIPS','rating','condSeq'}}),3),...
-              'VariableNames',{'NPSraw','SIIPS','rating','condSeq'});
+        mean(cat(3,placebo_R{:, {'NPSraw','MHEraw','rating','condSeq'}},...
+              control_L{:, {'NPSraw','MHEraw','rating','condSeq'}}),3),...
+              'VariableNames',{'NPSraw','MHEraw','rating','condSeq'});
 combi2=[labelscombi2,combi2];
 
 % Get pain-images for both sides and treatments
@@ -133,12 +133,12 @@ sess2=sortrows(sess2,'subID');
 
 i=find(strcmp(studies,'bingel'));
 stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
-stats.SIIPS(i)=withinMetastats(sess2.SIIPS,sess1.SIIPS);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
 stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 % Add ICC
 stats.NPSraw(i).ICC=ICC([sess1.NPSraw,sess2.NPSraw],'C-1',0.05,0);
-stats.SIIPS(i).ICC=ICC([sess1.SIIPS,sess2.SIIPS],'C-1',0.05,0);
+stats.MHEraw(i).ICC=ICC([sess1.MHEraw,sess2.MHEraw],'C-1',0.05,0);
 stats.rating(i).ICC=ICC([sess1.rating,sess2.rating],'C-1',0.05,0);
 
 
@@ -153,36 +153,36 @@ sess4=df((strcmp(df.studyID,'bingel11')&~cellfun(@isempty,regexp(df.cond,'pain_r
 % First compare only placebo and control group used in meta analysis (sess
 % 2 and 3
 stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess3.NPSraw);
-stats.SIIPS(i)=withinMetastats(sess2.SIIPS,sess3.SIIPS);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess3.MHEraw);
 stats.rating(i)=withinMetastats(sess2.rating,sess3.rating);
 
 % Add ICC calculated across all four sessions
 stats.NPSraw(i).ICC=ICC([sess1.NPSraw,sess2.NPSraw,sess3.NPSraw,sess4.NPSraw],'C-1',0.05,0);
-stats.SIIPS(i).ICC=ICC([sess1.SIIPS,sess2.SIIPS,sess3.SIIPS,sess4.SIIPS],'C-1',0.05,0);
+stats.MHEraw(i).ICC=ICC([sess1.MHEraw,sess2.MHEraw,sess3.MHEraw,sess4.MHEraw],'C-1',0.05,0);
 stats.rating(i).ICC=ICC([sess1.rating,sess2.rating,sess3.rating,sess4.rating],'C-1',0.05,0);
 
 %'choi' (Correlation between Exp 1 (published) and Exp 2 (unpublished but identical)
 i=find(strcmp(studies,'choi'));
 sess1=array2table(...
-        mean(cat(3,df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp1_control_pain_beta'))), {'NPSraw','SIIPS','rating','condSeq'}},...
-                    df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp1_1potent_pain_beta'))), {'NPSraw','SIIPS','rating','condSeq'}},...
-                    df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp1_100potent_pain_beta'))), {'NPSraw','SIIPS','rating','condSeq'}}),3),...
-                    'VariableNames',{'NPSraw','SIIPS','rating','condSeq'});
+        mean(cat(3,df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp1_control_pain_beta'))), {'NPSraw','MHEraw','rating','condSeq'}},...
+                    df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp1_1potent_pain_beta'))), {'NPSraw','MHEraw','rating','condSeq'}},...
+                    df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp1_100potent_pain_beta'))), {'NPSraw','MHEraw','rating','condSeq'}}),3),...
+                    'VariableNames',{'NPSraw','MHEraw','rating','condSeq'});
 sess2=array2table(...
-        mean(cat(3,df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp2_control_pain_beta'))), {'NPSraw','SIIPS','rating','condSeq'}},...
-                    df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp2_1potent_pain_beta'))), {'NPSraw','SIIPS','rating','condSeq'}},...
-                    df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp2_100potent_pain_beta'))), {'NPSraw','SIIPS','rating','condSeq'}}),3),...
-                    'VariableNames',{'NPSraw','SIIPS','rating','condSeq'});
+        mean(cat(3,df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp2_control_pain_beta'))), {'NPSraw','MHEraw','rating','condSeq'}},...
+                    df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp2_1potent_pain_beta'))), {'NPSraw','MHEraw','rating','condSeq'}},...
+                    df{(strcmp(df.studyID,'choi')&~cellfun(@isempty,regexp(df.cond,'Exp2_100potent_pain_beta'))), {'NPSraw','MHEraw','rating','condSeq'}}),3),...
+                    'VariableNames',{'NPSraw','MHEraw','rating','condSeq'});
 
 corrcoef(sess1.rating,sess2.rating,'rows','complete')
 corrcoef(sess1.NPSraw,sess2.NPSraw,'rows','complete')
 stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
-stats.SIIPS(i)=withinMetastats(sess2.SIIPS,sess1.SIIPS);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
 stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 % Add ICC
 stats.NPSraw(i).ICC=ICC([sess1.NPSraw,sess2.NPSraw],'C-1',0.05,0);
-stats.SIIPS(i).ICC=ICC([sess1.SIIPS,sess2.SIIPS],'C-1',0.05,0);
+stats.MHEraw(i).ICC=ICC([sess1.MHEraw,sess2.MHEraw],'C-1',0.05,0);
 stats.rating(i).ICC=ICC([sess1.rating,sess2.rating],'C-1',0.05,0);
 
 
@@ -191,20 +191,20 @@ i=find(strcmp(studies,'eippert'));
 labelscontrol=[df((strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: control_saline'))), {'subID','cond'})
               df((strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: control_naloxone'))), {'subID','cond'})];
 control=array2table(...
-        [mean(cat(3,df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: control_saline'))), {'NPSraw','SIIPS','rating','condSeq'}},...
-              df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: control_saline'))), {'NPSraw','SIIPS','rating','condSeq'}}),3);...
-              mean(cat(3,df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: control_naloxone'))), {'NPSraw','SIIPS','rating','condSeq'}},...
-              df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: control_naloxone'))), {'NPSraw','SIIPS','rating','condSeq'}}),3)],...
-              'VariableNames',{'NPSraw','SIIPS','rating','condSeq'});
+        [mean(cat(3,df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: control_saline'))), {'NPSraw','MHEraw','rating','condSeq'}},...
+              df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: control_saline'))), {'NPSraw','MHEraw','rating','condSeq'}}),3);...
+              mean(cat(3,df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: control_naloxone'))), {'NPSraw','MHEraw','rating','condSeq'}},...
+              df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: control_naloxone'))), {'NPSraw','MHEraw','rating','condSeq'}}),3)],...
+              'VariableNames',{'NPSraw','MHEraw','rating','condSeq'});
 control=[labelscontrol,control];
 labelsplacebo=[df((strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: placebo_saline'))), {'subID','cond'})
               df((strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: placebo_naloxone'))), {'subID','cond'})];
 placebo=array2table(...
-             [mean(cat(3,df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: placebo_saline'))), {'NPSraw','SIIPS','rating','condSeq'}},...
-              df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: placebo_saline'))), {'NPSraw','SIIPS','rating','condSeq'}}),3);...
-              mean(cat(3,df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: placebo_naloxone'))), {'NPSraw','SIIPS','rating','condSeq'}},...
-              df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: placebo_naloxone'))), {'NPSraw','SIIPS','rating','condSeq'}}),3)],...
-              'VariableNames',{'NPSraw','SIIPS','rating','condSeq'});
+             [mean(cat(3,df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: placebo_saline'))), {'NPSraw','MHEraw','rating','condSeq'}},...
+              df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: placebo_saline'))), {'NPSraw','MHEraw','rating','condSeq'}}),3);...
+              mean(cat(3,df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain early: placebo_naloxone'))), {'NPSraw','MHEraw','rating','condSeq'}},...
+              df{(strcmp(df.studyID,'eippert')&~cellfun(@isempty,regexp(df.cond,'pain late: placebo_naloxone'))), {'NPSraw','MHEraw','rating','condSeq'}}),3)],...
+              'VariableNames',{'NPSraw','MHEraw','rating','condSeq'});
 placebo=[labelscontrol,placebo];
  
 sess1=[placebo(placebo.condSeq==1,:);control(control.condSeq==1,:)];
@@ -217,12 +217,12 @@ end
 corrcoef(sess1.rating,sess2.rating,'rows','complete')
 corrcoef(sess1.NPSraw,sess2.NPSraw,'rows','complete')
 stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
-stats.SIIPS(i)=withinMetastats(sess2.SIIPS,sess1.SIIPS);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
 stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 % Add ICC
 stats.NPSraw(i).ICC=ICC([sess1.NPSraw,sess2.NPSraw],'C-1',0.05,0);
-stats.SIIPS(i).ICC=ICC([sess1.SIIPS,sess2.SIIPS],'C-1',0.05,0);
+stats.MHEraw(i).ICC=ICC([sess1.MHEraw,sess2.MHEraw],'C-1',0.05,0);
 stats.rating(i).ICC=ICC([sess1.rating,sess2.rating],'C-1',0.05,0);
 
 %'ellingsen'
@@ -240,12 +240,12 @@ end
 corrcoef(sess1.rating,sess2.rating,'rows','complete')
 corrcoef(sess1.NPSraw,sess2.NPSraw,'rows','complete')
 stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
-stats.SIIPS(i)=withinMetastats(sess2.SIIPS,sess1.SIIPS);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
 stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 % Add ICC
 stats.NPSraw(i).ICC=ICC([sess1.NPSraw,sess2.NPSraw],'C-1',0.05,0);
-stats.SIIPS(i).ICC=ICC([sess1.SIIPS,sess2.SIIPS],'C-1',0.05,0);
+stats.MHEraw(i).ICC=ICC([sess1.MHEraw,sess2.MHEraw],'C-1',0.05,0);
 stats.rating(i).ICC=ICC([sess1.rating,sess2.rating],'C-1',0.05,0);
 
 %'elsenbruch'
@@ -267,12 +267,12 @@ end
 corrcoef(sess1.rating,sess2.rating,'rows','complete')
 corrcoef(sess1.NPSraw,sess2.NPSraw,'rows','complete')
 stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
-stats.SIIPS(i)=withinMetastats(sess2.SIIPS,sess1.SIIPS);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
 stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 % Add ICC
 stats.NPSraw(i).ICC=ICC([sess1.NPSraw,sess2.NPSraw],'C-1',0.05,0);
-stats.SIIPS(i).ICC=ICC([sess1.SIIPS,sess2.SIIPS],'C-1',0.05,0);
+stats.MHEraw(i).ICC=ICC([sess1.MHEraw,sess2.MHEraw],'C-1',0.05,0);
 stats.rating(i).ICC=ICC([sess1.rating,sess2.rating],'C-1',0.05,0);
 
 %'freeman'
@@ -282,9 +282,9 @@ stats.rating(i).ICC=ICC([sess1.rating,sess2.rating],'C-1',0.05,0);
 i=find(strcmp(studies,'geuter'));
 geuter_labels=df((strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'early_pain*'))), {'subID','cond'});
 geuter_all=array2table(...
-         mean(cat(3,df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'early_pain*'))),{'NPSraw','SIIPS','rating','condSeq'}},...
-         df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'late_pain*'))),{'NPSraw','SIIPS','rating','condSeq'}}),3),...
-         'VariableNames',{'NPSraw','SIIPS','rating','condSeq'});
+         mean(cat(3,df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'early_pain*'))),{'NPSraw','MHEraw','rating','condSeq'}},...
+         df{(strcmp(df.studyID,'geuter')&~cellfun(@isempty,regexp(df.cond,'late_pain*'))),{'NPSraw','MHEraw','rating','condSeq'}}),3),...
+         'VariableNames',{'NPSraw','MHEraw','rating','condSeq'});
 geuter_all=[geuter_labels,geuter_all];
 
 sess1=[geuter_all(geuter_all.condSeq==1,:);geuter_all(geuter_all.condSeq==1,:)];
@@ -302,12 +302,12 @@ if sum(~strcmp(sess1.subID,sess2.subID)) || sum(~strcmp(sess1.subID,sess3.subID)
 end
 
 stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
-stats.SIIPS(i)=withinMetastats(sess2.SIIPS,sess1.SIIPS);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
 stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 % Add ICC
 stats.NPSraw(i).ICC=ICC([sess1.NPSraw,sess2.NPSraw,sess3.NPSraw,sess4.NPSraw],'C-1',0.05,0);
-stats.SIIPS(i).ICC=ICC([sess1.SIIPS,sess2.SIIPS,sess3.SIIPS,sess4.SIIPS],'C-1',0.05,0);
+stats.MHEraw(i).ICC=ICC([sess1.MHEraw,sess2.MHEraw,sess3.MHEraw,sess4.MHEraw],'C-1',0.05,0);
 stats.rating(i).ICC=ICC([sess1.rating,sess2.rating,sess3.rating,sess4.rating],'C-1',0.05,0);
 
 %'kessner'
@@ -344,12 +344,12 @@ if sum(~strcmp(sess1.subID,sess2.subID)) || sum(~strcmp(sess1.subID,sess3.subID)
 end
 
 stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
-stats.SIIPS(i)=withinMetastats(sess2.SIIPS,sess1.SIIPS);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
 stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 % Add ICC
 stats.NPSraw(i).ICC=ICC([sess1.NPSraw,sess2.NPSraw,sess3.NPSraw,sess4.NPSraw],'C-1',0.05,0);
-stats.SIIPS(i).ICC=ICC([sess1.SIIPS,sess2.SIIPS,sess3.SIIPS,sess4.SIIPS],'C-1',0.05,0);
+stats.MHEraw(i).ICC=ICC([sess1.MHEraw,sess2.MHEraw,sess3.MHEraw,sess4.MHEraw],'C-1',0.05,0);
 stats.rating(i).ICC=ICC([sess1.rating,sess2.rating,sess3.rating,sess4.rating],'C-1',0.05,0);
 
 %'theysohn'
@@ -373,11 +373,11 @@ corrcoef(sess1.rating,sess2.rating,'rows','complete')
 corrcoef(sess1.NPSraw,sess2.NPSraw,'rows','complete')
 
 stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
-stats.SIIPS(i)=withinMetastats(sess2.SIIPS,sess1.SIIPS);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
 stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 stats.NPSraw(i).ICC=ICC([sess1.NPSraw,sess2.NPSraw],'C-1',0.05,0);
-stats.SIIPS(i).ICC=ICC([sess1.SIIPS,sess2.SIIPS],'C-1',0.05,0);
+stats.MHEraw(i).ICC=ICC([sess1.MHEraw,sess2.MHEraw],'C-1',0.05,0);
 stats.rating(i).ICC=ICC([sess1.rating,sess2.rating],'C-1',0.05,0);
 
 %'wager_princeton'
@@ -391,9 +391,9 @@ i=find(strcmp(studies,'wrobel'));
 % Take SubjectID's and condition labels from "early pain" (ordering of subIDs and testing sequence is the same for late pain)
 wrobel_labels=df((strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain*'))), {'subID','cond'});
 wrobel_all=array2table(...
-         mean(cat(3,df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain*'))),{'NPSraw','SIIPS','rating','condSeq'}},...
-         df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain*'))),{'NPSraw','SIIPS','rating','condSeq'}}),3),...
-         'VariableNames',{'NPSraw','SIIPS','rating','condSeq'});
+         mean(cat(3,df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'early_pain*'))),{'NPSraw','MHEraw','rating','condSeq'}},...
+         df{(strcmp(df.studyID,'wrobel')&~cellfun(@isempty,regexp(df.cond,'late_pain*'))),{'NPSraw','MHEraw','rating','condSeq'}}),3),...
+         'VariableNames',{'NPSraw','MHEraw','rating','condSeq'});
 wrobel_all=[wrobel_labels,wrobel_all];
 
 sess1=wrobel_all(wrobel_all.condSeq==1,:);
@@ -406,11 +406,11 @@ end
 corrcoef(sess1.rating,sess2.rating,'rows','complete')
 corrcoef(sess1.NPSraw,sess2.NPSraw,'rows','complete')
 stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
-stats.SIIPS(i)=withinMetastats(sess2.SIIPS,sess1.SIIPS);
+stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
 stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
 
 stats.NPSraw(i).ICC=ICC([sess1.NPSraw,sess2.NPSraw],'C-1',0.05,0);
-stats.SIIPS(i).ICC=ICC([sess1.SIIPS,sess2.SIIPS],'C-1',0.05,0);
+stats.MHEraw(i).ICC=ICC([sess1.MHEraw,sess2.MHEraw],'C-1',0.05,0);
 stats.rating(i).ICC=ICC([sess1.rating,sess2.rating],'C-1',0.05,0);
 
 %'zeidan'
@@ -429,25 +429,7 @@ ForestPlotter(stats.NPSraw,...
 
 hgexport(gcf, 'B2_NPS_reliability.svg', hgexport('factorystyle'), 'Format', 'svg'); 
 hgexport(gcf, '../../Protocol_and_Manuscript/NPS_validation/Figures/Figure3', hgexport('factorystyle'), 'Format', 'svg');
-hgexport(gcf, '../../Protocol_and_Manuscript/NPS_validation/Figures/Figure3', hgexport('factorystyle'), 'Format', 'png');
 crop('../../Protocol_and_Manuscript/NPS_validation/Figures/Figure3.png');
-
-
-% Summary analysis+ Forest Plot
-ForestPlotter(stats.SIIPS,...
-              'studyIDtexts',studyIDtexts,...
-              'outcomelabel','ICC of SIIPS responses across imaging runs (Hedge''s {\itg})',...
-              'type','random',...
-              'summarystat','ICC',...
-              'withoutlier',0,...
-              'WIsubdata',0,...
-              'boxscaling',1);
-
-hgexport(gcf, 'B2_SIIPS_reliability.svg', hgexport('factorystyle'), 'Format', 'svg'); 
-hgexport(gcf, '../../Protocol_and_Manuscript/NPS_validation/Figures/Figure3_SIIPS', hgexport('factorystyle'), 'Format', 'svg');
-hgexport(gcf, '../../Protocol_and_Manuscript/NPS_validation/Figures/Figure3_SIIPS', hgexport('factorystyle'), 'Format', 'png');
-crop('../../Protocol_and_Manuscript/NPS_validation/Figures/Figure3_SIIPS.png');
-
 
 
 stats.rating(4).ICC=NaN; % Rating data for Choi Sess 2 identical with Sess 1?

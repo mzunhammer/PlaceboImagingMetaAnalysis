@@ -90,34 +90,34 @@ for i=conOnly'
 stats.NPS(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
 end
 
-%% Third calculate meta-stats as usual for MHE
-v=find(strcmp(df_full.variables,'MHEraw'));
+%% Third calculate meta-stats as usual for SIIPS
+v=find(strcmp(df_full.variables,'SIIPS'));
 for i=1:length(df_full.studies) % Calculate for all studies except...
     if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
         if df_full.BetweenSubject(i)==0 %Within-subject studies
-           stats.MHE(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+           stats.SIIPS(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
         elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-           stats.MHE(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+           stats.SIIPS(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
         end        
     end
 end
 % Calculate for those studies where only pla>con contrasts are available
 conOnly=find(df_full.consOnlyNPS==1);
-impu_r=nanmean([stats.MHE.r]); % impute the mean within-subject study correlation observed in all other studies
+impu_r=nanmean([stats.SIIPS.r]); % impute the mean within-subject study correlation observed in all other studies
 for i=conOnly'
-stats.MHE(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
+stats.SIIPS(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
 end
 
 %% Fixed effects analysis
 WIstudies=[df_full.studies(df_full.BetweenSubject~=1)];
 WIratings=[stats.rating(df_full.BetweenSubject~=1)];
 WINPS=[stats.NPS(df_full.BetweenSubject~=1)];
-WINMHE=[stats.MHE(df_full.BetweenSubject~=1)];
+WINSIIPS=[stats.SIIPS(df_full.BetweenSubject~=1)];
 
 
 rating=vertcat(WIratings.std_delta);
 NPS=vertcat(WINPS.std_delta);
-MHE=vertcat(WINMHE.std_delta);
+SIIPS=vertcat(WINSIIPS.std_delta);
 
 subjID=(1:length(rating))';
 studyID=cell(0);
@@ -126,16 +126,17 @@ for i=1:length(WIstudies)
     studyID=vertcat(studyID, repmat(WIstudies(i),n,1));
 end
 
-df_lm=table(studyID,subjID,rating,NPS,MHE);
+df_lm=table(studyID,subjID,rating,NPS,SIIPS);
 df_lm=df_lm(~(isnan(df_lm.rating)|isnan(df_lm.NPS)),:);
 df_lm.studyID=categorical( df_lm.studyID);
 df_lm.rating=double( df_lm.rating);
 df_lm.NPS=double( df_lm.NPS);
-df_lm.MHE=double( df_lm.MHE);
+df_lm.SIIPS=double( df_lm.SIIPS);
 
 %% Linear model analysis
 mdl0 = fitlm(df_lm,'rating ~ studyID');
 mdl1 = fitlm(df_lm,'rating ~ studyID+NPS');
+mdl2 = fitlm(df_lm,'rating ~ studyID+NPS+SIIPS');
 
 %% Mixed model analysis
 var0=var(df_lm.rating)
@@ -284,6 +285,9 @@ plot(dfl.z_rating(dfl.treat==1),dfl.z_NPSraw(dfl.treat==1),'.b')
 lsline
 hold off
 
+
+% >> Export dfl to allow obtaining marginal and conditional R^2s  with lmer4 and MuMIn in R
+writetable(dfl);
 %% Plot with lm lines
 studies=unique(dfl.studyID);
 figure
@@ -329,14 +333,24 @@ mmdl_randslope = fitlme(dfl,'z_rating ~ 1+(1+z_NPSraw|studyID:subID)',...
 mmdl_NPS_like_meta = fitlme(dfl,'s_NPSraw ~ 1+treat+(1+treat|studyID)+(1|subID)',...
               'CheckHessian',true); % The mixed model estimates an even smaller effect of placebo treatment (-.045) ... but note that it excludes contrast-only studies.    
  
-          
-mmdl_full = fitlme(dfl,'rating101 ~ 1+s_NPSraw+treat+s_NPSraw:treat+(1+s_NPSraw|studyID:subID)',...
-              'CheckHessian',true);
-mmdl_full1 = fitlme(dfl,'rating101 ~ 1+s_NPSraw+treat+s_NPSraw:treat+(1+s_NPSraw|studyID)+(1|subID)',...
+% Random intercept modelling          
+mmdl0 = fitlme(dfl,'rating101 ~ 1+(1|studyID)+(1|studyID:subID)',...
               'CheckHessian',true);
 
-mmdl_full2 = fitlme(dfl,'rating101 ~ 1+s_NPSraw+treat+s_NPSraw:treat+(1+s_NPSraw|studyID)+(1+s_NPSraw|studyID:subID)',...
-              'CheckHessian',true);
-compare(mmdl_full,mmdl_full1)
-compare(mmdl_full,mmdl_full2)
-compare(mmdl_full1,mmdl_full2)
+mmdl1treat = fitlme(dfl,'rating101 ~ 1+treat+(1|studyID)+(1|studyID:subID)',...
+               'CheckHessian',true);
+mmdl1NPS = fitlme(dfl,'rating101 ~ 1+s_NPSraw+(1|studyID)+(1|studyID:subID)',...
+               'CheckHessian',true);
+mmdl1SIIPS = fitlme(dfl,'rating101 ~ 1+s_SIIPS+(1|studyID)+(1|studyID:subID)',...
+               'CheckHessian',true);
+           
+mmdl2 = fitlme(dfl,'rating101 ~ 1+treat+s_NPSraw+(1|studyID)+(1|studyID:subID)',...
+               'CheckHessian',true);
+mmdl2b = fitlme(dfl,'rating101 ~ 1+s_SIIPS+s_NPSraw+(1|studyID)+(1|studyID:subID)',...
+               'CheckHessian',true);
+           
+mmdl3 = fitlme(dfl,'rating101 ~ 1+treat+s_NPSraw+s_SIIPS+(1|studyID)+(1|studyID:subID)',...
+               'CheckHessian',true);
+compare(mmdl0,mmdl1treat)
+compare(mmdl1treat,mmdl2)
+compare(mmdl2,mmdl3)

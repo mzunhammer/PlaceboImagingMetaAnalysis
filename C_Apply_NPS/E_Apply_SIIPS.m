@@ -28,7 +28,7 @@ addpath(maskdir)
 % 'Zeidan_et_al_2015'
 
 runstudies={...
-'Atlas_et_al_2012'
+%'Atlas_et_al_2012'
 'Bingel_et_al_2006'
 'Bingel_et_al_2011'
 'Choi_et_al_2013'
@@ -63,7 +63,7 @@ for i=1:length(runstudies)
 
     % Compute SIIPS (The CAN Toolbox and the "Neuroimaging_Pattern_Masks" folders must be added to path!!!!)
     all_imgs= df.img;
-    [siips_values, image_names, data_objects, siipspos_exp_by_region, siipsneg_exp_by_region, clpos, clneg] = apply_siips(fullfile(datadir, all_imgs));
+    [siips_values, image_names, data_objects, siipspos_exp_by_region, siipsneg_exp_by_region, clpos, clneg] = apply_siips(fullfile(datadir, all_imgs),'notables' );
 
     siips_pos=vertcat(siipspos_exp_by_region{:});
     siips_pos_names=strcat('SIIPS_Pos_',...
@@ -79,6 +79,10 @@ for i=1:length(runstudies)
     siips_neg_names=matlab.lang.makeValidName(siips_neg_names);
     siips_neg=array2table(siips_neg,'VariableNames',siips_neg_names);
 
+    emptyimgs=cellfun(@isempty,siips_values);
+   	siips_values(emptyimgs)={NaN};
+    siips_pos{emptyimgs,:}=NaN;
+    siips_neg{emptyimgs,:}=NaN;
     df.SIIPS=[siips_values{:}]';
     df=[df,siips_pos];
     df=[df,siips_neg];
