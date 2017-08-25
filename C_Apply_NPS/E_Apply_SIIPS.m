@@ -37,7 +37,7 @@ runstudies={...
 'Elsenbruch_et_al_2012'
 'Freeman_et_al_2015'
 'Geuter_et_al_2013'
-'Huber_et_al_2013'
+%'Huber_et_al_2013'
 'Kessner_et_al_201314'
 'Kong_et_al_2006'
 'Kong_et_al_2009'
@@ -62,7 +62,7 @@ for i=1:length(runstudies)
     df=varload.(currtablename{:});
 
     % Compute SIIPS (The CAN Toolbox and the "Neuroimaging_Pattern_Masks" folders must be added to path!!!!)
-    all_imgs= df.img;
+    all_imgs= df.norm_img;
     [siips_values, image_names, data_objects, siipspos_exp_by_region, siipsneg_exp_by_region, clpos, clneg] = apply_siips(fullfile(datadir, all_imgs),'notables' );
 
     siips_pos=vertcat(siipspos_exp_by_region{:});
