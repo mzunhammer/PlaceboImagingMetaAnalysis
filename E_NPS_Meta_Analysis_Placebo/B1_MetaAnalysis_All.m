@@ -121,7 +121,7 @@ end
 % Calculate grand mean
 control_mean_rating101=nanmean(vertcat(all_control_pain_ratings{:}));
 %% Meta-Analysis NPS
-v=find(strcmp(df_full.variables,'NPSraw'));
+v=find(strcmp(df_full.variables,'NPS'));
 for i=1:length(df_full.studies) % Calculate for all studies except...
     if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
         if df_full.BetweenSubject(i)==0 %Within-subject studies

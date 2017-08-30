@@ -110,29 +110,29 @@ for i=conOnly'
 stats.NPS(i)=withinMetastats(df_resp.pladata{i}(:,v),impu_r);
 end
 
-%% Meta-Analysis MHE
-v=find(strcmp(df_resp.variables,'MHEraw'));
+%% Meta-Analysis SIIPS
+v=find(strcmp(df_resp.variables,'SIIPS'));
 for i=1:length(df_resp.studies) % Calculate for all studies except...
     if df_resp.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
         if df_resp.BetweenSubject(i)==0 %Within-subject studies
-           stats.MHE(i)=withinMetastats(df_resp.pladata{i}(:,v),df_resp.condata{i}(:,v));
+           stats.SIIPS(i)=withinMetastats(df_resp.pladata{i}(:,v),df_resp.condata{i}(:,v));
         elseif df_resp.BetweenSubject(i)==1 %Between-subject studies
-           stats.MHE(i)=betweenMetastats(df_resp.pladata{i}(:,v),df_resp.condata{i}(:,v));
+           stats.SIIPS(i)=betweenMetastats(df_resp.pladata{i}(:,v),df_resp.condata{i}(:,v));
         end        
     end
 end
 % Calculate for those studies where only pla>con contrasts are available
 conOnly=find(df_resp.consOnlyNPS==1);
-impu_r=nanmean([stats.MHE.r]); % impute the mean within-subject study correlation observed in all other studies
+impu_r=nanmean([stats.SIIPS.r]); % impute the mean within-subject study correlation observed in all other studies
 for i=conOnly'
-stats.MHE(i)=withinMetastats(df_resp.pladata{i}(:,v),impu_r);
+stats.SIIPS(i)=withinMetastats(df_resp.pladata{i}(:,v),impu_r);
 end
 
 %% One Forest plot per variable
 varnames=fieldnames(stats)
 nicevarnames={'Pain ratings',...
               'NPS-score',...
-              'VAS-score'};
+              'SIIPS-score'};
 for i = 1:numel(varnames)
     summary.(varnames{i})=ForestPlotter(stats.(varnames{i}),...
                   'studyIDtexts',studyIDtexts,...
