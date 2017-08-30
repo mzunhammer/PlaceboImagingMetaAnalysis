@@ -9,3 +9,19 @@ Affiliations:
 
 * Correspondence and requests to:
 e-mail: matthias.zunhammer@uk-essen.de
+
+
+Start at A_Run_All_Analyses.m to get an overview of analyses.
+
+Analysis requires:
+– MATLAB 2016b or newer
+– SPM12
+– CanlabCore (https://github.com/canlab/CanlabCore)
+– Canlab Private Masks (by Tor Wager)
+– The SIIPS folders from Canlab Neuroimaging_Pattern_Masks (https://github.com/canlab/Neuroimaging_Pattern_Masks)
+– MRIcroGL (PASCAL-based program for plotting/rendering images) 
+– The data collected by the Placebo Imaging Collaboration (currently only available for members of the Placebo Imaging Collaboration)
+(in a folder "Datasets" situated on the same path as the "PlaceboImagingMetaAnalysis" Repository)
+
+Work in progress.
+
