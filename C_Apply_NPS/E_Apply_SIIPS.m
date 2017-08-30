@@ -28,7 +28,7 @@ addpath(maskdir)
 % 'Zeidan_et_al_2015'
 
 runstudies={...
-%'Atlas_et_al_2012'
+'Atlas_et_al_2012'
 'Bingel_et_al_2006'
 'Bingel_et_al_2011'
 'Choi_et_al_2013'
@@ -53,13 +53,16 @@ runstudies={...
 
 tic
 h = waitbar(0,'Calculating SIIPS, studies completed:')
-for i=1:length(runstudies)
+for i=1%:length(runstudies)
     %Load table into a struct
     varload=load(fullfile(datadir,[runstudies{i},'.mat']));
     %Every table will be named differently, so get the name
     currtablename=fieldnames(varload);
+    varload=struct2cell(varload);
     %Load the variably named table into "df"
-    df=varload.(currtablename{:});
+    currtablename=currtablename(cellfun(@istable,varload),:);
+    df=varload{cellfun(@istable,varload),:};
+    
 
     % Compute SIIPS (The CAN Toolbox and the "Neuroimaging_Pattern_Masks" folders must be added to path!!!!)
     all_imgs= df.norm_img;
@@ -84,13 +87,22 @@ for i=1:length(runstudies)
     siips_pos{emptyimgs,:}=NaN;
     siips_neg{emptyimgs,:}=NaN;
     df.SIIPS=[siips_values{:}]';
-    df=[df,siips_pos];
-    df=[df,siips_neg];
+    
+    
+    if any(ismember(siips_neg_names,df.Properties.VariableNames))
+        df(:,siips_pos_names)=siips_pos;
+        df(:,siips_neg_names)=siips_neg;
+    else
+        df=[df,siips_pos];
+        df=[df,siips_neg];
+    end
 
+    clneg_siips=clneg;
+    clpos_siips=clpos;
     % Push the data in df into a table with the name of the original table
     eval([currtablename{1} '= df']);
     % Eval statement saving results with original table name
-    eval(['save(fullfile(datadir,[runstudies{i}]),''',currtablename{1},''')']);
+    eval(['save(fullfile(datadir,[runstudies{i}]),''',currtablename{1},''',''clneg_siips'',''clpos_siips'',''-append'')']);
 
     toc/60, 'Minutes'
     waitbar(i / length(runstudies))
