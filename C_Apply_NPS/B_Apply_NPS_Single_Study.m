@@ -28,8 +28,8 @@ addpath(maskdir)
 % 'Zeidan_et_al_2015'
 
 runstudies={...
- 'Atlas_et_al_2012'
-'Bingel_et_al_2006'
+ %'Atlas_et_al_2012'
+% 'Bingel_et_al_2006'
  'Bingel_et_al_2011'
  'Choi_et_al_2013'
  'Eippert_et_al_2009'

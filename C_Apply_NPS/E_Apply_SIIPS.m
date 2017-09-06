@@ -53,7 +53,7 @@ runstudies={...
 
 tic
 h = waitbar(0,'Calculating SIIPS, studies completed:')
-for i=1%:length(runstudies)
+for i=1:length(runstudies)
     %Load table into a struct
     varload=load(fullfile(datadir,[runstudies{i},'.mat']));
     %Every table will be named differently, so get the name
