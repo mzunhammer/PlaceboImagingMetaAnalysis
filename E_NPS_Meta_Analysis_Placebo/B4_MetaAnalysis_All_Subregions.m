@@ -1,57 +1,13 @@
-%% Meta-Analysis & Forest Plot
-% Difference compared to "basic":
-
-% Atlas: None 
-% Bingel06: None
-% Bingel11: None
-% Choi: 100potent AND 1potent vs baseling + First Session + Second (unpublisher) Session
-% Eippert: Late + Early and Saline + Naloxone
-% Ellingsen: None (non-painful placebo conditions not relevant)
-% Elsenbruch: None (50% placebo condition relevant but unavailable)
-% Freeman: None
-% Geuter: Late + Early Pain, Weak + Strong Placebo
-% Kessner: None
-% Kong06: High + Low Pain
-% Kong09: None
-% Lui: None
-% R?tgen: None
-% Schenk: No Lidocaine & Lidocaine
-% Theysohn: None
-% Wager06a: None
-% Wager06b: None
-% Wrobel: Early + Late Pain, Haldol + Saline
-% Zeidan: None
-
+%% Meta-Analysis & Plots For NPS and SIIPS Subregions (Full Sample)
 clear
 % Add folder with Generic Inverse Variance Methods Functions first
-addpath('../A_Analysis_GIV_Functions/')
-load('A1_Full_Sample.mat')
+datadir='../../Datasets';
+addpath('../A_Analysis_GIV_Functions/');
+load('A1_Full_Sample.mat');
+load(fullfile(datadir,'NPS_Subregion_labels.mat'));
+load(fullfile(datadir,'SIIPS_Subregion_labels.mat'));
 
 % !!!!! These must be in the same order as listed under "studies" !!!!
-
-% studyIDtexts={
-%             'Atlas et al. 2012: Hidden vs open remifentanil drip infusion (expectation period)| heat';...
-% 			'Bingel et al. 2006: Control vs placebo cream | laser';...
-% 			'Bingel et al. 2011: No vs positive expectations | heat';...
-% 			'Choi et al. 2011: No vs low & high effective placebo drip infusion (Exp1 and 2) | electrical';...
-% 			'Eippert et al. 2009: Control vs placebo cream (saline & naloxone group) | heat (early & late)';...
-% 			'Ellingsen et al. 2013: Pre vs post placebo nasal spray | heat';...
-%             'Elsenbruch et al. 2012: No vs certain placebo drip infusion | distension';...
-%             'Freeman et al. 2015: Control vs placebo cream | heat';...
-%             'Geuter et al. 2013: Control vs weak & strong placebo cream | heat (early & late)';...
-%             'Kessner et al. 2014: Negative vs positive treatment expectation group | heat';...
-%             'Kong et al. 2006: Control vs placebo acupuncture | heat (high & low)';...
-%             'Kong et al. 2009: Control vs placebo sham acupuncture | heat';...
-%             'Lui et al. 2010: Red vs green cue signifying sham TENS off vs on | laser';...
-%             'Ruetgen et al. 2015: No treatment vs placebo pill group  | electrical'
-%             'Schenk et al. 2015:  Control vs placebo (saline & lidocain) | heat'
-%             'Theysohn et al. 2009: No vs certain placebo drip infusion | distension';...
-%             'Wager et al. 2004, Study 1: Control vs placebo cream | heat*';...
-%             'Wager et al. 2004, Study 2: Control vs placebo cream | electrical*';...
-%             'Wrobel et al. 2014: Control vs placebo cream (saline & haldol group) | heat(early & late)'
-%             'Zeidan et al. 2015: Control vs placebo cream (placebo group) | heat*';...
-%             };
-
 studyIDtexts={
             'Atlas et al. 2012:';...
 			'Bingel et al. 2006:';...
@@ -150,18 +106,37 @@ errorbar(g,CI_g,'o')
 axis([0, numel(varnames)+1, miny, maxy]);
 xticks(1:numel(varnames))
 xtickangle(45)
-xticklabels(strrep(varnames','_',' '))
-refline(0,0)
+% Instead of the varnames from apply_nps use the labels taken from the
+% Wager 2013 paper. (NPS_labels was already sorted to match the order of regions in the df)
+xticklabels(NPS_labels.region);
+h=refline(0,0);
+h.Color='k';
 
 h=rectangle('FaceColor',[255,220,200]./255,...
             'LineStyle','none',...
-            'Position',[0 miny 8.5 maxy-miny])
+            'Position',[0 miny 8.5 maxy-miny]);
 uistack(h,'bottom') % send rectangle to bottom
 h=rectangle('FaceColor',[240,248,255]./255,...
             'LineStyle','none',...
-            'Position',[8.5 miny 15 maxy-miny])
-uistack(h,'bottom') % send rectangle to bottom
-set(gca,'layer','top') % put axes on top
+            'Position',[8.5 miny 15 maxy-miny]);
+uistack(h,'bottom'); % send rectangle to bottom
+set(gca,'layer','top'); % put axes on top
+
+text(0.05,0.9,...
+     'Positive weights',...
+     'Position',[],...
+     'Color',[127,64,64]./255,...
+     'Units','normalized',...
+     'HorizontalAlignment', 'left');
+text(0.95,0.9,...
+     'Negative weights',...
+     'Color',[64,64,127]./255,...
+     'Units','normalized',...
+     'HorizontalAlignment', 'right');
+
+hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/NPS_subregions', hgexport('factorystyle'), 'Format', 'svg');
+hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/NPS_subregions', hgexport('factorystyle'), 'Format', 'png');
+crop('../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/NPS_subregions.png');
 %% One Analysis and Forrest plot per Sub-Variable
 varnames={  'SIIPS_Pos_Region1_LCB'
             'SIIPS_Pos_Region2_CB_vermis_'
@@ -265,7 +240,7 @@ errorbar(g,CI_g,'o')
 axis([0, numel(varnames)+1, miny, maxy]);
 xticks(1:numel(varnames))
 xtickangle(45)
-xticklabels(strrep(varnames','_',' '))
+xticklabels(SIIPS_labels.region)
 refline(0,0)
 
 h=rectangle('FaceColor',[255,220,200]./255,...
@@ -277,3 +252,26 @@ h=rectangle('FaceColor',[240,248,255]./255,...
             'Position',[21.5 miny length(varnames) maxy-miny])
 uistack(h,'bottom') % send rectangle to bottom
 set(gca,'layer','top') % put axes on top
+
+text(0.05,0.9,...
+     'Positive weights',...
+     'Position',[],...
+     'Color',[127,64,64]./255,...
+     'Units','normalized',...
+     'HorizontalAlignment', 'left');
+text(0.95,0.9,...
+     'Negative weights',...
+     'Color',[64,64,127]./255,...
+     'Units','normalized',...
+     'HorizontalAlignment', 'right');
+
+%Increase figure size 
+figsize=get(gcf,'Position');
+set(gcf,'Position',[figsize(1:2),figsize(3)*1.5,figsize(4)])
+hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/SIIPS_subregions', hgexport('factorystyle'), 'Format', 'svg');
+hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/SIIPS_subregions', hgexport('factorystyle'), 'Format', 'png');
+crop('../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/SIIPS_subregions.png');
+
+
+
+close all
