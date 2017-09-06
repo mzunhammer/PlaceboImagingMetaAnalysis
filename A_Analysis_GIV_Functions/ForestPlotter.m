@@ -159,11 +159,11 @@ summary_ciHi=short_summary.CI_hi;
 
 
 
- %% Forest Plot for Standardized Effect Sizes:
+%% Forest Plot
 %FIGURE WINDOW
 figure_width=printwidth;
 lineheight=printwidth/25;
-figure_height=(length(studyIDtexts)+2)*lineheight;%figure height is defined as: (number of lines +one line for summary and one line for head)*line scaling*150px
+figure_height=(length(studyIDtexts)+2)*lineheight;%figure height is defined as: (number of lines +one line for summary and one line for head)*line scaling
 
 figure('Name','Forest Plot',...
         'Position', [0, 0, figure_width, figure_height],...
