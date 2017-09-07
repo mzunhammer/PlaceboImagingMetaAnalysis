@@ -147,14 +147,14 @@ stats_hilo=load('../F_NPS_Meta_Analysis_Validation/Hi_vs_lo_pain_all_study_level
 stats_hilo=stats_hilo.stats;
 
  hold on
- x=abs([%[stats_hilo.rating.g]'
+ x=[%[stats_hilo.rating.g]'
      stats_med_vs_lo.rating.g
     stats_hi_vs_med.rating.g
-    stats_6_vs_4pt5.rating.g]);
- y=abs([%[stats_hilo.NPS.g]'
+    stats_6_vs_4pt5.rating.g];
+ y=[%[stats_hilo.NPS.g]'
      stats_med_vs_lo.nps.g
     stats_hi_vs_med.nps.g
-    stats_6_vs_4pt5.rating.g]);
+    stats_6_vs_4pt5.rating.g];
 
  xneg=([%[stats_hilo.rating.se_g]'
      stats_med_vs_lo.rating.se_g
@@ -173,8 +173,8 @@ stats_hilo=stats_hilo.stats;
 %Then plot effects of placebos
 statsRating_pla=[stats.rating];
 statsNPS_pla=[stats.NPS];
-x=abs([statsRating_pla.g]);
-y=abs([statsNPS_pla.g]);
+x=[statsRating_pla.g];
+y=[statsNPS_pla.g];
 yneg=([statsNPS_pla.se_g].*1.96);
 ypos=([statsNPS_pla.se_g].*1.96);
 xneg=([statsRating_pla.se_g].*1.96);
@@ -185,10 +185,10 @@ lsline
 
 % Then plot effects of changes in remifentanil treatment on NPS/ratings in
 % green
- x=abs([ -0.504462733313263,... % Remifentanil effect in g, Atlas et al. See: Analysis/F_NPS_Meta_Analysis_Validation/E1_NPS_remifentanil
-    -1.09287747555418])  % Remifentanil effect in g, Bingel et al 2011. See: Analysis/F_NPS_Meta_Analysis_Validation/E1_NPS_remifentanil]);
- y=abs([ -0.985687939740397,...,... %  Remifentanil effect in g, Atlas et al. See: Analysis/F_NPS_Meta_Analysis_Validation/E1_NPS_remifentanil
-        -1.12975157989753]); % Remifentanil effect in g, Bingel et al 2011. See: Analysis/F_NPS_Meta_Analysis_Validation/E1_NPS_remifentanil]);
+ x=[ -0.504462733313263,... % Remifentanil effect in g, Atlas et al. See: Analysis/F_NPS_Meta_Analysis_Validation/E1_NPS_remifentanil
+    -1.09287747555418]  % Remifentanil effect in g, Bingel et al 2011. See: Analysis/F_NPS_Meta_Analysis_Validation/E1_NPS_remifentanil]);
+ y=[ -0.985687939740397,...,... %  Remifentanil effect in g, Atlas et al. See: Analysis/F_NPS_Meta_Analysis_Validation/E1_NPS_remifentanil
+        -1.12975157989753]; % Remifentanil effect in g, Bingel et al 2011. See: Analysis/F_NPS_Meta_Analysis_Validation/E1_NPS_remifentanil]);
  
  xneg=([0.118947320581685,... % SE of Remifentanil effect on Rating in g, Atlas et al. See: Analysis/F_NPS_Meta_Analysis_Validation/E1_NPS_remifentanil
     0.230077844571065].*1.96);
