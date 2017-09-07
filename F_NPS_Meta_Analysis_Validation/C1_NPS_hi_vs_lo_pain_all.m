@@ -54,11 +54,12 @@ studyIDtexts={
         % correlation for ratings in all other studies, which was: 0.5143
         % (obtained by running the code below with replacing all imputed r's with NaN for all withinMetastats functions, then nanmean([stats.r]))
 %% Study-level data
-varselect={'NPSraw','MHEraw','rating','stimInt'};
+varselect={'NPS','SIIPS','rating','stimInt'};
 df_hilo.variables=varselect;
 df_hilo.studies=studies;
 
-iNPS=find(strcmp(df_hilo.variables,'NPSraw'));
+iNPS=find(strcmp(df_hilo.variables,'NPS'));
+iSIIPS=find(strcmp(df_hilo.variables,'SIIPS'));
 iR=find(strcmp(df_hilo.variables,'rating'));
 iS=find(strcmp(df_hilo.variables,'stimInt'));
 
@@ -75,9 +76,10 @@ df_hilo.lo{i}=mean(...
         df{(strcmp(df.studyID,'atlas')&~cellfun(@isempty,regexp(df.cond,'StimLoPain_Hidden_Stimulation'))),varselect}),...
         3);
 
-stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
-stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
-stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
+stats.NPS(i)=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
+stats.SIIPS(i)=withinMetastats(df_hilo.hi{i}(:,iSIIPS),df_hilo.lo{i}(:,iSIIPS));
+stats.rating(i)=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
+stats.stimInt(i)=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
 
     
 %'Ellingsen Heat vs Warm'
@@ -92,9 +94,10 @@ df_hilo.lo{i}=mean(...
         df{(strcmp(df.studyID,'ellingsen')&strcmp(df.cond,'Warm_touch_placebo')),varselect},...
          df{(strcmp(df.studyID,'ellingsen')&strcmp(df.cond,'Warm_touch_control')),varselect}),...
         3);
-stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
-stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
-stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
+stats.NPS(i)=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
+stats.SIIPS(i)=withinMetastats(df_hilo.hi{i}(:,iSIIPS),df_hilo.lo{i}(:,iSIIPS));
+stats.rating(i)=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
+stats.stimInt(i)=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
 
 %'Ellingsen Heat vs Brushstroke'
 % i=find(strcmp(studies,'ellingsen_brush'));
@@ -108,15 +111,16 @@ stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
 %         df{(strcmp(df.studyID,'ellingsen')&strcmp(df.cond,'Brushstroke_placebo')),varselect},...
 %          df{(strcmp(df.studyID,'ellingsen')&strcmp(df.cond,'Brushstroke_control')),varselect}),...
 %         3);
-% stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
-% stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
+% stats.NPS(i)=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
+% stats.rating(i)=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
 
 %'Freeman High vs Lowpain'
 i=find(strcmp(studies,'freeman'));
 df_hilo.hi{i}= df{(strcmp(df.studyID,'freeman')&strcmp(df.cond,'post-HighpainVsLowpain')),varselect};
-stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS).*-1,0); % Jian Kong: Mail 20.06.2017: "see attachment for the low pain vs high pain data, please be noted to we used low pain minus high pain."
-stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),0);
-stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),0);
+stats.NPS(i)=withinMetastats(df_hilo.hi{i}(:,iNPS).*-1,0); % Jian Kong: Mail 20.06.2017: "see attachment for the low pain vs high pain data, please be noted to we used low pain minus high pain."
+stats.SIIPS(i)=withinMetastats(df_hilo.hi{i}(:,iSIIPS).*-1,0);
+stats.rating(i)=withinMetastats(df_hilo.hi{i}(:,iR),0);
+stats.stimInt(i)=withinMetastats(df_hilo.hi{i}(:,iS),0);
 
 % 'Kessner Hi (VAS 80) vs Lo (VAS 50) stimulation'
 % Since Kessner et al simulated a treatment effect witnin participants,
@@ -127,9 +131,10 @@ df_hilo.hi{i}=[df{(strcmp(df.studyID,'kessner')&strcmp(df.cond,'pain_control_neg
         df{(strcmp(df.studyID,'kessner')&strcmp(df.cond,'pain_control_pos')),varselect}];
 df_hilo.lo{i}=[df{(strcmp(df.studyID,'kessner')&strcmp(df.cond,'pain_placebo_neg')),varselect};...
          df{(strcmp(df.studyID,'kessner')&strcmp(df.cond,'pain_placebo_pos')),varselect}];
-stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
-stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
-stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
+stats.NPS(i)=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
+stats.SIIPS(i)=withinMetastats(df_hilo.hi{i}(:,iSIIPS),df_hilo.lo{i}(:,iSIIPS));
+stats.rating(i)=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
+stats.stimInt(i)=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
 
 %'Kong06 Heat vs Warm'
 i=find(strcmp(studies,'kong06'));
@@ -147,16 +152,18 @@ df_hilo.lo{i}=mean(...
          df{(strcmp(df.studyID,'kong06')&strcmp(df.cond,'pain_post_control_low_pain')),varselect},...
          df{(strcmp(df.studyID,'kong06')&strcmp(df.cond,'pain_post_placebo_low_pain')),varselect}),...
         3);
-stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
-stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
-stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
+stats.NPS(i)=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
+stats.SIIPS(i)=withinMetastats(df_hilo.hi{i}(:,iSIIPS),df_hilo.lo{i}(:,iSIIPS));
+stats.rating(i)=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
+stats.stimInt(i)=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
 
 %'Kong09 High vs Lowpain'
 i=find(strcmp(studies,'kong09'));
 df_hilo.hi{i}= df{(strcmp(df.studyID,'kong09')&strcmp(df.cond,'allHighpainVSLowPain')),varselect};
-stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),0);
-stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),0);
-stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),0);
+stats.NPS(i)=withinMetastats(df_hilo.hi{i}(:,iNPS),0);
+stats.SIIPS(i)=withinMetastats(df_hilo.hi{i}(:,iSIIPS),0);
+stats.rating(i)=withinMetastats(df_hilo.hi{i}(:,iR),0);
+stats.stimInt(i)=withinMetastats(df_hilo.hi{i}(:,iS),0);
 
 %'R?tgen Hi vs Low shock'
 i=find(strcmp(studies,'ruetgen'));
@@ -165,18 +172,24 @@ df_hilo.hi{i}=[df{(strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_Pain_Contro
 df_hilo.lo{i}=[df{(strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_NoPain_Control_Group')),varselect};...
          df{(strcmp(df.studyID,'ruetgen')&strcmp(df.cond,'Self_NoPain_Placebo_Group')),varselect}];
 
-stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
-stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
-stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
+stats.NPS(i)=withinMetastats(df_hilo.hi{i}(:,iNPS),df_hilo.lo{i}(:,iNPS));
+stats.SIIPS(i)=withinMetastats(df_hilo.hi{i}(:,iSIIPS),df_hilo.lo{i}(:,iSIIPS));
+stats.rating(i)=withinMetastats(df_hilo.hi{i}(:,iR),df_hilo.lo{i}(:,iR));
+stats.stimInt(i)=withinMetastats(df_hilo.hi{i}(:,iS),df_hilo.lo{i}(:,iS));
 
 %'wager_princeton High vs Lowpain'
 i=find(strcmp(studies,'wager04a_princeton'));
 df_hilo.hi{i}= df{(strcmp(df.studyID,'wager04a_princeton')&strcmp(df.cond,'intense-mild')),varselect};
-stats(i).NPS=withinMetastats(df_hilo.hi{i}(:,iNPS),0);
-stats(i).rating=withinMetastats(df_hilo.hi{i}(:,iR),0);
-stats(i).stimInt=withinMetastats(df_hilo.hi{i}(:,iS),0);
+stats.NPS(i)=withinMetastats(df_hilo.hi{i}(:,iNPS),0);
+stats.SIIPS(i)=withinMetastats(df_hilo.hi{i}(:,iSIIPS),0);
+stats.rating(i)=withinMetastats(df_hilo.hi{i}(:,iR),0);
+stats.stimInt(i)=withinMetastats(df_hilo.hi{i}(:,iS),0);
 
-%% Summarize all studies, weigh by SE
+
+save('Hi_vs_lo_pain_all_study_level_results.mat','stats');
+
+
+%% NPS: Summarize all studies + Forest Plot
 % Summary analysis+ Forest Plot
 statsNPS=[stats.NPS];
 statsStimInt=[stats.stimInt];
@@ -202,6 +215,34 @@ NPS_pos_imgs=vertcat(statsNPS.delta)>0;
 perc_pos_NPS=sum(NPS_pos_imgs)/sum(~isnan(NPS_pos_imgs));
 
 disp([num2str(perc_pos_NPS*100),'% of participants showed a positive NPS response.'])
+
+
+%% SIIPS: Summarize all studies + Forest Plot
+% Summary analysis+ Forest Plot
+statsSIIPS=[stats.SIIPS];
+statsStimInt=[stats.stimInt];
+
+ForestPlotter(statsSIIPS,...
+              'studyIDtexts',studyIDtexts,...
+              'outcomelabel','SIIPS-Response (Hedge''s g)',...
+              'type','random',...
+              'summarystat','g',...
+              'textoffset',0,...
+              'withoutlier',0,...
+              'WIsubdata',0,...
+              'boxscaling',1);
+          
+hgexport(gcf, 'C1_SIIPS_hi_vs_lo_pain_all.svg', hgexport('factorystyle'), 'Format', 'svg'); 
+hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Fig_S3_SIIPS_hi_vs_lo.svg', hgexport('factorystyle'), 'Format', 'svg');
+hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Fig_S3_SIIPS_hi_vs_lo.png', hgexport('factorystyle'), 'Format', 'png');
+crop('../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Fig_S3_SIIPS_hi_vs_lo.png');
+
+hgexport(gcf, '../../Protocol_and_Manuscript/NPS_validation/Figures/Figure4', hgexport('factorystyle'), 'Format', 'svg');
+
+SIIPS_pos_imgs=vertcat(statsSIIPS.delta)>0;
+perc_pos_SIIPS=sum(SIIPS_pos_imgs)/sum(~isnan(SIIPS_pos_imgs));
+
+disp([num2str(perc_pos_SIIPS*100),'% of participants showed a positive SIIPS response.'])
 
 %% Plot Standardized NPS vs Standardized Rating response
 statsRating=[stats.rating];
