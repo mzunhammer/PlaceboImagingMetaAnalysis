@@ -1,57 +1,13 @@
-%% Meta-Analysis & Forest Plot
-% Difference compared to "basic":
-
-% Atlas: None 
-% Bingel06: None
-% Bingel11: None
-% Choi: 100potent AND 1potent vs baseling + First Session + Second (unpublisher) Session
-% Eippert: Late + Early and Saline + Naloxone
-% Ellingsen: None (non-painful placebo conditions not relevant)
-% Elsenbruch: None (50% placebo condition relevant but unavailable)
-% Freeman: None
-% Geuter: Late + Early Pain, Weak + Strong Placebo
-% Kessner: None
-% Kong06: High + Low Pain
-% Kong09: None
-% Lui: None
-% R?tgen: None
-% Schenk: No Lidocaine & Lidocaine
-% Theysohn: None
-% Wager06a: None
-% Wager06b: None
-% Wrobel: Early + Late Pain, Haldol + Saline
-% Zeidan: None
-
+%% Meta-Analysis & Forest Plot ? Full Sample (MAIN RESULTS)
 clear
-% Add folder with Generic Inverse Variance Methods Functions first
+
+% Path to add Forest Plots to:
+pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
+% Add folder with Generic Inverse Variance Methods Functions
 addpath('../A_Analysis_GIV_Functions/')
 load('A1_Full_Sample.mat')
 
-% !!!!! These must be in the same order as listed under "studies" !!!!
-
-% studyIDtexts={
-%             'Atlas et al. 2012: Hidden vs open remifentanil drip infusion (expectation period)| heat';...
-% 			'Bingel et al. 2006: Control vs placebo cream | laser';...
-% 			'Bingel et al. 2011: No vs positive expectations | heat';...
-% 			'Choi et al. 2011: No vs low & high effective placebo drip infusion (Exp1 and 2) | electrical';...
-% 			'Eippert et al. 2009: Control vs placebo cream (saline & naloxone group) | heat (early & late)';...
-% 			'Ellingsen et al. 2013: Pre vs post placebo nasal spray | heat';...
-%             'Elsenbruch et al. 2012: No vs certain placebo drip infusion | distension';...
-%             'Freeman et al. 2015: Control vs placebo cream | heat';...
-%             'Geuter et al. 2013: Control vs weak & strong placebo cream | heat (early & late)';...
-%             'Kessner et al. 2014: Negative vs positive treatment expectation group | heat';...
-%             'Kong et al. 2006: Control vs placebo acupuncture | heat (high & low)';...
-%             'Kong et al. 2009: Control vs placebo sham acupuncture | heat';...
-%             'Lui et al. 2010: Red vs green cue signifying sham TENS off vs on | laser';...
-%             'Ruetgen et al. 2015: No treatment vs placebo pill group  | electrical'
-%             'Schenk et al. 2015:  Control vs placebo (saline & lidocain) | heat'
-%             'Theysohn et al. 2009: No vs certain placebo drip infusion | distension';...
-%             'Wager et al. 2004, Study 1: Control vs placebo cream | heat*';...
-%             'Wager et al. 2004, Study 2: Control vs placebo cream | electrical*';...
-%             'Wrobel et al. 2014: Control vs placebo cream (saline & haldol group) | heat(early & late)'
-%             'Zeidan et al. 2015: Control vs placebo cream (placebo group) | heat*';...
-%             };
-
+% Labels for Forrest Plots
 studyIDtexts={
             'Atlas et al. 2012:';...
 			'Bingel et al. 2006:';...
@@ -74,43 +30,76 @@ studyIDtexts={
             'Wrobel et al. 2014:';...
             'Zeidan et al. 2015:';...
             };
+% Labels extended version, w description for placebo / pain conditions 
+% studyIDtexts={
+%             'Atlas et al. 2012: Hidden vs open remifentanil drip infusion (expectation period)| heat';...
+% 			'Bingel et al. 2006: Control vs placebo cream | laser';...
+% 			'Bingel et al. 2011: No vs positive expectations | heat';...
+% 			'Choi et al. 2011: No vs low & high effective placebo drip infusion (Exp1 and 2) | electrical';...
+% 			'Eippert et al. 2009: Control vs placebo cream (saline & naloxone group) | heat (early & late)';...
+% 			'Ellingsen et al. 2013: Pre vs post placebo nasal spray | heat';...
+%             'Elsenbruch et al. 2012: No vs certain placebo drip infusion | distension';...
+%             'Freeman et al. 2015: Control vs placebo cream | heat';...
+%             'Geuter et al. 2013: Control vs weak & strong placebo cream | heat (early & late)';...
+%             'Kessner et al. 2014: Negative vs positive treatment expectation group | heat';...
+%             'Kong et al. 2006: Control vs placebo acupuncture | heat (high & low)';...
+%             'Kong et al. 2009: Control vs placebo sham acupuncture | heat';...
+%             'Lui et al. 2010: Red vs green cue signifying sham TENS off vs on | laser';...
+%             'Ruetgen et al. 2015: No treatment vs placebo pill group  | electrical'
+%             'Schenk et al. 2015:  Control vs placebo (saline & lidocain) | heat'
+%             'Theysohn et al. 2009: No vs certain placebo drip infusion | distension';...
+%             'Wager et al. 2004, Study 1: Control vs placebo cream | heat*';...
+%             'Wager et al. 2004, Study 2: Control vs placebo cream | electrical*';...
+%             'Wrobel et al. 2014: Control vs placebo cream (saline & haldol group) | heat(early & late)'
+%             'Zeidan et al. 2015: Control vs placebo cream (placebo group) | heat*';...
+%             };
+        
+varselect={'rating','rating101','NPS','MHEraw','SIIPS','stimInt'};
+ratingvars={'rating','rating101'};
+imagingvars={'NPS','MHEraw','SIIPS','stimInt'};
 %% Meta-Analysis Ratings
-v=find(strcmp(df_full.variables,'rating'));
-for i=1:length(df_full.studies) % Calculate for all studies except...
-    if df_full.consOnlyRating(i)==0 %...data-sets where both pla and con is available
-        if df_full.BetweenSubject(i)==0 %Within-subject studies
-           stats.rating(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-           stats.rating(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        end        
+for j=1:length(varselect) % Loop through all outcome variables
+    currvar=varselect{j};
+    v=find(strcmp(df_full.variables,currvar));
+    for i=1:length(df_full.studies) % Loop through all studies...
+        rating_var_and_con_only=(any(strcmp(ratingvars,currvar)) && df_full.consOnlyRating(i)==1);
+        img_var_and_con_only=(any(strcmp(imagingvars,currvar)) && df_full.consOnlyNPS(i)==1)
+        if  ~rating_var_and_con_only && ~img_var_and_con_only % where both pla and con is available.
+            if df_full.BetweenSubject(i)==0 %Use withinMetastats for within-subject studies
+               stats.(currvar)(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+            elseif df_full.BetweenSubject(i)==1 %Use betweenMetastats for between-subject studies
+               stats.(currvar)(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
+            end        
+        end
     end
 end
-% Calculate for those studies where only pla>con contrasts are available
-conOnly=find(df_full.consOnlyRating==1);
-impu_r=nanmean([stats.rating.r]); % impute the mean within-subject study correlation observed in all other studies
-for i=conOnly'
-stats.rating(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
-end
 
-%% Meta-Analysis Ratings on 101 VAS scale
-v=find(strcmp(df_full.variables,'rating101'));
-for i=1:length(df_full.studies) % Calculate for all studies except...
-    if df_full.consOnlyRating(i)==0 %...data-sets where both pla and con is available
-        if df_full.BetweenSubject(i)==0 %Within-subject studies
-           stats.rating101(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-           stats.rating101(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        end        
+% For some studies (all within-subject) pla>con contrasts are available, only.
+% For these studies within-subject correlations have to be imputed (mean of
+% all other studies is used. There are some studies where contrasts only
+% are available for images, others where this is the case for ratings.
+
+% Loop for studies with contrast-only ratings
+conOnly=find(df_full.consOnlyRating==1);
+for j=1:length(ratingvars)
+    currvar=ratingvars{j};
+    v=find(strcmp(df_full.variables,currvar));
+    impu_r=nanmean([stats.(currvar).r]); % impute the mean within-subject study correlation observed in all other studies
+    for i=conOnly'
+        stats.(currvar)(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
     end
 end
-% Calculate for those studies where only pla>con contrasts are available
-conOnly=find(df_full.consOnlyRating==1);
-impu_r=nanmean([stats.rating101.r]); % impute the mean within-subject study correlation observed in all other studies
-for i=conOnly'
-stats.rating101(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
+
+% Loop for studies with contrast-only imaging data
+conOnly=find(df_full.consOnlyNPS==1);
+for j=1:length(imagingvars)
+    currvar=imagingvars{j};
+    v=find(strcmp(df_full.variables,currvar));
+    impu_r=nanmean([stats.(currvar).r]); % impute the mean within-subject study correlation observed in all other studies
+    for i=conOnly'
+        stats.(currvar)(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
+    end
 end
-
-
 %% Meta-Analysis Ratings on 101 VAS scale ? MEAN BASELINE RATING
 v=find(strcmp(df_full.variables,'rating101'));
 for i=1:length(df_full.studies) % Calculate for all studies except...
@@ -120,136 +109,11 @@ for i=1:length(df_full.studies) % Calculate for all studies except...
 end
 % Calculate grand mean
 control_mean_rating101=nanmean(vertcat(all_control_pain_ratings{:}));
-%% Meta-Analysis NPS
-v=find(strcmp(df_full.variables,'NPS'));
-for i=1:length(df_full.studies) % Calculate for all studies except...
-    if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
-        if df_full.BetweenSubject(i)==0 %Within-subject studies
-           stats.NPS(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-           stats.NPS(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        end        
-    end
-end
-% Calculate for those studies where only pla>con contrasts are available
-conOnly=find(df_full.consOnlyNPS==1);
-impu_r=nanmean([stats.NPS.r]); % impute the mean within-subject study correlation observed in all other studies
-for i=conOnly'
-stats.NPS(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
-end
 
-%% Meta-Analysis MHE
-v=find(strcmp(df_full.variables,'MHEraw'));
-for i=1:length(df_full.studies) % Calculate for all studies except...
-    if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
-        if df_full.BetweenSubject(i)==0 %Within-subject studies
-           stats.MHE(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-           stats.MHE(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        end        
-    end
-end
-% Calculate for those studies where only pla>con contrasts are available
-conOnly=find(df_full.consOnlyNPS==1);
-impu_r=nanmean([stats.MHE.r]); % impute the mean within-subject study correlation observed in all other studies
-for i=conOnly'
-stats.MHE(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
-end
-
-%% Meta-Analysis stimInt
-v=find(strcmp(df_full.variables,'stimInt'));
-for i=1:length(df_full.studies) % Calculate for all studies except...
-    if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
-        if df_full.BetweenSubject(i)==0 %Within-subject studies
-           stats.stimInt(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-           stats.stimInt(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        end        
-    end
-end
-% Calculate for those studies where only pla>con contrasts are available
-conOnly=find(df_full.consOnlyNPS==1);
-impu_r=nanmean([stats.stimInt.r]); % impute the mean within-subject study correlation observed in all other studies
-for i=conOnly'
-stats.stimInt(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
-end
-
-%% Meta-Analysis SIIPS
-v=find(strcmp(df_full.variables,'SIIPS'));
-for i=1:length(df_full.studies) % Calculate for all studies except...
-    if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
-        if df_full.BetweenSubject(i)==0 %Within-subject studies
-           stats.SIIPS(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-           stats.SIIPS(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-        end        
-    end
-end
-% Calculate for those studies where only pla>con contrasts are available
-conOnly=find(df_full.consOnlyNPS==1);
-impu_r=nanmean([stats.SIIPS.r]); % impute the mean within-subject study correlation observed in all other studies
-for i=conOnly'
-stats.SIIPS(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
-end
-
-
-% %% Meta-Analysis PPR_pain
-% v=find(strcmp(df_full.variables,'PPR_pain_raw'));
-% for i=1:length(df_full.studies) % Calculate for all studies except...
-%     if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
-%         if df_full.BetweenSubject(i)==0 %Within-subject studies
-%            stats.PPR_pain_raw(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-%         elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-%            stats.PPR_pain_raw(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-%         end        
-%     end
-% end
-% % Calculate for those studies where only pla>con contrasts are available
-% conOnly=find(df_full.consOnlyNPS==1);
-% impu_r=nanmean([stats.PPR_pain_raw.r]); % impute the mean within-subject study correlation observed in all other studies
-% for i=conOnly'
-% stats.PPR_pain_raw(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
-% end
-% 
-% %% Meta-Analysis PPR_anti
-% v=find(strcmp(df_full.variables,'PPR_anti_raw'));
-% for i=1:length(df_full.studies) % Calculate for all studies except...
-%     if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
-%         if df_full.BetweenSubject(i)==0 %Within-subject studies
-%            stats.PPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-%         elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-%            stats.PPR_anti_raw(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-%         end        
-%     end
-% end
-% % Calculate for those studies where only pla>con contrasts are available
-% conOnly=find(df_full.consOnlyNPS==1);
-% impu_r=nanmean([stats.PPR_anti_raw.r]); % impute the mean within-subject study correlation observed in all other studies
-% for i=conOnly'
-% stats.PPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
-% end
-% 
-% %% Meta-Analysis brainPPR_anti
-% v=find(strcmp(df_full.variables,'brainPPR_anti_raw'));
-% for i=1:length(df_full.studies) % Calculate for all studies except...
-%     if df_full.consOnlyNPS(i)==0 %...data-sets where both pla and con is available
-%         if df_full.BetweenSubject(i)==0 %Within-subject studies
-%            stats.brainPPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-%         elseif df_full.BetweenSubject(i)==1 %Between-subject studies
-%            stats.brainPPR_anti_raw(i)=betweenMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));
-%         end        
-%     end
-% end
-% % Calculate for those studies where only pla>con contrasts are available
-% conOnly=find(df_full.consOnlyNPS==1);
-% impu_r=nanmean([stats.brainPPR_anti_raw.r]); % impute the mean within-subject study correlation observed in all other studies
-% for i=conOnly'
-% stats.brainPPR_anti_raw(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
-% end
 %% One Forest plot per variable
 varnames={'rating'
           'NPS'
-          'MHE'
+          'MHEraw'
           'SIIPS'};
 nicevarnames={'Pain ratings',...
               'NPS response',...
@@ -266,8 +130,6 @@ for i = 1:numel(varnames)
                   'WIsubdata',0,...
                   'boxscaling',1,...
                   'textoffset',0);
-    hgexport(gcf, ['B1_Meta_All_',varnames{i},'.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
-    pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
     hgexport(gcf, fullfile(pubpath,['B1_Meta_All_',varnames{i},'.svg']), hgexport('factorystyle'), 'Format', 'svg');
     hgexport(gcf, fullfile(pubpath,['B1_Meta_All_',varnames{i},'.png']), hgexport('factorystyle'), 'Format', 'png'); 
     crop(fullfile(pubpath,['B1_Meta_All_',varnames{i},'.png']));
@@ -286,8 +148,6 @@ for i = 1:numel(varnames)
                   'WIsubdata',0,...
                   'boxscaling',1,...
                   'textoffset',0);
-    hgexport(gcf, ['B1_Meta_All_',varnames{i},'.svg'], hgexport('factorystyle'), 'Format', 'svg'); 
-    pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
     hgexport(gcf, fullfile(pubpath,['B1_Meta_All_',varnames{i},'.svg']), hgexport('factorystyle'), 'Format', 'svg'); 
     hgexport(gcf, fullfile(pubpath,['B1_Meta_All_',varnames{i},'.png']), hgexport('factorystyle'), 'Format', 'png'); 
     crop(fullfile(pubpath,['B1_Meta_All_',varnames{i},'.png']));
