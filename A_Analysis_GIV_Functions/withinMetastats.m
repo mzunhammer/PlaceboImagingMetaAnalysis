@@ -1,6 +1,6 @@
 function StudyStat=withinMetastats(cond1,cond2)
 % Function for computing stats for meta-analysis when single-subject data
-% from a two-condition within-subject experiment are available, or when
+% from a two-condition within-subject experiment are available (cond1-cond2), or when
 % single- subject data representing the contrast (difference) between the
 % groups is available.
 
