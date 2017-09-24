@@ -54,10 +54,12 @@ studyIDtexts={
 %             'Zeidan et al. 2015: Control vs placebo cream (placebo group) | heat*';...
 %             };
         
+
+%% Meta-Analysis
 varselect={'rating','rating101','NPS','MHEraw','SIIPS','stimInt'};
 ratingvars={'rating','rating101'};
 imagingvars={'NPS','MHEraw','SIIPS','stimInt'};
-%% Meta-Analysis Ratings
+% Loop for studies where both con and pla conditions are available
 for j=1:length(varselect) % Loop through all outcome variables
     currvar=varselect{j};
     v=find(strcmp(df_full.variables,currvar));

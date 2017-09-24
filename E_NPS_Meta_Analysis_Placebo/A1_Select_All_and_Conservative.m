@@ -287,11 +287,12 @@ df_full.condata{i}=NaN(size(df_full.pladata{i}));
 
 save('A1_Full_Sample.mat','df_full');
 
-%% INCLUSIVE SAMPLE
+%% CONSERVATIVE SAMPLE
 % Difference compared to "ALL":
 % Atlas: None 
 % Bingel06: None
-% Bingel11: None
+% Bingel11: Excluded bc placebo condition was not randomized in respect to
+%           testing sequence
 % Choi: None
 % Eippert: None
 % Ellingsen: None
@@ -299,7 +300,7 @@ save('A1_Full_Sample.mat','df_full');
 % Freeman: None
 % Geuter: None
 % Kessner: None
-% Kong06: None
+% Kong06: Excluded as not all participants from original analysis were available.
 % Kong09: None
 % Ruetgen: Excluded bc of responder selection
 % Schenk: None
@@ -307,30 +308,28 @@ save('A1_Full_Sample.mat','df_full');
 % Wager06a: None
 % Wager06b: Excluded bc of responder selection
 % Wrobel: None
-% Zeidan: None
+% Zeidan: Excluded as not all participants from original analysis were
+%         available + only ASL study
 
-%%>> Exclude Ruetgen (responder selection), Wager06b (responder selection),
-% Bingel 2011 (sequence effects)
-
-df_incl=df_full;
+df_conserv=df_full;
 %'kong06'
 i=find(strcmp(studies,'kong06'));
-df_incl.condata{i}=NaN(size(df_full.condata{i}));
-df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
+df_conserv.condata{i}=NaN(size(df_full.condata{i}));
+df_conserv.pladata{i}=NaN(size(df_full.pladata{i}));
 %'ruetgen'
 i=find(strcmp(studies,'ruetgen'));
-df_incl.condata{i}=NaN(size(df_full.condata{i}));
-df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
+df_conserv.condata{i}=NaN(size(df_full.condata{i}));
+df_conserv.pladata{i}=NaN(size(df_full.pladata{i}));
 %'wager04b_michigan'
 i=find(strcmp(studies,'wager04b_michigan'));
-df_incl.condata{i}=NaN(size(df_full.condata{i}));
-df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
+df_conserv.condata{i}=NaN(size(df_full.condata{i}));
+df_conserv.pladata{i}=NaN(size(df_full.pladata{i}));
 %'bingel11'
 i=find(strcmp(studies,'bingel11'));
-df_incl.condata{i}=NaN(size(df_full.condata{i}));
-df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
+df_conserv.condata{i}=NaN(size(df_full.condata{i}));
+df_conserv.pladata{i}=NaN(size(df_full.pladata{i}));
 %'zeidan'
 i=find(strcmp(studies,'zeidan'));
-df_incl.condata{i}=NaN(size(df_full.condata{i}));
-df_incl.pladata{i}=NaN(size(df_full.pladata{i}));
-save('A2_Inclusive_Sample.mat','df_incl');
+df_conserv.condata{i}=NaN(size(df_full.condata{i}));
+df_conserv.pladata{i}=NaN(size(df_full.pladata{i}));
+save('A2_Conservative_Sample.mat','df_conserv');
