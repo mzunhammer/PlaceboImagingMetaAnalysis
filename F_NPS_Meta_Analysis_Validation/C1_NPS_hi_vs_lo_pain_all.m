@@ -204,7 +204,6 @@ ForestPlotter(statsNPS,...
               'WIsubdata',0,...
               'boxscaling',1);
           
-hgexport(gcf, 'C1_NPS_hi_vs_lo_pain_all.svg', hgexport('factorystyle'), 'Format', 'svg'); 
 hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Fig_S3_NPS_hi_vs_lo.svg', hgexport('factorystyle'), 'Format', 'svg');
 hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Fig_S3_NPS_hi_vs_lo.png', hgexport('factorystyle'), 'Format', 'png');
 crop('../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Fig_S3_NPS_hi_vs_lo.png');
@@ -232,7 +231,6 @@ ForestPlotter(statsSIIPS,...
               'WIsubdata',0,...
               'boxscaling',1);
           
-hgexport(gcf, 'C1_SIIPS_hi_vs_lo_pain_all.svg', hgexport('factorystyle'), 'Format', 'svg'); 
 hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Fig_S3_SIIPS_hi_vs_lo.svg', hgexport('factorystyle'), 'Format', 'svg');
 hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Fig_S3_SIIPS_hi_vs_lo.png', hgexport('factorystyle'), 'Format', 'png');
 crop('../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Fig_S3_SIIPS_hi_vs_lo.png');
@@ -243,71 +241,3 @@ SIIPS_pos_imgs=vertcat(statsSIIPS.delta)>0;
 perc_pos_SIIPS=sum(SIIPS_pos_imgs)/sum(~isnan(SIIPS_pos_imgs));
 
 disp([num2str(perc_pos_SIIPS*100),'% of participants showed a positive SIIPS response.'])
-
-%% Plot Standardized NPS vs Standardized Rating response
-statsRating=[stats.rating];
-figure
-% First plot effects of changes in stimulus intensity on NPS/ratings in red
-hold on
-x=[statsRating.g];
-y=[statsNPS.g];
-yneg=([statsNPS.se_g].*1.96);
-ypos=([statsNPS.se_g].*1.96);
-xneg=([statsRating.se_g].*1.96);
-xpos=([statsRating.se_g].*1.96);
-errorbar(x,y,yneg,ypos,xneg,xpos,'ro')
-plot(x,y,'.')
-lsline
-
-%Then plot effects of placebos
-PlaceboStats=load('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/E_NPS_Meta_Analysis_Placebo/Full_Sample_Study_Level_Results_Placebo.mat');
-pla_studies={'atlas'
-             'ellingsen'
-             %'freeman'
-             'kessner'
-             'kong06'
-             'kong09'
-             'ruetgen'
-             'wager04a_princeton'};
-ipla_studies=ismember(PlaceboStats.stats.studies,pla_studies);
-statsRating_pla=[PlaceboStats.stats.rating(ipla_studies)];
-statsNPS_pla=[PlaceboStats.stats.NPS(ipla_studies)];
-x=abs([statsRating_pla.g]);
-y=abs([statsNPS_pla.g]);
-yneg=([statsNPS_pla.se_g].*1.96);
-ypos=([statsNPS_pla.se_g].*1.96);
-xneg=([statsRating_pla.se_g].*1.96);
-xpos=([statsRating_pla.se_g].*1.96);
-errorbar(x,y,yneg,ypos,xneg,xpos,'bo')
-plot(x,y,'.')
-
-% Overall results
-% x_pla=0.65;
-% y_pla=0.08;
-% yneg_pla=0.08;
-% ypos_pla=0.08;
-% xneg_pla=0.13;
-% xpos_pla=0.13;
-%errorbar(x_pla,y_pla,yneg_pla,ypos_pla,xneg_pla,xpos_pla,'o')
-hold off
-ylabel('Absolute effect on NPS response (Hedges''g)')
-xlabel('Absolute effect on pain ratings (Hedges''g)')
-
-%% Plot Standardized NPS vs Standardized Rating response
-
-% statsRating_pla=[PlaceboStats.stats.rating(ipla_studies)]
-% stats_pla_not_empty=~cellfun(@isempty,{statsRating_pla.std_delta}');
-% rating_diff_pla=vertcat(statsRating_pla.std_delta)
-% rating_diff_temp=vertcat(statsRating(stats_pla_not_empty).std_delta)
-% 
-% plot(rating_diff_pla,rating_diff_temp,'.')
-% ylabel('Effect of temperature change on ratings')
-% xlabel('Effect of placebo on ratings')
-% axis([max(abs(rating_diff_pla))*-1
-%       max(abs(rating_diff_pla))
-%       max(abs(rating_diff_temp))*-1
-%       max(abs(rating_diff_temp))])
-% ax = gca;
-% ax.XAxisLocation = 'origin';
-% ax.YAxisLocation = 'origin';
-% refline(1,0)
