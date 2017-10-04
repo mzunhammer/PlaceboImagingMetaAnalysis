@@ -293,16 +293,24 @@ OVERLAYHIDEZEROS(false);
 
 //  #### Placebo R — CORRELATION W BEHAVIORAL PLACEBO  #### 
 
-// Correlation w behaviour placebo — Full sample
-over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/rrating/random/Full_pla_rrating_unthresh_pos.nii');
-OVERLAYCOLORNAME(over1,'0_red');
-OVERLAYMINMAX(over1,0,0.25);
+// g Main effect placebo — Full sample
+over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/rrating/random/Full_pla_rrating_unthresh.nii');
+OVERLAYCOLORNAME(over1,'blue_0_red');
+OVERLAYMINMAX(over1,-0.25,0.25);
 MOSAIC(SPECS_standard);
-over2 := OVERLAYLOAD(BASEPATH_NII+'full/pla/rrating/random/Full_pla_rrating_unthresh_neg.nii');
-OVERLAYCOLORNAME(over2,'0_blue');
-OVERLAYMINMAX(over2,0.001,0.25);
 SAVEBMP(BASEPATH_FIG+'Figure_3_r_placebo_A');
 OVERLAYCLOSEALL;
+// VERION WITH SEPARATE IMAGES FOR POSITIVE AND NEGATIVE CORRELATIONS
+// Correlation w behaviour placebo — Full sample
+//over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/rrating/random/Full_pla_rrating_unthresh_pos.nii');
+//OVERLAYCOLORNAME(over1,'0_red');
+//OVERLAYMINMAX(over1,0,0.25);
+//MOSAIC(SPECS_standard);
+//over2 := OVERLAYLOAD(BASEPATH_NII+'full/pla/rrating/random/Full_pla_rrating_unthresh_neg.nii');
+//OVERLAYCOLORNAME(over2,'0_blue');
+//OVERLAYMINMAX(over2,0.001,0.25);
+//SAVEBMP(BASEPATH_FIG+'Figure_3_r_placebo_A');
+//OVERLAYCLOSEALL;
 
 // g significant only
 // Slicing layout for all overlays

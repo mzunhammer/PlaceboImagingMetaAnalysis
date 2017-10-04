@@ -13,13 +13,12 @@ BEGIN
 	SHADERNAME('phong');
 	CAMERADISTANCE(0.01);
 	
-	FRAMEVISIBLE(false);
 	COLORBARVISIBLE(false);
 	OVERLAYTRANSPARENCYONBACKGROUND(0);
 	OVERLAYTRANSPARENCYONOVERLAY(0);
 	OVERLAYCOLORFROMZERO(false);
 	
-	SHADERADJUST('lightAmount', 0.5);
+	//SHADERADJUST('lightAmount', 0.5);
 	SHADERADJUST('ambient', 1.75);
 	SHADERADJUST('diffuse', 0.35);
 	SHADERADJUST('specular', 0.1);
@@ -27,28 +26,17 @@ BEGIN
 	SHADERADJUST('edgeThresh', 0);
 	
 	
-	// ###### PAIN HEDGE'S G ######
-	// ## SEE Multi-Slice cuts in MRIcro_figure_arrangement
+	// ###### PLACEBO SUB-GROUP DIFFERENCE CONDITIONING VS SUGGESTIONS, HEDGE'S G ######
 	
-	// ###### PLACEBO HEDGE'S G ######
 	
 	// RANDOM EFFECTS
 	//OVERLAYLOADSMOOTH(true);
-	OVERLAYLOAD(BASEPATH_NII+'full/pla/g/random/Full_pla_g_p001_neg.nii');
+	OVERLAYLOAD(BASEPATH_NII+'full/pla_cond_vs_sugg/g_diff/random/Cond_vs_Sugg_g_diff_p001_neg.nii');
 	OVERLAYCOLORNAME(1,'0_blue');
 	OVERLAYMINMAX(1,0.001,0.01);
-	OVERLAYLOAD(BASEPATH_NII+'full/pla/g/random/Full_pla_g_p001_pos.nii'); 
+	OVERLAYLOAD(BASEPATH_NII+'full/pla_cond_vs_sugg/g_diff/random/Cond_vs_Sugg_g_diff_p001_pos.nii'); 
 	OVERLAYCOLORNAME(2,'0_red');
 	OVERLAYMINMAX(2,0.001,0.01);
-	
-	//OVERLAYLOADSMOOTH(false);
-	OVERLAYLOAD(BASEPATH_NII+'full/pla/g/random/Full_pla_g_pperm05_neg.nii');
-	OVERLAYCOLORNAME(3,'0_green');
-	OVERLAYMINMAX(3,0.001,0.01);
-	//OVERLAYLOAD(BASEPATH_NII+'full/pla/g/random/Full_pla_g_pperm05_pos.nii'); // EMPTY! NO SIGNIFICANT VOXELS
-	//OVERLAYCOLORNAME(4,'0_gold');
-	//OVERLAYMINMAX(4,0.001,0.01);
-	////OVERLAYLOADSMOOTH(true);
 	
 	//AZIMUTHELEVATION (AZI, ELEV: integer). Sets the viewer location. For example,
 	//AZIMUTHELEVATION(90,10) will show a sagittal (right side) view from a slightly inclined viewpoint.
@@ -73,79 +61,22 @@ BEGIN
 		   1.0,1.0,1.0); // to   R P I
 	SAVEBMP(BASEPATH_FIG+'Figure_2_Render_cut_insula');
 
-	AZIMUTHELEVATION(90,10)
-	//CUTOUT (L,A,S,R,P,I: single)
-	CUTOUT(0,0.0,0.0,
-		   0.47,1.0,1.0); // to   R P I
-	SAVEBMP(BASEPATH_FIG+'Figure_2_Render_cut_medial_left');
-	
 	AZIMUTHELEVATION(270,10)
 	//CUTOUT (L,A,S,R,P,I: single)
-	CUTOUT(0.53,0.0,0.0,
+	CUTOUT(0.48,0.0,0.0,
 		   1.0,1.0,1.0); // to   R P I
+	SAVEBMP(BASEPATH_FIG+'Figure_2_Render_cut_medial_left');
+	
+	AZIMUTHELEVATION(90,10)
+	//CUTOUT (L,A,S,R,P,I: single)
+	CUTOUT(0.0,0.0,0.0,
+		   0.52,1.0,1.0); // to   R P I
 	SAVEBMP(BASEPATH_FIG+'Figure_2_Render_cut_medial_right');
 	OVERLAYCLOSEALL;
 	CUTOUT(0,0,0,
 		   0,0,0);
 	
-	// FIXED EFFECTS
-	//OVERLAYLOADSMOOTH(true);
-	OVERLAYLOAD(BASEPATH_NII+'full/pla/g/fixed/Full_pla_g_p001Fixed_neg.nii');
-	OVERLAYCOLORNAME(1,'0_blue');
-	OVERLAYMINMAX(1,0.001,0.01);
-	OVERLAYLOAD(BASEPATH_NII+'full/pla/g/fixed/Full_pla_g_p001Fixed_pos.nii');
-	OVERLAYCOLORNAME(2,'0_red');
-	OVERLAYMINMAX(2,0.001,0.01);
 	
-	//OVERLAYLOADSMOOTH(false);
-	OVERLAYLOAD(BASEPATH_NII+'full/pla/g/fixed/Full_pla_g_pperm05Fixed_neg.nii');
-	OVERLAYCOLORNAME(3,'0_green');
-	OVERLAYMINMAX(3,0.001,0.01);
-	OVERLAYLOAD(BASEPATH_NII+'full/pla/g/fixed/Full_pla_g_pperm05Fixed_pos.nii');
-	OVERLAYCOLORNAME(4,'0_gold');
-	OVERLAYMINMAX(4,0.001,0.01);
-	//OVERLAYLOADSMOOTH(true);
-
-
-//AZIMUTHELEVATION (AZI, ELEV: integer). Sets the viewer location. For example,
-//AZIMUTHELEVATION(90,10) will show a sagittal (right side) view from a slightly inclined viewpoint.
-//Zero degrees azimuth refers to posterior, while 180 degress is directly anterior. Note that these values are
-//absolute, while the AZIMUTH and ELEVATION commands refer to relative changes in viewpoint.
-
-	AZIMUTHELEVATION(0,10);
-	SAVEBMP(BASEPATH_FIG+'Figure_S8_Render_post');
-
-	AZIMUTHELEVATION(90,10);
-	SAVEBMP(BASEPATH_FIG+'Figure_S8_Render_left');
-
-	AZIMUTHELEVATION(180,10);
-	SAVEBMP(BASEPATH_FIG+'Figure_S8_Render_ant');
-
-	AZIMUTHELEVATION(270,10);
-	SAVEBMP(BASEPATH_FIG+'Figure_S8_Render_right');
-	
-	AZIMUTHELEVATION(200,10);
-	//CUTOUT (L,A,S,R,P,I: single)
-	CUTOUT(0.0,0.62,0.0,
-		   1.0,1.0,1.0); // to   R P I
-	SAVEBMP(BASEPATH_FIG+'Figure_S8_Render_cut_insula2');
-		   
-	AZIMUTHELEVATION(90,10)
-	//CUTOUT (L,A,S,R,P,I: single)
-	// SHADERADJUST('ambient', 1.5);
-	CUTOUT(0,0.0,0.0,
-		   0.48,1.0,1.0); // to   R P I
-	SAVEBMP(BASEPATH_FIG+'Figure_S8_Render_cut_medial_left');
-	
-	AZIMUTHELEVATION(270,10)
-	//CUTOUT (L,A,S,R,P,I: single)
-		// SHADERADJUST('ambient', 1.75)
-	CUTOUT(0.52,0.0,0.0,
-		   1.0,1.0,1.0); // to   R P I
-	SAVEBMP(BASEPATH_FIG+'Figure_S8_Render_cut_medial_right');
-	OVERLAYCLOSEALL;
-	CUTOUT(0,0,0,
-		   0,0,0);
 
 // ###### PLACEBO BEHAVIORAL CORRELATION R ######
 
@@ -191,22 +122,23 @@ BEGIN
 	SAVEBMP(BASEPATH_FIG+'Figure_3_Render_cut_insula');
 	OVERLAYMASKEDBYBACKGROUND(true)
 	
-	AZIMUTHELEVATION(90,10)
-	//CUTOUT (L,A,S,R,P,I: single)
-	// SHADERADJUST('ambient', 1.5);
-	CUTOUT(0,0.0,0.0,
-		   0.48,1.0,1.0); // to   R P I
-	SAVEBMP(BASEPATH_FIG+'Figure_3_Render_cut_medial_left');
-	
 	AZIMUTHELEVATION(270,10)
 	//CUTOUT (L,A,S,R,P,I: single)
-		// SHADERADJUST('ambient', 1.75)
-	CUTOUT(0.55,0.0,0.0,
+	CUTOUT(0.48,0.0,0.0,
 		   1.0,1.0,1.0); // to   R P I
+	SAVEBMP(BASEPATH_FIG+'Figure_3_Render_cut_medial_left');
+
+	SHADERADJUST('ambient', 1.5);
+	AZIMUTHELEVATION(90,10)
+	//CUTOUT (L,A,S,R,P,I: single)
+	CUTOUT(0.0,0.0,0.0,
+		   0.55,1.0,1.0); // to   R P I
 	SAVEBMP(BASEPATH_FIG+'Figure_3_Render_cut_medial_right');
+	SHADERADJUST('ambient', 1.75);
+
 	OVERLAYCLOSEALL;
 	CUTOUT(0,0,0,
-		   0,0,0);
+		   0,0,0)
 		   
 		   
 // ###### CEREBELLUM ######
@@ -218,7 +150,6 @@ RESETDEFAULTS;
 	SHADERNAME('phong');
 	CAMERADISTANCE(0.01);
 
-	FRAMEVISIBLE(false);
 	COLORBARVISIBLE(false);
 	OVERLAYTRANSPARENCYONBACKGROUND(0);
 	OVERLAYTRANSPARENCYONOVERLAY(0);
@@ -236,15 +167,15 @@ RESETDEFAULTS;
 
 	// RANDOM EFFECTS
 	//OVERLAYLOADSMOOTH(true);
-	OVERLAYLOAD(BASEPATH_NII+'full/pla/g/random/Full_pla_g_p001_neg.nii');
+	OVERLAYLOAD(BASEPATH_NII+'full/pla_cond_vs_sugg/g_diff/random/Full_pla_g_p001_neg.nii');
 	OVERLAYCOLORNAME(1,'0_blue');
 	OVERLAYMINMAX(1,0.001,0.01);
-	OVERLAYLOAD(BASEPATH_NII+'full/pla/g/random/Full_pla_g_p001_pos.nii'); 
+	OVERLAYLOAD(BASEPATH_NII+'full/pla_cond_vs_sugg/g_diff/random/Full_pla_g_p001_pos.nii'); 
 	OVERLAYCOLORNAME(2,'0_red');
 	OVERLAYMINMAX(2,0.001,0.01);
 	
 	//OVERLAYLOADSMOOTH(false);
-	OVERLAYLOAD(BASEPATH_NII+'full/pla/g/random/Full_pla_g_pperm05_neg.nii');
+	OVERLAYLOAD(BASEPATH_NII+'full/pla_cond_vs_sugg/g_diff/random/Full_pla_g_pperm05_neg.nii');
 	OVERLAYCOLORNAME(3,'0_green');
 	OVERLAYMINMAX(3,0.001,0.01);
 	
@@ -375,10 +306,10 @@ BASEPATH_NII:='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_An
 	OVERLAYTRANSPARENCYONBACKGROUND(0);
 	OVERLAYTRANSPARENCYONOVERLAY(0);
 
-	OVERLAYLOAD(BASEPATH_NII+'full/pla/g/random/Full_pla_g_unthresh.nii');
+	OVERLAYLOAD(BASEPATH_NII+'full/pla_cond_vs_sugg/g_diff/random/Full_pla_g_unthresh.nii');
 	OVERLAYCOLORNAME(1,'blue_0_red');
 	OVERLAYMINMAX(1,-0.25,0.25);
-	OVERLAYLOAD(BASEPATH_NII+'full/pla/g/random/Full_pla_g_pperm05_neg.nii');
+	OVERLAYLOAD(BASEPATH_NII+'full/pla_cond_vs_sugg/g_diff/random/Full_pla_g_pperm05_neg.nii');
 	OVERLAYCOLORNAME(2,'0_cyan');
 	OVERLAYMINMAX(2,0.001,0.2);
 	
