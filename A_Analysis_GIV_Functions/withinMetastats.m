@@ -75,10 +75,12 @@ se_mu=sd_diff./sqrt(n);  %by-study se (based on SD of differences!)
 
 %Standardized outcome 1: Cohen's d
 %Here there may be a dispute over how sd_within must be defined.
-% Alternative suggestion by Lakens (2013) ("Cohen's d AV):
+% Alternative suggestion by Lakens (2013) ("Cohen's d_av):
 %sd1=nanstd(cond1);
 %sd2=nanstd(cond2);
 %sd_pooled=(sd1+sd2)/2;
+% We use what Lakens calls: "Cohen's d_rm", which is also used in
+% Borenstein et al.
 sd_pooled=sd_diff./sqrt(2.*(1-r));% see:[1], Formula 4.27
 d=mu./sd_pooled; % see:[1]
 

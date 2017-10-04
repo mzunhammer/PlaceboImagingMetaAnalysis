@@ -82,7 +82,7 @@ if any(strcmp(outputs,'r'))
  summary.r.n=nansum(vertcat(stats(:).n));
 
 % Back-transform from fishersZ to r
- summary.r.heterogeneity.tausq=fishersZ2r(sqrt(summary.r.heterogeneity.tausq)).^2; % The measure tau is the SD of between-subject differences and is in units of the outcome... has to be transformed, as well!
+ summary.r.heterogeneity.tausq=fishersZ2r(sqrt(summary.r.heterogeneity.tausq)).^2; % The measure tau is the SD of between-subject differences and is in units of the outcome... has to be transformed, as well! Before transform, root has to be taken, after it has to be squared again!
  summary.r.fixed.summary=fishersZ2r(summary.r.fixed.summary);
  summary.r.fixed.SEsummary=fishersZ2r(summary.r.fixed.SEsummary);
  summary.r.fixed.CI_lo=fishersZ2r(summary.r.fixed.CI_lo);
@@ -91,7 +91,6 @@ if any(strcmp(outputs,'r'))
  summary.r.random.SEsummary=fishersZ2r(summary.r.random.SEsummary);
  summary.r.random.CI_lo=fishersZ2r(summary.r.random.CI_lo);
  summary.r.random.CI_hi=fishersZ2r(summary.r.random.CI_hi);
-
 end
 
 %r external
