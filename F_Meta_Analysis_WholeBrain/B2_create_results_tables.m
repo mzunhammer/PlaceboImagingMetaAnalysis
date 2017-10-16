@@ -16,65 +16,36 @@ clear
 %     ?Oxford-Imanova Striatal Structural Atlas?
 %     ?Talairach Daemon Labels?
 
-atlases={'Harvard-Oxford Subcortical Structural Atlas'}; %'Talairach Daemon Labels','Harvard-Oxford Cortical Structural Atlas',
-satlases={'Hrvrd_Subcort'}; %'TD','Hrvrd_Cort',
+atlases={'Cerebellar Atlas in MNI152 space after normalization with FLIRT'}; %'Talairach Daemon Labels','Harvard-Oxford Cortical Structural Atlas',
+satlases={'Cerebellum_MNIflirt'}; %'TD','Hrvrd_Cort',
 %% Read all nii results images, filter thresholded ones
- nii_results=dir('./nii_results/');
- nii_results={nii_results.name}';
-% imgs_d001=regexp(nii_results,'(.*_p001\.nii)','tokens');
-% imgs_d001=[imgs_d001{:}]';
-% imgs_d001=[imgs_d001{:}]';
-% [~,imgs_d001,~]=cellfun(@fileparts,imgs_d001,'UniformOutput',0);
-% 
-% imgs_pperm05=regexp(nii_results,'(.*_pperm05\.nii)','tokens');
-% imgs_pperm05=[imgs_pperm05{:}]';
-% imgs_pperm05=[imgs_pperm05{:}]';
-% [~,imgs_pperm05,~]=cellfun(@fileparts,imgs_pperm05,'UniformOutput',0);
-
-%select tables manually (thresholded Isquare maps for pain contain too many clusters to tabulate)
+nii_results=dir('./nii_results/');
+nii_results={nii_results.name}';
+ 
+%select tables manually (thresholded Isquare maps since pain contain too many clusters to tabulate)
 img_path_pperm05={
- %'conservative/pla/g/heterogeneity/Conservative_pain_g_Isq_pperm05';
- %'conservative/pla/g/random/Conservative_pain_g_pperm05';
- %'conservative/pla/g/heterogeneity/Conservative_pla_g_Isq_pperm05';
- 
- % NO SIGNIFICANT CLUSTER
- %'conservative/pla/g/random/Conservative_pla_g_pperm05';
- %'conservative/pla/rrating/heterogeneity/Conservative_pla_rrating_Isq_pperm05';
- %'full/pain/g/heterogeneity/Full_pain_g_Isq_pperm05';
- %'./nii_results/full/pla/g/heterogeneity/Full_pla_g_tau_pperm05';
- %'./nii_results/full/pla/rrating/heterogeneity/Full_pla_rrating_tau_pperm05';
 
+ %Pain, g's, perm
  './nii_results/full/pain/g/random/Full_pain_g_pperm05';
-
- './nii_results/full/pla/g/random/Full_pla_g_pperm05';
- './nii_results/full/pla/g/fixed/Full_pla_g_pperm05Fixed';
  
- './nii_results/full/pla/rrating/random/Full_pla_rrating_pperm05'
- './nii_results/full/pla/rrating/fixed/Full_pla_rrating_pperm05Fixed';
+ %Random, g's
+ './nii_results/full/pla/g/random/Full_pla_g_pperm05';
+ './nii_results/full/pla/g/random/Full_pla_g_g10pos'
+ './nii_results/full/pla/g/random/Full_pla_g_g10neg'
 
+ %Random, correlations
+ './nii_results/full/pla/rrating/random/Full_pla_rrating_pperm05'
+ './nii_results/full/pla/rrating/random/Full_pla_rrating_g10pos'
+ './nii_results/full/pla/rrating/random/Full_pla_rrating_g15pos'
+ './nii_results/full/pla/rrating/random/Full_pla_rrating_g15neg'
+
+ %Fixed, .05 perm
+ './nii_results/full/pla/g/fixed/Full_pla_g_pperm05Fixed';
+ './nii_results/full/pla/rrating/fixed/Full_pla_rrating_pperm05Fixed';
+ 
+ %Conservative, g's and correlations
  './nii_results/conservative/pla/g/random/Conservative_pla_g_pperm05';
  './nii_results/conservative/pla/rrating/random/Conservative_pla_rrating_pperm05';
-
- 
-  
-%  
-%  ;
-
-% './nii_results/full/pla/g/random/Full_pla_g_g15';
-% './nii_results/full/pla/g/fixed/Full_pla_g_g15Fixed';
-% 
-% './nii_results/full/pla/rrating/random/Full_pla_rrating_g10pos'
-% './nii_results/full/pla/rrating/fixed/Full_pla_rrating_g20neg';
-% './nii_results/full/pla/rrating/random/Full_pla_rrating_g10Fixedpos'
-% './nii_results/full/pla/rrating/fixed/Full_pla_rrating_g20Fixedneg';
-% 
-% './nii_results/conservative/pla/g/random/Conservative_pla_g_g15';
-% './nii_results/conservative/pla/g/fixed/Conservative_pla_g_g15Fixed';
-% 
-% './nii_results/conservative/pla/rrating/random/Conservative_pla_rrating_g10pos'
-% './nii_results/conservative/pla/rrating/fixed/Conservative_pla_rrating_g20neg';
-% './nii_results/conservative/pla/rrating/random/Conservative_pla_rrating_g10Fixedpos'
-% './nii_results/conservative/pla/rrating/fixed/Conservative_pla_rrating_g20Fixedneg';
  };
 
 %% Print tables for p<0.05 permutation test based results
