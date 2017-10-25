@@ -40,11 +40,11 @@ studyIDtexts={
             'Elsenbruch et al. 2012';...
             'Freeman et al. 2015';...
             'Geuter et al. 2013';...
-            'Kessner et al. 2014';...
+            'Kessner et al. 2014*';...
             'Kong et al. 2006';...
             'Kong et al. 2009';...
             'Lui et al. 2010';...
-            'Ruetgen et al. 2015'
+            'Ruetgen et al. 2015*'
             'Schenk et al. 2015'
             'Theysohn et al. 2009';...
             'Wager et al. 2004, Study 1';...
@@ -107,6 +107,44 @@ impu_r=nanmean([stats.SIIPS.r]); % impute the mean within-subject study correlat
 for i=conOnly'
 stats.SIIPS(i)=withinMetastats(df_full.pladata{i}(:,v),impu_r);
 end
+
+%% GIV analysis
+
+for i=1:length(stats.NPS)
+    stats.NPS(i).r_external=fastcorrcoef(stats.NPS(i).delta,stats.rating(i).delta,true); % correlate single-subject effect of behavior and voxel signal 
+    if ~isempty(stats.NPS(i).delta) % necessary as "sum" returns 0 for [] for some stupid reason
+        stats.NPS(i).n_r_external=sum(~(isnan(stats.NPS(i).delta)|... % the n for the correlation is the n of subjects showing non-nan values at that particular voxels
+                                         isnan(stats.rating(i).delta))); % AND non nan-ratings
+    else
+        stats.NPS(i).r_external=NaN
+        stats.NPS(i).n_r_external=NaN
+        
+    end
+end
+
+
+summary_NPS_vs_ratings=ForestPlotter(stats.NPS,...
+              'studyIDtexts',studyIDtexts,...
+              'outcomelabel','Correlation (Pearson''s r) of placebo effects on behaviour vs NPS',...
+              'type','random',...
+              'summarystat','r_external',...
+              'withoutlier',0,...
+              'WIsubdata',0,...
+              'boxscaling',1);
+
+ hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Corr_Placebo_Effect_NPS_vs_ratings', hgexport('factorystyle'), 'Format', 'svg');
+ hgexport(gcf, '../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Corr_Placebo_Effect_vs_ratings', hgexport('factorystyle'), 'Format', 'png');
+ crop('../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/Corr_Placebo_Effect_vs_ratings.png');
+
+r=summary_NPS_vs_ratings.r_external.random.summary;
+SEr=summary_NPS_vs_ratings.r_external.random.SEsummary;
+
+df=summary_NPS_vs_ratings.r_external.random.df;
+d=2*r/sqrt(1-r^2);
+J=1-(3./(4.*df-1)); %Approximation to Hedge's correction factor J according to [1]
+
+bayesfactor(r2fishersZ(r),r2fishersZ(SEr),0,[0,0.5,2])
+
 
 %% Fixed effects analysis
 WIstudies=[df_full.studies(df_full.BetweenSubject~=1)];
