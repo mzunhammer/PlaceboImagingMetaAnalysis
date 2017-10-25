@@ -16,8 +16,8 @@ clear
 %     ?Oxford-Imanova Striatal Structural Atlas?
 %     ?Talairach Daemon Labels?
 
-atlases={'Cerebellar Atlas in MNI152 space after normalization with FLIRT'}; %'Talairach Daemon Labels','Harvard-Oxford Cortical Structural Atlas',
-satlases={'Cerebellum_MNIflirt'}; %'TD','Hrvrd_Cort',
+atlases= {'Oxford Thalamic Connectivity Probability Atlas'}% {'Cerebellar Atlas in MNI152 space after normalization with FLIRT'}; %'Talairach Daemon Labels','Harvard-Oxford Cortical Structural Atlas',
+satlases={'Thalamus'}; %'TD','Hrvrd_Cort',
 %% Read all nii results images, filter thresholded ones
 nii_results=dir('./nii_results/');
 nii_results={nii_results.name}';
@@ -25,27 +25,27 @@ nii_results={nii_results.name}';
 %select tables manually (thresholded Isquare maps since pain contain too many clusters to tabulate)
 img_path_pperm05={
 
- %Pain, g's, perm
- './nii_results/full/pain/g/random/Full_pain_g_pperm05';
+%%Pain, g's, perm
+%  './nii_results/full/pain/g/random/Full_pain_g_pperm05';
  
- %Random, g's
- './nii_results/full/pla/g/random/Full_pla_g_pperm05';
- './nii_results/full/pla/g/random/Full_pla_g_g10pos'
- './nii_results/full/pla/g/random/Full_pla_g_g10neg'
+%%Random, g's
+% './nii_results/full/pla/g/random/Full_pla_g_pperm05';
+%  './nii_results/full/pla/g/random/Full_pla_g_g10pos'
+%  './nii_results/full/pla/g/random/Full_pla_g_g10neg'
 
- %Random, correlations
- './nii_results/full/pla/rrating/random/Full_pla_rrating_pperm05'
- './nii_results/full/pla/rrating/random/Full_pla_rrating_g10pos'
- './nii_results/full/pla/rrating/random/Full_pla_rrating_g15pos'
- './nii_results/full/pla/rrating/random/Full_pla_rrating_g15neg'
-
- %Fixed, .05 perm
- './nii_results/full/pla/g/fixed/Full_pla_g_pperm05Fixed';
- './nii_results/full/pla/rrating/fixed/Full_pla_rrating_pperm05Fixed';
- 
- %Conservative, g's and correlations
- './nii_results/conservative/pla/g/random/Conservative_pla_g_pperm05';
- './nii_results/conservative/pla/rrating/random/Conservative_pla_rrating_pperm05';
+%  %Random, correlations
+  './nii_results/full/pla/rrating/random/Full_pla_rrating_pperm05'
+%  './nii_results/full/pla/rrating/random/Full_pla_rrating_g10pos'
+%  './nii_results/full/pla/rrating/random/Full_pla_rrating_g15pos'
+%  './nii_results/full/pla/rrating/random/Full_pla_rrating_g15neg'
+% 
+%  %Fixed, .05 perm
+%  './nii_results/full/pla/g/fixed/Full_pla_g_pperm05Fixed';
+%  './nii_results/full/pla/rrating/fixed/Full_pla_rrating_pperm05Fixed';
+%  
+%  %Conservative, g's and correlations
+%  './nii_results/conservative/pla/g/random/Conservative_pla_g_pperm05';
+%  './nii_results/conservative/pla/rrating/random/Conservative_pla_rrating_pperm05';
  };
 
 %% Print tables for p<0.05 permutation test based results
