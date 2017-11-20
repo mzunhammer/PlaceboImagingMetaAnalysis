@@ -1,0 +1,139 @@
+var BASEPATH_NII : string;
+var BASEPATH_FIG : string;
+
+var SPECS_n : string;
+var SPECS_standard : string;
+var SPECS_sig_pain : string;
+var SPECS_sig_pla_g : string;
+var SPECS_sig_pla_r : string;
+var SPECS_sig_pla_g_fixed : string;
+var SPECS_sig_pla_r_fixed : string;
+
+var over1 : integer;
+var over2 : integer;
+var over3 : integer;
+var over4 : integer;
+
+
+BEGIN
+
+BASEPATH_NII:='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/F_Meta_Analysis_WholeBrain/nii_results/'
+BASEPATH_FIG:='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain_conditioning_vs_suggestions/figures/'
+
+// Set background image specs for all images and load image
+RESETDEFAULTS;
+BACKCOLOR (255,255,255);
+LOADIMAGE('/Users/matthiaszunhammer/Documents/MATLAB/spm12/canonical/fsl_standards/MNI152_T1_1mm_brain.nii');
+
+
+// Set overlay specs for all overlays
+OVERLAYTRANSPARENCYONBACKGROUND(40);
+OVERLAYTRANSPARENCYONOVERLAY(0);
+
+OVERLAYCOLORFROMZERO(false);
+OVERLAYLOADSMOOTH(true);
+OVERLAYHIDEZEROS(false);
+COLORBARCOORD(0.4,0.85,0.6,0.8); // Left_limit Top_limit Right_limit Bottom_limit
+//SHADERFORMVISIBLE(false);
+//CUTOUTFORMVISIBLE(false);
+//CLIPFORMVISIBLE(false);
+
+// Slicing layout for all overlays
+// MIND THE GAPS: USE SPACES TO MAKE SURE ARGUMENTS ARE SEPARATED
+
+SPECS_n :='A'+ //subsequent axial slices
+	   ' L+'+ //slice labels on (L- for off)
+       ' H -0.200'+ // horizontal overlap
+	   ' V 0.0'+ // vertical overlap
+	   ' A -49.5 -44.5 -29.5 -9.5 0.5 S -4.5; '+ //Row one (semicolon defines end of row!)
+	   ' A 10.5 30.5 50.5 65.5 70.5 S 5.5' //Row two + MidSagittal slice
+SPECS_standard:='A'+ //subsequent axial slices
+	   ' L+'+ //slice labels on (L- for off)
+       ' H -0.200'+ // horizontal overlap
+	   ' V 0.0'+ // vertical overlap
+	   ' A -44.5 -29.5 -14.5 -9.5 0.5 S -4.5; '+ //Row one (semicolon defines end of row!)
+	   ' A 10.5 15.5 30.5 45.5 60.5 S 5.5' //Row two  //MidSagittal slice
+SPECS_sig_pla_g:='A'+ //subsequent axial slices
+	   ' L+'+ //slice labels on (L- for off)
+       ' H -0.200'+ // horizontal overlap
+	   ' V 0.0'+ // vertical overlap
+	   ' A -20.5 12.5 23.5 31.5 38.5 44.5' //Row one (semicolon defines end of row!)
+SPECS_sig_pla_r:='A'+ //subsequent axial slices
+	   ' L+'+ //slice labels on (L- for off)
+       ' H -0.200'+ // horizontal overlap
+	   ' V 0.0'+ // vertical overlap
+	   ' A -34.5 -20.5 18 S -4.5'
+
+//SPECS_sig_pla_r_fixed:='A'+ //subsequent axial slices
+//	   ' L+'+ //slice labels on (L- for off)
+//       ' H -0.200'+ // horizontal overlap
+//	   ' V 0.0'+ // vertical overlap
+//	   ' A -44.5 -29.5 -14.5 -9.5 0.5 S -4.5; '+ //Row one (semicolon defines end of row!)
+//	   ' A 10.5 15.5 30.5 45.5 60.5 S 5.5' //Row two  //MidSagittal slice#
+	   
+	   
+// ######## FULL SAMPLE #############
+// #### Suggestions vs Conditioning: Differences in Hedges G ####
+
+// g Main effect placebo — Full sample
+over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla_cond_vs_sugg/g_diff/random/Cond_vs_Sugg_g_diff_unthresh.nii');
+OVERLAYCOLORNAME(over1,'blue_0_red');
+OVERLAYMINMAX(over1,-0.5,0.5);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_1_g_diff_A');
+OVERLAYCLOSEALL;
+
+// g Main effect placebo — Full sample — SIGNIFICANT CLUSTERS AT p_uncorr<.001
+// NO SIGNIFICANT POSITIVE DIFFERENCES
+// over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla_cond_vs_sugg/g_diff/random/Cond_vs_Sugg_g_diff_p001_pos.nii');
+// OVERLAYCOLORNAME(over1,'0_red');
+// OVERLAYMINMAX(over1,0.001,0.1);
+OVERLAYMASKEDBYBACKGROUND(false);
+MOSAIC(SPECS_sig_pla_g);
+over2 := OVERLAYLOAD(BASEPATH_NII+'full/pla_cond_vs_sugg/g_diff/random/Cond_vs_Sugg_g_diff_p001_neg.nii');
+OVERLAYCOLORNAME(over2,'0_blue');
+OVERLAYMINMAX(over2,0.001,0.1);
+SAVEBMP(BASEPATH_FIG+'Figure_1_g_diff_B');
+OVERLAYCLOSEALL;
+OVERLAYMASKEDBYBACKGROUND(true);
+
+// z Main effect placebo — Full sample
+OVERLAYLOAD(BASEPATH_NII+'full/pla_cond_vs_sugg/g_diff/random/Cond_vs_Sugg_g_diff_p001.nii');
+OVERLAYCOLORNAME(1,'blue_0_red');
+OVERLAYMINMAX(1,-4.5,4.5);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_1_z_placebo');
+OVERLAYCLOSEALL;
+
+//  #### Placebo R — CORRELATION W BEHAVIORAL PLACEBO  #### 
+
+// g Main effect placebo — Full sample
+over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla_cond_vs_sugg/rrating_diff/random/Cond_vs_Sugg_rrating_unthresh.nii');
+OVERLAYCOLORNAME(over1,'blue_0_red');
+OVERLAYMINMAX(over1,-0.40,0.40);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_2_rrating_diff_A');
+OVERLAYCLOSEALL;
+
+// g Main effect placebo — Full sample — SIGNIFICANT CLUSTERS AT p_uncorr<.001
+OVERLAYMASKEDBYBACKGROUND(false);
+over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla_cond_vs_sugg/rrating_diff/random/Cond_vs_Sugg_rrating_p001_pos.nii');
+OVERLAYCOLORNAME(over1,'0_red');
+OVERLAYMINMAX(over1,0.001,0.1);
+MOSAIC(SPECS_sig_pla_r);
+over2 := OVERLAYLOAD(BASEPATH_NII+'full/pla_cond_vs_sugg/rrating_diff/random/Cond_vs_Sugg_rrating_p001_neg.nii');
+OVERLAYCOLORNAME(over2,'0_blue');
+OVERLAYMINMAX(over2,0.001,0.1);
+SAVEBMP(BASEPATH_FIG+'Figure_2_rrating_diff_B');
+OVERLAYCLOSEALL;
+OVERLAYMASKEDBYBACKGROUND(true);
+
+// z Main effect placebo — Full sample
+OVERLAYLOAD(BASEPATH_NII+'full/pla_cond_vs_sugg/rrating_diff/random/Cond_vs_Sugg_rrating_z.nii');
+OVERLAYCOLORNAME(1,'blue_0_red');
+OVERLAYMINMAX(1,-4,4);
+MOSAIC(SPECS_standard);
+SAVEBMP(BASEPATH_FIG+'Figure_2_r_placebo_z');
+OVERLAYCLOSEALL;
+
+END.

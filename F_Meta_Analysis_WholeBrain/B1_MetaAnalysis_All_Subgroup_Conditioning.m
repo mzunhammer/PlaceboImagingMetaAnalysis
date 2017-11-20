@@ -40,6 +40,8 @@ placebo_stats_sugg=placebo_stats(~conditioning);
 summary_placebo_cond=GIVsummary(placebo_stats_cond,{'g','r_external'});
 summary_placebo_sugg=GIVsummary(placebo_stats_sugg,{'g','r_external'});
 
+% compareGIVsummary calculates effects as eff_1-eff_2
+% >> Conditioning?Suggestions only
 summary_c_vs_s=compareGIVsummary(summary_placebo_cond,summary_placebo_sugg);
 
 
