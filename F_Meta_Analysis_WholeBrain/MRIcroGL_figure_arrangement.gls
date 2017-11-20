@@ -296,7 +296,7 @@ OVERLAYHIDEZEROS(false);
 // g Main effect placebo — Full sample
 over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/rrating/random/Full_pla_rrating_unthresh.nii');
 OVERLAYCOLORNAME(over1,'blue_0_red');
-OVERLAYMINMAX(over1,-0.25,0.25);
+OVERLAYMINMAX(over1,-0.30,0.30);
 MOSAIC(SPECS_standard);
 SAVEBMP(BASEPATH_FIG+'Figure_3_r_placebo_A');
 OVERLAYCLOSEALL;
