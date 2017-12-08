@@ -46,3 +46,34 @@ print_summary_niis(summary_pain.g,df_conserv_masked.brainmask,'Conservative_pain
 %% Placebo Conservative
 print_summary_niis(summary_placebo.g,df_conserv_masked.brainmask,'Conservative_pla_g', './nii_results/conservative/pla/g/')
 print_summary_niis(summary_placebo.r_external,df_conserv_masked.brainmask,'Conservative_pla_rrating', './nii_results/conservative/pla/rrating/')
+
+
+%% Print single-study summaries
+brainmask='../../pattern_masks/brainmask_logical_50.nii';
+
+for i=1:length(placebo_stats)
+   template=zeros(size(df_full_masked.brainmask));
+   outimg_main=template;
+   if ~isempty(placebo_stats(i).g)
+       outimg_main(df_full_masked.brainmask)=placebo_stats(i).g;
+       printImage(outimg_main,brainmask,fullfile(['./nii_results/full/pla/g/study_level/',df_full_masked.studies{i}]));
+   end
+end
+
+for i=1:length(placebo_stats)
+   a(i)=nanmean(placebo_stats(i).g);
+end
+plot(a)
+xticks(1:20)
+xticklabels(df_full_masked.studies)
+%% Print single-subject contasts
+for i=1:length(placebo_stats)
+    if ~isempty(placebo_stats(i).g)
+        for j=1:size(placebo_stats(i).std_delta,1)
+           template=zeros(size(df_full_masked.brainmask));
+           outimg_main=template;
+           outimg_main(df_full_masked.brainmask)=placebo_stats(i).std_delta(j,:);
+           printImage(outimg_main,brainmask,fullfile(['./nii_results/full/pla/g/subject_level/',df_full_masked.studies{i},'_idx_',num2str(j)]));
+        end
+    end
+end
