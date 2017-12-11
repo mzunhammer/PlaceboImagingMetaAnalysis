@@ -45,11 +45,19 @@ for i=1:length(runstudies)
     currtablename=varnames(structfun(@istable,varload));
     %Load the variably named table into "df"
     df=varload.(currtablename{:});
-    %Construct full image path
     infile=df.img;
+    %Construct full image path for output
     [path,filename,ext]=cellfun(@fileparts,infile,'UniformOutput',0);
-    df.norm_img=fullfile(path,strcat(strcat('r_',filename),ext));
+    smooth_img=fullfile(path,strcat(strcat('s_',filename),ext)); %does not go to df as only needed intermediately
+    df.smooth_norm_img=fullfile(path,strcat(strcat('sr_',filename),ext));
     
+    % Smooth
+    spm_jobman('run', matlabbatch);
+    matlabbatch
+    
+    
+    % Reslice and mask
+    clear matlabbatch
     for j=1:length(infile)
         matlabbatch{j}.spm.util.imcalc.input = {
                                                 maskpath

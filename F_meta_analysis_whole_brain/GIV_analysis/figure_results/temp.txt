@@ -1,0 +1,1 @@
+=====[ ./nii_results/full/pla/rrating/random/Full_pla_rrating_g15neg.nii | Cerebellar Atlas in MNI152 space after normalization with FLIRT ]=====
