@@ -110,12 +110,7 @@ n_blocks=vertcat(n_blocks(:));
 con_span      =ones(size(cond)).*1;
 
 % Create Study-Specific table
-outpath=fullfile(basedir,'Geuter_et_al_2013.mat')
-if exist(outpath)==2
-    load(outpath);
-else
-    geuter=table(img);
-end
+geuter=table(img);
 geuter.img=img;
 geuter.study_ID=repmat({'geuter'},size(geuter.img));
 geuter.sub_ID=strcat(geuter.study_ID,'_',num2str(sub));
@@ -139,7 +134,8 @@ geuter.n_imgs      =n_imgs; % Images per Participant
 geuter.x_span        =x_span;
 geuter.con_span      =con_span;
 
-%% Save
-save(outpath,'geuter')
-
+%% Save in data_frame
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'geuter')),'raw'}={geuter};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

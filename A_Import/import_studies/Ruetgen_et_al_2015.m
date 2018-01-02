@@ -72,12 +72,7 @@ rating101=rating*(100/6); % SEVEN POINT RATING SCALE WITH MAX 6!!! >> Scale to 1
 
 
 % Create Study-Specific table
-outpath=fullfile(basedir,'Ruetgen_et_al_2015.mat');
-if exist(outpath)==2
-    load(outpath);
-else
-    ruetgen=table(img);
-end
+ruetgen=table(img);
 ruetgen.img=img;
 ruetgen.study_ID=repmat({'ruetgen'},size(ruetgen.img));
 ruetgen.sub_ID=strcat(ruetgen.study_ID,'_',sub);
@@ -102,6 +97,7 @@ ruetgen.x_span        =x_span;
 ruetgen.con_span      =ones(size(ruetgen.cond)).*1;
 
 %% Save
-save(outpath,'ruetgen')
-
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'ruetgen')),'raw'}={ruetgen};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

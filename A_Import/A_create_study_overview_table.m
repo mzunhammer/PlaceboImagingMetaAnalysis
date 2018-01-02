@@ -1,3 +1,4 @@
+function A_create_study_overview_table()
 clear
 %% Creates an overview table for study-level information
 % data collected from original publications, mat-files, and personal
@@ -5,7 +6,7 @@ clear
 
 study_id={
 'atlas'
-'bingel'
+'bingel06'
 'bingel11'
 'choi'
 'eippert'
@@ -57,17 +58,39 @@ n=[
 'Elsenbruch_et_al_2012' %'elsenbruch'
 'Freeman_et_al_2015' %'freeman'
 'Geuter_et_al_2013' %'geuter'
-'Huber_et_al_2013' %'kessner'
-'Kessner_et_al_201314' %'kong06'
-'Kong_et_al_2006' %'kong09'
-'Kong_et_al_2009' %'lui'
-'Lui_et_al_2010' %'ruetgen'
-'Ruetgen_et_al_2015' %'schenk'
-'Schenk_et al_2014' %'theysohn'
-'Theysohn_et_al_2014' %'wager04a_princeton'
-'Wager_et_al_2004' %'wager04b_michigan'
-'Wrobel_et_al_2014' %'wrobel'
+'Kessner_et_al_201314' %kessner
+'Kong_et_al_2006' %'kong06'
+'Kong_et_al_2009' %'kong009'
+'Lui_et_al_2010' %'lui'
+'Ruetgen_et_al_2015' %'ruetgen'
+'Schenk_et_al_2014' %'schenk'
+'Theysohn_et_al_2014' %'theysohn'
+'Wager_et_al_2004a_Princeton_shock' %'wager04a'
+'Wager_et_al_2004b_Michigan_heat' %'wager04b'
+'Wrobel_et_al_2014' %'wrobel14'
 'Zeidan_et_al_2015'}; %'zeidan'
+
+study_design={
+'within' %'atlas'
+'within' %'bingel'
+'within' %'bingel11'
+'within' %'choi'
+'within' %'eippert'
+'within' %'ellingsen'
+'within' %'elsenbruch'
+'within' %'freeman'
+'within' %'geuter'
+'between' %'kessner' (mixed design, but "between-group" in respect to placebo conditioning)
+'within' %'kong06'
+'within' %'kong09'
+'within' %'lui'
+'between' %'ruetgen'
+'within' %'schenk'
+'within' %'theysohn'
+'within' %'wager04a_princeton'
+'within' %'wager04b_michigan'
+'within' %'wrobel'
+'within'}; %'zeidan'
 
 img_modality={
 'fMRI' %'atlas'
@@ -487,12 +510,16 @@ contrast_ratings_only=[
 0 %'wrobel'
 1]; %'zeidan'
 
-df_study=table(study_id,study_dir,n,...
+raw=cell(length(study_id),1); %placeholder for image data-tables
+
+df=table(study_id,study_dir,n,study_design,...
       img_modality,field_strength,TR,TE,voxel_size_at_acq,...
       voxel_size_img,slice_timing_correction,temporal_high_pass_filter,spatial_smoothing_FWHM,...
       contrast_imgs_only,image_type,analysis_software,...
       modeled_stimulus_duration,stimulus_duration,stim_type,stim_location,...
-      placebo_form, placebo_induction,contrast_ratings_only);
+      placebo_form, placebo_induction,contrast_ratings_only,...
+      raw);
 
 datadir = '../../datasets/';
-save([datadir,'df_study_level'], 'df_study');
+save([datadir,'data_frame'], 'df');
+end

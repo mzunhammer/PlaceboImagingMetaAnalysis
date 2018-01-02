@@ -135,12 +135,7 @@ rating101=(rating-5)*100/5;
 rating101(rating101<0)=0;
 
 % Create Study-Specific table
-outpath=fullfile(basedir,'Ellingsen_et_al_2013.mat');
-if exist(outpath)==2
-    load(outpath);
-else
-    ellingsen=table(img);
-end
+ellingsen=table(img);
 ellingsen.img=img;
 ellingsen.study_ID=repmat({'ellingsen'},size(ellingsen.img));
 ellingsen.sub_ID=strcat(ellingsen.study_ID,'_',sub);
@@ -166,7 +161,8 @@ ellingsen.n_imgs      =n_imgs; % Images per Participant
 ellingsen.x_span        =x_span;
 ellingsen.con_span      =ones(size(ellingsen.img));
 
-%% Save
-save(outpath,'ellingsen')
-
+%% Save in data_frame
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'ellingsen')),'raw'}={ellingsen};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

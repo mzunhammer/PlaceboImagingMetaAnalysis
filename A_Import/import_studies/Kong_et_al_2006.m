@@ -107,12 +107,7 @@ rating=[xlsread(xls_path,1,'H3:H12');...
         xlsread(xls_path,1,'M3:M12')];
 
 % Create Study-Specific table
-outpath=fullfile(basedir,'Kong_et_al_2006.mat');
-if exist(outpath)==2
-    load(outpath);
-else
-    kong06=table(img);
-end
+kong06=table(img);
 kong06.img=img;
 kong06.study_ID=repmat({'kong06'},size(kong06.img));
 kong06.sub_ID=sub;
@@ -137,6 +132,8 @@ kong06.x_span        =NaN(size(img));       % currently unknown(?)
 kong06.con_span      =NaN(size(img));       % currently unknown(?) 
 
 %% Save
-save(outpath,'kong06')
-
+%% Save in data_frame
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'kong06')),'raw'}={kong06};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

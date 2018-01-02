@@ -106,12 +106,7 @@ n_imgs=n_imgs(:);
 % unbearable pain
 rating101=rating;
 %% Collect all Variables in Table
-outpath=fullfile(basedir,'Bingel_et_al_2011.mat');
-if exist(outpath)==2
-    load(outpath);
-else
-    bingel11=table(img);
-end
+bingel11=table(img);
 bingel11.img=img;
 bingel11.study_ID=repmat({'bingel11'},size(bingel11.img));
 bingel11.sub_ID=strcat(bingel11.study_ID,'_',vertcat(sub{:}));
@@ -136,7 +131,8 @@ bingel11.x_span        =x_span;
 bingel11.x_span(strcmp(bingel11.sub_ID,'bingel11_14'))=NaN;
 % For Subj14 (10th subject in array) one onset for pain has been entered in duplicate: the x-Vector is flawed.
 bingel11.con_span      =con_span;
-%% Save
-save(outpath,'bingel11')
-
+%% Save in data_frame
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'bingel11')),'raw'}={bingel11};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

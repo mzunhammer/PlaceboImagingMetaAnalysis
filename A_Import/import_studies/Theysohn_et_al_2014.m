@@ -94,12 +94,7 @@ theyrxls=fullfile(basedir,studydir,'Theysohn_et_al_NMO_2014 bereignigte Reihenfo
 
 %% Collect all Variables in Table
 % Create Study-Specific table
-outpath=fullfile(basedir,'Theysohn_et_al_2014.mat');
-if exist(outpath)==2
-    load(outpath);
-else
-    they=table(img);
-end
+they=table(img);
 they.img=img;
 they.study_ID=repmat({'theysohn'},size(they.img));
 they.sub_ID=repmat(strcat('theysohn_',theyfolders)',nbeta,1);
@@ -129,6 +124,7 @@ they.n_imgs      =n_imgs; % Images per Participant
 they.x_span        =x_span;
 they.con_span      =ones(size(they.img)); %beta images used
 %% Save
-save(outpath,'they')
-
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'theysohn')),'raw'}={they};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

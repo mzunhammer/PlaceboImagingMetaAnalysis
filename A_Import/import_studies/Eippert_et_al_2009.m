@@ -111,12 +111,7 @@ placebo_first=xlsread(xls_path,1,'E2:E41');
 placebo_first=repmat(placebo_first,6,1);
 
 %% Collect all Variables in Table
-outpath=fullfile(basedir,'Eippert_et_al_2009.mat');
-if exist(outpath)==2
-    load(outpath);
-else
-    eippert=table(img);
-end
+eippert=table(img);
 eippert.img=img;
 eippert.study_ID=repmat({'eippert'},size(eippert.img));
 eippert.sub_ID=strcat(eippert.study_ID,'_',repmat(subfolder',6,1));
@@ -139,7 +134,8 @@ eippert.n_blocks      =ones(size(eippert.img)).*15; % Number of blocks per condi
 eippert.n_imgs      =n_imgs; % Images per Participant 
 eippert.x_span        =x_span;
 eippert.con_span      =con_span;
-%% Save
-save(outpath,'eippert');
-
+%% Save in data_frame
+load(fullfile(basedir,'data_frame.mat'))
+df{find(strcmp(df.study_id,'eippert')),'raw'}={eippert};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

@@ -113,12 +113,7 @@ temp=NaN(size(img));            % Not yet available
 x_span=vertcat(x_span(:));
 
 % Create Study-Specific table
-outpath=fullfile(basedir,'Huber_et_al_2013.mat');
-if exist(outpath)==2
-    load(outpath);
-else
-    huber=table(img);
-end
+huber=table(img);
 huber.img=img;
 huber.study_ID=repmat({'huber'},size(huber.img));
 huber.sub_ID=i_sub(:);
@@ -141,7 +136,8 @@ huber.n_blocks      =ones(size(huber.cond)).*6;
 huber.n_imgs      =n_imgs; % Images per Participant
 huber.x_span        =x_span;
 huber.con_span      =con_span(:);
-%% Save
-save(outpath,'huber')
-
+%% Save in data_frame
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'huber')),'raw'}={huber};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

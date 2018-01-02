@@ -91,12 +91,7 @@ n_blocks=[nBlocks_anti_control,nBlocks_anti_treatment,nBlocks_pain_control,nBloc
 n_blocks=imgs_per_stimulus_block(:);
 
 % Create Study-Specific table
-outpath=fullfile(basedir,'Kessner_et_al_201314.mat')
-if exist(outpath)==2
-    load(outpath);
-else
-    kessner=table(img);
-end
+kessner=table(img);
 kessner.img=img;
 kessner.study_ID=repmat({'kessner'},size(kessner.img));
 kessner.sub_ID=strcat(kessner.study_ID,'_',[sub{:}]');
@@ -123,7 +118,8 @@ kessner.n_imgs      =n_imgs; % Images per Participant
 kessner.x_span        =x_span;
 kessner.con_span      =ones(size(kessner.cond)).*1;
 
-%% Save
-save(outpath,'kessner')
-
+%% Save in data_frame
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'kessner')),'raw'}={kessner};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

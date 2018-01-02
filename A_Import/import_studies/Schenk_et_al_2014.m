@@ -9,7 +9,7 @@ basedir = '../../../Datasets/';
 
 %% Load images paths
 %and extract/assign experimental conditions from/to image names
-studydir= 'Schenk_et al_2014';
+studydir= 'Schenk_et_al_2014';
 schenkdir = dir(fullfile(basedir, studydir));
 dirnames={schenkdir.name};
 isubfolder=regexp(dirnames,'sub\d\d');
@@ -137,12 +137,7 @@ stim_side=cell(size(img));
 stim_side(stimside_raw<=2)={'R'};
 stim_side(stimside_raw>=3)={'L'};
 %% Collect all Variables in Table
-outpath=fullfile(basedir,'Schenk_et_al_2014.mat')
-if exist(outpath)==2
-    load(outpath);
-else
-    schenk=table(img);
-end
+schenk=table(img);
 schenk.img=img;
 schenk.study_ID=repmat({'schenk'},size(schenk.img));
 schenk.sub_ID=strcat(schenk.study_ID,'_',repmat(subfolder',nbetas,1));
@@ -167,6 +162,8 @@ schenk.x_span        =x_span;
 schenk.con_span      =ones(size(cond));
 
 %% Save
-save(outpath,'schenk');
-
+%% Save
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'schenk')),'raw'}={schenk};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

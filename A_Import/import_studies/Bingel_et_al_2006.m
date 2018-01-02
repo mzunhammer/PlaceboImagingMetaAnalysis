@@ -3,10 +3,10 @@ function Bingel_et_al_2006
 %% Collects all behavioral data and absolute img-paths for Elsenbruch 2012
 % in a data frame, saves as .mat
 % Since second session data for participant CK and FK were missing these
-% were replaced by "dummy" images (Session 1) where all values were replaced with NaNs.
+% were replaced by all-NaN "dummy" images
 
 %% Set working environment
-clear
+
 basedir = '../../../Datasets/';
 
 %% Load images paths
@@ -37,7 +37,7 @@ sides={'L'...
 bingelfolders=dir(fullfile(basedir,studydir));
 bingelfolders={bingelfolders.name};
 bingelfolders=bingelfolders(~cellfun(@isempty,...
-                            regexpi(bingelfolders','^\w+$','match')));
+                            regexp(bingelfolders','^\w{2,4}$','match')));
 nsubj=length(bingelfolders);
 
 img={};
@@ -152,14 +152,7 @@ rating101(rating101<0)=0;
 % 0= NoPain 1=FullPain 2=EarlyPain 3=LatePain
 pain=~cellfun(@isempty,regexpi(cond,'pain','match'));  
 %% Collect all Variables in Table
-% If the current table already exists only replace fields (so that NPS values etc. do not have to be re-calculated)
-outpath=fullfile(basedir,'Bingel_et_al_2006.mat')
-if exist(outpath)==2
-    load(outpath);
-else
-    bingel06=table(img);
-end
-% Create Study-Specific table
+bingel06=table(img);
 bingel06.img=img;
 bingel06.study_ID=repmat({'bingel'},size(bingel06.img));
 bingel06.sub_ID=strcat('bingel06_',sub);
@@ -183,6 +176,8 @@ bingel06.n_imgs      =n_imgs; % Images per Participant AND SIDE!!! number of ima
 bingel06.x_span        =x_span;
 bingel06.con_span      =con_span; %con images used
 bingel06(cellfun(@isempty,bingel06.img),:)=[]; % Delete missing sessions
-%% Save
-save(outpath,'bingel06')
+%% Save in data_frame
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'bingel06')),'raw'}={bingel06};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

@@ -1,4 +1,4 @@
-function Wager_et_al_2004a_princeton_shock
+function Wager_et_al_2004a_Princeton_shock
 
 %% Set working environment
 clear
@@ -6,7 +6,7 @@ basedir = '../../../Datasets/';
 
 %% Load images paths
 %and extract/assign experimental conditions from/to image names
-studydir = 'Wager_et_al_2004/Study1_Princeton_shock';
+studydir = 'Wager_et_al_2004a_Princeton_shock';
 load(fullfile(basedir,studydir,'EXPTrilling.mat'));
 % Get subject-directorys from EXPT.mat
 subdir=EXPTrilling.subdir;
@@ -137,13 +137,7 @@ con_span(~cellfun(@isempty, (regexp(img,'0005.img'))),1) =2; % Differential Cont
 con_span(~cellfun(@isempty, (regexp(img,'0006.img'))),1) =4; % Differential Contrast from betas 2  7 12  17 and 3  8 13 18 -> Contrast weigths add to 0, positive weights add to 4
 
 % Create Study-Specific table
-outpath=fullfile(basedir,'Wager_at_al_2004a_princeton_shock.mat');
-if exist(outpath)==2
-    load(outpath);
-else
-    wager_princeton=table(img);
-end
-
+wager_princeton=table(img);
 wager_princeton.img=img;
 wager_princeton.study_ID=repmat({'wager04a_princeton'},size(wager_princeton.img));
 wager_princeton.sub_ID=strcat(wager_princeton.study_ID,'_',sub);
@@ -168,6 +162,7 @@ wager_princeton.x_span        =x_span;
 wager_princeton.con_span      =ones(size(wager_princeton.cond)).*1;
 
 %% Save
-save(outpath,'wager_princeton')
-
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'wager04a_princeton')),'raw'}={wager_princeton};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

@@ -1,6 +1,5 @@
 function Choi_et_al_2011
 
-
 %% Collects all behavioral data and absolute img-paths for Choi et al. 2011
 % in a data frame, saves as .mat
 
@@ -107,12 +106,7 @@ end
 
 %% Create Study-Specific table
 % If the current table already exists only replace fields (so that NPS values etc. do not have to be re-calculated)
-outpath=fullfile(basedir,'Choi_et_al_2013.mat');
-if exist(outpath)==2
-    load(outpath);
-else
-    choi=table(img);
-end
+choi=table(img);
 choi.img=img;
 choi.study_ID=repmat({'choi'},size(choi.img));
 choi.sub_ID=strcat(choi.study_ID,'_',sub);
@@ -136,7 +130,8 @@ choi.n_blocks      =ones(size(choi.cond)).*5; % According to paper there were 5 
 choi.n_imgs      =n_imgs; % Images per Participant: Note that separae GLMs were performed for the different experimental placebo conditions AND that exp 2 seems not to be included in the original publications. Therefore the number of images/participant was 300*2=600
 choi.x_span        =x_span;
 choi.con_span      =ones(size(choi.img));
-%% Save
-save(outpath,'choi')
-
+%% Save in data_frame
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'choi')),'raw'}={choi};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

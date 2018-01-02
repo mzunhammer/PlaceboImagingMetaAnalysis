@@ -68,12 +68,7 @@ pain(ismember(beta,6),1)=1;
 
 elsenbrxls=fullfile(basedir,studydir,'Elsenbruch_2012_behavioral.xlsx');
 %% Import behavioral from Excel-Sheet and Collect all Variables in Table
-outpath=fullfile(basedir,'Elsenbruch_et_al_2012.mat')
-if exist(outpath)==2
-    load(outpath);
-else
-    elsenb=table(img);
-end
+elsenb=table(img);
 elsenb.img=img;
 % Create Study-Specific table
 elsenb.study_ID=repmat({'elsenbruch'},size(elsenb.img));
@@ -107,7 +102,8 @@ elsenb.n_blocks      =ones(size(elsenb.img)).*8; % Number of blocks per conditio
 elsenb.n_imgs      =n_imgs; % Images per Participant
 elsenb.x_span        =x_span;
 elsenb.con_span      =ones(size(elsenb.img)); %beta images used
-%% Save
-save(outpath,'elsenb')
-
+%% Save in data_frame
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'elsenbruch')),'raw'}={elsenb};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

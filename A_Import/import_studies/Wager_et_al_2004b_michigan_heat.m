@@ -1,4 +1,4 @@
-function Wager_et_al_2004b_michigan_heat
+function Wager_et_al_2004b_Michigan_heat
 
 %% Set working environment
 clear
@@ -6,7 +6,7 @@ basedir = '../../../Datasets/';
 
 %% Import Wager_et_al_2004: Study 2 (michigan heat)
 
-studydir = 'Wager_et_al_2004/Study2_Michigan_heat';
+studydir = 'Wager_et_al_2004b_Michigan_heat';
 load(fullfile(basedir,studydir,'EXPT.mat'));
 % Get subject-directorys from EXPT.mat
 subdir=EXPT.subdir;
@@ -76,13 +76,7 @@ rating= NaN(size(cond));
 rating(strcmp(cond,'placebo_pain'))=EXPT.behavior; % ATTENTION: Unfortunately for images placebo & control are available as separate conditions, while for behavior only the contrast control-placebo is available...
 
 % Create Study-Specific table
-
-outpath=fullfile(basedir,'Wager_et_al_2004b_michigan_heat.mat');
-if exist(outpath)==2
-    load(outpath);
-else
-    wager_michigan=table(img);
-end
+wager_michigan=table(img);
 wager_michigan.img=img;
 wager_michigan.study_ID=repmat({'wager04b_michigan'},size(wager_michigan.img));
 wager_michigan.sub_ID=strcat(wager_michigan.study_ID,'_',sub);
@@ -106,6 +100,7 @@ wager_michigan.n_imgs      =vertcat(n_imgs(:)); % Images per Participant
 wager_michigan.x_span        =x_span;
 wager_michigan.con_span      =ones(size(wager_michigan.cond));
 %% Save
-save(outpath,'wager_michigan')
-
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'wager04b_michigan')),'raw'}={wager_michigan};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

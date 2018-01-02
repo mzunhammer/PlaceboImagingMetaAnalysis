@@ -83,12 +83,7 @@ x_span =wrobelxSpanslong;
 con_span      =ones(size(cond)).*1;
 
 % Create Study-Specific table
-outpath=fullfile(basedir,'Wrobel_et_al_2014.mat')
-if exist(outpath)==2
-    load(outpath);
-else
-    wrobel=table(img);
-end
+wrobel=table(img);
 wrobel.img=img;
 wrobel.study_ID=repmat({'wrobel'},size(wrobel.img));
 wrobel.sub_ID=strcat(wrobel.study_ID,'_',num2str(sub));
@@ -117,6 +112,7 @@ wrobel.n_imgs      =n_imgs; % Images per Participant
 wrobel.x_span        =x_span;
 wrobel.con_span      =ones(size(wrobel.cond));
 %% Save
-save(outpath,'wrobel')
-
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'wrobel')),'raw'}={wrobel};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

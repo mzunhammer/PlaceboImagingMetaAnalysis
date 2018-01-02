@@ -42,12 +42,7 @@ cond=[repmat({'pain_post_control_high_pain'},size(img_pain_control));...
 xls_path=fullfile(basedir, studydir, 'Behav-kong-neuroimage2015-withGender.xlsx');
 
 % Create Study-Specific table
-outpath=fullfile(basedir,'Freeman_et_al_2015.mat');
-if exist(outpath)==2
-    load(outpath);
-else
-    freeman=table(img);
-end
+freeman=table(img);
 freeman.img=img;
 freeman.study_ID=repmat({'freeman'},size(freeman.img));
 freeman.sub_ID=sub;
@@ -90,7 +85,8 @@ freeman.con_span      =[ones(size(img_pain_control));...
                        ones(size(img_pain_placebo));...
                        ones(size(img_painHiLo))*2;...
                        ones(size(img_painAllPrevsBL))*2];
-%% Save
-save(outpath,'freeman')
-
+%% Save in data_frame
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'freeman')),'raw'}={freeman};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

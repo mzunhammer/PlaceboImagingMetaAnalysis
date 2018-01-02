@@ -80,12 +80,7 @@ for i= 1:length(img)
  end
 
 % Create Study-Specific table
-outpath=fullfile(basedir,'Zeidan_et_al_2015.mat')
-if exist(outpath)==2
-    load(outpath);
-else
-    zeidan=table(img);
-end
+zeidan=table(img);
 zeidan.img=img;
 zeidan.study_ID=repmat({'zeidan'},size(zeidan.img));
 zeidan.sub_ID=strcat(zeidan.study_ID,'_',sub);
@@ -113,6 +108,7 @@ zeidan.con_span      =[ones(size(zeidandir))*4;
                       ones(size(zeidandir))*4;
                       ones(size(zeidandir))*4]; %Use design calculator in B_Unpack_and_Contrast_Zeidan to get contrast weights.
 %% Save
-save(outpath,'zeidan')
-
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'zeidan')),'raw'}={zeidan};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

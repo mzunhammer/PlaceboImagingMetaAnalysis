@@ -1,7 +1,6 @@
 function Atlas_et_al_2012
 
 %% Set working environment
-clear
 basedir = '../../../Datasets/';
 
 %% Import Atlas_et_al_2012: Study 2
@@ -206,12 +205,7 @@ rating101(isnan(rating))=NaN; %Cannot do the same as above, as there are actual 
         i_condition_in_sequence(~cellfun(@isempty, regexp(cond,'Hidden'))&openFirst==0)=1;
 
 % Create Study-Specific table
-outpath=fullfile(basedir,'Atlas_et_al_2012.mat');
-if exist(outpath)==2
-    load(outpath);
-else
-    atlas=table(img);
-end
+atlas=table(img);
 atlas.img=img;
 atlas.study_ID=repmat({'atlas'},size(atlas.img));
 atlas.sub_ID=strcat(atlas.study_ID,'_',[sub{:}]');
@@ -234,7 +228,8 @@ atlas.n_blocks      =n_blocks; % According to SPM
 atlas.n_imgs      =n_imgs; % Images per Participant
 atlas.x_span      =x_span;
 atlas.con_span    =ones(size(atlas.cond));
-%% Save
-save(outpath,'atlas');
-
+%% Save in data_frame
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'atlas')),'raw'}={atlas};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

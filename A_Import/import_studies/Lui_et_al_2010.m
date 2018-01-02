@@ -112,15 +112,8 @@ temp=NaN(size(img));            % Not yet available
 x_span=vertcat(x_span(:));
 
 % Create Study-Specific table
-outpath=fullfile(basedir,'Lui_et_al_2010.mat')
-if exist(outpath)==2
-    load(outpath);
-else
-    lui=table(img);
-end
+lui=table(img);
 lui.img=img;
-lui.img_type=repmat({'fMRI'},size(lui.img));
-lui.study_design=repmat({'within'},size(lui.img));
 lui.study_ID=repmat({'lui'},size(lui.img));
 lui.sub_ID=i_sub(:);
 lui.male=vertcat(male(:));
@@ -130,30 +123,21 @@ lui.pla=vertcat(pla(:));
 lui.pain=pain;
 lui.predictable=ones(size(lui.img));                %No uncertainty: Fixed 12 second anticipation
 lui.real_treat=zeros(size(lui.img));                 %No real treatment
-lui.cond=vertcat(cond(:));             
-lui.stim_type=repmat({'laser'},size(lui.img));
-lui.stim_loc=repmat({'L or R foot (v)'},size(lui.img));
+lui.cond=vertcat(cond(:));
 lui.stim_side=vertcat(stim_side(:));       %Very important in this study: some subjects were stimulated left, some right
-lui.placebo_form=repmat({'TENS'},size(lui.img));
-lui.placebo_induction=repmat({'Suggestions + Conditioning'},size(lui.img));
 lui.placebo_first=placebo_first;
 lui.i_condition_in_sequence=i_condition_in_sequence;
 lui.rating=vertcat(rating(:)); % % Ratings were performed on a 101pt-VAS from no pain to "worst imagingable pain", but scaled in 255 steps.  
 lui.rating101=lui.rating*100/255;
 lui.stim_intensity=vertcat(stim_intensity(:));             
-lui.field_strength=ones(size(lui.img)).*3;
-lui.tr           =ones(size(lui.img)).*3014;
-lui.te           =ones(size(lui.img)).*35;
-lui.voxel_vol_at_acq  =ones(size(lui.img)).*(1.875*1.875*3.5);
-lui.voxel_vol_image  =ones(size(lui.img)).*(2*2*2);
 lui.imgs_per_stimulus_block =imgs_per_stimulus_block; % Paper and SPM agree
 lui.n_blocks      =ones(size(lui.cond)).*6;
 lui.n_imgs      =n_imgs; % Images per Participant
 lui.x_span        =x_span;
 lui.con_span      =con_span(:);
-lui.fsl          =zeros(size(lui.cond)); %analysis with fsl, rather than SPM
 
 %% Save
-save(outpath,'lui')
-
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'lui')),'raw'}={lui};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end

@@ -46,12 +46,7 @@ cond=[repmat({'pain_pre_control'},size(img_pain_control_pre));...
 xls_path=fullfile(basedir, studydir, 'Behav-kong-neuroimage2009.xlsx');
 
 % Create Study-Specific table
-outpath=fullfile(basedir,'Kong_et_al_2009.mat')
-if exist(outpath)==2
-    load(outpath);
-else
-    kong09=table(img);
-end
+kong09=table(img);
 kong09.img=img;
 kong09.study_ID=repmat({'kong09'},size(kong09.img));
 kong09.sub_ID=sub;
@@ -86,6 +81,7 @@ kong09.x_span        =NaN(size(img)); % currently unknown(?)
 kong09.con_span      =NaN(size(img)); % currently unknown(?)
 
 %% Save
-save(outpath,'kong09')
-
+load(fullfile(basedir,'data_frame.mat'));
+df{find(strcmp(df.study_id,'kong09')),'raw'}={kong09};
+save(fullfile(basedir,'data_frame.mat'),'df');
 end
