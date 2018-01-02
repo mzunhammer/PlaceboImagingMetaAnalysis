@@ -65,7 +65,7 @@ for j=1:length(varselect) % Loop through all outcome variables
     v=find(strcmp(df_full.variables,currvar));
     for i=1:length(df_full.studies) % Loop through all studies...
         rating_var_and_con_only=(any(strcmp(ratingvars,currvar)) && df_full.consOnlyRating(i)==1);
-        img_var_and_con_only=(any(strcmp(imagingvars,currvar)) && df_full.consOnlyNPS(i)==1)
+        img_var_and_con_only=(any(strcmp(imagingvars,currvar)) && df_full.consOnlyNPS(i)==1);
         if  ~rating_var_and_con_only && ~img_var_and_con_only % where both pla and con is available.
             if df_full.BetweenSubject(i)==0 %Use withinMetastats for within-subject studies
                stats.(currvar)(i)=withinMetastats(df_full.pladata{i}(:,v),df_full.condata{i}(:,v));

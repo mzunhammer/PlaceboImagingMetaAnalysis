@@ -5,7 +5,7 @@ runstudies={...
 'Atlas_et_al_2012'
 'Bingel_et_al_2006'
 'Bingel_et_al_2011'
-'Choi_et_al_2013'
+'Choi_et_al_2011'
 'Eippert_et_al_2009'
 'Ellingsen_et_al_2013'
 'Elsenbruch_et_al_2012'
