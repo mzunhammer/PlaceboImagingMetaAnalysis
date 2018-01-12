@@ -79,8 +79,8 @@ se_mu=sd_diff./sqrt(n);  %by-study se (based on SD of differences!)
 %sd1=nanstd(cond1);
 %sd2=nanstd(cond2);
 %sd_pooled=(sd1+sd2)/2;
-% We use what Lakens calls: "Cohen's d_rm", which is also used in
-% Borenstein et al.
+% We use what Lakens calls: "Cohen's d_rm", which is also used by
+% [1] Borenstein et al.
 sd_pooled=sd_diff./sqrt(2.*(1-r));% see:[1], Formula 4.27
 d=mu./sd_pooled; % see:[1]
 

@@ -1,8 +1,6 @@
 %% Script checking if GIV functions betweenMetastats, withinMetastats, and
 % GIVsummary yield valid results
 clear
-cd /Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis/A_Analysis_GIV_Functions/
-
 tol=0.001; % absolute tolerance for deviations for all values tested
 %% Calculate BETWEEN Metastats
 % Version with two data-sets
@@ -43,7 +41,7 @@ y1=repmat(y1,1,3);
 y2=repmat(y2,1,3);
 
 % Let the function do its job
-BWStudyStat=betweenMetastats(y1,y2);
+BWStudyStat=summarize_between(y1,y2);
 % >>Assert results
 fields=fieldnames(BWStudyStat);
 for i = 1:length(fields)
@@ -110,7 +108,7 @@ y1=repmat(y1,1,3);
 y2=repmat(y2,1,3);
 
 % Let the function do its job
-WIStudyStat=withinMetastats(y1,y2);
+WIStudyStat=summarize_within(y1,y2);
 
 % >>Assert results
 fields=fieldnames(WIStudyStat);
@@ -127,7 +125,7 @@ end
 
 y_diff=y1-y2;
 rr=corr(y1,y2,'rows','complete');
-WIStudyStat2=withinMetastats(y_diff,rr(2));
+WIStudyStat2=summarize_within(y_diff,rr(2));
 
 % >>Assert results
 fields=fieldnames(WIStudyStat2);
@@ -152,7 +150,7 @@ disp('Within-Metastats all match Example Results')
 
 %SUMMARY_stat=[WItarget,BWtarget];% Simple version: Using Hedge's g for the former TARGETS
 SUMMARY_stat=[WIStudyStat,BWStudyStat];
-summary=GIVsummary(SUMMARY_stat);
+summary=GIV_summary(SUMMARY_stat);
 
 % For summary stats, study-target results were fed into refMan5 (random effects analysis).
 %Since refMan returns only rounded results, assertions had to be rounded to two
