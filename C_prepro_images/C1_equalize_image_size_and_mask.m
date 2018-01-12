@@ -19,7 +19,7 @@ load(df_path);
 %% Loop through studies, create 2x2x2 images, add to table 
 tic
 h = waitbar(0,'Calculating masked images, studies completed:');
-for i=1%:size(df.full,1)
+for i=1:size(df.full,1)
     %Load struct of all contrasts for a study 
     curr_fields=fieldnames(df.full(i));
     for j=1:length(curr_fields)

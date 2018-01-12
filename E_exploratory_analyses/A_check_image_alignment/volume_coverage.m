@@ -1,5 +1,5 @@
 function volume_coverage(image_vector,outfilename)
-% Function that takes an volume vector and looks for all non-zero/nan voxels
+% Function that takes a list of images and looks for all non-zero/nan voxels
 % Then creates an output image that shows % of volume having
 % non-zero/nan values at every given voxel.
 

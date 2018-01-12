@@ -1,17 +1,14 @@
 clear
 
-datapath='../../Datasets/';
-df_name='AllData';
-load(fullfile(datapath,[df_name '.mat']));
+datapath='../../datasets/';
+df_name='data_frame.mat';
+load(fullfile(datapath,df_name));
+
+% Use mean_pla_con, bc this includes within and between studies
+df_all=vertcat(df.full(:).mean_pla_con);
 
 % Get df with only first entry per subject for demographics
-[uniquesubs,ia,ic]=unique(df.subID);
-dfs=df(ia,:);      %dataframe single-data-point-per-subject
-[ustuds,ia,ic]=unique(df.studyID);
-dfstud=df(ia,:);      %dataframe single-data-point-per-subject
-
-['Total number of independent subjects:' num2str(height(dfs))]
-
+fprintf('Total number of independent subjects: %d\n',length(df_all.sub_ID))
 
 
 df_by_subID=varfun(@mean,df,'InputVariables',{'ex_lo_p_ratings','ex_img_artifact','ex_all'},...
