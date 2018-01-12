@@ -38,19 +38,18 @@ df.spatial_smoothing_FWHM_est=est_smoothness;
 % >> Target smoothness the maximum FWHM smoothness estimate in the sample
 % (across all three spatial dimensions)
 
-FWHM_target=max(max(df.spatial_smoothing_FWHM_est));
+FWHM_target=max(max(df.spatial_smoothing_FWHM));
 tic
 h = waitbar(0,'Smoothing, studies completed:');
 for i=1:n
     %Load struct of all contrasts for a study 
-    curr_est_FWHM=df.spatial_smoothing_FWHM_est(i,:);
-    %Smoothness adds like SD: smoothness_A^2+smoothness_B^2=smoothness_C^2 >>
+    curr_est_FWHM=df.spatial_smoothing_FWHM(i,:);
+    %Smoothness should add like SD: smoothness_A^2+smoothness_B^2=smoothness_C^2
     FWHM_to_apply=sqrt(FWHM_target^2-curr_est_FWHM.^2);
     
     curr_fields=fieldnames(df.full(i));
     for j=1:length(curr_fields)
-        if istable(df.full(i).(curr_fields{j}))
-        if ~isempty(df.full(i).(curr_fields{j}))
+        if istable(df.full(i).(curr_fields{j})) && (~isempty(df.full(i).(curr_fields{j})))
         %Construct output-path for smoothed images and and add to table
         [path,filename,ext]=cellfun(@fileparts,...
                                     df.full(i).(curr_fields{j}).norm_img,...
@@ -65,7 +64,6 @@ for i=1:n
         matlabbatch{1}.spm.spatial.smooth.im = 0;
         matlabbatch{1}.spm.spatial.smooth.prefix = 's_';
         spm_jobman('run', matlabbatch);
-        end
         end
     end
     h = waitbar(i / size(df.full,1));
