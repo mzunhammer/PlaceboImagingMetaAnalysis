@@ -1,23 +1,25 @@
-function A_check_coverage_and_alignment()
+function A_check_coverage_and_alignment(datapath)
 % Setup: Load df with paths and variables
-clear
-% Add folder with Generic Inverse Variance Methods Functions first
-datapath='../../../datasets/';
-load(fullfile(datapath,'data_frame.mat'))
+load(fullfile(datapath,'data_frame.mat'),'df')
+[currpath,~,~]=fileparts(mfilename('fullpath'));
 
 % A) Check coverage across all studies (full sample)
 % Note 1: Use mean_pla_con contrasts as these cover all images for placebo
 % and control studies
 % Note 2: use raw image (.img), as norm_img are already masked.
-all_study_table=vertcat(df.full(:).mean_pla_con);
-in_imgs=fullfile(datapath,all_study_table.img);
+df_all_subs=vertcat(df.subjects{:});
+df_all_imgs=vertcat(df_all_subs.placebo_and_control{:});
+
+in_imgs=fullfile(datapath,df_all_imgs.img);
 outfile='check_coverage_full_sample_pla.nii';
-volume_coverage(in_imgs,fullfile('./results',outfile))
+volume_coverage(in_imgs,fullfile(currpath,'results',outfile))
 
 % B) Check coverage for each study (full sample)
  for i=1:size(df,1)
-    in_imgs=fullfile(datapath,df.full(i).mean_pla_con.img);
-    volume_coverage(in_imgs,fullfile('./results/',['coverage_',df.study_id{i},'.nii']))
+    curr_study_df=df.subjects{i};
+    curr_contrast_df=vertcat(curr_study_df.placebo_and_control{:});
+    in_imgs=fullfile(datapath,curr_contrast_df.img);
+    volume_coverage(in_imgs,fullfile(currpath,'/results/',['coverage_',df.study_ID{i},'.nii']))
  end
  
 % Descriptive summary:

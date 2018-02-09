@@ -2,7 +2,7 @@
 % Script graphs all block parameters provided by the respective paper 
 % BIG AG-Bingel external hard drive needed.
 
-clear
+
 %Basic Graphing Features
 h_px=1400;
 font_size=20;

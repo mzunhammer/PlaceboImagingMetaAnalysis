@@ -1,4 +1,4 @@
-clear
+
 
 %% Load df_pain
 datapath='../../../Datasets/';

@@ -1,65 +1,38 @@
-clear
+function D_dempographics(datapath)
 
-datapath='../../datasets/';
 df_name='data_frame.mat';
 load(fullfile(datapath,df_name));
+addpath(genpath(fullfile(userpath,'/tight_subplot')));
+%addpath(genpath(fullfile(userpath,'/cbrewer')));
 
-% Use mean_pla_con, bc this includes within and between studies
-df_all=vertcat(df.full(:).mean_pla_con);
+% Use mean_pla_con, bc this includes images for each participant in  within and between group studies
+df_all=vertcat(df.subjects{:});
 
 % Get df with only first entry per subject for demographics
 fprintf('Total number of independent subjects: %d\n',length(df_all.sub_ID))
 
 
-df_by_subID=varfun(@mean,df,'InputVariables',{'ex_lo_p_ratings','ex_img_artifact','ex_all'},...
-    'GroupingVariables','subID')
+df_by_subID=varfun(@mean,df_all,'InputVariables',{'excluded_low_pain','excluded_image_quality','excluded'},...
+    'GroupingVariables','sub_ID');
 
-['Total number of independent subjects excluded for near-zero ratings: ', num2str(sum(df_by_subID.mean_ex_lo_p_ratings))]
-['Total number of independent subjects excluded for suspected image artifacts: ', num2str(sum(df_by_subID.mean_ex_img_artifact))]
+['Total number of independent subjects excluded for near-zero ratings: ', num2str(sum(df_by_subID.mean_excluded_low_pain))]
+['Total number of independent subjects excluded for suspected image artifacts: ', num2str(sum(df_by_subID.mean_excluded_image_quality))]
 
 f1=figure('position', [100, 100, 1049*2, 895*0.5],...
         'PaperPositionMode', 'auto'); %'Units','centimeters','position',[0 0 17 3]
+
+%% Figure 1: Study features, overview
 [subplothandle, pos] =tight_subplot(1,7,0,[0.01 0.1],0.01);
 
-%% Subjects/Study
-% studlabels={
-%     'Atlas ''12';...
-%     'Bingel ''06';...
-%     'Bingel ''11';...
-%     'Choi ''11';...
-%     'Eippert ''09';...
-%     'Ellingsen ''13';...
-%     'Elsenbruch ''12';...
-%     'Freeman ''15';...
-%     'Geuter ''13';...
-%     'Huber ''13';...
-%     'Kessner ''13';...
-%     'Kong ''06';...
-%     'Kong ''09';...
-%     'Ruetgen ''15';...
-%     'Schenk ''15';...
-%     'Theysohn ''14';...
-%     'Wager ''04b';...
-%     'Wager ''04a';...
-%     'Wrobel ''14';...
-%     'Zeidan ''14'};
-% 
-% a=categorical(dfs.studyID);
-% a=renamecats(a ,studlabels);
-% 
-%axes(subplothandle(1))
-% g1=nicebar(a,'Studies');
-
-%g1=nicepie(a);
-%saveas(g1,'/Graphs/Studies.fig')
-%% Subjects/Study
-% for atlas and bingel these are only known on group level from the published manuscript,
+dfs=vertcat(df.subjects{:});
+dfs=outerjoin(df(:,1:23),dfs,'MergeKeys',true);
+% for atlas and bingel06 these are only known on group level from the published manuscript,
 gender=dfs.male;
-gender(strcmp(dfs.studyID,'atlas'))=[ones(10,1);zeros(11,1)];
-gender(strcmp(dfs.studyID,'bingel'))=[ones(15,1);zeros(4,1)];
+gender(strcmp(dfs.study_ID,'atlas'))=[ones(10,1);zeros(11,1)];
+gender(strcmp(dfs.study_ID,'bingel06'))=[ones(15,1);zeros(4,1)];
 gender(isnan(gender))=2;
 
-genderlabels={'Female';'Male';'Unknown'}
+genderlabels={'Female';'Male';'Unknown'};
 % 
 a=categorical(gender);
 a=renamecats(a ,genderlabels);
@@ -72,7 +45,7 @@ g1=nicebar(a,'Sex');
 %% DESIGN
 designlabels={'Between-group';'Within-subject'};
 
-a=categorical(dfs.studyType);
+a=categorical(dfs.study_design);
 a=renamecats(a ,designlabels);
 
 %g3=nicepie(a);
@@ -99,7 +72,7 @@ prop_female=(1-nanmean(dfs.male))*100;
 T={'1.5 Tesla';...
    '3 Tesla'};
 
-a=categorical(dfs.fieldStrength);
+a=categorical(dfs.field_strength);
 a=renamecats(a ,T);
 
 %g3=nicepie(a);
@@ -113,7 +86,7 @@ stimlbl={'Heat+Capsaicin';...
     'Electric shock';...
     'Heat';...
     'Laser'};
-a=categorical(dfs.stimtype);
+a=categorical(dfs.stim_type);
 a=renamecats(a ,stimlbl);
 
 %subs_by_study=renamecats(subs_by_study ,T);
@@ -125,15 +98,16 @@ g4=nicebar(a, 'Pain stimulus');
 
 %% STIMSIDE
 % CORRECT: BINGEL ET AL AND SCHENK AT AL STIMULATED BOTH SIDES!
-dfs.stimside(strcmp(dfs.studyID,'bingel'))={'both'};
-dfs.stimside(strcmp(dfs.studyID,'schenk'))={'both'};
 
+dfs.stim_side=cellfun(@(x) x.stim_side,dfs.placebo_and_control,'UniformOutput',0);
+dfs.stim_side(strcmp(dfs.study_ID,'bingel06'))={'both'};
+dfs.stim_side(strcmp(dfs.study_ID,'schenk'))={'both'};
 LR={'Midline';...
     'Left';...
     'Right';...
     'Left & right';...
    };
-a=categorical(dfs.stimside);
+a=categorical(vertcat(dfs.stim_side{:}));
 a=renamecats(a ,LR);
 
 %subs_by_study=renamecats(subs_by_study ,T);
@@ -144,10 +118,10 @@ g5=nicebar(a, 'Stimulus side');
 %saveas(g5,'/Graphs/StimulusSide.fig')
 
 
-%by_study_meanages = grpstats(df.stimside, df.studyID, {'mean'});
+%by_study_meanages = grpstats(df.stimside, df.study_ID, {'mean'});
 
 %% Placebo Form
-studlabels={
+stud_labels={
     'Sham acupuncture'
     'Intravenous'
     'Nasal spray'
@@ -155,9 +129,9 @@ studlabels={
     'Sham TENS'
     'Topical'};
 
-a=categorical(dfs.plaForm);
+a=categorical(dfs.placebo_form);
 %subs_by_study=renamecats(subs_by_study ,T);
-a=renamecats(a ,studlabels);
+a=renamecats(a ,stud_labels);
 
 %g6=nicepie(a);
 axes(subplothandle(6))
@@ -170,7 +144,7 @@ Indu={
     sprintf('Conditioning only\n')
     sprintf('Suggestions only\n')
     sprintf('Suggestions &\nconditioning')}
-a=categorical(dfs.plaInduct);
+a=categorical(dfs.placebo_induction);
 a=renamecats(a ,Indu);
 
 %g7=nicepie(a);
@@ -186,24 +160,18 @@ print('Descriptive.svg','-dsvg')
 %gcf.PaperSize=[17,3];
 print('Descriptive.png','-f1','-dpng')
 
-print('Descriptive.pdf','-dpdf')
+print('Descriptive.pdf','-dpdf','-bestfit')
 
 %% Stimulus sites
-stimloc=categorical(dfs.stimloc);
-table(categories(stimloc),...
-    countcats(stimloc))
+stim_location=categorical(dfs.stim_location);
+table(categories(stim_location),...
+    countcats(stim_location))
 
-%% Number of participants
-categorical(dfs.plaInduct);
-for i=1:length(ustuds)
-   istud=strcmp(df.studyID,ustuds(i));
-   n(i,1)=length(unique(df.subID(istud)));
-end
-n
 %% Mean age and gender by study
-by_study_meanages = grpstats( df.age, df.studyID, {'mean'})
-by_study_propmale = grpstats( df.male, df.studyID, {'mean'})
+by_study_meanages = grpstats( dfs.age, dfs.study_ID, {'mean'})
+by_study_propmale = grpstats( dfs.male, dfs.study_ID, {'mean'})
 
-df_pain=df(logical(df.pain),:);
-close all;
 
+%close all;
+
+end

@@ -21,7 +21,11 @@ for i=1:length(prop)
 end
 
 %figure(); % New figure
-h = bar([prop zeros(size(prop))]','stacked');
+h = bar([prop zeros(size(prop))]','stacked',...
+    'FaceColor','flat');
+for k = 1:size(prop,1)
+    h(k).CData = k;
+end
 
 % Place category labels
 yBarBorders=cumsum(prop);
@@ -59,8 +63,7 @@ set(ax,...
     'visible','off',...
     'box','off',...
     'XTick',[],...
-    'YTick',[],... %0:25:100
-    'color','none',...
+    'YTick',[],... %0:25:100 %'color','none',...
     'FontSize',font_size,...
     'FontName',font_name) %
 title(titletxt)
@@ -71,7 +74,7 @@ set(findall(gca, 'type', 'text'), 'visible', 'on') % Workaround to keep axis lab
 
 % SOFT RAINBOW
 % in R: library("colorspace") DANN pal <-choose_palette() DANN
-% col2rgb(pal(X)) wobei X die Zahl der gewählten Farben sein soll
+% col2rgb(pal(X)) wobei X die Zahl der gewï¿½hlten Farben sein soll
 % colmap=[...
 % 255,197,208;...
 % 253,199,197;...
@@ -163,9 +166,8 @@ set(findall(gca, 'type', 'text'), 'visible', 'on') % Workaround to keep axis lab
 
 colmap=gray(40);
 colmap=fliplr(colmap(25:1:39,:));
-colormap(colmap);
+colormap(gcf,colmap);
 
-ax=gca;
 %fi=gcf;
 end
 
