@@ -1,61 +1,25 @@
-clear
-p = mfilename('fullpath'); %CANlab's apply mask do not like lists with relative paths so this cludge is needed
+function D_apply_SIIPS(datapath)
+addpath(genpath('~/Documents/MATLAB/CanlabCore/CanlabCore/'));
+addpath(genpath('~/Documents/MATLAB/CanlabPatternMasks/MasksPrivate/'));
+
+p = mfilename('fullpath'); %CANlab's apply mask do not like relative paths so this cludge is needed
 [p,~,~]=fileparts(p);
 splitp=strsplit(p,'/');
-datadir=fullfile(filesep,splitp{1:end-2},'Datasets');
 maskdir=fullfile(filesep,splitp{1:end-2},'pattern_masks');
-addpath(maskdir)
-% 'Atlas_et_al_2012'
-% 'Bingel_et_al_2006'
-% 'Bingel_et_al_2011'
-% 'Choi_et_al_2011'
-% 'Eippert_et_al_2009'
-% 'Ellingsen_et_al_2013'
-% 'Elsenbruch_et_al_2012'
-% 'Freeman_et_al_2015'
-% 'Geuter_et_al_2013'
-% 'Huber_et_al_2013'
-% 'Kessner_et_al_201314'
-% 'Kong_et_al_2006'
-% 'Kong_et_al_2009'
-% 'Lui_et_al_2010'
-% 'Ruetgen_et_al_2015'
-% 'Schenk_et_al_2014'
-% 'Theysohn_et_al_2014'
-% 'Wager_at_al_2004a_princeton_shock'
-% 'Wager_et_al_2004b_michigan_heat'
-% 'Wrobel_et_al_2014'
-% 'Zeidan_et_al_2015'
+addpath(maskdir);
+df_path=fullfile(datapath,'data_frame.mat');
+load(df_path,'df');
 
-runstudies={...
-'Atlas_et_al_2012'
-'Bingel_et_al_2006'
-'Bingel_et_al_2011'
-'Choi_et_al_2011'
-'Eippert_et_al_2009'
-'Ellingsen_et_al_2013'
-'Elsenbruch_et_al_2012'
-'Freeman_et_al_2015'
-'Geuter_et_al_2013'
-%'Huber_et_al_2013'
-'Kessner_et_al_201314'
-'Kong_et_al_2006'
-'Kong_et_al_2009'
-'Lui_et_al_2010'
-'Ruetgen_et_al_2015'
-'Schenk_et_al_2014'
-'Theysohn_et_al_2014'
-'Wager_at_al_2004a_princeton_shock'
-'Wager_et_al_2004b_michigan_heat'
-'Wrobel_et_al_2014'
-'Zeidan_et_al_2015'
-};
-
+contrasts={'pain_placebo',...
+           'pain_control',...
+           'placebo_minus_control',...
+           'placebo_and_control'};
+       
 tic
 h = waitbar(0,'Calculating SIIPS, studies completed:')
 for i=1:length(runstudies)
     %Load table into a struct
-    varload=load(fullfile(datadir,[runstudies{i},'.mat']));
+    varload=load(fullfile(datapath,[runstudies{i},'.mat']));
     %Every table will be named differently, so get the name
     currtablename=fieldnames(varload);
     varload=struct2cell(varload);
@@ -66,7 +30,7 @@ for i=1:length(runstudies)
 
     % Compute SIIPS (The CAN Toolbox and the "Neuroimaging_Pattern_Masks" folders must be added to path!!!!)
     all_imgs= df.norm_img;
-    [siips_values, image_names, data_objects, siipspos_exp_by_region, siipsneg_exp_by_region, clpos, clneg] = apply_siips(fullfile(datadir, all_imgs),'notables' );
+    [siips_values, image_names, data_objects, siipspos_exp_by_region, siipsneg_exp_by_region, clpos, clneg] = apply_siips(fullfile(datapath, all_imgs),'notables' );
 
     siips_pos=vertcat(siipspos_exp_by_region{:});
     siips_pos_names=strcat('SIIPS_Pos_',...
@@ -102,9 +66,10 @@ for i=1:length(runstudies)
     % Push the data in df into a table with the name of the original table
     eval([currtablename{1} '= df']);
     % Eval statement saving results with original table name
-    eval(['save(fullfile(datadir,[runstudies{i}]),''',currtablename{1},''',''clneg_siips'',''clpos_siips'',''-append'')']);
+    eval(['save(fullfile(datapath,[runstudies{i}]),''',currtablename{1},''',''clneg_siips'',''clpos_siips'',''-append'')']);
 
     toc/60, 'Minutes'
     waitbar(i / length(runstudies))
 end
 close(h)
+end

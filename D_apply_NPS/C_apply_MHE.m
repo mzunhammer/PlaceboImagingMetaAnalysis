@@ -1,37 +1,46 @@
-clear
+function C_apply_MHE(datapath)
 addpath(genpath('~/Documents/MATLAB/CanlabCore/CanlabCore/'));
+addpath(genpath('~/Documents/MATLAB/CanlabPatternMasks/MasksPrivate/'));
 
 %% Set IO paths
 p = mfilename('fullpath'); %CANlab's apply mask do not like relative paths so this cludge is needed
 [p,~,~]=fileparts(p);
 splitp=strsplit(p,'/');
-datadir=fullfile(filesep,splitp{1:end-2},'datasets');
 maskdir=fullfile(filesep,splitp{1:end-2},'pattern_masks');
 addpath(maskdir);
-df_path=fullfile(datadir,'data_frame.mat');
+df_path=fullfile(datapath,'data_frame.mat');
+load(df_path,'df');
 
-load(df_path);
+contrasts={'pain_placebo',...
+           'pain_control',...
+           'placebo_minus_control',...
+           'placebo_and_control'};
+       
+% Pre allocate by-study structs containing info on the location&size of NPS
+% subregions.
+%df.NPS_subr_info=repmat({struct('pos',{},'neg',{})},size(df,1),1);
+
+%df.NPS_subr_info=struct('pos',cell(height(df),1),...
+%              'neg',cell(height(df),1));
+
 n=size(df,1);
-h = waitbar(0,'Calculating tissue mask averages, studies completed:');
-df.NPS_subr_info=repmat({struct('pos',{},'neg',{})},size(df,1),1);
-
-df.NPS_subr_info=struct('pos',cell(height(df),1),...
-              'neg',cell(height(df),1));
+h = waitbar(0,'Calculating tissue mask averages, studies completed:');          
 for i=1:n
-    curr_fields=fieldnames(df.full(i));
-    for j=1:length(curr_fields)
-        if istable(df.full(i).(curr_fields{j}))
-        if ~isempty(df.full(i).(curr_fields{j}))
-        curr_imgs= df.full(i).(curr_fields{j}).norm_img;
+    for j=1:length(contrasts)
+        for k=1:size(df.subjects{i},1)
+        if ~isempty(df.subjects{i}.(contrasts{j}){k})
+        in_img= df.subjects{i}.(contrasts{j}){k}.norm_img;
         
         % Apply NPS, get NPS values and sub-region estimates
-        MHE_values=apply_patternmask(fullfile(datadir, curr_imgs),fullfile(maskdir,'b_Weights_for_PCA_469_y_temp_x.nii'));
-        df.full(i).(curr_fields{j}).MHE=[MHE_values{:}]';
+        MHE_value=apply_patternmask(fullfile(datapath, in_img),...
+                        fullfile(maskdir,'b_Weights_for_PCA_469_y_temp_x.nii'),...
+                        'noverbose');
+        df.subjects{i}.(contrasts{j}){k}.MHE = MHE_value{:};
         end
         end
      end
     save(df_path,'df');
-    h =waitbar(i / n);
+    h =waitbar(i / n,h);
 end
-    
 close(h)
+end

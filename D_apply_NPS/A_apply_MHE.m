@@ -1,4 +1,4 @@
-function A_apply_tissuemasks(datapath)
+function A_apply_MHE(datapath)
 addpath(genpath('~/Documents/MATLAB/CanlabCore/CanlabCore/'));
 
 %% Set IO paths
@@ -16,7 +16,7 @@ contrasts={'pain_placebo',...
            'placebo_and_control'};
 
 n=size(df,1);
-h = waitbar(0,'Calculating tissue mask averages, studies completed:');
+h = waitbar(0,'Calculating MHE, studies completed:');
 %%
 for i=1:n
     for j=1:length(contrasts)

@@ -1,6 +1,4 @@
-%% Additional NPS analysis based on images where smoothness was equalized
 
-clear
 addpath(genpath('~/Documents/MATLAB/CanlabCore/CanlabCore/'));
 addpath(genpath('~/Documents/MATLAB/CanlabPatternMasks/MasksPrivate/'));
 
@@ -12,56 +10,65 @@ datadir=fullfile(filesep,splitp{1:end-2},'datasets');
 maskdir=fullfile(filesep,splitp{1:end-2},'pattern_masks');
 addpath(maskdir);
 df_path=fullfile(datadir,'data_frame.mat');
+load(df_path,'df');
 
-load(df_path);
+contrasts={'pain_placebo',...
+           'pain_control',...
+           'placebo_minus_control',...
+           'placebo_and_control'};
+       
+% Pre allocate by-study structs containing info on the location&size of NPS
+% subregions.
+%df.NPS_subr_info=repmat({struct('pos',{},'neg',{})},size(df,1),1);
+
+%df.NPS_subr_info=struct('pos',cell(height(df),1),...
+%              'neg',cell(height(df),1));
+
 n=size(df,1);
-h = waitbar(0,'Calculating tissue mask averages, studies completed:');
-df.NPS_subr_info_smooth=repmat({struct('pos',{},'neg',{})},size(df,1),1);
-
-df.NPS_subr_info_smooth=struct('pos',cell(height(df),1),...
-              'neg',cell(height(df),1));
+h = waitbar(0,'Calculating tissue mask averages, studies completed:');          
 for i=1:n
-    curr_fields=fieldnames(df.full(i));
-    for j=1:length(curr_fields)
-        if istable(df.full(i).(curr_fields{j}))
-        if ~isempty(df.full(i).(curr_fields{j}))
-        curr_imgs= df.full(i).(curr_fields{j}).smoothed_norm_img;
+    for j=1:length(contrasts)
+        for k=1:size(df.subjects{i},1)
+        if ~isempty(df.subjects{i}.(contrasts{j}){k})
+        in_img= df.subjects{i}.(contrasts{j}){k}.smooth_norm_img;
         
         % Apply NPS, get NPS values and sub-region estimates
-        [NPS_values, image_names, data_objects, NPSpos_exp_by_region, NPSneg_exp_by_region, clpos, clneg] = apply_nps(fullfile(datadir, curr_imgs),'notables' );
-        df.full(i).(curr_fields{j}).NPS_smooth=[NPS_values{:}]';
-        df.NPS_subr_info_smooth(i).pos.(curr_fields{j})={clpos};
-        df.NPS_subr_info_smooth(i).neg.(curr_fields{j})={clneg};
+        [NPS_value, image_name, data_object, NPSpos_exp_by_region, NPSneg_exp_by_region, clpos, clneg] = ...
+            apply_nps(fullfile(datadir, in_img),'notables' );
+        df.subjects{i}.(contrasts{j}){k}.NPS_smooth = NPS_value;
+        % Not feasible for single-study processing. Get separately, for all images
+        % together
+        % df.NPS_subr_info(i).pos.(contrasts{j})={clpos};
+        % df.NPS_subr_info(i).neg.(contrasts{j})={clneg};
         % Get sub-region estimates, construct valid names 
         NPS_pos=vertcat(NPSpos_exp_by_region{:});
-        NPS_pos_names=strcat('NPS_smooth_Pos_',...
+        NPS_pos_names=strcat('NPS_smooth_pos_',...
                                strtrim({clpos.title}'),'_',...
                                strtrim({clpos.shorttitle}'));
         NPS_pos_names=matlab.lang.makeValidName(NPS_pos_names);
         NPS_pos=array2table(NPS_pos,'VariableNames',NPS_pos_names);
 
         NPS_neg=vertcat(NPSneg_exp_by_region{:});
-        NPS_neg_names=strcat('NPS_smooth_Neg_',...
+        NPS_neg_names=strcat('NPS_smooth_neg_',...
                                strtrim({clneg.title}'),'_',...
                                strtrim({clneg.shorttitle}'));
         NPS_neg_names=matlab.lang.makeValidName(NPS_neg_names);
         NPS_neg=array2table(NPS_neg,'VariableNames',NPS_neg_names);
 
         % NaN for subregions with no global NPS-estimates
-        emptyimgs=cellfun(@isempty,NPS_values);
-        NPS_values(emptyimgs)={NaN};
+        emptyimgs=cellfun(@isempty,NPS_value);
+        NPS_value(emptyimgs)={NaN};
         NPS_pos{emptyimgs,:}=NaN;
         NPS_neg{emptyimgs,:}=NaN;
 
         if any(ismember(NPS_neg_names,...
-                        df.full(i).(curr_fields{j}).Properties.VariableNames))
-            df.full(i).(curr_fields{j})(:,NPS_pos_names)=NPS_pos;
-            df.full(i).(curr_fields{j})(:,NPS_neg_names)=NPS_neg;
+                        df.subjects{i}.(contrasts{j}){k}.Properties.VariableNames))
+            df.subjects{i}.(contrasts{j}){k}(:,NPS_pos_names)=NPS_pos;
+            df.subjects{i}.(contrasts{j}){k}(:,NPS_neg_names)=NPS_neg;
         else
-            df.full(i).(curr_fields{j})=[df.full(i).(curr_fields{j}),NPS_pos];
-            df.full(i).(curr_fields{j})=[df.full(i).(curr_fields{j}),NPS_neg];
+            df.subjects{i}.(contrasts{j}){k}=[df.subjects{i}.(contrasts{j}){k},NPS_smooth_pos];
+            df.subjects{i}.(contrasts{j}){k}=[df.subjects{i}.(contrasts{j}){k},NPS_smooth_neg];
         end
-        
         end
         end
      end

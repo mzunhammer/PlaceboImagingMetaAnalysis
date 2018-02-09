@@ -1,4 +1,7 @@
-clear
+NOT YET ADAPTED TO REVISED DATA STRUCTURE
+
+
+
 datadir='../../Datasets';
 
 runstudies={...
@@ -54,7 +57,6 @@ boxplot(mm_center_x_neg_siips)
 boxplot(mm_center_y_neg_siips)
 boxplot(mm_center_z_neg_siips)
 
-
 % Check size and MNI location of all positive clusters: NPS
 voxelSizes_pos_NPS=arrayfun(@(x) x.numVox,pos_regions_NPS);
 mm_center_x_pos_NPS=arrayfun(@(x) x.mm_center(1),pos_regions_NPS);
@@ -77,7 +79,6 @@ boxplot(mm_center_x_pos_siips)
 boxplot(mm_center_y_pos_siips)
 boxplot(mm_center_z_pos_siips)
 
-
 %% NPS Labels as of Wager et al. 2017, Supplementary Table 4
 [~,hdr,~]=xlsread(fullfile(datadir,'NPS_Subregion_Labels.xlsx'),'A1:K1');
 [num,region,~]=xlsread(fullfile(datadir,'NPS_Subregion_Labels.xlsx'),'A2:K16');
@@ -86,8 +87,6 @@ NPS_labels=[table(region),...
         array2table(num,'VariableNames',hdr(2:end))];
 
 save(fullfile(datadir,'NPS_Subregion_labels'),'NPS_labels');
-
-
 
 %% SIIPS Labels as of Woo et al. 2017, Supplementary Table 4
 [~,hdr,~]=xlsread(fullfile(datadir,'SIIPS_Subregion_Labels.xlsx'),'A1:M1');

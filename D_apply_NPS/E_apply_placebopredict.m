@@ -1,4 +1,6 @@
-clear
+NOT YET ADAPTED TO REVISED DATA STRUCTURE
+
+
 p = mfilename('fullpath'); %CANlab's apply mask do not like lists with relative paths so this cludge is needed
 [p,~,~]=fileparts(p);
 splitp=strsplit(p,'/');
