@@ -1,6 +1,6 @@
 %% Preprocess data for meta-analysis study-wise (summarize equivalent conditions)
 
-clear
+
 % Add folder with Generic Inverse Variance Methods Functions first
 addpath('../A_Analysis_GIV_Functions/')
 datapath='../../Datasets';
@@ -118,10 +118,10 @@ paindf{i}.cond=strcat(paindf{i}.cond, '&expect&remi');
 %side... summarizine data across hemispheres for NPS and ratings first.
 %There were two missing sessions>> Match values according to subID's 
 
-i=find(strcmp(studies,'bingel'));
+i=find(strcmp(studies,'bingel06'));
 % First get pure pain effect for right side only to get basic data-frame
-paindf{i}=[df((strcmp(df.studyID,'bingel')&strcmp(df.cond,'painNoPlacebo_R')),varselect);
-          df((strcmp(df.studyID,'bingel')&strcmp(df.cond,'painPlacebo_R')),varselect)];
+paindf{i}=[df((strcmp(df.studyID,'bingel06')&strcmp(df.cond,'painNoPlacebo_R')),varselect);
+          df((strcmp(df.studyID,'bingel06')&strcmp(df.cond,'painPlacebo_R')),varselect)];
 % These variables are available for right and left side and have to be averaged of
 vars2avg={ 'condSeq','stimInt','rating',...
            'imgsPerBlock','nImages','xSpan',...
@@ -130,8 +130,8 @@ vars2avg={ 'condSeq','stimInt','rating',...
 vars2sum={'nBlocks'};
 % Get all Right and Left pain conditions sorted by participant and placebo
 % condition
-R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'pain.+_R'))),varselect);
-L=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'pain.+_L'))),varselect);
+R=df((strcmp(df.studyID,'bingel06')&~cellfun(@isempty,regexp(df.cond,'pain.+_R'))),varselect);
+L=df((strcmp(df.studyID,'bingel06')&~cellfun(@isempty,regexp(df.cond,'pain.+_L'))),varselect);
 R=sortrows(R,{'subID','pla'});
 L=sortrows(L,{'subID','pla'});
 % Make sure basic df is sorted by subID and pla, too

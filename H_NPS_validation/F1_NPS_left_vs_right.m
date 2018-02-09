@@ -1,13 +1,13 @@
 %% Meta-Analysis & Forest Plot
 
-clear
+
 % Add folder with Generic Inverse Variance Methods Functions first
 addpath('../A_Analysis_GIV_Functions/')
 datapath='../../Datasets';
 
 load(fullfile(datapath,'AllData.mat'))
 
-studies={'bingel'
+studies={'bingel06'
          'lui'};
 
 studyIDtexts={
@@ -17,17 +17,17 @@ studyIDtexts={
 
 %% Select data STUDIES
 
-%'bingel'
-left_pain_control=df((strcmp(df.studyID,'bingel')&...
+%'bingel06'
+left_pain_control=df((strcmp(df.studyID,'bingel06')&...
         ~cellfun(@isempty,regexp(df.cond,'painNoPlacebo'))&...
         strcmp(df.stimside,'L')),:);
-right_pain_control=df((strcmp(df.studyID,'bingel')&...
+right_pain_control=df((strcmp(df.studyID,'bingel06')&...
         ~cellfun(@isempty,regexp(df.cond,'painNoPlacebo'))&...
         strcmp(df.stimside,'R')),:);
-left_pain_placebo=df((strcmp(df.studyID,'bingel')&...
+left_pain_placebo=df((strcmp(df.studyID,'bingel06')&...
         ~cellfun(@isempty,regexp(df.cond,'painPlacebo'))&...
         strcmp(df.stimside,'L')),:);
-right_pain_placebo=df((strcmp(df.studyID,'bingel')&...
+right_pain_placebo=df((strcmp(df.studyID,'bingel06')&...
         ~cellfun(@isempty,regexp(df.cond,'painPlacebo'))&...
         strcmp(df.stimside,'R')),:);
 
@@ -46,7 +46,7 @@ end
 left=nanmean([left_pain_control.NPSraw,left_pain_placebo.NPSraw],2);
 right=nanmean([right_pain_control.NPSraw,right_pain_placebo.NPSraw],2);
 
-i=find(strcmp(studies,'bingel'));
+i=find(strcmp(studies,'bingel06'));
 stats(i)=withinMetastats(left,right);
 
 % 'lui'

@@ -3,7 +3,7 @@
 %       design matrix
 
 
-clear
+
 % Add folder with Generic Inverse Variance Methods Functions first
 addpath('../A_Analysis_GIV_Functions/')
 addpath('/Users/matthiaszunhammer/Documents/MATLAB/ICC/')
@@ -93,10 +93,10 @@ stats.rating(i).ICC=ICC([sess1.rating,sess2.rating],'C-1',0.05,0);
 % -Second Session is missing for two participants
 
 % Get pain-images for both sides and treatments
-control_R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'painNoPlacebo_R'))),varselect);
-placebo_L=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'painPlacebo_L'))),varselect);
-placebo_R=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'painPlacebo_R'))),varselect);
-control_L=df((strcmp(df.studyID,'bingel')&~cellfun(@isempty,regexp(df.cond,'painNoPlacebo_L'))),varselect);
+control_R=df((strcmp(df.studyID,'bingel06')&~cellfun(@isempty,regexp(df.cond,'painNoPlacebo_R'))),varselect);
+placebo_L=df((strcmp(df.studyID,'bingel06')&~cellfun(@isempty,regexp(df.cond,'painPlacebo_L'))),varselect);
+placebo_R=df((strcmp(df.studyID,'bingel06')&~cellfun(@isempty,regexp(df.cond,'painPlacebo_R'))),varselect);
+control_L=df((strcmp(df.studyID,'bingel06')&~cellfun(@isempty,regexp(df.cond,'painNoPlacebo_L'))),varselect);
 
 % Check whether control_R and placebo_L can be combined with matching
 % subjects and matching runs
@@ -131,7 +131,7 @@ sess2=[combi1(combi1.condSeq==2,:);combi2(combi2.condSeq==2,:)];
 sess1=sortrows(sess1,'subID');
 sess2=sortrows(sess2,'subID');
 
-i=find(strcmp(studies,'bingel'));
+i=find(strcmp(studies,'bingel06'));
 stats.NPSraw(i)=withinMetastats(sess2.NPSraw,sess1.NPSraw);
 stats.MHEraw(i)=withinMetastats(sess2.MHEraw,sess1.MHEraw);
 stats.rating(i)=withinMetastats(sess2.rating,sess1.rating);
@@ -546,7 +546,7 @@ ylabel('Correlation (r) Session 1 vs 2')
 legend show
  hold off 
 
- rmpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/ICC'))
+ rmpath(genpath(fullfile(userpath,'ICC')))
 % Plot overall fixed effects regression line
 % t=table(nBlocks,rs);
 % t.sqrt_nBlocks=sqrt(nBlocks);

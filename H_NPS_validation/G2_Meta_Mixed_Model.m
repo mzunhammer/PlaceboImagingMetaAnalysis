@@ -1,5 +1,5 @@
 %% Placebo-response (ratings) vs placebo-response NPS
-clear
+
 % Add folder with Generic Inverse Variance Methods Functions first
 addpath('../A_Analysis_GIV_Functions/')
 load('G_dflong.mat')
