@@ -2,7 +2,7 @@
 % placebo conditioning
 % Script includes Permutation test and runs ~35 minutes
 
-clear
+
 % Add folder with Generic Inverse Variance Methods Functions first
 addpath('../A_Analysis_GIV_Functions/')
 load('B1_Full_Sample_Summary_Placebo.mat');
@@ -10,7 +10,7 @@ load('B1_Full_Sample_Summary_Placebo.mat');
 %% Define placebo induction type type
 condi=...
    {'Suggestions'               %	'atlas'
-    'Suggestions + Conditioning'%   'bingel'
+    'Suggestions + Conditioning'%   'bingel06'
     'Suggestions + Conditioning'%   'bingel11'
     'Suggestions + Conditioning'%   'choi'
     'Suggestions + Conditioning'%   'eippert'

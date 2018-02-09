@@ -1,9 +1,9 @@
-clear
+
 
 %% Load df containing target images
 datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/datasets';% Must be explicit path, as SPM's jobman does can't handle relative paths
 df_path=fullfile(datapath,'data_frame.mat');
-load(df_path);
+load(df_path,'df');
 addpath('./')
 %% Create random-effects summary of pain>baseline images
 % (averaged across placebo and control conditions)

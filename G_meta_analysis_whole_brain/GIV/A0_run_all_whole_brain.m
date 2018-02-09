@@ -4,7 +4,7 @@
 %% Import required functions
 %cd /Users/matthiaszunhammer/Dropbox/Boulder_Essen/Analysis
 % SPM required
-addpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/spm12/'))
+addpath(genpath(fullfile(userpath,'spm12/')))
 % All custom meta-analysis functions required
 addpath(genpath('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/'))
 

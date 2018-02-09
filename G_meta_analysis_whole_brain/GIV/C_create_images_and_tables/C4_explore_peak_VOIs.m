@@ -1,7 +1,7 @@
 % Explore peak activations with Forrest Plots
  addpath('~/Documents/MATLAB/crop')
 %% Create results tables
-clear
+
 load('B1_Full_Sample_Summary_Pain.mat')
 load('B1_Full_Sample_Summary_Placebo.mat')
 

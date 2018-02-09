@@ -1,4 +1,4 @@
-clear
+
 
 %% SAME AS SPM_random_effects, but with images where each voxel was scaled
 % to its within-study SD. This is analog to the standardized effect sizes
@@ -8,7 +8,7 @@ clear
 %% Load df containing target images
 datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/datasets';% Must be explicit path, as SPM's jobman does can't handle relative paths
 df_path=fullfile(datapath,'data_frame.mat');
-load(df_path);
+load(df_path,'df');
 
 %% Create random-effects summary of pain>baseline images
 % (averaged across placebo and control conditions)

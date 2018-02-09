@@ -1,5 +1,5 @@
 %% Print and label results cluster-wise
-clear
+
 
 % Available atlases (see: https://brainder.org/2012/07/30/automatic-atlas-queries-in-fsl/, or atlasquery --dumpatlases)
 %     ?Cerebellar Atlas in MNI152 space after normalization with FLIRT?

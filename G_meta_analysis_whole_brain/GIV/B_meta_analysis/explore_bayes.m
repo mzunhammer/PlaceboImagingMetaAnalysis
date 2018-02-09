@@ -1,5 +1,5 @@
 % Explore Bayes Factor Analysis
-clear
+
 load('B1_Full_Sample_Summary_Pain.mat')
 load('B1_Full_Sample_Summary_Placebo.mat')
 load('A1_Full_Sample_Img_Data_Masked_10_percent.mat')
@@ -86,7 +86,7 @@ end
 %% Placebo correlation RANDOM
 % Voxel-wise loop needed as bayesfactor function does not work for vectors
 y=r2fishersZ(summary_placebo.r_external.random.summary);
-SE_y=n2fisherZse(summary_placebo.r_external.n);
+SE_y=n2fishersZse(summary_placebo.r_external.n);
 for j=1:length(se0)
     if isnumeric(se0(j))
         curr_se=se0(j);
@@ -112,7 +112,7 @@ end
 %% Placebo correlation RANDOM
 % Voxel-wise loop needed as bayesfactor function does not work for vectors
 y=r2fishersZ(summary_placebo.r_external.fixed.summary);
-SE_y=n2fisherZse(summary_placebo.r_external.n);
+SE_y=n2fishersZse(summary_placebo.r_external.n);
 for j=1:length(se0)
     if isnumeric(se0(j))
         curr_se=se0(j);

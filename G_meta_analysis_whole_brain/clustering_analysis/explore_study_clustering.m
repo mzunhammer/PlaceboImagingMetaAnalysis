@@ -1,9 +1,9 @@
 % Study-clustering
-clear
+
 load B1_Full_Sample_Summary_Pain.mat
 load B1_Full_Sample_Summary_Placebo.mat
 
-rmpath(genpath('/Users/matthiaszunhammer/Documents/MATLAB/CanlabCore/'))
+rmpath(genpath(fullfile(userpath,'/CanlabCore/')))
 X_pain=vertcat(pain_stats.g);
 X_pla=vertcat(placebo_stats.g);
 X_pain(isnan(X_pain))=0;

@@ -1,4 +1,4 @@
-clear
+
 
 %% In the SPM-style fixed-(study-level)-effects analysis between-group studies cannot be included as 
 % one summary image of pla>con is needed per participant.
@@ -6,7 +6,7 @@ clear
 %% Load df containing target images
 datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/datasets';% Must be explicit path, as SPM's jobman does can't handle relative paths
 df_path=fullfile(datapath,'data_frame.mat');
-load(df_path);
+load(df_path,'df');
 
 %% Create fixed-effects summary of pain>baseline images
 % (averaged across placebo and control conditions)
