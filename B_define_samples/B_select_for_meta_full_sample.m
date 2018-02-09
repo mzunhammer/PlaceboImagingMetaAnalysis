@@ -1,11 +1,7 @@
-function B1_select_for_meta_all()
+function B_select_for_meta_full_sample(datapath)
 %% Define cases for the meta-analysis of the full sample
-
-clear
 % Add folder with Generic Inverse Variance Methods Functions first
-datapath='../../Datasets';
-
-load(fullfile(datapath,'data_frame.mat'));
+load(fullfile(datapath,'data_frame.mat'),'df')
 
 %% Contrast images selected for meta-analysis:
 
@@ -52,21 +48,51 @@ contrast_select={{'^control_summary',... % atlas
         };
        
 %% Get data
-df.full=struct('con',cell(height(df),1),...
-              'pla',cell(height(df),1),...
-              'pla_minus_con',cell(height(df),1),...
-              'mean_pla_con',cell(height(df),1));
-for i=1:length(df.study_id)
-    %Load the variably named table into "df"
-    raw=df.raw{i,1};
+subject_level_vars={'study_ID','sub_ID','male','age','healthy',...
+                    'predictable','real_treat','placebo_first',...
+                    'n_imgs'};
+contrast_level_vars={'sub_ID','img','pla','pain','cond','rating','rating101',...
+                  'stim_intensity','stim_side','i_condition_in_sequence',...
+                  'imgs_per_stimulus_block','n_blocks','x_span','con_span'};
+
+df.subjects=repmat({table()},20,1);
+for i=1:length(df.study_ID)
+    raw=df.raw{i,1}; %Get all images from current study
+    %Select control pain and (if existing) placebo pain conditions
     i_control=(~cellfun(@isempty,regexp(raw.cond,contrast_select{i}{1})));
     i_placebo=(~cellfun(@isempty,regexp(raw.cond,contrast_select{i}{2})));
-    df.full(i).con=raw(i_control,:);
-    df.full(i).pla=raw(i_placebo,:);
+    %Get separate tables
+    control_tbl=raw(i_control,:);
+    placebo_tbl=raw(i_placebo,:);
+    %Get separate tables (contrasts nested in subjects)
+    control_tbl2=control_tbl(:,'sub_ID');
+    placebo_tbl2=placebo_tbl(:,'sub_ID');
+    control_tbl2.pain_control=cell(size(control_tbl,1),1);
+    placebo_tbl2.pain_placebo=cell(size(placebo_tbl,1),1);
+    for j=1:size(control_tbl)
+        control_tbl2{j,'pain_control'}={control_tbl(j,contrast_level_vars)};
+    end
+    for j=1:size(placebo_tbl)
+        placebo_tbl2{j,'pain_placebo'}={placebo_tbl(j,contrast_level_vars)};
+    end
+    
+    % Create "subjec_level" data table by performing a union
+    % (important for between-group studies)
+    % Note: union lists rows with any NaN entry double. Therefore the union
+    % has to be performed on sub_ID, then indices have to be applied to
+    % full subject level rows in a second step.
+    [~,ia,ib]=union(control_tbl(:,'sub_ID'),...
+                      placebo_tbl(:,'sub_ID'));
+    subject_tbl=[control_tbl(ia,subject_level_vars);
+                 placebo_tbl(ib,subject_level_vars)];      
+    subject_tbl2=outerjoin(subject_tbl,control_tbl2,...
+                'Keys','sub_ID','MergeKeys',1);
+    subject_tbl3=outerjoin(subject_tbl2,placebo_tbl2,...
+                'Keys','sub_ID','MergeKeys',1);
+    df.subjects{i}=subject_tbl3;
 end
 
 %% Add study/variable descriptions needed for meta-analysis
-
 save(fullfile(datapath,'data_frame.mat'),'df');
 
 end

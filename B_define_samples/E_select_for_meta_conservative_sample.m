@@ -23,13 +23,13 @@ function B1_select_for_meta_conservative_sample()
 % Wrobel: None
 % Zeidan: Excluded as not all participants from original analysis were
 %         available + only ASL study
-clear
+
 % Add folder with Generic Inverse Variance Methods Functions first
 datapath='../../Datasets';
-load(fullfile(datapath,'data_frame.mat'));
+load(fullfile(datapath,'data_frame.mat'),'df')
 df.conservative=df.full;
 studies_excluded={'bingel11','kong06','ruetgen','wager04b_michigan','zeidan'};
-i=find(ismember(df.study_id,studies_excluded));
+i=find(ismember(df.study_ID,studies_excluded));
 
 % Fill with empty fields
 for j=i
