@@ -162,6 +162,10 @@ t = threshold(t, .05, 'fdr');
 
 %% network-based analyses
 
+% Need masks on path:
+% cd('/Users/tor/Documents/Code_Repositories/Neuroimaging_Pattern_Masks')
+% g = genpath(pwd); addpath(g); savepath
+
 create_figure('placebo fx', 1, 4);
 stats = image_similarity_plot(DATA_CAT, 'cosine_similarity', 'bucknerlab', 'nofigure');
 title('Buckner lab: Cortex');
@@ -177,11 +181,38 @@ subplot(1, 4, 3);
 stats = image_similarity_plot(DATA_CAT, 'cosine_similarity', 'bgloops', 'nofigure');
 title('Pauli cortico-striatal loops: BG');
 drawnow
+
+% Look at the parcels on the brain
+pauli = load_atlas('basal_ganglia');
+figure; montage(atlas2region(pauli), 'unique');
+
+%%
+% subplot(1, 4, 4);
+% stats = image_similarity_plot(DATA_CAT, 'cosine_similarity', 'bgloops_cortex', 'nofigure');
+% title('Pauli cortico-striatal loops: Cortex');
+% drawnow
+
+
+
+%%
+
+thal = load_atlas('thalamus');
+parcel_means = apply_parcellation(DATA_CAT, thal);
+
+% parcel_means = subjects x thalamic regions
+
+% TO-DO FOR ALL PLOTS:
+% covary out study-level effects (Can use Im variable above)
+% regression against behavioral placebo scores, covary out for group
+% analysis
+% group analysis wedge plot...
+
+figure; barplot_columns(parcel_means);
+
 %%
 subplot(1, 4, 4);
-stats = image_similarity_plot(DATA_CAT, 'cosine_similarity', 'bgloops_cortex', 'nofigure');
-title('Pauli cortico-striatal loops: Cortex');
-drawnow
+cla
+hh = tor_wedge_plot(parcel_means, thal.labels, 'outer_circle_radius', double(max(abs(mean(parcel_means)))), 'bicolor', 'colors', {[1 1 0] [0 0 1]}, 'nofigure');
 
 %% NPS + signatures
 create_figure('placebo fx signatures', 1, 3);
@@ -189,4 +220,3 @@ create_figure('placebo fx signatures', 1, 3);
 stats = image_similarity_plot(DATA_CAT, 'cosine_similarity', 'painsig', 'nofigure');
 title('CANlab pain signatures');
 drawnow
-
