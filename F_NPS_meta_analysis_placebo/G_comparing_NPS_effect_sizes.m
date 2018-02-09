@@ -6,7 +6,7 @@
 % are calculated and compared with rating changes 
 % to put results of the placebo meta-analysis into persepctive.
 
-clear
+
 % Add folder with Generic Inverse Variance Methods Functions first
 addpath('../A_Analysis_GIV_Functions/')
 load('Full_Sample_Study_Level_Results_Placebo.mat')

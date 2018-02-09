@@ -1,7 +1,7 @@
 %% Meta-Analysis & Forest Plot ? Conservative Sample (LOW-RISK OF BIAS RESULTS)
 % Difference compared to "basic":
 
-clear
+
 
 pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
 % Add folder with Generic Inverse Variance Methods Functions 
@@ -31,6 +31,10 @@ studyIDtexts={
             'Wrobel et al. 2014:'
             'Zeidan et al. 2015:**';...
             };
+        
+  %* excluded due to fixed testing sequence
+  %** excluded due to incomplete data-set
+  %*** excluded due to pre-selection of placebo responders.
 %% Meta-Analysis
 varselect={'rating','rating101','NPS','MHEraw','SIIPS','stimInt'};
 ratingvars={'rating','rating101'};

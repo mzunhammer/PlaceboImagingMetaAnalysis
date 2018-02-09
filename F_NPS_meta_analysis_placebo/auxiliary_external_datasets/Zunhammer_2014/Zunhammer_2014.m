@@ -1,5 +1,5 @@
 %% Meta-Analysis & Forest Plot ? Full Sample (MAIN RESULTS)
-clear
+
 % Path to add Forest Plots to:
 % Add folder with Generic Inverse Variance Methods Functions
 load('../../../../../Oxytocin_NPS/Oxytocin_Zunhammer_2014_NPS_SIIPS.mat')

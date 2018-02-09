@@ -1,4 +1,4 @@
-clear
+
 load A1_Full_Sample.mat
 
 %% Graph theory-style analysis of NPS Sub-Regions
@@ -60,7 +60,7 @@ end
 
 %% Summarize single-study correlations for placebo runs
 Z_corr_pla=r2fishersZ(vertcat(df_full.pla_ROIs_corrs{:}));
-seZ_corr_pla=n2fisherZse(vertcat(df_full.pla_corr_n{:}));
+seZ_corr_pla=n2fishersZse(vertcat(df_full.pla_corr_n{:}));
 
 [summary_pla.fixed,...
  summary_pla.random,...
@@ -73,7 +73,7 @@ seZ_corr_pla=n2fisherZse(vertcat(df_full.pla_corr_n{:}));
                                                   summary_pla.heterogeneity)
 %% Summarize single-study correlations for control runs
 Z_corr_con=r2fishersZ(vertcat(df_full.con_ROIs_corrs{:}));
-seZ_corr_con=n2fisherZse(vertcat(df_full.con_corr_n{:}));                                             
+seZ_corr_con=n2fishersZse(vertcat(df_full.con_corr_n{:}));                                             
                                               
 [summary_con.fixed,...
  summary_con.random,...

@@ -1,7 +1,7 @@
 %% Meta-Analysis & Forest Plot
 % Difference compared to "basic":
 
-clear
+
 pubpath='../../Protocol_and_Manuscript/NPS_placebo/NEJM/Figures/';
 % Add folder with Generic Inverse Variance Methods Functions first
 addpath('../A_Analysis_GIV_Functions/')
