@@ -1,4 +1,4 @@
-
+function C_equalize_smoothing(datapath,varargin)
 %% Attempt to apply equalize smoothing to all images post-hoc
 
 % CAVE: This is a post-hoc method and requires that the SPM-style whole brain
@@ -17,13 +17,15 @@
 % kernel observed in the sample according to the formula:
 % Smooth_total^2 = Smooth_observed^2+Smooth_added^2
 
+% OPTION: argument 'noimcalc' skips actual smoothing of images and just
+% updates the df
+
 
 SPM_analysis_path='../G_meta_analysis_whole_brain/SPM_analysis/SPM_2nd_level_study_summaries/random/pain/';
 
 %% Load df
-datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/datasets';% Must be explicit path, as SPM's jobman does can't handle relative paths
 df_path=fullfile(datapath,'data_frame.mat');
-load(df_path);
+load(df_path,'df');
 
 %% Loop through studies, get smoothness estimates, add to df
 n=size(df,1);
@@ -63,7 +65,9 @@ for i=1:n
         matlabbatch{1}.spm.spatial.smooth.dtype = 0;
         matlabbatch{1}.spm.spatial.smooth.im = 0;
         matlabbatch{1}.spm.spatial.smooth.prefix = 's_';
-        spm_jobman('run', matlabbatch);
+        if ~any(strcmp(varargin,'noimcalc'))
+                spm_jobman('run', matlabbatch);
+        end
         end
     end
     h = waitbar(i / size(df.full,1));
