@@ -1,6 +1,7 @@
+function validate_GIV()
 %% Script checking if GIV functions betweenMetastats, withinMetastats, and
 % GIVsummary yield valid results
-clear
+
 tol=0.001; % absolute tolerance for deviations for all values tested
 %% Calculate BETWEEN Metastats
 % Version with two data-sets
@@ -162,3 +163,4 @@ assert(all(0.76==round(summary.g.random.rel_weight(1,:),2)),'g weight of study 1
 assert(all(0.24==round(summary.g.random.rel_weight(2,:),2)),'g weight of study 2   does not match the result obtained with RefMan5');
 assert(all(4.65==round(summary.g.random.z,2)),'z stat does not match the result obtained with RefMan5');
 disp('All summary results match example results')
+end

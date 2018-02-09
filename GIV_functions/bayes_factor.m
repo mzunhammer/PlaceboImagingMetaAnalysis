@@ -1,6 +1,8 @@
-function [K,Likelihoodtheory,Likelihoodnull]= bayesfactor(effect,se,uniform,varargin)
+function [K,Likelihoodtheory,Likelihoodnull]= bayes_factor(effect,se,uniform,varargin)
 
-% Function for calculating the Bayes factor for uniform, half-normal or normal priors
+% Function for calculating the Bayes factor for
+% uniform, half-normal or normal priors,
+% testing against the null hypothesis of 0 effect.
 % accordding to Dienes (2014) Frontiers in Psychology, Vol 5, July, p1-17.;
 % adapted  by Matthias Zunhammer (February 2017).
 %
@@ -14,15 +16,15 @@ function [K,Likelihoodtheory,Likelihoodnull]= bayesfactor(effect,se,uniform,vara
 %   as "effect/t" if only the t-value and the effect size are available
 % - 'uniform'
 %   Choose 'uniform' for a uniform distribution under H0, i.e. when all values in a certain range (between an upper and an lower bound) are
-%   equally plausible. In addition to the 'uniform' argument, enter the lower and upper bound of uniformly distributed H0 as a two-element vector, e.g.:
-%   'uniform', [0,1] ... for a H0 where all effects between 0 and 1 are equally plausible.
+%   equally plausible. In addition to the 'uniform' argument, enter the lower and upper bound of uniformly distributed H1-prior as a two-element vector, e.g.:
+%   'uniform', [0,1] ... for a H1-prior where all effects between 0 and 1 are equally plausible.
 % - 'normal'
 %   Choose 'normal' when values near a certain value (often the population mean) are more likely than values far from that value.
 %   In addition to the 'normal' argument, enter the  population mean, SE
-%   and number of tails for the normal HO as a three-element vector.
-%   Example 1: [0,1,1] for a H0 where there is no population mean effect, an SD of 1 and
+%   and number of tails for the normal H1-prior as a three-element vector.
+%   Example 1: [0,1,1] for a H1 where there is no population mean effect, an SD of 1 and
 %   effects are only expected in one direction.
-%   Example 2: [1,0.5,2] for a H0 where there is a population mean effect of 1 is expected, with a SD of 0.5 and
+%   Example 2: [1,0.5,2] for a H1 where there is a population mean effect of 1 is expected, with a SD of 0.5 and
 %   both positive or negative effects.
 % Optional arguments:
 % 'verbose' 1, 0
@@ -72,7 +74,9 @@ if any(strcmp(varargin,'verbose'))
 end
 
 normaly = @(mn, variance, x) 2.718283^(- (x - mn)*(x - mn)/(2*variance))/realsqrt(2*pi*variance);
- 
+ % note: normaly is essentially normpdf from the statistics &
+ % machine-learning toolbox
+
       sd = se;
       sd2 = sd*sd;
       obtained = effect;

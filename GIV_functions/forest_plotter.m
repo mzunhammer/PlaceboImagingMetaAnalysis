@@ -84,7 +84,7 @@ Xscale=p.Results.Xscale;
 
 %% Summarize all studies, weighted by se_summary_total
 % Summarize standardized using the generic inverse-variance weighting method
-summary=GIVsummary(MetaStats,summarystat);
+summary=GIV_summary(MetaStats,summarystat);
 
 % Select the desired statistics
 if strcmp(summarystat,'mu')

@@ -1,11 +1,14 @@
 function v=nii2vector(nii_imgs,mask_img)
-
+if ischar(nii_imgs)
+    nii_imgs={nii_imgs};
+end
+    
 if (exist('mask_img'))
     % Load mask
     maskheader=spm_vol(mask_img);
     mask=logical(spm_read_vols(maskheader)); 
 else
-    sample_img=spm_read_vols(spm_vol(nii_imgs{1}));
+    sample_img=spm_read_vols(spm_vol(nii_imgs));
     mask=ones(size(sample_img));
 end
 masking=mask(:);

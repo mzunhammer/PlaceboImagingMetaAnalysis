@@ -1,4 +1,4 @@
-function SE_Z=n2fisherZse(n)
+function SE_Z=n2fishersZse(n)
 % Converts the n of pairs in a correlation to the corresponding SE
 % of Fisher's z.
 % Returns NaN instead of Inf for small sample sizes.

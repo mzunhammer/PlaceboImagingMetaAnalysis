@@ -1,4 +1,4 @@
-function img_data=nii2vec(nii_path)
+function img_data=nii2img(nii_path)
 if iscellstr(nii_path)
     nii_path=nii_path{:};
 end
