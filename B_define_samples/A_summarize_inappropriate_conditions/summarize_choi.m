@@ -1,4 +1,4 @@
-function summarize_choi()
+function summarize_choi(datapath)
 
 %% Summarize Choi et al. for meta-analysis
 % In Choi et al. two placebo-conditions and a control condition was used.
@@ -6,14 +6,13 @@ function summarize_choi()
 % summarized for meta-analysis.
 % There was a second run (Exp2) of the experiment that was not published.
 % As we limited our meta analysis to published data, a-priori, this data was not analyzed.
-clear
-datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/datasets/'; % must be explicit path as SPMs imcalc does not work w relative paths
 tblpath=fullfile(datapath,'data_frame.mat'); % must be explicit path as SPMs imcalc does not work w relative paths
 load(tblpath);
-i_study=find(strcmp(df.study_id,'choi'));
+i_study=find(strcmp(df.study_ID,'choi'));
 choi=df.raw{i_study,1};
 subjects=unique(choi.sub_ID);
-outpath=[datapath,'Choi_et_al_2011/summarized_for_meta']; %for images
+outpath=fullfile(datapath,'Choi_et_al_2011/summarized_for_meta'); %for images
+
 %%
 pla_tbl=table();
 for j=1:length(subjects)
@@ -35,10 +34,10 @@ for j=1:length(subjects)
     pla_tbl.img{j}=['Choi_et_al_2011/summarized_for_meta/',outfilename_pla{j}];
     pla_tbl.pla(j)=1;
     pla_tbl.pain(j)=1;
-    pla_tbl.real_treat(j)=1;
+    pla_tbl.real_treat(j)=0;
     pla_tbl.cond{j}='placebo_summary';
-    pla_tbl.rating(j)=sum(curr_pla_tbl.rating);
-    pla_tbl.rating101(j)=sum(curr_pla_tbl.rating101);
+    pla_tbl.rating(j)=mean(curr_pla_tbl.rating);
+    pla_tbl.rating101(j)=mean(curr_pla_tbl.rating101);
     pla_tbl.x_span(j)=mean(curr_pla_tbl.x_span);
 end
 

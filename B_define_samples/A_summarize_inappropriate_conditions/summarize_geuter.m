@@ -1,20 +1,18 @@
-function summarize_geuter()
+function summarize_geuter(datapath)
 
 %% Summarize Geuter et al. for meta-analysis
 % In Geuter et al. pain was modeled as an early and a late phase.
 % Further there was a weak and a strong placebo condition.
 % All of these conditions were averaged (mean) for the main analysis into one
 % placebo and one control image.
-
-clear
-datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/datasets/'; % must be explicit path as SPMs imcalc does not work w relative paths
 tblpath=fullfile(datapath,'data_frame.mat'); % must be explicit path as SPMs imcalc does not work w relative paths
 load(tblpath);
-i_study=find(strcmp(df.study_id,'geuter'));
+i_study=find(strcmp(df.study_ID,'geuter'));
 geuter=df.raw{i_study,1};
 subjects=unique(geuter.sub_ID);
 
-outpath=[datapath,'Geuter_et_al_2013/summarized_for_meta']; %for images
+outpath=fullfile(datapath,'Geuter_et_al_2013/summarized_for_meta'); %for images
+
 %% Placebo
 pla_tbl=table();
 for j=1:length(subjects)

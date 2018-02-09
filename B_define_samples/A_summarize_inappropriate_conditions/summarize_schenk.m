@@ -1,19 +1,17 @@
-function summarize_schenk()
+function summarize_schenk(datapath)
 
 %% Summarize Schenk et al. for meta-analysis
 % In Schenk et al. placebo effects were tested for lidocaine and non-lidocaine conditions.
 % These conditions were averaged (mean) for the main analysis into one
 % placebo and one control image.
-
-clear
-datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/datasets/'; % must be explicit path as SPMs imcalc does not work w relative paths
 tblpath=fullfile(datapath,'data_frame.mat'); % must be explicit path as SPMs imcalc does not work w relative paths
 load(tblpath);
-i_study=find(strcmp(df.study_id,'schenk'));
+i_study=find(strcmp(df.study_ID,'schenk'));
 schenk=df.raw{i_study,1};
 subjects=unique(schenk.sub_ID);
 
-outpath=[datapath,'Schenk_et_al_2014/summarized_for_meta'];
+outpath=fullfile(datapath,'Schenk_et_al_2014/summarized_for_meta'); %for images
+
 %% Placebo
 pla_tbl=table();
 for j=1:length(subjects)

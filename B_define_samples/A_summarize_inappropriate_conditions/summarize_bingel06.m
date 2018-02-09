@@ -1,4 +1,4 @@
-function summarize_bingel06()
+function summarize_bingel06(datapath)
 %% In the original analysis of Bingel et al. the effects of
 % testing was performed within participants on left and right
 % side... summarizine placebo & control data across hemispheres.
@@ -8,17 +8,13 @@ function summarize_bingel06()
 % were replaced by all-NaN "dummy" images. >> nanmean will result in
 % equivalent of first-session-only
 
-clear
-datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/datasets/'; % must be explicit path as SPMs imcalc does not work w relative paths
 tblpath=fullfile(datapath,'data_frame.mat'); % must be explicit path as SPMs imcalc does not work w relative paths
 load(tblpath);
-i_study=find(strcmp(df.study_id,'bingel06'));
+i_study=find(strcmp(df.study_ID,'bingel06'));
 bingel06=df.raw{i_study,1};
 subjects=unique(bingel06.sub_ID);
 
-outpath=[datapath,'Bingel_et_al_2006/summarized_for_meta']; %for images
-
-
+outpath=fullfile(datapath,'Bingel_et_al_2006/summarized_for_meta'); %for images
 
 keys={'study_ID','sub_ID','male','age', 'healthy',...
       'predictable','real_treat','placebo_first','stim_intensity','imgs_per_stimulus_block',...

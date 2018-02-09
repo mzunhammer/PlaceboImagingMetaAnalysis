@@ -1,19 +1,18 @@
-function summarize_wager_princeton()
+function summarize_wager_princeton(datapath)
 
 %% Summarize wager_princeton et al. for meta-analysis
 % For wager_princeton et al. only contrasts between control - placebo were
 % available. This script creates the opposite contrasts placebo - control
 % for consistency with the other studies.
 
-clear
-datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/datasets/'; % must be explicit path as SPMs imcalc does not work w relative paths
 tblpath=fullfile(datapath,'data_frame.mat'); % must be explicit path as SPMs imcalc does not work w relative paths
 load(tblpath);
-i_study=find(strcmp(df.study_id,'wager04a_princeton'));
+i_study=find(strcmp(df.study_ID,'wager04a_princeton'));
 wager_princeton=df.raw{i_study,1};
 subjects=unique(wager_princeton.sub_ID);
 
-outpath=[datapath,'Wager_et_al_2004a_Princeton_shock/summarized_for_meta'];
+outpath=fullfile(datapath,'Wager_et_al_2004a_Princeton_shock/summarized_for_meta'); %for images
+
 %% Inverse contrasts control-placebo >> placebo-control
 pla_tbl=table();
 for j=1:length(subjects)

@@ -1,18 +1,17 @@
-function summarize_eippert()
+function summarize_eippert(datapath)
 
 %% Summarize Eippert et al. for meta-analysis
 % In Eippert et al. pain was modeled as an early and a late phase.
 % Early and late pain are summarized (mean) for the main analysis into one
 % placebo and one control image.
-clear
-datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/datasets/'; % must be explicit path as SPMs imcalc does not work w relative paths
+
 tblpath=fullfile(datapath,'data_frame.mat'); % must be explicit path as SPMs imcalc does not work w relative paths
 load(tblpath);
-i_study=find(strcmp(df.study_id,'eippert'));
+i_study=find(strcmp(df.study_ID,'eippert'));
 eippert=df.raw{i_study,1};
 subjects=unique(eippert.sub_ID);
 
-outpath=[datapath,'Eippert_et_al_2009/summarized_for_meta']; %for images
+outpath=fullfile(datapath,'Eippert_et_al_2009/summarized_for_meta'); %for images
 %% Placebo
 pla_tbl=table();
 for j=1:length(subjects)

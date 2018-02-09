@@ -1,4 +1,4 @@
-function summarize_atlas()
+function summarize_atlas(datapath)
 
 %% In the original analysis of Atlas et al. the effects of
 % stimulation, expectation and remifentanil were modeled separately.
@@ -12,15 +12,13 @@ function summarize_atlas()
 % Effect of remi vs no-remi corresponds to estimated mean plateau effect of
 % 0.043 micro-g/kg/min (individual) OR 0.884 ng/ml (absolute)
 % across hidden and open administration periods
-clear
-datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/datasets/'; % must be explicit path as SPMs imcalc does not work w relative paths
 tblpath=fullfile(datapath,'data_frame.mat'); % must be explicit path as SPMs imcalc does not work w relative paths
 load(tblpath);
-i_study=find(strcmp(df.study_id,'atlas'));
+i_study=find(strcmp(df.study_ID,'atlas'));
 atlas=df.raw{i_study,1};
 subjects=unique(atlas.sub_ID);
 
-outpath=[datapath,'Atlas_et_al_2012/summarized_for_meta']; %for images
+outpath=fullfile(datapath,'Atlas_et_al_2012/summarized_for_meta'); %for images
 
 %%
 pla_tbl=table();
