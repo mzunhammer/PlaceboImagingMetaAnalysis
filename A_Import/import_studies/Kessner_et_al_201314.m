@@ -1,19 +1,19 @@
-function Kessner_et_al_2013114
+function Kessner_et_al_2013114(datapath)
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 
 %% Load images paths
 %and extract/assign experimental conditions from/to image names
 studydir = 'Kessner_et_al_201314';
 kessnerdir = dir(fullfile(basedir, studydir));
 xls_path=fullfile(basedir, studydir,'Kessner_et_al_behavioral.xlsx');
-beta_img = {kessnerdir(~cellfun(@isempty,regexp({kessnerdir.name},'^s.*img'))).name}';
+beta_img = {kessnerdir(~cellfun(@isempty,regexp({kessnerdir.name},'^sub\d\d.*img'))).name}';
 img=cellfun(@(x) fullfile(studydir, x),beta_img,'UniformOutput',0);                                               % The absolute image paths
 
 % Get subject numbers
-sub=regexp(img,'sub(\d\d)_beta','tokens');
+sub=regexp(img,'.*/sub(\d\d)_beta','tokens');
 sub=[sub{:}]';
 
 % Import behavioral from excel
@@ -49,11 +49,11 @@ placebo_first=repmat(xlsread(xls_path,1,'BA2:BA40'),1,4);
 placebo_first=placebo_first';
 placebo_first=placebo_first(:);
 
-i_condition_in_sequence=NaN(size(img));
-i_condition_in_sequence(~cellfun(@isempty,regexp(beta_img,'placebo'))&placebo_first==1)=1;
-i_condition_in_sequence(~cellfun(@isempty,regexp(beta_img,'placebo'))&placebo_first==0)=2;
-i_condition_in_sequence(~cellfun(@isempty,regexp(beta_img,'control'))&placebo_first==1)=2;
-i_condition_in_sequence(~cellfun(@isempty,regexp(beta_img,'control'))&placebo_first==0)=1;
+i_condition_in_sequence=NaN(size(beta_img));
+i_condition_in_sequence(~cellfun(@isempty,regexp(beta_img,'placebo'))&(placebo_first==1))=1;
+i_condition_in_sequence(~cellfun(@isempty,regexp(beta_img,'placebo'))&(placebo_first==0))=2;
+i_condition_in_sequence(~cellfun(@isempty,regexp(beta_img,'control'))&(placebo_first==1))=2;
+i_condition_in_sequence(~cellfun(@isempty,regexp(beta_img,'control'))&(placebo_first==0))=1;
 temp_c=repmat(xlsread(xls_path,1,'I2:I40'),1,4);
 temp_c=temp_c';
 temp_c=temp_c(:);
@@ -120,6 +120,6 @@ kessner.con_span      =ones(size(kessner.cond)).*1;
 
 %% Save in data_frame
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'kessner')),'raw'}={kessner};
+df{find(strcmp(df.study_ID,'kessner')),'raw'}={kessner};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

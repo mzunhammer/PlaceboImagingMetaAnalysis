@@ -1,10 +1,10 @@
-function A_create_study_overview_table()
-clear
+function A_create_study_overview_table(datapath)
+
 %% Creates an overview table for study-level information
 % data collected from original publications, mat-files, and personal
 % communication
 
-study_id={
+study_ID={
 'atlas'
 'bingel06'
 'bingel11'
@@ -28,7 +28,7 @@ study_id={
 
 n=[
 21 %'atlas'
-19 %'bingel'
+19 %'bingel06'
 22 %'bingel11'
 15%'choi'
 40 %'eippert'
@@ -50,7 +50,7 @@ n=[
 
  study_dir={
 'Atlas_et_al_2012' %'atlas'
-'Bingel_et_al_2006' %'bingel'
+'Bingel_et_al_2006' %'bingel06'
 'Bingel_et_al_2011' %'bingel11'
 'Choi_et_al_2011' %'choi'
 'Eippert_et_al_2009' %'eippert'
@@ -72,7 +72,7 @@ n=[
 
 study_design={
 'within' %'atlas'
-'within' %'bingel'
+'within' %'bingel06'
 'within' %'bingel11'
 'within' %'choi'
 'within' %'eippert'
@@ -94,7 +94,7 @@ study_design={
 
 img_modality={
 'fMRI' %'atlas'
-'fMRI' %'bingel'
+'fMRI' %'bingel06'
 'fMRI' %'bingel11'
 'fMRI' %'choi'
 'fMRI' %'eippert'
@@ -116,7 +116,7 @@ img_modality={
 
 field_strength=[
 1.5 %'atlas'
-1.5 %'bingel'
+1.5 %'bingel06'
 3.0 %'bingel11'
 3.0 %'choi'
 3.0 %'eippert'
@@ -138,7 +138,7 @@ field_strength=[
 
  TR=[
 2000 %'atlas'
-2600 %'bingel'
+2600 %'bingel06'
 3000 %'bingel11'
 3000 %'choi'
 2620 %'eippert'
@@ -160,7 +160,7 @@ field_strength=[
 
  TE=[
 34 %'atlas'
-40 %'bingel'
+40 %'bingel06'
 30 %'bingel11'
 30 %'choi'
 26 %'eippert'
@@ -182,7 +182,7 @@ field_strength=[
 
 voxel_size_at_acq=[
 3.5 3.5 4.0 %'atlas'
-3.3 3.3 4.0 %'bingel'
+3.3 3.3 4.0 %'bingel06'
 3.5 3.5 3.0 %'bingel11'
 3.8 3.8 4.0 %'choi'
 2.0 2.0 3.0 %'eippert'
@@ -204,7 +204,7 @@ voxel_size_at_acq=[
 
 voxel_size_img=[
 2.0 2.0 2.0 %'atlas'
-3.0 3.0 3.0 %'bingel'
+3.0 3.0 3.0 %'bingel06'
 2.0 2.0 2.0 %'bingel11'
 2.0 2.0 2.0 %'choi'
 2.0 2.0 2.0 %'eippert'
@@ -226,7 +226,7 @@ voxel_size_img=[
 
 analysis_software={
 'SPM5' %'atlas'
-'SPM2' %'bingel'
+'SPM2' %'bingel06'
 'SPM5' %'bingel11'
 'FSL' %'choi'
 'SPM5' %'eippert'
@@ -248,7 +248,7 @@ analysis_software={
 
 slice_timing_correction=[
 1 %'atlas'
-0 %'bingel'
+0 %'bingel06'
 1 %'bingel11'
 0 %'choi'
 1 %'eippert'
@@ -270,7 +270,7 @@ NaN]; %'zeidan'
 
 spatial_smoothing_FWHM=[
 8 8 8 %'atlas'
-8 8 8 %'bingel'
+8 8 8 %'bingel06'
 8 8 8 %'bingel11'
 5 5 5 %'choi'
 8 8 8 %'eippert'
@@ -292,7 +292,7 @@ spatial_smoothing_FWHM=[
 
 temporal_high_pass_filter=[
 180 %'atlas'
-128 %'bingel'
+128 %'bingel06'
 128 %'bingel11'
 50 %'choi'
 128 %'eippert'
@@ -314,7 +314,7 @@ NaN]; %'zeidan'
 
 image_type={
 'beta' %'atlas'
-'con' %'bingel'
+'con' %'bingel06'
 'beta' %'bingel11'
 'beta' %'choi'
 'con' %'eippert'
@@ -336,7 +336,7 @@ image_type={
 
 contrast_imgs_only=[
 0 %'atlas'
-0 %'bingel'
+0 %'bingel06'
 0 %'bingel11'
 0 %'choi'
 0 %'eippert'
@@ -358,7 +358,7 @@ contrast_imgs_only=[
 
 modeled_stimulus_duration={
 14.2 %'atlas'
-0.0 %'bingel'
+0.0 %'bingel06'
 6.0 %'bingel11'
 15.0 %'choi'
 [10.0, 10.0] %'eippert' early+late
@@ -380,7 +380,7 @@ modeled_stimulus_duration={
 
 stimulus_duration=[
 10 %'atlas'
-0.001 %'bingel'
+0.001 %'bingel06'
 6 %'bingel11'
 15 %'choi'
 17 %'eippert'
@@ -402,7 +402,7 @@ stimulus_duration=[
 
 stim_type={
 'contact heat' %'atlas'
-'laser' %'bingel'
+'laser' %'bingel06'
 'contact heat' %'bingel11'
 'electrical' %'choi'
 'contact heat' %'eippert'
@@ -424,7 +424,7 @@ stim_type={
 
 stim_location={
 'L forearm (v)' %'atlas'
-'L & R hand (d)' %'bingel'
+'L & R hand (d)' %'bingel06'
 'R calf (d)' %'bingel11'
 'L hand (d)' %'choi'
 'L forearm (v)' %'eippert'
@@ -446,7 +446,7 @@ stim_location={
 
 placebo_form={
 'intravenous drip' %'atlas'
-'topical cream/gel/patch' %'bingel'
+'topical cream/gel/patch' %'bingel06'
 'intravenous drip' %'bingel11'
 'intravenous drip' %'choi'
 'topical cream/gel/patch' %'eippert'
@@ -468,7 +468,7 @@ placebo_form={
 
 placebo_induction={
 'suggestions' %'atlas'
-'suggestions & conditioning' %'bingel'
+'suggestions & conditioning' %'bingel06'
 'suggestions & conditioning' %'bingel11'
 'suggestions & conditioning' %'choi'
 'suggestions & conditioning' %'eippert'
@@ -490,7 +490,7 @@ placebo_induction={
 
 contrast_ratings_only=[
 0 %'atlas'
-0 %'bingel'
+0 %'bingel06'
 0 %'bingel11'
 0 %'choi'
 0 %'eippert'
@@ -510,16 +510,88 @@ contrast_ratings_only=[
 0 %'wrobel'
 1]; %'zeidan'
 
-raw=cell(length(study_id),1); %placeholder for image data-tables
+excluded_conservative_sample=logical([
+0 %'atlas'
+0 %'bingel06'
+1 %'bingel11' due to fixed testing sequence of placebo and control
+0 %'choi'
+0 %'eippert'
+0 %'ellingsen'
+0 %'elsenbruch'
+0 %'freeman'
+0 %'geuter'
+0 %'kessner'
+1 %'kong06' due to missing data
+0 %'kong09'
+0 %'lui'
+1 %'ruetgen' due to placebo responder selection
+0 %'schenk'
+0 %'theysohn'
+0 %'wager04a_princeton'
+1 %'wager04b_michigan' due to placebo responder selection
+0 %'wrobel'
+1]); %'zeidan' due to missing subjects and since this is the only ASL study
 
-df=table(study_id,study_dir,n,study_design,...
+study_citations={
+            'Atlas et al. 2012:';...
+			'Bingel et al. 2006:';...
+			'Bingel et al. 2011:';...
+			'Choi et al. 2011:';...
+			'Eippert et al. 2009:';...
+			'Ellingsen et al. 2013:';...
+            'Elsenbruch et al. 2012:';...
+            'Freeman et al. 2015:';...
+            'Geuter et al. 2013:';...
+            'Kessner et al. 2014:';...
+            'Kong et al. 2006:';...
+            'Kong et al. 2009:';...
+            'Lui et al. 2010';...
+            'Ruetgen et al. 2015:';...
+            'Schenk et al. 2015:';...
+            'Theysohn et al. 2009:';...
+            'Wager et al. 2004, Study 1:';...
+            'Wager et al. 2004, Study 2:';...
+            'Wrobel et al. 2014:';...
+            'Zeidan et al. 2015:';...
+            };
+        
+study_citations_conservative={
+            'Atlas et al. 2012:';...
+			'Bingel et al. 2006:';...
+			'Bingel et al. 2011:*';...
+			'Choi et al. 2011:';...
+			'Eippert et al. 2009:';...
+			'Ellingsen et al. 2013:';...
+            'Elsenbruch et al. 2012:';...
+            'Freeman et al. 2015:';...
+            'Geuter et al. 2013:';...
+            'Kessner et al. 2014:';...
+            'Kong et al. 2006:**';...
+            'Kong et al. 2009:';...
+            'Lui et al. 2010:';...
+            'Ruetgen et al. 2015:***'
+            'Schenk et al. 2015:'
+            'Theysohn et al. 2009:';...
+            'Wager et al. 2004, Study 1:';...
+            'Wager et al. 2004, Study 2:***';...
+            'Wrobel et al. 2014:'
+            'Zeidan et al. 2015:**';...
+            };
+  %* excluded due to fixed testing sequence
+  %** excluded due to incomplete data-set
+  %*** excluded due to pre-selection of placebo responders.        
+  
+  
+raw=cell(length(study_ID),1); %placeholder for image data-tables
+
+df=table(study_ID,study_dir,n,study_design,...
       img_modality,field_strength,TR,TE,voxel_size_at_acq,...
       voxel_size_img,slice_timing_correction,temporal_high_pass_filter,spatial_smoothing_FWHM,...
       contrast_imgs_only,image_type,analysis_software,...
       modeled_stimulus_duration,stimulus_duration,stim_type,stim_location,...
       placebo_form, placebo_induction,contrast_ratings_only,...
-      raw);
+      raw, excluded_conservative_sample, study_citations,...
+      study_citations_conservative);
 
-datadir = '../../datasets/';
-save([datadir,'data_frame'], 'df');
+save(fullfile(datapath,'data_frame.mat'), 'df');
 end

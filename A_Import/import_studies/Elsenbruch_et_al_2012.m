@@ -1,11 +1,11 @@
-function Elsenbruch_et_al_2012
+function Elsenbruch_et_al_2012(datapath)
 
 %% Collects all behavioral data and absolute img-paths for Elsenbruch 2012
 % in a data frame, saves as .mat
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 
 %% Load images paths
 %and extract/assign experimental conditions from/to image names
@@ -104,6 +104,6 @@ elsenb.x_span        =x_span;
 elsenb.con_span      =ones(size(elsenb.img)); %beta images used
 %% Save in data_frame
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'elsenbruch')),'raw'}={elsenb};
+df{find(strcmp(df.study_ID,'elsenbruch')),'raw'}={elsenb};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

@@ -1,11 +1,11 @@
-function Geuter_et_al_2012
+function Geuter_et_al_2012(datapath)
 
 %% Collects all behavioral data and absolute img-paths for Elsenbruch 2012
 % in a data frame, saves as .mat
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 
 %% Load images paths
 %and extract/assign experimental conditions from/to image names
@@ -28,8 +28,8 @@ con_descriptors= {...
 
 load(fullfile(basedir,studydir,'metadata_geuter.mat')); % Load behavioral data
 %data in meta is in single-format in some cases!!!
-meta.vas=double(meta.vas)
-meta.temperature=double(meta.temperature)
+meta.vas=double(meta.vas);
+meta.temperature=double(meta.temperature);
 
 for j= nsubj
     geuterSPMs{j} = fullfile(studydir, ['sub' num2str(j,'%02d')],'SPM.mat');
@@ -136,6 +136,6 @@ geuter.con_span      =con_span;
 
 %% Save in data_frame
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'geuter')),'raw'}={geuter};
+df{strcmp(df.study_ID,'geuter'),'raw'}={geuter};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

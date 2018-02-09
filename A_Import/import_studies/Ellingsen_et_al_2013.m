@@ -1,11 +1,11 @@
-function Ellingsen_et_al_2013
+function Ellingsen_et_al_2013(datapath)
 
 %% Collects all behavioral data and absolute img-paths for Ellingsen et al. 2013
 % in a data frame, saves as .mat
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 
 %% Load images paths
 %and extract/assign experimental conditions from/to image names
@@ -163,6 +163,6 @@ ellingsen.con_span      =ones(size(ellingsen.img));
 
 %% Save in data_frame
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'ellingsen')),'raw'}={ellingsen};
+df{find(strcmp(df.study_ID,'ellingsen')),'raw'}={ellingsen};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

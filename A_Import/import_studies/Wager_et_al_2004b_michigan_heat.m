@@ -1,8 +1,8 @@
-function Wager_et_al_2004b_Michigan_heat
+function Wager_et_al_2004b_Michigan_heat(datapath)
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 
 %% Import Wager_et_al_2004: Study 2 (michigan heat)
 
@@ -101,6 +101,6 @@ wager_michigan.x_span        =x_span;
 wager_michigan.con_span      =ones(size(wager_michigan.cond));
 %% Save
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'wager04b_michigan')),'raw'}={wager_michigan};
+df{find(strcmp(df.study_ID,'wager04b_michigan')),'raw'}={wager_michigan};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

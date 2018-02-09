@@ -1,11 +1,11 @@
-function Zeidan_et_al_2015
+function Zeidan_et_al_2015(datapath)
 
 %% Collects all behavioral data and absolute img-paths for Zeidan et al. 2013
 % in a data frame, saves as .mat
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 
 %% Load images paths
 %and extract/assign experimental conditions from/to image names
@@ -109,6 +109,6 @@ zeidan.con_span      =[ones(size(zeidandir))*4;
                       ones(size(zeidandir))*4]; %Use design calculator in B_Unpack_and_Contrast_Zeidan to get contrast weights.
 %% Save
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'zeidan')),'raw'}={zeidan};
+df{find(strcmp(df.study_ID,'zeidan')),'raw'}={zeidan};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

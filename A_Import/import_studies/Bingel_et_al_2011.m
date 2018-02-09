@@ -1,11 +1,11 @@
-function Bingel_et_al_2011
+function Bingel_et_al_2011(datapath)
 
 %% Collects all behavioral data and absolute img-paths for Bingel 2011
 % in a data frame, saves as .mat
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 
 %% Load images paths
 %and extract/assign experimental conditions from/to image names
@@ -133,6 +133,6 @@ bingel11.x_span(strcmp(bingel11.sub_ID,'bingel11_14'))=NaN;
 bingel11.con_span      =con_span;
 %% Save in data_frame
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'bingel11')),'raw'}={bingel11};
+df{find(strcmp(df.study_ID,'bingel11')),'raw'}={bingel11};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

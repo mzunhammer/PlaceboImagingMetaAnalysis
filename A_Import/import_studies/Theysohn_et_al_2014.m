@@ -1,11 +1,11 @@
-function Theysohn_et_al_2014
+function Theysohn_et_al_2014(datapath)
 
 %% Collects all behavioral data and absolute img-paths for Theyson et al 2014
 % in a data frame, saves as .mat
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 
 %% Load images paths
 %and extract/assign experimental conditions from/to image names
@@ -125,6 +125,6 @@ they.x_span        =x_span;
 they.con_span      =ones(size(they.img)); %beta images used
 %% Save
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'theysohn')),'raw'}={they};
+df{find(strcmp(df.study_ID,'theysohn')),'raw'}={they};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

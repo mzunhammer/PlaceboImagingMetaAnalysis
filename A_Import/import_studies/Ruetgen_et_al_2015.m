@@ -1,8 +1,8 @@
-function Ruetgen_et_al_2015
+function Ruetgen_et_al_2015(datapath)
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 
 %% Load images paths
 %and extract/assign experimental conditions from/to image names
@@ -98,6 +98,6 @@ ruetgen.con_span      =ones(size(ruetgen.cond)).*1;
 
 %% Save
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'ruetgen')),'raw'}={ruetgen};
+df{find(strcmp(df.study_ID,'ruetgen')),'raw'}={ruetgen};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

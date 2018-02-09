@@ -1,8 +1,8 @@
-function Wager_et_al_2004a_Princeton_shock
+function Wager_et_al_2004a_Princeton_shock(datapath)
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 
 %% Load images paths
 %and extract/assign experimental conditions from/to image names
@@ -163,6 +163,6 @@ wager_princeton.con_span      =ones(size(wager_princeton.cond)).*1;
 
 %% Save
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'wager04a_princeton')),'raw'}={wager_princeton};
+df{find(strcmp(df.study_ID,'wager04a_princeton')),'raw'}={wager_princeton};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

@@ -1,11 +1,11 @@
-function Huber_et_al_2013
+function Huber_et_al_2013(datapath)
 
 %% Collects all behavioral data and absolute img-paths for Elsenbruch 2012
 % in a data frame, saves as .mat
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 studydir= 'Huber_et_al_2013';
 
 %% Load images paths
@@ -138,6 +138,6 @@ huber.x_span        =x_span;
 huber.con_span      =con_span(:);
 %% Save in data_frame
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'huber')),'raw'}={huber};
+df{find(strcmp(df.study_ID,'huber')),'raw'}={huber};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

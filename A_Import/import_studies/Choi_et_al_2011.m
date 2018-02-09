@@ -1,11 +1,11 @@
-function Choi_et_al_2011
+function Choi_et_al_2011(datapath)
 
 %% Collects all behavioral data and absolute img-paths for Choi et al. 2011
 % in a data frame, saves as .mat
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 
 %% Load images paths
 %and extract/assign experimental conditions from/to image names
@@ -132,6 +132,6 @@ choi.x_span        =x_span;
 choi.con_span      =ones(size(choi.img));
 %% Save in data_frame
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'choi')),'raw'}={choi};
+df{find(strcmp(df.study_ID,'choi')),'raw'}={choi};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

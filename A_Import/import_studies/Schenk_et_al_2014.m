@@ -1,11 +1,11 @@
-function Schenk_et_al_2014
+function Schenk_et_al_2014(datapath)
 
 %% Collects all behavioral data and absolute img-paths for schenk 2011
 % in a data frame, saves as .mat
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 
 %% Load images paths
 %and extract/assign experimental conditions from/to image names
@@ -164,6 +164,6 @@ schenk.con_span      =ones(size(cond));
 %% Save
 %% Save
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'schenk')),'raw'}={schenk};
+df{find(strcmp(df.study_ID,'schenk')),'raw'}={schenk};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

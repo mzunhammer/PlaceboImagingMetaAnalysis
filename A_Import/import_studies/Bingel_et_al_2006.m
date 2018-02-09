@@ -1,4 +1,4 @@
-function Bingel_et_al_2006
+function Bingel_et_al_2006(datapath)
 
 %% Collects all behavioral data and absolute img-paths for Elsenbruch 2012
 % in a data frame, saves as .mat
@@ -7,7 +7,7 @@ function Bingel_et_al_2006
 
 %% Set working environment
 
-basedir = '../../../Datasets/';
+basedir = datapath;
 
 %% Load images paths
 %and extract/assign experimental conditions from/to image names
@@ -154,7 +154,7 @@ pain=~cellfun(@isempty,regexpi(cond,'pain','match'));
 %% Collect all Variables in Table
 bingel06=table(img);
 bingel06.img=img;
-bingel06.study_ID=repmat({'bingel'},size(bingel06.img));
+bingel06.study_ID=repmat({'bingel06'},size(bingel06.img));
 bingel06.sub_ID=strcat('bingel06_',sub);
 bingel06.male=ones(size(bingel06.img))*((19-4)/19); %MISSING: Mean sex according to paper
 bingel06.age=ones(size(bingel06.img))*((19-4)/19);  %MISSING: Mean age according to paper
@@ -178,6 +178,6 @@ bingel06.con_span      =con_span; %con images used
 bingel06(cellfun(@isempty,bingel06.img),:)=[]; % Delete missing sessions
 %% Save in data_frame
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'bingel06')),'raw'}={bingel06};
+df{find(strcmp(df.study_ID,'bingel06')),'raw'}={bingel06};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

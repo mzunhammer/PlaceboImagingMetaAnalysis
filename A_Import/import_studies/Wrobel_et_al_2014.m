@@ -1,8 +1,8 @@
-function Wrobel_et_al_2014
+function Wrobel_et_al_2014(datapath)
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 
 %% Collects all behavioral data and absolute img-paths
 % in a data frame, saves as .mat
@@ -32,7 +32,7 @@ cond=[cond{:}]';
 
 % Import behavioral
 wrobel_subs=unique(sub);
-xls_path=[basedir, studydir,filesep, 'wrobel_haldol_study.xlsx'];
+xls_path=[basedir,filesep, studydir,filesep, 'wrobel_haldol_study.xlsx'];
 
 %Ratings
 [num,~,~]=xlsread(xls_path,1,'O:P');
@@ -113,6 +113,6 @@ wrobel.x_span        =x_span;
 wrobel.con_span      =ones(size(wrobel.cond));
 %% Save
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'wrobel')),'raw'}={wrobel};
+df{find(strcmp(df.study_ID,'wrobel')),'raw'}={wrobel};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

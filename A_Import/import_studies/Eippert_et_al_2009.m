@@ -1,11 +1,11 @@
-function Eippert_et_al_2009
+function Eippert_et_al_2009(datapath)
 
 %% Collects all behavioral data and absolute img-paths for eippert 2011
 % in a data frame, saves as .mat
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 
 %% Load images paths
 %and extract/assign experimental conditions from/to image names
@@ -136,6 +136,6 @@ eippert.x_span        =x_span;
 eippert.con_span      =con_span;
 %% Save in data_frame
 load(fullfile(basedir,'data_frame.mat'))
-df{find(strcmp(df.study_id,'eippert')),'raw'}={eippert};
+df{find(strcmp(df.study_ID,'eippert')),'raw'}={eippert};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

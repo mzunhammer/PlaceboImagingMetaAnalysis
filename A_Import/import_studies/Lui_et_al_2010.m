@@ -1,11 +1,11 @@
-function Lui_et_al_2010
+function Lui_et_al_2010(datapath)
 
 %% Collects all behavioral data and absolute img-paths for Elsenbruch 2012
 % in a data frame, saves as .mat
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 studydir= 'Lui_et_al_2010';
 
 %% Load images paths
@@ -138,6 +138,6 @@ lui.con_span      =con_span(:);
 
 %% Save
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'lui')),'raw'}={lui};
+df{find(strcmp(df.study_ID,'lui')),'raw'}={lui};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

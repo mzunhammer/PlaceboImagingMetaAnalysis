@@ -1,7 +1,7 @@
-function Atlas_et_al_2012
+function Atlas_et_al_2012(datapath)
 
 %% Set working environment
-basedir = '../../../Datasets/';
+basedir = datapath;
 
 %% Import Atlas_et_al_2012: Study 2
 
@@ -230,6 +230,6 @@ atlas.x_span      =x_span;
 atlas.con_span    =ones(size(atlas.cond));
 %% Save in data_frame
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'atlas')),'raw'}={atlas};
+df{find(strcmp(df.study_ID,'atlas')),'raw'}={atlas};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

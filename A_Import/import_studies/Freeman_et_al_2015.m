@@ -1,8 +1,8 @@
-function Freeman_et_al_2015
+function Freeman_et_al_2015(datapath)
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 
 %% Collects all behavioral data and absolute img-paths
 % in a data frame, saves as .mat
@@ -87,6 +87,6 @@ freeman.con_span      =[ones(size(img_pain_control));...
                        ones(size(img_painAllPrevsBL))*2];
 %% Save in data_frame
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'freeman')),'raw'}={freeman};
+df{find(strcmp(df.study_ID,'freeman')),'raw'}={freeman};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end

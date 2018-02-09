@@ -1,8 +1,8 @@
-function Kong_et_al_2009
+function Kong_et_al_2009(datapath)
 
 %% Set working environment
-clear
-basedir = '../../../Datasets/';
+
+basedir = datapath;
 
 %% Collects all behavioral data and absolute img-paths
 % in a data frame, saves as .mat
@@ -82,6 +82,6 @@ kong09.con_span      =NaN(size(img)); % currently unknown(?)
 
 %% Save
 load(fullfile(basedir,'data_frame.mat'));
-df{find(strcmp(df.study_id,'kong09')),'raw'}={kong09};
+df{find(strcmp(df.study_ID,'kong09')),'raw'}={kong09};
 save(fullfile(basedir,'data_frame.mat'),'df');
 end
