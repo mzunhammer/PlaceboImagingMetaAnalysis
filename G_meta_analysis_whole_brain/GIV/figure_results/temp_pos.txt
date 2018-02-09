@@ -1,0 +1,17 @@
+=====[ ./nii_results/full/pla/rrating/random/Full_pla_rrating_pperm05_pos.nii | Oxford Thalamic Connectivity Probability Atlas ]=====
+ClusterIndex	Voxels	MAX	MAX X (mm)	MAX Y (mm)	MAX Z (mm)	COG X (mm)	COG Y (mm)	COG Z (mm)
+1	902629	0	90	-126	-72	nan	nan	nan
+------------------------------------------
+Structures to which each cluster peak belongs to:
+1,90,-126,-72,Oxford Thalamic Connectivity Probability Atlas,No label found!
+------------------------------------------
+Structures to which each cluster belongs to:
+
+Cluster #1
+Primary motor:0.0224245
+Sensory:0.0249372
+Occipital:0.0405205
+Pre-frontal:0.123986
+Pre-motor:0.0407942
+Posterior parietal:0.070041
+Temporal:0.105831
