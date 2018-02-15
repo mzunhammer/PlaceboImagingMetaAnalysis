@@ -1,17 +1,249 @@
-=====[ ./nii_results/full/pla/rrating/random/Full_pla_rrating_pperm05_pos.nii | Oxford Thalamic Connectivity Probability Atlas ]=====
+=====[ ../nii_results/full/pla/g/fixed/Full_pla_g_pperm_FDR_pos.nii | Harvard-Oxford Cortical Structural Atlas ]=====
 ClusterIndex	Voxels	MAX	MAX X (mm)	MAX Y (mm)	MAX Z (mm)	COG X (mm)	COG Y (mm)	COG Z (mm)
-1	902629	0	90	-126	-72	nan	nan	nan
+37	57	0.169	30	-50	38	37.4	-52	42.1
+36	17	0.151	-8	-70	48	-6.14	-70.6	45.9
+35	17	0.139	-42	-48	46	-45.7	-48.4	46.2
+34	14	0.22	46	32	36	44.2	32.4	35.5
+33	10	0.136	6	-72	52	4.69	-73.1	51.2
+32	10	0.169	-34	-78	42	-33.9	-77	41.8
+31	5	0.148	38	-68	40	38.4	-66.1	40.7
+30	4	0.118	-28	-74	46	-27.5	-74.5	46.5
+29	4	0.137	36	-72	42	36.5	-72.5	41
+28	4	0.159	-40	10	34	-40	11.4	35.4
+27	3	0.124	-8	14	56	-7.4	14	56.7
+26	2	0.117	28	60	10	29	60	10
+25	2	0.0971	52	-48	42	53	-48	42
+24	2	0.125	2	-74	44	2	-74.9	44
+23	2	0.147	30	54	-4	30	54	-4.94
+22	2	0.121	42	-50	46	41	-51	47
+21	2	0.113	44	24	46	44	23.1	46
+20	1	0.127	14	-44	34	14	-44	34
+19	1	0.114	10	-40	32	10	-40	32
+18	1	0.125	-14	-64	32	-14	-64	32
+17	1	0.123	-50	38	12	-50	38	12
+16	1	0.114	-44	12	38	-44	12	38
+15	1	0.109	52	38	8	52	38	8
+14	1	0.122	-46	46	4	-46	46	4
+13	1	0.13	36	-62	40	36	-62	40
+12	1	0.112	-38	-56	42	-38	-56	42
+11	1	0.138	-42	-50	42	-42	-50	42
+10	1	0.0985	48	48	0	48	48	0
+9	1	0.108	8	30	42	8	30	42
+8	1	0.0915	-22	-70	44	-22	-70	44
+7	1	0.0992	64	-34	-10	64	-34	-10
+6	1	0.111	-36	-66	48	-36	-66	48
+5	1	0.124	-42	-58	48	-42	-58	48
+4	1	0.112	10	-64	50	10	-64	50
+3	1	0.149	48	-56	50	48	-56	50
+2	1	0.0934	48	-42	50	48	-42	50
+1	1	0.154	26	54	-12	26	54	-12
 ------------------------------------------
 Structures to which each cluster peak belongs to:
-1,90,-126,-72,Oxford Thalamic Connectivity Probability Atlas,No label found!
+37,30,-50,38,Harvard-Oxford Cortical Structural Atlas,9% Angular Gyrus, 9% Superior Parietal Lobule
+36,-8,-70,48,Harvard-Oxford Cortical Structural Atlas,39% Precuneous Cortex, 8% Lateral Occipital Cortex, superior division
+35,-42,-48,46,Harvard-Oxford Cortical Structural Atlas,34% Supramarginal Gyrus, posterior division, 21% Superior Parietal Lobule, 13% Angular Gyrus, 3% Supramarginal Gyrus, anterior division
+34,46,32,36,Harvard-Oxford Cortical Structural Atlas,57% Middle Frontal Gyrus, 10% Frontal Pole
+33,6,-72,52,Harvard-Oxford Cortical Structural Atlas,66% Precuneous Cortex, 6% Lateral Occipital Cortex, superior division, 1% Cuneal Cortex
+32,-34,-78,42,Harvard-Oxford Cortical Structural Atlas,73% Lateral Occipital Cortex, superior division
+31,38,-68,40,Harvard-Oxford Cortical Structural Atlas,45% Lateral Occipital Cortex, superior division
+30,-28,-74,46,Harvard-Oxford Cortical Structural Atlas,70% Lateral Occipital Cortex, superior division
+29,36,-72,42,Harvard-Oxford Cortical Structural Atlas,62% Lateral Occipital Cortex, superior division
+28,-40,10,34,Harvard-Oxford Cortical Structural Atlas,31% Middle Frontal Gyrus, 10% Inferior Frontal Gyrus, pars opercularis, 9% Precentral Gyrus
+27,-8,14,56,Harvard-Oxford Cortical Structural Atlas,25% Superior Frontal Gyrus, 5% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex), 3% Paracingulate Gyrus
+26,28,60,10,Harvard-Oxford Cortical Structural Atlas,84% Frontal Pole
+25,52,-48,42,Harvard-Oxford Cortical Structural Atlas,49% Angular Gyrus, 17% Supramarginal Gyrus, posterior division
+24,2,-74,44,Harvard-Oxford Cortical Structural Atlas,59% Precuneous Cortex, 4% Cuneal Cortex
+23,30,54,-4,Harvard-Oxford Cortical Structural Atlas,59% Frontal Pole
+22,42,-50,46,Harvard-Oxford Cortical Structural Atlas,34% Angular Gyrus, 21% Superior Parietal Lobule, 7% Supramarginal Gyrus, posterior division
+21,44,24,46,Harvard-Oxford Cortical Structural Atlas,70% Middle Frontal Gyrus
+20,14,-44,34,Harvard-Oxford Cortical Structural Atlas,28% Cingulate Gyrus, posterior division, 8% Precuneous Cortex
+19,10,-40,32,Harvard-Oxford Cortical Structural Atlas,35% Cingulate Gyrus, posterior division, 1% Precuneous Cortex
+18,-14,-64,32,Harvard-Oxford Cortical Structural Atlas,31% Precuneous Cortex, 4% Cuneal Cortex, 2% Supracalcarine Cortex
+17,-50,38,12,Harvard-Oxford Cortical Structural Atlas,42% Frontal Pole, 27% Inferior Frontal Gyrus, pars triangularis, 10% Middle Frontal Gyrus
+16,-44,12,38,Harvard-Oxford Cortical Structural Atlas,44% Middle Frontal Gyrus, 5% Inferior Frontal Gyrus, pars opercularis, 3% Precentral Gyrus
+15,52,38,8,Harvard-Oxford Cortical Structural Atlas,59% Frontal Pole, 18% Inferior Frontal Gyrus, pars triangularis, 3% Middle Frontal Gyrus
+14,-46,46,4,Harvard-Oxford Cortical Structural Atlas,93% Frontal Pole
+13,36,-62,40,Harvard-Oxford Cortical Structural Atlas,48% Lateral Occipital Cortex, superior division, 7% Angular Gyrus
+12,-38,-56,42,Harvard-Oxford Cortical Structural Atlas,24% Angular Gyrus, 14% Superior Parietal Lobule, 12% Lateral Occipital Cortex, superior division, 7% Supramarginal Gyrus, posterior division
+11,-42,-50,42,Harvard-Oxford Cortical Structural Atlas,24% Angular Gyrus, 23% Supramarginal Gyrus, posterior division, 7% Superior Parietal Lobule, 1% Lateral Occipital Cortex, superior division, 1% Supramarginal Gyrus, anterior division
+10,48,48,0,Harvard-Oxford Cortical Structural Atlas,81% Frontal Pole
+9,8,30,42,Harvard-Oxford Cortical Structural Atlas,33% Paracingulate Gyrus, 25% Superior Frontal Gyrus
+8,-22,-70,44,Harvard-Oxford Cortical Structural Atlas,59% Lateral Occipital Cortex, superior division, 3% Precuneous Cortex
+7,64,-34,-10,Harvard-Oxford Cortical Structural Atlas,45% Middle Temporal Gyrus, posterior division, 7% Middle Temporal Gyrus, temporooccipital part, 1% Inferior Temporal Gyrus, temporooccipital part, 1% Inferior Temporal Gyrus, posterior division
+6,-36,-66,48,Harvard-Oxford Cortical Structural Atlas,64% Lateral Occipital Cortex, superior division, 2% Angular Gyrus, 1% Superior Parietal Lobule
+5,-42,-58,48,Harvard-Oxford Cortical Structural Atlas,35% Angular Gyrus, 20% Lateral Occipital Cortex, superior division, 7% Supramarginal Gyrus, posterior division, 7% Superior Parietal Lobule
+4,10,-64,50,Harvard-Oxford Cortical Structural Atlas,34% Precuneous Cortex, 6% Lateral Occipital Cortex, superior division
+3,48,-56,50,Harvard-Oxford Cortical Structural Atlas,48% Angular Gyrus, 25% Lateral Occipital Cortex, superior division, 2% Superior Parietal Lobule
+2,48,-42,50,Harvard-Oxford Cortical Structural Atlas,45% Supramarginal Gyrus, posterior division, 12% Angular Gyrus, 5% Superior Parietal Lobule, 2% Postcentral Gyrus
+1,26,54,-12,Harvard-Oxford Cortical Structural Atlas,66% Frontal Pole
 ------------------------------------------
 Structures to which each cluster belongs to:
 
+Cluster #37
+Superior Parietal Lobule:14.4035
+Supramarginal Gyrus, posterior division:8.98246
+Angular Gyrus:21.2807
+Lateral Occipital Cortex, superior division:10.8246
+
+Cluster #36
+Lateral Occipital Cortex, superior division:4.88235
+Precuneous Cortex:51.7647
+Cuneal Cortex:2.17647
+
+Cluster #35
+Postcentral Gyrus:0.176471
+Superior Parietal Lobule:7.94118
+Supramarginal Gyrus, anterior division:2.58824
+Supramarginal Gyrus, posterior division:32.7059
+Angular Gyrus:17.0588
+Lateral Occipital Cortex, superior division:1.11765
+Parietal Operculum Cortex:0.0588235
+
+Cluster #34
+Frontal Pole:14.5714
+Middle Frontal Gyrus:57.5714
+
+Cluster #33
+Lateral Occipital Cortex, superior division:6.6
+Precuneous Cortex:62.1
+Cuneal Cortex:1.2
+
+Cluster #32
+Lateral Occipital Cortex, superior division:68.9
+
+Cluster #31
+Angular Gyrus:1.8
+Lateral Occipital Cortex, superior division:49
+
+Cluster #30
+Lateral Occipital Cortex, superior division:69.75
+
+Cluster #29
+Lateral Occipital Cortex, superior division:62.5
+
+Cluster #28
+Middle Frontal Gyrus:34.75
+Inferior Frontal Gyrus, pars opercularis:6.25
+Precentral Gyrus:4
+
+Cluster #27
+Superior Frontal Gyrus:27.3333
+Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex):4.66667
+Paracingulate Gyrus:4
+
+Cluster #26
+Frontal Pole:87
+
+Cluster #25
+Supramarginal Gyrus, posterior division:18
+Angular Gyrus:50
+
+Cluster #24
+Precuneous Cortex:55
+Cuneal Cortex:5
+
+Cluster #23
+Frontal Pole:55
+
+Cluster #22
+Superior Parietal Lobule:24
+Supramarginal Gyrus, posterior division:3.5
+Angular Gyrus:33
+Lateral Occipital Cortex, superior division:1.5
+
+Cluster #21
+Middle Frontal Gyrus:72
+
+Cluster #20
+Cingulate Gyrus, posterior division:28
+Precuneous Cortex:8
+
+Cluster #19
+Cingulate Gyrus, posterior division:35
+Precuneous Cortex:1
+
+Cluster #18
+Precuneous Cortex:31
+Cuneal Cortex:4
+Supracalcarine Cortex:2
+
+Cluster #17
+Frontal Pole:42
+Middle Frontal Gyrus:10
+Inferior Frontal Gyrus, pars triangularis:27
+
+Cluster #16
+Middle Frontal Gyrus:44
+Inferior Frontal Gyrus, pars opercularis:5
+Precentral Gyrus:3
+
+Cluster #15
+Frontal Pole:59
+Middle Frontal Gyrus:3
+Inferior Frontal Gyrus, pars triangularis:18
+
+Cluster #14
+Frontal Pole:93
+
+Cluster #13
+Angular Gyrus:7
+Lateral Occipital Cortex, superior division:48
+
+Cluster #12
+Superior Parietal Lobule:14
+Supramarginal Gyrus, posterior division:7
+Angular Gyrus:24
+Lateral Occipital Cortex, superior division:12
+
+Cluster #11
+Superior Parietal Lobule:7
+Supramarginal Gyrus, anterior division:1
+Supramarginal Gyrus, posterior division:23
+Angular Gyrus:24
+Lateral Occipital Cortex, superior division:1
+
+Cluster #10
+Frontal Pole:81
+
+Cluster #9
+Superior Frontal Gyrus:25
+Paracingulate Gyrus:33
+
+Cluster #8
+Lateral Occipital Cortex, superior division:59
+Precuneous Cortex:3
+
+Cluster #7
+Middle Temporal Gyrus, posterior division:45
+Middle Temporal Gyrus, temporooccipital part:7
+Inferior Temporal Gyrus, posterior division:1
+Inferior Temporal Gyrus, temporooccipital part:1
+
+Cluster #6
+Superior Parietal Lobule:1
+Angular Gyrus:2
+Lateral Occipital Cortex, superior division:64
+
+Cluster #5
+Superior Parietal Lobule:7
+Supramarginal Gyrus, posterior division:7
+Angular Gyrus:35
+Lateral Occipital Cortex, superior division:20
+
+Cluster #4
+Lateral Occipital Cortex, superior division:6
+Precuneous Cortex:34
+
+Cluster #3
+Superior Parietal Lobule:2
+Angular Gyrus:48
+Lateral Occipital Cortex, superior division:25
+
+Cluster #2
+Postcentral Gyrus:2
+Superior Parietal Lobule:5
+Supramarginal Gyrus, posterior division:45
+Angular Gyrus:12
+
 Cluster #1
-Primary motor:0.0224245
-Sensory:0.0249372
-Occipital:0.0405205
-Pre-frontal:0.123986
-Pre-motor:0.0407942
-Posterior parietal:0.070041
-Temporal:0.105831
+Frontal Pole:66

@@ -1,56 +1,239 @@
-=====[ ./nii_results/full/pla/rrating/random/Full_pla_rrating_pperm05_neg.nii | Oxford Thalamic Connectivity Probability Atlas ]=====
+=====[ ../nii_results/full/pla/g/fixed/Full_pla_g_pperm_FDR_neg.nii | Harvard-Oxford Cortical Structural Atlas ]=====
 ClusterIndex	Voxels	MAX	MAX X (mm)	MAX Y (mm)	MAX Z (mm)	COG X (mm)	COG Y (mm)	COG Z (mm)
-10	174	0.267	6	6	60	5.79	6.28	57.3
-9	17	0.241	10	-16	6	12.1	-16.1	8.56
-8	11	0.232	54	20	-6	52.6	18.6	-5.46
-7	6	0.225	-8	-10	12	-8	-9	11
-6	6	0.243	16	-20	40	14	-16.1	42
-5	5	0.23	10	-4	46	10	-4	46
-4	3	0.227	36	-18	20	36.7	-18	20
-3	2	0.229	58	12	0	58	11	-7.63e-06
-2	1	0.216	-60	-20	26	-60	-20	26
-1	1	0.229	40	-2	58	40	-2	58
+91	96	0.162	8	-8	52	6.66	-6.71	53.1
+90	57	0.219	-24	4	-6	-25.2	3.92	-5.21
+89	47	0.169	36	8	0	40.3	7.73	0.995
+88	41	0.139	8	-14	68	2.5	-12.7	65.3
+87	15	0.131	-2	2	42	-0.795	2.92	42.8
+86	13	0.137	-16	-44	58	-16.4	-45.1	58
+85	11	0.152	-36	-64	-22	-34.2	-62.8	-22.9
+84	8	0.16	0	-42	0	-1.21	-40.3	0.752
+83	7	0.136	20	-34	68	19.5	-34.5	66.4
+82	7	0.142	-28	-50	-18	-26.5	-49.7	-18.1
+81	6	0.109	24	-8	64	25.3	-8	65.6
+80	5	0.153	26	-8	24	26.8	-7.25	24.7
+79	4	0.108	26	-30	68	26.5	-31.5	68
+78	4	0.101	-8	-42	62	-7.53	-41.5	63.4
+77	3	0.0862	4	12	44	2.71	10.7	44.6
+76	3	0.131	40	-8	38	40	-9.78	38.6
+75	3	0.113	48	-18	20	48.7	-17.3	19.3
+74	3	0.106	-50	0	8	-50	0.626	8.67
+73	2	0.112	20	-62	-28	21	-62	-28
+72	2	0.129	10	-50	62	11	-49	62
+71	2	0.12	-16	-66	-10	-17	-67	-10
+70	2	0.107	-8	-62	-10	-8	-61	-9.04
+69	2	0.124	-18	-30	54	-18	-31	54
+68	2	0.127	26	0	-8	26	-0.963	-8
+67	2	0.148	-30	-60	-6	-30	-61	-6
+66	2	0.123	14	2	44	13	1.04	44
+65	2	0.104	-6	-88	36	-6	-89	36
+64	2	0.122	-26	6	4	-25	5.02	4
+63	2	0.166	24	34	14	24	35	15
+62	2	0.126	26	-20	12	26.9	-20	12
+61	1	0.0798	-62	-10	8	-62	-10	8
+60	1	0.101	46	-18	8	46	-18	8
+59	1	0.107	-62	-6	10	-62	-6	10
+58	1	0.0888	-22	-52	6	-22	-52	6
+57	1	0.119	62	-8	14	62	-8	14
+56	1	0.0849	58	6	14	58	6	14
+55	1	0.132	2	58	4	2	58	4
+54	1	0.0823	66	-12	16	66	-12	16
+53	1	0.125	12	58	16	12	58	16
+52	1	0.0935	0	-24	18	0	-24	18
+51	1	0.0891	-50	-22	18	-50	-22	18
+50	1	0.109	-6	-30	4	-6	-30	4
+49	1	0.138	22	-8	18	22	-8	18
+48	1	0.107	40	-20	20	40	-20	20
+47	1	0.0989	-44	-70	22	-44	-70	22
+46	1	0.0902	60	-52	24	60	-52	24
+45	1	0.0912	60	-8	24	60	-8	24
+44	1	0.125	-2	-32	4	-2	-32	4
+43	1	0.1	-50	-18	28	-50	-18	28
+42	1	0.116	20	2	28	20	2	28
+41	1	0.127	20	8	28	20	8	28
+40	1	0.117	16	10	30	16	10	30
+39	1	0.127	-26	-18	32	-26	-18	32
+38	1	0.113	-48	-18	32	-48	-18	32
+37	1	0.164	-26	-50	34	-26	-50	34
+36	1	0.108	14	-92	4	14	-92	4
+35	1	0.13	-18	-66	2	-18	-66	2
+34	1	0.104	34	-14	40	34	-14	40
+33	1	0.119	8	2	40	8	2	40
+32	1	0.131	32	0	0	32	0	0
+31	1	0.107	-8	-4	42	-8	-4	42
+30	1	0.106	42	-14	44	42	-14	44
+29	1	0.117	38	-60	-2	38	-60	-2
+28	1	0.114	-14	-66	-4	-14	-66	-4
+27	1	0.126	-14	-70	-4	-14	-70	-4
+26	1	0.086	8	6	46	8	6	46
+25	1	0.111	22	6	-6	22	6	-6
+24	1	0.157	20	-4	-8	20	-4	-8
+23	1	0.0979	14	-52	56	14	-52	56
+22	1	0.113	-16	-32	58	-16	-32	58
+21	1	0.0879	-18	-48	60	-18	-48	60
+20	1	0.0938	18	-42	60	18	-42	60
+19	1	0.122	-14	-72	-8	-14	-72	-8
+18	1	0.15	-40	-62	-24	-40	-62	-24
+17	1	0.0992	-18	-36	-26	-18	-36	-26
+16	1	0.0961	24	-24	62	24	-24	62
+15	1	0.128	-46	-60	-26	-46	-60	-26
+14	1	0.135	-26	-30	64	-26	-30	64
+13	1	0.131	22	-30	-30	22	-30	-30
+12	1	0.133	12	-2	64	12	-2	64
+11	1	0.0911	-16	-26	66	-16	-26	66
+10	1	0.103	8	-18	66	8	-18	66
+9	1	0.0871	4	-18	66	4	-18	66
+8	1	0.124	-14	-4	66	-14	-4	66
+7	1	0.113	-44	-56	-30	-44	-56	-30
+6	1	0.129	12	-14	68	12	-14	68
+5	1	0.0975	20	-6	68	20	-6	68
+4	1	0.137	-22	-20	70	-22	-20	70
+3	1	0.107	-14	-10	70	-14	-10	70
+2	1	0.122	16	-8	72	16	-8	72
+1	1	0.0873	-8	-18	74	-8	-18	74
 ------------------------------------------
 Structures to which each cluster peak belongs to:
-10,6,6,60,Oxford Thalamic Connectivity Probability Atlas,No label found!
-9,10,-16,6,Oxford Thalamic Connectivity Probability Atlas,94% Pre-frontal
-8,54,20,-6,Oxford Thalamic Connectivity Probability Atlas,No label found!
-7,-8,-10,12,Oxford Thalamic Connectivity Probability Atlas,60% Pre-frontal, 42% Temporal, 22% Occipital
-6,16,-20,40,Oxford Thalamic Connectivity Probability Atlas,No label found!
-5,10,-4,46,Oxford Thalamic Connectivity Probability Atlas,No label found!
-4,36,-18,20,Oxford Thalamic Connectivity Probability Atlas,No label found!
-3,58,12,0,Oxford Thalamic Connectivity Probability Atlas,No label found!
-2,-60,-20,26,Oxford Thalamic Connectivity Probability Atlas,No label found!
-1,40,-2,58,Oxford Thalamic Connectivity Probability Atlas,No label found!
+91,8,-8,52,Harvard-Oxford Cortical Structural Atlas,46% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex), 9% Precentral Gyrus, 7% Cingulate Gyrus, anterior division, 1% Cingulate Gyrus, posterior division
+90,-24,4,-6,Harvard-Oxford Cortical Structural Atlas,No label found!
+89,36,8,0,Harvard-Oxford Cortical Structural Atlas,38% Insular Cortex
+88,8,-14,68,Harvard-Oxford Cortical Structural Atlas,19% Precentral Gyrus, 18% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex), 5% Superior Frontal Gyrus
+87,-2,2,42,Harvard-Oxford Cortical Structural Atlas,71% Cingulate Gyrus, anterior division, 16% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex), 1% Paracingulate Gyrus
+86,-16,-44,58,Harvard-Oxford Cortical Structural Atlas,35% Postcentral Gyrus, 5% Precuneous Cortex, 3% Superior Parietal Lobule, 1% Precentral Gyrus
+85,-36,-64,-22,Harvard-Oxford Cortical Structural Atlas,14% Temporal Occipital Fusiform Cortex, 8% Occipital Fusiform Gyrus, 1% Lateral Occipital Cortex, inferior division
+84,0,-42,0,Harvard-Oxford Cortical Structural Atlas,No label found!
+83,20,-34,68,Harvard-Oxford Cortical Structural Atlas,59% Postcentral Gyrus, 8% Precentral Gyrus, 2% Superior Parietal Lobule
+82,-28,-50,-18,Harvard-Oxford Cortical Structural Atlas,72% Temporal Occipital Fusiform Cortex, 8% Temporal Fusiform Cortex, posterior division, 3% Lingual Gyrus
+81,24,-8,64,Harvard-Oxford Cortical Structural Atlas,27% Superior Frontal Gyrus, 25% Precentral Gyrus, 6% Middle Frontal Gyrus
+80,26,-8,24,Harvard-Oxford Cortical Structural Atlas,No label found!
+79,26,-30,68,Harvard-Oxford Cortical Structural Atlas,47% Postcentral Gyrus, 19% Precentral Gyrus
+78,-8,-42,62,Harvard-Oxford Cortical Structural Atlas,40% Postcentral Gyrus, 12% Precuneous Cortex, 2% Precentral Gyrus
+77,4,12,44,Harvard-Oxford Cortical Structural Atlas,63% Paracingulate Gyrus, 29% Cingulate Gyrus, anterior division, 4% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex)
+76,40,-8,38,Harvard-Oxford Cortical Structural Atlas,12% Precentral Gyrus, 1% Middle Frontal Gyrus
+75,48,-18,20,Harvard-Oxford Cortical Structural Atlas,28% Central Opercular Cortex, 23% Parietal Operculum Cortex, 2% Postcentral Gyrus, 1% Heschl's Gyrus (includes H1 and H2)
+74,-50,0,8,Harvard-Oxford Cortical Structural Atlas,51% Central Opercular Cortex, 6% Precentral Gyrus, 2% Inferior Frontal Gyrus, pars opercularis
+73,20,-62,-28,Harvard-Oxford Cortical Structural Atlas,No label found!
+72,10,-50,62,Harvard-Oxford Cortical Structural Atlas,43% Precuneous Cortex, 15% Superior Parietal Lobule, 9% Postcentral Gyrus, 1% Precentral Gyrus
+71,-16,-66,-10,Harvard-Oxford Cortical Structural Atlas,55% Lingual Gyrus, 20% Occipital Fusiform Gyrus, 3% Temporal Occipital Fusiform Cortex
+70,-8,-62,-10,Harvard-Oxford Cortical Structural Atlas,7% Lingual Gyrus, 1% Temporal Occipital Fusiform Cortex
+69,-18,-30,54,Harvard-Oxford Cortical Structural Atlas,9% Precentral Gyrus
+68,26,0,-8,Harvard-Oxford Cortical Structural Atlas,No label found!
+67,-30,-60,-6,Harvard-Oxford Cortical Structural Atlas,29% Temporal Occipital Fusiform Cortex, 14% Lingual Gyrus, 11% Occipital Fusiform Gyrus
+66,14,2,44,Harvard-Oxford Cortical Structural Atlas,20% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex), 4% Cingulate Gyrus, anterior division, 2% Paracingulate Gyrus
+65,-6,-88,36,Harvard-Oxford Cortical Structural Atlas,35% Cuneal Cortex, 24% Occipital Pole, 9% Lateral Occipital Cortex, superior division, 1% Precuneous Cortex
+64,-26,6,4,Harvard-Oxford Cortical Structural Atlas,No label found!
+63,24,34,14,Harvard-Oxford Cortical Structural Atlas,No label found!
+62,26,-20,12,Harvard-Oxford Cortical Structural Atlas,No label found!
+61,-62,-10,8,Harvard-Oxford Cortical Structural Atlas,37% Central Opercular Cortex, 11% Planum Temporale, 9% Planum Polare, 9% Postcentral Gyrus, 4% Superior Temporal Gyrus, posterior division, 4% Superior Temporal Gyrus, anterior division, 1% Heschl's Gyrus (includes H1 and H2)
+60,46,-18,8,Harvard-Oxford Cortical Structural Atlas,49% Heschl's Gyrus (includes H1 and H2), 6% Central Opercular Cortex, 1% Planum Temporale
+59,-62,-6,10,Harvard-Oxford Cortical Structural Atlas,29% Central Opercular Cortex, 23% Postcentral Gyrus, 17% Precentral Gyrus, 3% Planum Polare, 1% Planum Temporale, 1% Heschl's Gyrus (includes H1 and H2)
+58,-22,-52,6,Harvard-Oxford Cortical Structural Atlas,26% Precuneous Cortex, 3% Lingual Gyrus, 3% Cingulate Gyrus, posterior division
+57,62,-8,14,Harvard-Oxford Cortical Structural Atlas,26% Postcentral Gyrus, 22% Central Opercular Cortex, 7% Precentral Gyrus, 1% Planum Temporale
+56,58,6,14,Harvard-Oxford Cortical Structural Atlas,55% Precentral Gyrus, 7% Inferior Frontal Gyrus, pars opercularis, 2% Postcentral Gyrus, 1% Central Opercular Cortex
+55,2,58,4,Harvard-Oxford Cortical Structural Atlas,60% Frontal Pole, 14% Paracingulate Gyrus
+54,66,-12,16,Harvard-Oxford Cortical Structural Atlas,65% Postcentral Gyrus, 13% Central Opercular Cortex, 1% Planum Temporale, 1% Supramarginal Gyrus, anterior division
+53,12,58,16,Harvard-Oxford Cortical Structural Atlas,16% Frontal Pole, 3% Superior Frontal Gyrus
+52,0,-24,18,Harvard-Oxford Cortical Structural Atlas,No label found!
+51,-50,-22,18,Harvard-Oxford Cortical Structural Atlas,53% Central Opercular Cortex, 27% Parietal Operculum Cortex, 3% Postcentral Gyrus, 2% Heschl's Gyrus (includes H1 and H2)
+50,-6,-30,4,Harvard-Oxford Cortical Structural Atlas,No label found!
+49,22,-8,18,Harvard-Oxford Cortical Structural Atlas,No label found!
+48,40,-20,20,Harvard-Oxford Cortical Structural Atlas,40% Parietal Operculum Cortex, 27% Central Opercular Cortex, 2% Insular Cortex
+47,-44,-70,22,Harvard-Oxford Cortical Structural Atlas,66% Lateral Occipital Cortex, superior division, 4% Lateral Occipital Cortex, inferior division
+46,60,-52,24,Harvard-Oxford Cortical Structural Atlas,74% Angular Gyrus, 4% Supramarginal Gyrus, posterior division, 1% Lateral Occipital Cortex, superior division
+45,60,-8,24,Harvard-Oxford Cortical Structural Atlas,43% Postcentral Gyrus, 13% Precentral Gyrus
+44,-2,-32,4,Harvard-Oxford Cortical Structural Atlas,1% Cingulate Gyrus, posterior division
+43,-50,-18,28,Harvard-Oxford Cortical Structural Atlas,24% Postcentral Gyrus, 2% Supramarginal Gyrus, anterior division, 1% Precentral Gyrus
+42,20,2,28,Harvard-Oxford Cortical Structural Atlas,No label found!
+41,20,8,28,Harvard-Oxford Cortical Structural Atlas,No label found!
+40,16,10,30,Harvard-Oxford Cortical Structural Atlas,No label found!
+39,-26,-18,32,Harvard-Oxford Cortical Structural Atlas,No label found!
+38,-48,-18,32,Harvard-Oxford Cortical Structural Atlas,27% Postcentral Gyrus, 4% Precentral Gyrus, 2% Supramarginal Gyrus, anterior division
+37,-26,-50,34,Harvard-Oxford Cortical Structural Atlas,7% Superior Parietal Lobule
+36,14,-92,4,Harvard-Oxford Cortical Structural Atlas,53% Occipital Pole, 12% Intracalcarine Cortex, 2% Lingual Gyrus
+35,-18,-66,2,Harvard-Oxford Cortical Structural Atlas,28% Intracalcarine Cortex, 13% Lingual Gyrus, 1% Precuneous Cortex, 1% Cingulate Gyrus, posterior division
+34,34,-14,40,Harvard-Oxford Cortical Structural Atlas,18% Precentral Gyrus, 3% Postcentral Gyrus
+33,8,2,40,Harvard-Oxford Cortical Structural Atlas,37% Cingulate Gyrus, anterior division, 14% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex), 1% Paracingulate Gyrus
+32,32,0,0,Harvard-Oxford Cortical Structural Atlas,No label found!
+31,-8,-4,42,Harvard-Oxford Cortical Structural Atlas,29% Cingulate Gyrus, anterior division, 28% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex)
+30,42,-14,44,Harvard-Oxford Cortical Structural Atlas,42% Precentral Gyrus, 23% Postcentral Gyrus
+29,38,-60,-2,Harvard-Oxford Cortical Structural Atlas,4% Lateral Occipital Cortex, inferior division, 2% Inferior Temporal Gyrus, temporooccipital part, 1% Occipital Fusiform Gyrus, 1% Middle Temporal Gyrus, temporooccipital part
+28,-14,-66,-4,Harvard-Oxford Cortical Structural Atlas,51% Lingual Gyrus, 3% Occipital Fusiform Gyrus, 2% Temporal Occipital Fusiform Cortex, 1% Intracalcarine Cortex
+27,-14,-70,-4,Harvard-Oxford Cortical Structural Atlas,43% Lingual Gyrus, 7% Occipital Fusiform Gyrus, 2% Intracalcarine Cortex
+26,8,6,46,Harvard-Oxford Cortical Structural Atlas,38% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex), 20% Cingulate Gyrus, anterior division, 18% Paracingulate Gyrus
+25,22,6,-6,Harvard-Oxford Cortical Structural Atlas,No label found!
+24,20,-4,-8,Harvard-Oxford Cortical Structural Atlas,No label found!
+23,14,-52,56,Harvard-Oxford Cortical Structural Atlas,32% Precuneous Cortex, 15% Superior Parietal Lobule, 2% Postcentral Gyrus
+22,-16,-32,58,Harvard-Oxford Cortical Structural Atlas,16% Precentral Gyrus, 7% Postcentral Gyrus
+21,-18,-48,60,Harvard-Oxford Cortical Structural Atlas,24% Superior Parietal Lobule, 17% Postcentral Gyrus, 1% Lateral Occipital Cortex, superior division
+20,18,-42,60,Harvard-Oxford Cortical Structural Atlas,26% Postcentral Gyrus, 15% Superior Parietal Lobule
+19,-14,-72,-8,Harvard-Oxford Cortical Structural Atlas,48% Lingual Gyrus, 22% Occipital Fusiform Gyrus
+18,-40,-62,-24,Harvard-Oxford Cortical Structural Atlas,10% Temporal Occipital Fusiform Cortex, 2% Occipital Fusiform Gyrus, 1% Lateral Occipital Cortex, inferior division
+17,-18,-36,-26,Harvard-Oxford Cortical Structural Atlas,No label found!
+16,24,-24,62,Harvard-Oxford Cortical Structural Atlas,49% Precentral Gyrus, 8% Postcentral Gyrus
+15,-46,-60,-26,Harvard-Oxford Cortical Structural Atlas,8% Temporal Occipital Fusiform Cortex, 2% Inferior Temporal Gyrus, temporooccipital part
+14,-26,-30,64,Harvard-Oxford Cortical Structural Atlas,45% Postcentral Gyrus, 20% Precentral Gyrus
+13,22,-30,-30,Harvard-Oxford Cortical Structural Atlas,1% Temporal Occipital Fusiform Cortex
+12,12,-2,64,Harvard-Oxford Cortical Structural Atlas,20% Superior Frontal Gyrus, 9% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex), 2% Precentral Gyrus
+11,-16,-26,66,Harvard-Oxford Cortical Structural Atlas,37% Precentral Gyrus, 5% Postcentral Gyrus
+10,8,-18,66,Harvard-Oxford Cortical Structural Atlas,27% Precentral Gyrus, 5% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex)
+9,4,-18,66,Harvard-Oxford Cortical Structural Atlas,58% Precentral Gyrus, 9% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex)
+8,-14,-4,66,Harvard-Oxford Cortical Structural Atlas,33% Superior Frontal Gyrus
+7,-44,-56,-30,Harvard-Oxford Cortical Structural Atlas,No label found!
+6,12,-14,68,Harvard-Oxford Cortical Structural Atlas,17% Precentral Gyrus, 9% Superior Frontal Gyrus, 7% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex)
+5,20,-6,68,Harvard-Oxford Cortical Structural Atlas,38% Superior Frontal Gyrus, 15% Precentral Gyrus, 1% Middle Frontal Gyrus
+4,-22,-20,70,Harvard-Oxford Cortical Structural Atlas,50% Precentral Gyrus, 2% Postcentral Gyrus, 2% Superior Frontal Gyrus
+3,-14,-10,70,Harvard-Oxford Cortical Structural Atlas,37% Superior Frontal Gyrus, 11% Precentral Gyrus
+2,16,-8,72,Harvard-Oxford Cortical Structural Atlas,44% Superior Frontal Gyrus, 23% Precentral Gyrus
+1,-8,-18,74,Harvard-Oxford Cortical Structural Atlas,24% Precentral Gyrus, 4% Superior Frontal Gyrus, 2% Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex)
 ------------------------------------------
 Structures to which each cluster belongs to:
 
-Cluster #10
+Cluster #91
+Superior Frontal Gyrus:1.33333
+Precentral Gyrus:7.97917
+Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex):43.1458
+Cingulate Gyrus, anterior division:12.3958
+Cingulate Gyrus, posterior division:2.47917
 
-Cluster #9
-Primary motor:1.58824
-Sensory:2.23529
-Occipital:1.76471
-Pre-frontal:73
-Pre-motor:14.4706
-Posterior parietal:4.82353
-Temporal:8.70588
+Cluster #90
 
-Cluster #8
+Cluster #89
+Insular Cortex:33.2128
+Inferior Frontal Gyrus, pars opercularis:0.531915
+Precentral Gyrus:0.617021
+Temporal Pole:0.212766
+Frontal Operculum Cortex:6.2766
+Central Opercular Cortex:18.8085
+Planum Polare:1.19149
+Heschl's Gyrus (includes H1 and H2):0.0851064
 
-Cluster #7
-Occipital:15.6667
-Pre-frontal:62
-Temporal:36.5
+Cluster #88
+Superior Frontal Gyrus:0.414634
+Precentral Gyrus:28.4878
+Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex):34.2683
 
-Cluster #6
+Cluster #87
+Juxtapositional Lobule Cortex (formerly Supplementary Motor Cortex):22.8
+Paracingulate Gyrus:3.06667
+Cingulate Gyrus, anterior division:55.4667
 
-Cluster #5
+Cluster #86
+Precentral Gyrus:1.53846
+Postcentral Gyrus:26.7692
+Superior Parietal Lobule:6.53846
+Supramarginal Gyrus, anterior division:0.615385
+Lateral Occipital Cortex, superior division:0.384615
+Precuneous Cortex:4.46154
 
-Cluster #4
+Cluster #85
+Lateral Occipital Cortex, inferior division:0.181818
+Temporal Occipital Fusiform Cortex:8.18182
+Occipital Fusiform Gyrus:3.54545
 
-Cluster #3
+Cluster #84
+Cingulate Gyrus, posterior division:0.625
+Parahippocampal Gyrus, posterior division:0.5
 
-Cluster #2
-
-Cluster #1
+Cluster #83
+Precentral Gyrus:5.57143
+Postcentral Gyrus:58
+Superior Parietal Lobule:2.71429
