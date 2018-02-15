@@ -1,4 +1,6 @@
 function print_summary_niis(summary,statmask,label,outpath)
+addpath(genpath(fullfile(userpath,'/CanlabCore/CanlabCore'))); % Required for FDR thresholding
+
 p = mfilename('fullpath'); %CANlab's apply mask do not like relative paths so this cludge is needed
 [p,~,~]=fileparts(p);
 splitp=strsplit(p,'/');
@@ -64,60 +66,58 @@ outpath_fixed=fullfile(outpath,'fixed');
 %main (fixed effects) outcome unthresholded
 outimg_main=template;
 outimg_main(statmask)=summary.fixed.summary;
-print_image(outimg_main,mask_path,fullfile(outpath_fixed,[label,'_unthresh_fixed']));
+print_image(outimg_main,mask_path,fullfile(outpath_fixed,[label,'_unthresh']));
 %main (fixed effects) outcome at p<.001 uncorrected
 outimg_main_p001=template;
 outimg_main_p001(statmask)=summary.fixed.summary.*(summary.fixed.p<.001);
-print_image(outimg_main_p001,mask_path,fullfile(outpath_fixed,[label,'_p001_fixed']))
+print_image(outimg_main_p001,mask_path,fullfile(outpath_fixed,[label,'_p001']))
 %main (fixed effects) outcome at p FDR
 outimg_main_p_FDR=template;
-FDR_tresh=fdr(summary.fixed.p,0.05); % Note: FDR-function as provided by SPM12's fieldtrip. Was copied to GIV as function resides in private folder inside SPM12
-outimg_main_p_FDR(statmask)=summary.fixed.summary.*FDR_tresh;
+outimg_main_p_FDR(statmask)=summary.fixed.summary.*(summary.fixed.p<summary.fixed.p_FDR_thresh);
 print_image(outimg_main_p_FDR,mask_path,fullfile(outpath_fixed,[label,'_p_FDR']))
 %main (fixed effects) outcome at pperm<.001 (uncorrected)
 outimg_main_pperm_001=template;
 outimg_main_pperm_001(statmask)=summary.fixed.summary.*(summary.fixed.perm.p_uncorr<.05);
-print_image(outimg_main_pperm_001,mask_path,fullfile(outpath_fixed,[label,'_pperm_p001_fixed']))
+print_image(outimg_main_pperm_001,mask_path,fullfile(outpath_fixed,[label,'_pperm_p001']))
 %main (fixed effects) outcome at pperm FDR
 outimg_main_pperm_FDR=template;
-FDR_tresh=fdr(summary.fixed.perm.p_uncorr,0.05); % Note: FDR-function as provided by SPM12's fieldtrip. Was copied to GIV as function resides in private folder inside SPM12
-outimg_main_pperm_FDR(statmask)=summary.fixed.summary.*(summary.fixed.perm.p_uncorr<FDR_tresh);
-print_image(outimg_main_pperm_FDR,mask_path,fullfile(outpath_fixed,[label,'_pperm_FDR_fixed']))
+outimg_main_pperm_FDR(statmask)=summary.fixed.summary.*(summary.fixed.perm.p_uncorr<summary.fixed.perm.pperm_FDR_thresh);
+print_image(outimg_main_pperm_FDR,mask_path,fullfile(outpath_fixed,[label,'_pperm_FDR']))
 
 %main (fixed effects) outcome at pperm<.05 (FWE corrected)
 outimg_main_pperm_FWE05=template;
 outimg_main_pperm_FWE05(statmask)=summary.fixed.summary.*(summary.fixed.perm.p_FWE<.05);
-print_image(outimg_main_pperm_FWE05,mask_path,fullfile(outpath_fixed,[label,'_pperm_FWE05_fixed']))
+print_image(outimg_main_pperm_FWE05,mask_path,fullfile(outpath_fixed,[label,'_pperm_FWE05']))
 
 %SE of main (fixed effects) outcome unthresholded
 outimg_SEmain=template;
 outimg_SEmain(statmask)=summary.fixed.SEsummary;
-print_image(outimg_SEmain,mask_path,fullfile(outpath_fixed,[label,'_SE_fixed']));
+print_image(outimg_SEmain,mask_path,fullfile(outpath_fixed,[label,'_SE']));
 
 %SEsmooth of main (fixed effects) outcome unthresholded
 outimg_SEsmooth=template;
 outimg_SEsmooth(statmask)=summary.fixed.SEsummary_smooth;
-print_image(outimg_SEsmooth,mask_path,fullfile(outpath_fixed,[label,'_SE_smooth_fixed']));
+print_image(outimg_SEsmooth,mask_path,fullfile(outpath_fixed,[label,'_SE_smooth']));
 
 %z of main (fixed effects) outcome unthresholded
 outimg_z=template;
 outimg_z(statmask)=summary.fixed.z;
-print_image(outimg_z,mask_path,fullfile(outpath_fixed,[label,'_z_fixed']));
+print_image(outimg_z,mask_path,fullfile(outpath_fixed,[label,'_z']));
 
 %(pseudo-)z of main (fixed effects) outcome unthresholded, based on
 %smoothed SE
 outimg_z_smooth=template;
 outimg_z_smooth(statmask)=summary.fixed.z_smooth;
-print_image(outimg_z_smooth,mask_path,fullfile(outpath_fixed,[label,'_z_smooth_fixed']));
+print_image(outimg_z_smooth,mask_path,fullfile(outpath_fixed,[label,'_z_smooth']));
 
 %full p of main (fixed effects) outcome  uncorrected
 outimg_p=template;
 outimg_p(statmask)=summary.fixed.p;
-print_image(outimg_p,mask_path,fullfile(outpath_fixed,[label,'_p_map_fixed']));
+print_image(outimg_p,mask_path,fullfile(outpath_fixed,[label,'_p_map']));
 %full p of main (fixed effects) outcome  pperm
 outimg_pperm=template;
 outimg_pperm(statmask)=summary.fixed.perm.p_FWE;
-print_image(outimg_pperm,mask_path,fullfile(outpath_fixed,[label,'_pmapperm_FWE05_fixed']));
+print_image(outimg_pperm,mask_path,fullfile(outpath_fixed,[label,'_pmapperm_FWE05']));
 
 
 %% Print images for main effect RANDOM
@@ -133,8 +133,7 @@ outimg_main_p001(statmask)=summary.random.summary.*(summary.random.p<.001);
 print_image(outimg_main_p001,mask_path,fullfile(outpath_random,[label,'_p001']))
 %main (random effects) outcome at p FDR
 outimg_main_p_FDR=template;
-FDR_tresh=fdr(summary.random.p,0.05); % Note: FDR-function as provided by SPM12's fieldtrip. Was copied to GIV as function resides in private folder inside SPM12
-outimg_main_p_FDR(statmask)=summary.random.summary.*(FDR_tresh);
+outimg_main_p_FDR(statmask)=summary.random.summary.*(summary.random.p<summary.random.p_FDR_thresh);
 print_image(outimg_main_p_FDR,mask_path,fullfile(outpath_random,[label,'_p_FDR']))
 %main (random effects) outcome at pperm<.001 (uncorrected)
 outimg_main_pperm_001=template;
@@ -142,8 +141,7 @@ outimg_main_pperm_001(statmask)=summary.random.summary.*(summary.random.perm.p_u
 print_image(outimg_main_pperm_001,mask_path,fullfile(outpath_random,[label,'_pperm_p001']))
 %main (random effects) outcome at pperm FDR
 outimg_main_pperm_FDR=template;
-FDR_tresh=fdr(summary.random.perm.p_uncorr,0.05); % Note: FDR-function as provided by SPM12's fieldtrip. Was copied to GIV as function resides in private folder inside SPM12
-outimg_main_pperm_FDR(statmask)=summary.random.summary.*FDR_tresh;
+outimg_main_pperm_FDR(statmask)=summary.random.summary.*(summary.random.perm.p_uncorr<summary.random.perm.pperm_FDR_thresh);
 print_image(outimg_main_pperm_FDR,mask_path,fullfile(outpath_random,[label,'_pperm_FDR']))
 %main (random effects) outcome at pperm<.05 (FWE corrected)
 outimg_main_pperm_FWE05=template;
