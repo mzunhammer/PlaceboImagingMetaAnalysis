@@ -18,30 +18,33 @@ function [p_uncorr,p_FWE]=p_perm(values,perm_dist,tails)
 % go for the upper 95% CI of p-Value estimates, instead of the actual p-Value estimates.
 addpath(fullfile(userpath,'PermutationTestPvalueEstimation_EPEPT'))
 
+% Power-transform original and unpermuted values for better tail fit (does
+% not affect p-values outside of tails.
+values=values.^5;
+perm_dist=perm_dist.^5;
 %% Uncorrected permuted p-Values (voxel-wise)
     p_uncorr=NaN(size(values));
     for i=1:size(values,2) %unfortunately Ppermest seems to handle matrixes incorrectly >> loop req
         if strcmp(tails,"one-tailed-larger")
-                [~,ci_p]=Ppermest(values(i),perm_dist(:,i));
-                p_uncorr(i)=ci_p(2);
+                p_uncorr(i)=Ppermest(values(i),perm_dist(:,i));
         elseif strcmp(tails,"one-tailed-smaller")
-                [~,ci_p]=Ppermest(values(i)*-1,perm_dist(:,i)*-1); % invert, as Ppermest can only do one-tailed-larger
-                p_uncorr(i)=ci_p(2);
+                p_uncorr(i)=Ppermest(values(i)*-1,perm_dist(:,i)*-1); % invert, as Ppermest can only do one-tailed-larger
         elseif strcmp(tails,"two-tailed")
             mdn=median(perm_dist(:,i));
             if values(i)>mdn % for values larger than the median (usually 0
-                [~,ci_p]=Ppermest(values(i),perm_dist(:,i)).*2; % ... get upper one-sided p, multiply by two.
-                p_uncorr(i)=ci_p(2);
+                p_uncorr(i)=Ppermest(values(i),perm_dist(:,i)).*2; % ... get upper one-sided p, multiply by two.
             elseif values(i)<=mdn % for values smaller or equal  the median (usually 0)
-                [~,ci_p]=Ppermest(values(i)*-1, perm_dist(:,i)*-1).*2;% ... flip distribution and value by multiplying with -1, get upper one-sided p, multiply by two.
-                p_uncorr(i)=ci_p(2);
+                p_uncorr(i)=Ppermest(values(i)*-1, perm_dist(:,i)*-1).*2;% ... flip distribution and value by multiplying with -1, get upper one-sided p, multiply by two.
             end
         end
     end
+    min_p=min(p_uncorr(p_uncorr>0)); % Ppermest will eventually yield p-values of 0 despite ok tail fit. As this is not possible with permutation testing per definition and will be problematic with FDR control, I replace any p-values of 0 with the smallest non-zero p.
+    p_uncorr(p_uncorr==0)=min_p;
 %% FWE corrected p-Values according to the "maximum-t" (here: "maximum-z") method by Nichols
 
 perm_min=nanmin(perm_dist,[],2);
 perm_max=nanmax(perm_dist,[],2);
+perm_dist=[perm_min;perm_max];
 p_FWE=NaN(size(values));
 for i=1:size(values,2)  %unfortunately Ppermest seems to handle matrixes incorrectly >> loop req
     if strcmp(tails,"one-tailed-larger")
@@ -49,9 +52,14 @@ for i=1:size(values,2)  %unfortunately Ppermest seems to handle matrixes incorre
     elseif strcmp(tails,"one-tailed-smaller")
             p_FWE(i)=Ppermest(values(i)*-1,perm_min*-1); % invert, as Ppermest can only do one-tailed-larger
     elseif strcmp(tails,"two-tailed")
-            p_FWE_lo=Ppermest(values(i).*-1,[perm_min;perm_max].*-1);
-            p_FWE_hi=Ppermest(values(i),[perm_min;perm_max]);
-            p_FWE(i)=min([p_FWE_lo,p_FWE_hi])*2;
+            if values(i)>0 % for values larger than the median (usually 0)
+                p_FWE(i)=Ppermest(values(i),perm_dist).*2; % ... get upper one-sided p, multiply by two.
+            elseif values(i)<=0 % for values smaller or equal  the median (usually 0)
+                p_FWE(i)=Ppermest(values(i)*-1, perm_dist*-1).*2;% ... flip distribution and value by multiplying with -1, get upper one-sided p, multiply by two.
+            end
     end
 end
+min_p=min(p_FWE(p_FWE>0)); % Ppermest will eventually yield p-values of 0 despite ok tail fit. As this is not possible with permutation testing per definition and will be problematic with FDR control, I replace any p-values of 0 with the smallest non-zero p.
+p_FWE(p_FWE==0)=min_p;
+
 end
