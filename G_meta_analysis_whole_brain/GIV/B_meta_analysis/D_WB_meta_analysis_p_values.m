@@ -12,6 +12,7 @@ load(fullfile(results_path,'WB_summary_pain_full.mat'));
 load(fullfile(results_path,'WB_summary_placebo_full.mat'));
 
 %% Pain
+disp('START: P-Values Pain')                                     
 [summary_pain.g.fixed.perm.p_uncorr,...
  summary_pain.g.fixed.perm.p_FWE]=p_perm(summary_pain.g.fixed.z_smooth,... %original stat
                                  summary_pain.g.fixed.perm.z_dist,...    %permutation object
@@ -24,8 +25,7 @@ load(fullfile(results_path,'WB_summary_placebo_full.mat'));
  summary_pain.g.heterogeneity.perm.p_FWE]=p_perm(summary_pain.g.heterogeneity.chisq,...
                                          summary_pain.g.heterogeneity.perm.chi_dist,...
                                          'one-tailed-larger');
-                                     
-
+disp('DONE: P-Values Pain')                                     
 % Add FDR thresholds for parametric p-values
 summary_pain.g.fixed.p_FDR_thresh=FDR_0(summary_pain.g.fixed.p,0.05);
 summary_pain.g.random.p_FDR_thresh=FDR_0(summary_pain.g.random.p,0.05);
@@ -37,7 +37,7 @@ summary_pain.g.random.perm.pperm_FDR_thresh=FDR_0(summary_pain.g.random.perm.p_u
 summary_pain.g.heterogeneity.perm.pperm_FDR_thresh=FDR_0(summary_pain.g.heterogeneity.perm.p_uncorr,0.05);
 
 %% Placebo
-
+disp('START: P-Values Placebo g')                                     
 % g
 [summary_placebo.g.fixed.perm.p_uncorr,...
  summary_placebo.g.fixed.perm.p_FWE]=p_perm(summary_placebo.g.fixed.z_smooth,... %original stat
@@ -52,6 +52,8 @@ summary_pain.g.heterogeneity.perm.pperm_FDR_thresh=FDR_0(summary_pain.g.heteroge
  summary_placebo.g.heterogeneity.perm.p_FWE]=p_perm(summary_placebo.g.heterogeneity.chisq,...
                                         summary_placebo.g.heterogeneity.perm.chi_dist,...
                                         'one-tailed-larger');
+disp('DONE: P-Values Placebo g')                                     
+disp('START: P-Values Placebo r_external')                                     
 % correlation with behavior
 [summary_placebo.r_external.fixed.perm.p_uncorr,...
  summary_placebo.r_external.fixed.perm.p_FWE]=p_perm(summary_placebo.r_external.fixed.z_smooth,... %original stat
@@ -86,6 +88,7 @@ summary_placebo.r_external.heterogeneity.p_FDR_thresh=FDR_0(summary_placebo.r_ex
 summary_placebo.r_external.fixed.perm.pperm_FDR_thresh=FDR_0(summary_placebo.r_external.fixed.perm.p_uncorr,0.05);
 summary_placebo.r_external.random.perm.pperm_FDR_thresh=FDR_0(summary_placebo.r_external.random.perm.p_uncorr,0.05);
 summary_placebo.r_external.heterogeneity.perm.pperm_FDR_thresh=FDR_0(summary_placebo.r_external.heterogeneity.perm.p_uncorr,0.05);
+disp('DONE: P-Values Placebo r_external')                                     
 
 %% DELETE PERMUTED DISTRIBUTIONS BEFORE SAVING, TO SAVE DISKSPACE AND LOADING DURATIONS
 summary_pain.g.fixed.perm.z_dist=[];

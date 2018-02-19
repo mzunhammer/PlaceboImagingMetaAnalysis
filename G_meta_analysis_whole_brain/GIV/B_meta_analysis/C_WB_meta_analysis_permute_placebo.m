@@ -26,6 +26,7 @@ r_external_z_random=NaN(n_perms,sum(dfv_masked.brainmask));
 r_het=NaN(n_perms,sum(dfv_masked.brainmask));
 
 tic
+h = waitbar(0,'Permuting placebo...');
 for p=1:n_perms %exchange parfor with for if parallel processing is not possible
     % Shuffle placebo/baseline labels 
     [curr_df_null, curr_dfv_null]=relabel_placebo_for_perm(df,dfv_masked);
@@ -44,8 +45,9 @@ for p=1:n_perms %exchange parfor with for if parallel processing is not possible
     r_external_z_fixed(p,:)=curr_perm_summary_stats.r_external.fixed.z_smooth;
     r_external_z_random(p,:)=curr_perm_summary_stats.r_external.random.z_smooth;
     r_het(p,:)=curr_perm_summary_stats.r_external.heterogeneity.chisq;
+    waitbar(p / n_perms)
 end
-
+close(h) 
 toc
 %% Add permuted null-distributions to statistical summary struct
 load(fullfile(results_path,'WB_summary_placebo_full.mat'),...

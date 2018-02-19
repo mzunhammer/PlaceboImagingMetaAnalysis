@@ -22,6 +22,7 @@ g_z_random=NaN(n_perms,sum(dfv_masked.brainmask));
 g_het=NaN(n_perms,sum(dfv_masked.brainmask));
 
 tic
+h = waitbar(0,'Permuting pain...');
 for p=1:n_perms %exchange parfor with for if parallel processing is not possible
     % Shuffle pain contrast signs 
     curr_dfv_null=relabel_pain_for_perm(df,dfv_masked);
@@ -35,7 +36,9 @@ for p=1:n_perms %exchange parfor with for if parallel processing is not possible
     g_z_fixed(p,:)=curr_perm_summary_stats.g.fixed.z_smooth;
     g_z_random(p,:)=curr_perm_summary_stats.g.random.z_smooth;
     g_het(p,:)=curr_perm_summary_stats.g.heterogeneity.chisq;
+    waitbar(p / n_perms)
 end
+close(h) 
 
 %% Add permuted null-distributions to statistical summary struct
 load(fullfile(results_path,'WB_summary_pain_full.mat'),...
