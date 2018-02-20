@@ -8,7 +8,7 @@ function summary_stat=smooth_SE(summary_stat,mask)
 % package (snpm_cp), where a smoothed mask is factored out of the smoothened SE
 % to avoid edge effects.
 
-kernel_size=[2,2,2]; % CAVE! FWHM in voxels (and not in mm) as we are working with matrices, not structs!!!
+kernel_size=[4,4,4]; % CAVE! FWHM in voxels (and not in mm) as we are working with matrices, not structs!!!
 
 summary_stat.fixed.SEsummary_smooth=smooth_one(summary_stat.fixed.SEsummary);
 summary_stat.fixed.z_smooth=summary_stat.fixed.summary ./ ...
