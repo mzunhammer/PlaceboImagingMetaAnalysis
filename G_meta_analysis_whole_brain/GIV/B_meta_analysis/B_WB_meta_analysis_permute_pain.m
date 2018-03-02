@@ -19,6 +19,8 @@ clear load_a load_b
 %% Meta-Analysis for FULL BRAIN ANALYSIS
 g_z_fixed=NaN(n_perms,sum(dfv_masked.brainmask));
 g_z_random=NaN(n_perms,sum(dfv_masked.brainmask));
+g_tfce_fixed=NaN(n_perms,sum(dfv_masked.brainmask));
+g_tfce_random=NaN(n_perms,sum(dfv_masked.brainmask));
 g_het=NaN(n_perms,sum(dfv_masked.brainmask));
 
 tic
@@ -32,9 +34,12 @@ for p=1:n_perms %exchange parfor with for if parallel processing is not possible
     curr_perm_summary_stats=GIV_summary(curr_null_stats_voxels_pain,'g');           % use output-argument to only compute stats for "g"
     % Obtained smoothed error image and smoothed z-Distribution
     curr_perm_summary_stats.g=smooth_SE(curr_perm_summary_stats.g,dfv_masked.brainmask3d);
+    curr_perm_summary_stats.g=meta_TFCE(curr_perm_summary_stats.g,dfv_masked.brainmask3d);
 
     g_z_fixed(p,:)=curr_perm_summary_stats.g.fixed.z_smooth;
     g_z_random(p,:)=curr_perm_summary_stats.g.random.z_smooth;
+    g_tfce_fixed(p,:)=curr_perm_summary_stats.g.fixed.tfce;
+    g_tfce_random(p,:)=curr_perm_summary_stats.g.random.tfce;
     g_het(p,:)=curr_perm_summary_stats.g.heterogeneity.chisq;
     waitbar(p / n_perms)
 end
@@ -48,6 +53,7 @@ summary_pain.g.random.perm.z_dist=g_z_random;
 summary_pain.g.heterogeneity.perm.chi_dist=g_het;
 %% Add smoothened errors and pseudo-z to statistical summary struct
 summary_pain.g=smooth_SE(summary_pain.g,dfv_masked.brainmask3d);
+summary_pain.g=meta_TFCE(summary_pain.g,dfv_masked.brainmask3d);
 
 %% Save results in struct
 save(fullfile(results_path,'WB_summary_pain_full.mat'),...

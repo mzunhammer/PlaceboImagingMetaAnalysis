@@ -19,10 +19,14 @@ clear load_a load_b
 %% Meta-Analysis for FULL BRAIN ANALYSIS
 g_z_fixed=NaN(n_perms,sum(dfv_masked.brainmask));
 g_z_random=NaN(n_perms,sum(dfv_masked.brainmask));
+g_tfce_fixed=NaN(n_perms,sum(dfv_masked.brainmask));
+g_tfce_random=NaN(n_perms,sum(dfv_masked.brainmask));
 g_het=NaN(n_perms,sum(dfv_masked.brainmask));
 
 r_external_z_fixed=NaN(n_perms,sum(dfv_masked.brainmask));
 r_external_z_random=NaN(n_perms,sum(dfv_masked.brainmask));
+r_external_tfce_fixed=NaN(n_perms,sum(dfv_masked.brainmask));
+r_external_tfce_random=NaN(n_perms,sum(dfv_masked.brainmask));
 r_het=NaN(n_perms,sum(dfv_masked.brainmask));
 
 tic
@@ -38,12 +42,20 @@ for p=1:n_perms %exchange parfor with for if parallel processing is not possible
     curr_perm_summary_stats.g=smooth_SE(curr_perm_summary_stats.g,dfv_masked.brainmask3d);
     curr_perm_summary_stats.r_external=smooth_SE(curr_perm_summary_stats.r_external,dfv_masked.brainmask3d);
 
+    % TFCE based on z-smooth
+    curr_perm_summary_stats.g=meta_TFCE(curr_perm_summary_stats.g,dfv_masked.brainmask3d);
+    curr_perm_summary_stats.r_external=meta_TFCE(curr_perm_summary_stats.r_external,dfv_masked.brainmask3d);
+    
     g_z_fixed(p,:)=curr_perm_summary_stats.g.fixed.z_smooth;
     g_z_random(p,:)=curr_perm_summary_stats.g.random.z_smooth;
+    g_tfce_fixed(p,:)=curr_perm_summary_stats.g.fixed.tfce;
+    g_tfce_random(p,:)=curr_perm_summary_stats.g.random.tfce;
     g_het(p,:)=curr_perm_summary_stats.g.heterogeneity.chisq;
 
     r_external_z_fixed(p,:)=curr_perm_summary_stats.r_external.fixed.z_smooth;
     r_external_z_random(p,:)=curr_perm_summary_stats.r_external.random.z_smooth;
+    r_external_tfce_fixed(p,:)=curr_perm_summary_stats.r_external.fixed.tfce;
+    r_external_tfce_random(p,:)=curr_perm_summary_stats.r_external.random.tfce;
     r_het(p,:)=curr_perm_summary_stats.r_external.heterogeneity.chisq;
     waitbar(p / n_perms)
 end
@@ -55,15 +67,22 @@ load(fullfile(results_path,'WB_summary_placebo_full.mat'),...
 
 summary_placebo.g.fixed.perm.z_dist=g_z_fixed;
 summary_placebo.g.random.perm.z_dist=g_z_random;
+summary_placebo.g.fixed.perm.tfce_dist=g_tfce_fixed;
+summary_placebo.g.random.perm.tfce_dist=g_tfce_random;
 summary_placebo.g.heterogeneity.perm.chi_dist=g_het;
 
 summary_placebo.r_external.fixed.perm.z_dist=r_external_z_fixed;
 summary_placebo.r_external.random.perm.z_dist=r_external_z_random;
+summary_placebo.r_external.fixed.perm.tfce_dist=r_external_tfce_fixed;
+summary_placebo.r_external.random.perm.tfce_dist=r_external_tfce_random;
 summary_placebo.r_external.heterogeneity.perm.chi_dist=r_het;
 
-%% Add smoothened errors and pseudo-z to statistical summary struct
+%% Add smoothened errors, pseudo-z and TFCE to statistical summary struct
 summary_placebo.g=smooth_SE(summary_placebo.g,dfv_masked.brainmask3d);
+summary_placebo.g=meta_TFCE(summary_placebo.g,dfv_masked.brainmask3d);
+
 summary_placebo.r_external=smooth_SE(summary_placebo.r_external,dfv_masked.brainmask3d);
+summary_placebo.r_external=meta_TFCE(summary_placebo.r_external,dfv_masked.brainmask3d);
 
 
 save(fullfile(results_path,'WB_summary_placebo_full.mat'),...
