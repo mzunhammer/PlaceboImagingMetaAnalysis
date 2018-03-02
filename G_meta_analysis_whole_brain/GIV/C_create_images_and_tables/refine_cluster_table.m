@@ -71,13 +71,13 @@ end
 rtable=array2table(tblcontent,'VariableNames',genvarname(tblhdr));
 rtable.labels=clustertxt_clean'; %add lalbels
 
-%For each cluster get n,SE,Isq,t-val,p-val(uncorr),p-val(perm)
+%For each cluster get n,SE,tausq,z-val,p-val(parametric,uncorrected),p-val(perm,uncorrected),p-val(perm,FWE)
 switch stattype{:}
     case 'heterogeneity'
-    paramOfInterest={'n','chisq','phet','phetperm','unthresh','SE'};
+    paramOfInterest={'n','chisq','p_het','p_map','p_map_perm','p_map_perm_FWE','unthresh','SE'};
     mainstat='random';
     otherwise
-    paramOfInterest={'n','SE','tau','z','pmap001','pmapperm05'};
+    paramOfInterest={'n','SE','tausq','z','p_map','p_map_perm','p_map_perm_FWE'};
     mainstat=stattype;
 end
 addtable=array2table(NaN(height(rtable),length(paramOfInterest)),'VariableNames',paramOfInterest);
@@ -89,9 +89,9 @@ for i=1:height(rtable)
         switch cparam{:}
             case 'n'
                 cpath=subpath;
-            case {'Isq','chisq','tau','phetperm','phet'}
+            case {'Isq','chisq','tausq','p_hetperm','p_het'}
                 cpath=fullfile(subpath,'heterogeneity');
-            case {'unthresh','SE','z','pmap001','pmapperm05'}
+            case {'unthresh','SE','z','p_map','p_map_perm'}
                 cpath=fullfile(subpath,mainstat);
         end
         cimg=fullfile(char(cpath),char(cimg));
@@ -112,14 +112,14 @@ outtable.ClusterIndex=flipud(outtable.ClusterIndex); % Number by cluster size
 
 switch stattype{:}
     case 'heterogeneity'
-        oldnames={'ClusterIndex','MAX','MAXX','MAXY','MAXZ','COGX','COGY','COGZ','phet','phetperm'};
-        newnames={'No',imgnameparts{4},'X','Y','Z','COG_X','COG_Y','COG_Z','p_uncorr','p_perm'};
+        oldnames={'ClusterIndex','MAX','MAXX','MAXY','MAXZ','COGX','COGY','COGZ','p_het','p_het_perm','p_het_perm_FWE'};
+        newnames={'No',imgnameparts{4},'X','Y','Z','COG_X','COG_Y','COG_Z','p_uncorr','p_uncorr_perm','p_FWE_perm'};
         outtable.Properties.VariableNames(oldnames)=newnames; %Rename columns
-        outtable = outtable(:,[1 10 4:6 2 11 3 15 16 12 14]); %Reorder columns
+        outtable = outtable(:,[1 10 4:6 2 11 3 15 14]); %Reorder columns
     otherwise
-        oldnames={'ClusterIndex','MAX','MAXX','MAXY','MAXZ','COGX','COGY','COGZ','pmap001','pmapperm05'};
-        newnames={'No',imgnameparts{3},'X','Y','Z','COG_X','COG_Y','COG_Z','p001_uncorr','p05perm'};
+        oldnames={'ClusterIndex','MAX','MAXX','MAXY','MAXZ','COGX','COGY','COGZ','p_map','p_map_perm','p_map_perm_FWE'};
+        newnames={'No',imgnameparts{3},'X','Y','Z','COG_X','COG_Y','COG_Z','p_uncorr','p_uncorr_perm','p_FWE_perm'};
         outtable.Properties.VariableNames(oldnames)=newnames; %Rename columns
-        outtable = outtable(:,[1 10 4:6 2 11 13 3 12 14 16]); %Reorder columns
+        outtable = outtable(:,[1 10 4:6 2 11 13 3 12 14 17]); %Reorder columns
 end
 
