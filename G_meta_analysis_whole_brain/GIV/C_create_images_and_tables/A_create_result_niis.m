@@ -8,14 +8,13 @@ splitp=strsplit(p,'/');
 whole_brain_path=fullfile(filesep,splitp{1:end-1});
 results_path=fullfile(whole_brain_path,'vectorized_results');
 nii_path=fullfile(whole_brain_path,'nii_results');
+mask_path=fullfile(filesep,splitp{1:end-4},'pattern_masks','brainmask_logical_50.nii');
 
 load(fullfile(datapath,'vectorized_images_full_masked_10_percent'),'dfv_masked');
 load(fullfile(datapath,'data_frame'),'df');
 
-load(fullfile(results_path,'WB_summary_pain_full.mat'),...
-    'summary_pain');
-load(fullfile(results_path,'WB_summary_placebo_full.mat'),...
-    'summary_placebo');
+load(fullfile(results_path,'WB_summary_pain_full.mat'));
+load(fullfile(results_path,'WB_summary_placebo_full.mat'));
 
 
 %% Pain ALL
@@ -36,32 +35,41 @@ print_summary_niis(summary_placebo.r_external,dfv_masked.brainmask,'Full_pla_rra
 % print_summary_niis(summary_placebo.r_external,df_conserv_masked.brainmask,'Conservative_pla_rrating', fullfile(nii_path,'/conservative/pla/rrating/'))
 % 
 
-% %% Print single-study summaries
-% brainmask='../../pattern_masks/brainmask_logical_50.nii';
-% 
-% for i=1:length(placebo_stats)
-%    template=zeros(size(dfv_masked.brainmask));
-%    outimg_main=template;
-%    if ~isempty(placebo_stats(i).g)
-%        outimg_main(dfv_masked.brainmask)=placebo_stats(i).g;
-%        printImage(outimg_main,brainmask,fullfile(nii_path,'/full/pla/g/study_level/',dfv_masked.studies{i}));
-%    end
-% end
-% 
-% for i=1:length(placebo_stats)
-%    a(i)=nanmean(placebo_stats(i).g);
-% end
-% plot(a)
-% xticks(1:20)
-% xticklabels(dfv_masked.studies)
-% %% Print single-subject contasts
-% for i=1:length(placebo_stats)
-%     if ~isempty(placebo_stats(i).g)
-%         for j=1:size(placebo_stats(i).std_delta,1)
-%            template=zeros(size(dfv_masked.brainmask));
-%            outimg_main=template;
-%            outimg_main(dfv_masked.brainmask)=placebo_stats(i).std_delta(j,:);
-%            printImage(outimg_main,brainmask,fullfile(nii_path,'/full/pla/g/subject_level/',dfv_masked.studies{i},'_idx_',num2str(j)));
-%         end
-%     end
-% end
+%% Print single-study PAIN
+for i=1:size(df,1)
+   template=zeros(size(dfv_masked.brainmask));
+   outimg_main=template;
+   currstat=pain_stats(i).g; %hedge's g effect size
+   if ~isempty(currstat)
+       outimg_main(dfv_masked.brainmask)=currstat;
+       print_image(outimg_main,mask_path,fullfile(nii_path,'/full/pain/g/study_level/',df.study_ID{i}));
+   end
+end
+
+
+%% Print single-study summaries PLACEBO
+for i=1:size(df,1)
+   template=zeros(size(dfv_masked.brainmask));
+   outimg_main=template;
+   currstat=placebo_stats(i).g; %hedge's g effect size
+   if ~isempty(currstat)
+       outimg_main(dfv_masked.brainmask)=currstat;
+       print_image(outimg_main,mask_path,fullfile(nii_path,'/full/pla/g/study_level/',df.study_ID{i}));
+   end
+end
+
+%% Print single-subject effect size estimates
+for i=1:length(placebo_stats)
+    currstat=placebo_stats(i).std_delta; %standardized effect differences
+    if ~isempty(currstat)
+        for j=1:size(currstat,1)
+           template=zeros(size(dfv_masked.brainmask));
+           outimg_main=template;
+           outimg_main(dfv_masked.brainmask)=currstat(j,:);
+           print_image(outimg_main,mask_path,...
+               fullfile(nii_path,...
+                        '/full/pla/g/subject_level/',...
+                        df.subjects{i}.sub_ID{j}));
+        end
+    end
+end
