@@ -3,6 +3,9 @@
 ## We have git for backups!
 ##---------------------------------------------------
 
+#
+0_Study_Search/Eligible_Studies
+
 # Windows default autosave extension
 *.asv
 
