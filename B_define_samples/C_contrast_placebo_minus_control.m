@@ -1,5 +1,5 @@
 function C_contrast_placebo_minus_control(datapath, varargin)
-% OPTION: argument 'noimcalc' skips actual smoothing of images and just
+% OPTION: argument 'noimcalc' skips actual calculation of images and just
 % updates the df
 %% Create contrast images for placebo and control conditons (placebo-control)
 % for within-subject studies & add images to data-frame

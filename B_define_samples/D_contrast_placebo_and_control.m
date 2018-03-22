@@ -77,6 +77,14 @@ end
 %% Manually add contrast-only studies
 % (there are no within-subject contrasts for between-group studies)
 
+% For Atlas et al, the placebo-meta analysis is performed with remifentanil
+% effects underlying pain_placebo and pain_control. However, given the
+% strong remifentanil effect we definitely do not want to have remifentanil
+% in the placebo_and_control (= pain) contrast. We use the
+% Hi_pain condition (mean of open and hidden but without remifentanil and expectation period) instead.
+i=find(strcmp(df.study_ID,'atlas'));
+df.subjects{i}.placebo_and_control=df.subjects{i}.hi_pain;
+
 % for contrast-only studies the "pain vs baseline" contrasts were already loaded
 % into control_baseline. In both cases, these contrasts represent pain
 % controlled for placebo and control effects. So they are not fully
