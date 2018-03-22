@@ -8,7 +8,6 @@
 
 
 % Add folder with Generic Inverse Variance Methods Functions first
-addpath('../A_Analysis_GIV_Functions/')
 load('Full_Sample_Study_Level_Results_Placebo.mat')
 load('../F_NPS_Meta_Analysis_Validation/Hi_vs_lo_pain_all_study_level_results.mat')
 load('../F_NPS_Meta_Analysis_Validation/Remifentanil_Results.mat')
