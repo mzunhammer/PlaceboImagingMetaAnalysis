@@ -1,3 +1,5 @@
+function C2_create_results_tables()
+
 %% Print and label results cluster-wise
 
 
@@ -16,13 +18,17 @@
 %     ?Oxford-Imanova Striatal Structural Atlas?
 %     ?Talairach Daemon Labels?
 
-atlases= {'Talairach Daemon Labels',...
-          'Cerebellar Atlas in MNI152 space after normalization with FLIRT'}; %'Harvard-Oxford Cortical Structural Atlas',...
-         %'Harvard-Oxford Subcortical Structural Atlas',...
+atlases= {%'Harvard-Oxford Cortical Structural Atlas',...
+          'Harvard-Oxford Subcortical Structural Atlas'};%,...
          %'Oxford Thalamic Connectivity Probability Atlas',...
+         %'Talairach Daemon Labels',...
+         %'Cerebellar Atlas in MNI152 space after normalization with FLIRT'};
+         %{'Talairach Daemon Labels',...
+         % 'Cerebellar Atlas in MNI152 space after normalization with FLIRT'}; %'Harvard-Oxford Cortical Structural Atlas',...
+         
          %
           %','Harvard-Oxford Cortical Structural Atlas'};
-satlases={'Talairach','Cerebellum'}; %'TD','Hrvrd_Cort', 'HO_cort','HO_subcort','Thalamus','Cerebellum',
+satlases={'Hrvrd_Subcort'};%'Hrvrd_Cort', 'Thal','Talairach','Cerebellum'}; % {'Talairach','Cerebellum'}; %'TD', 'HO_cort','HO_subcort','Thalamus','Cerebellum',
 %% Read all nii results images, filter thresholded ones
 %select images for tables manually
 img_path_pperm05={
@@ -31,16 +37,16 @@ img_path_pperm05={
   '../nii_results/full/pain/g/random/Full_pain_g_pperm_FWE05';
 
 % Placebo, fixed, g's
-%  '../nii_results/full/pla/g/fixed/Full_pla_g_pperm_FWE05';
+  '../nii_results/full/pla/g/fixed/Full_pla_g_pperm_FWE05';
 
 % Placebo, fixed, correlations
-%  '../nii_results/full/pla/rrating/fixed/Full_pla_rrating_pperm_FWE05';
+  '../nii_results/full/pla/rrating/fixed/Full_pla_rrating_pperm_FWE05';
 
 % Placebo, random, g's
-%  '../nii_results/full/pla/g/random/Full_pla_g_pperm_FWE05';
+  '../nii_results/full/pla/g/random/Full_pla_g_pperm_FWE05';
 
 % Placebo, Random, correlations
-%  '../nii_results/full/pla/rrating/random/Full_pla_rrating_pperm_FWE05';
+  '../nii_results/full/pla/rrating/random/Full_pla_rrating_pperm_FWE05';
  
 
   };
@@ -88,4 +94,5 @@ for k=1:length(atlases)
             writetable(outtxt,['../figure_results/',satlases{k},'_',curr_img_name,'.xlsx']);
         end
     end
+end
 end

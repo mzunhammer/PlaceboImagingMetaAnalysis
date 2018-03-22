@@ -33,7 +33,7 @@ ylabel('SE g pain')
 
 %% Het vs effect sizes pain
 x=summary_pain.g.random.summary;
-y=sqrt(summary_pain.g.heterogeneity.Isq);
+y=sqrt(summary_pain.g.heterogeneity.tausq);
 plot(x,y,'.')% Het vs effect sizes placebo
 lsline
 q = polyfit(x,y,4);
@@ -129,8 +129,8 @@ h1=hexbin(xwo0,ywo0,100,'colorbar')
 
 %[R,P,RLO,RUP]=corrcoef(x(y>=1),y(y>=1))
 %[R,P,RLO,RUP]=corrcoef(abs(x(y>=1)),y(y>=1))
-xlabel('r: behavioral placebo effec vs brain activity')
-ylabel('tau: behavioral placebo effec vs brain activity')
+xlabel('r: behavioral placebo effect vs brain activity')
+ylabel('tau: behavioral placebo effect vs brain activity')
 
 hgexport(h1, fullfile(figure_path,'Correlation_r_vs_tau_placebo.svg'), hgexport('factorystyle'), 'Format', 'svg'); 
 hgexport(h1, fullfile(figure_path,'Correlation_r_vs_tau_placebo.png'), hgexport('factorystyle'), 'Format', 'png'); 

@@ -20,14 +20,14 @@ disp('START: P-Values Pain')
  summary_pain.g.random.perm.p_FWE]=p_perm(summary_pain.g.random.z_smooth,...
                                   summary_pain.g.random.perm.z_dist,...
                                   'two-tailed',5);
-[summary_pain.g.fixed.perm.p_tfce_uncorr,...
- summary_pain.g.fixed.perm.p_tfce_FWE]=p_perm(summary_pain.g.fixed.tfce,... %original stat
-                                 summary_pain.g.fixed.perm.tfce_dist,...    %permutation object
-                                 'two-tailed',1);
- [summary_pain.g.random.perm.p_tfce_uncorr,...
- summary_pain.g.random.perm.p_tfce_FWE]=p_perm(summary_pain.g.random.tfce,... %original stat
-                                 summary_pain.g.random.perm.tfce_dist,...    %permutation object
-                                 'two-tailed',1); 
+%[summary_pain.g.fixed.perm.p_tfce_uncorr,...
+% summary_pain.g.fixed.perm.p_tfce_FWE]=p_perm(summary_pain.g.fixed.tfce,... %original stat
+%                                 summary_pain.g.fixed.perm.tfce_dist,...    %permutation object
+%                                 'two-tailed',1);
+ %[summary_pain.g.random.perm.p_tfce_uncorr,...
+ %summary_pain.g.random.perm.p_tfce_FWE]=p_perm(summary_pain.g.random.tfce,... %original stat
+ %                                summary_pain.g.random.perm.tfce_dist,...    %permutation object
+ %                                'two-tailed',1); 
 [summary_pain.g.heterogeneity.perm.p_uncorr,...
  summary_pain.g.heterogeneity.perm.p_FWE]=p_perm(summary_pain.g.heterogeneity.chisq,...
                                          summary_pain.g.heterogeneity.perm.chi_dist,...
@@ -47,8 +47,8 @@ summary_pain.g.heterogeneity.perm.p_FDR_thresh=FDR_0(summary_pain.g.heterogeneit
 %% DELETE PERMUTED DISTRIBUTIONS BEFORE SAVING, TO SAVE DISKSPACE AND LOADING DURATIONS
 summary_pain.g.fixed.perm.z_dist=[];
 summary_pain.g.random.perm.z_dist=[];
-summary_pain.g.fixed.perm.tfce_dist=[];
-summary_pain.g.random.perm.tfce_dist=[];
+%summary_pain.g.fixed.perm.tfce_dist=[];
+%summary_pain.g.random.perm.tfce_dist=[];
 summary_pain.g.heterogeneity.perm.chi_dist=[];
 
 % All has to be overwritten to get rid of large permutation distributions

@@ -116,7 +116,8 @@ end
 % 'Schenk et al. 2015:'... well aligned, "flattened" apex, cropped with
 % posterior tilted FOV
 % 'Theysohn et al. 2009:';... well aligned, strong orbitofrontal signal
-% extinctions
+% extinctions, some maps look like there are  unaccounted movement artifacts in
+% the parietal cortex.
 % 'Wager et al. 2004, Study 1:';...well aligned,some orbitofrontal extinction 
 % 'Wager et al. 2004, Study 2:';...well aligned, but WHITE MATTER MASKED!
 % 'Wrobel et al. 2014:'...well aligned

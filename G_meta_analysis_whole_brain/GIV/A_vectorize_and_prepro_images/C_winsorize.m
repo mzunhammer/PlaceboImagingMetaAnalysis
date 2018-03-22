@@ -4,7 +4,7 @@ function C_winsorize(datapath)
 % Winsorizing is performed on a by-study-by-contrast level.
 
 % Load data
-load(fullfile(datapath,'vectorized_images_full_masked_10_percent_non_winsor.mat'),'dfv_masked')
+load(fullfile(datapath,'vectorized_images_full_masked_10_percent.mat'),'dfv_masked')
 
 % Set windsorizing parameters:
 target_sd=3;
@@ -77,6 +77,6 @@ plot(sum(e,2)/size(e,2));
 
 dfv_masked.placebo_and_control_scaled=[];
 
-%save(fullfile(datapath,'vectorized_images_full_masked_10_percent.mat'),'dfv_masked','-v7.3')
+save(fullfile(datapath,'vectorized_images_full_masked_10_percent.mat'),'dfv_masked','-v7.3')
 
 end

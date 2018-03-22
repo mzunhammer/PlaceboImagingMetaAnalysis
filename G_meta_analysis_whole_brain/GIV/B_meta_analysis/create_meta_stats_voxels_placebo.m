@@ -1,6 +1,7 @@
 function stats=create_meta_stats_voxels_placebo(df,dfv)
 %Preallocate stats for speed
 n_studies=size(df,1);
+n_voxel=sum(dfv.brainmask);
 stats(n_studies).mu=[];
 stats(n_studies).sd_diff=[];
 stats(n_studies).sd_pooled=[];
@@ -36,10 +37,13 @@ end
 
 %% Correlation of behavioral effect and voxel-by-voxel bold response
 for i=1:length(stats)
-    stats(i).r_external=fastcorrcoef(stats(i).delta,df.GIV_stats_rating(i).delta,true); % correlate single-subject effect of behavior and voxel signal 
+    stats(i).r_external=fastcorrcoef(stats(i).delta,df.GIV_stats_rating(i).delta,'exclude_nan'); % correlate single-subject effect of behavior and voxel signal 
     if ~isempty(stats(i).delta) % necessary as "sum" returns 0 for [] for some stupid reason
         stats(i).n_r_external=sum(~(isnan(stats(i).delta)|... % the n for the correlation is the n of subjects showing non-nan values at that particular voxels
                                          isnan(df.GIV_stats_rating(i).delta))); % AND non nan-ratings
+    else
+        stats(i).r_external=NaN(1,n_voxel);
+        stats(i).n_r_external=NaN(1,n_voxel);
     end
 end
 
