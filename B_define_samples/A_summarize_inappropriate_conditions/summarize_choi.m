@@ -18,7 +18,7 @@ pla_tbl=table();
 for j=1:length(subjects)
     outfilename_pla{j}=[subjects{j},'_placebo.nii'];
     curr_pla_tbl=choi(strcmp(choi.sub_ID,subjects(j)) & ...% current subject
-                     (~cellfun(@isempty,regexp(choi.cond,'Exp1_control_pain_beta.*'))...
+                     (~cellfun(@isempty,regexp(choi.cond,'Exp1_1potent_pain_beta.*'))...
                      |~cellfun(@isempty,regexp(choi.cond,'Exp1_100potent_pain_beta.*'))),:);
     matlabbatch{j}.spm.util.imcalc.input = fullfile(datapath,curr_pla_tbl.img);
     matlabbatch{j}.spm.util.imcalc.output = outfilename_pla{j};

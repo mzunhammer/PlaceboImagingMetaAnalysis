@@ -31,6 +31,8 @@ for j=1:length(subjects)
     pla_tbl(j,:)=curr_pla_tbl(1,:);
     pla_tbl.img{j}=['Wrobel_et_al_2014/summarized_for_meta/',outfilename_pla{j}];
     pla_tbl.pain(j)=1;
+    pla_tbl.rating(j)=mean(curr_pla_tbl.rating);
+    pla_tbl.rating101(j)=mean(curr_pla_tbl.rating101);
     if pla_tbl.real_treat(j)==0
         pla_tbl.cond{j}='placebo_summary_saline';
     elseif pla_tbl.real_treat(j)==1
@@ -60,6 +62,8 @@ for j=1:length(subjects)
     con_tbl(j,:)=curr_con_tbl(1,:);
     con_tbl.img{j}=['Wrobel_et_al_2014/summarized_for_meta/',outfilename_con{j}];
     con_tbl.pain(j)=1;
+    con_tbl.rating(j)=nanmean(curr_con_tbl.rating);
+    con_tbl.rating101(j)=nanmean(curr_con_tbl.rating101);
     if con_tbl.real_treat(j)==0
         con_tbl.cond{j}='control_summary_saline';
     elseif con_tbl.real_treat(j)==1
