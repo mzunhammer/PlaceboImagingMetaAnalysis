@@ -104,9 +104,10 @@ y2=mu2+errorset(:,2)*sd;
 y1=[y1;NaN;NaN];
 y2=[y2;NaN;NaN];
 
-%Finally, replicate y1s and y2s to check if matrix-calculations work
+%Replicate y1s and y2s to check if matrix-calculations work
 y1=repmat(y1,1,3);
 y2=repmat(y2,1,3);
+
 
 % Let the function do its job
 WIStudyStat=summarize_within(y1,y2);
