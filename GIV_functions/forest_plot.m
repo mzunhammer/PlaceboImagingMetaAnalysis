@@ -36,6 +36,8 @@ function forest_plot(eff,se_eff,n,summary,varargin)
 %   size = one y-unit * weight
 % 'print_width': Two-element numeric vector indicating the desired with of image in px [x,y].
 % 'X_scale': Scalar indicating the maximum scale value for X
+% 'WI_subdata': Prints single-subject data-points below by-study means +
+% error bars. this requires
 
 % ###### Example ######:
 % forest_plot(r,...
@@ -84,17 +86,14 @@ addParameter(p,'print_width',def_print_width,@isnumeric);
 def_with_outlier = 1;
 addParameter(p,'with_outlier',def_with_outlier,@isnumeric);
 %Check WI_subdata
-def_WI_sub_data = 0;
-addParameter(p,'WI_subdata',def_WI_sub_data,@isnumeric);
-%Check WI_subdata
-def_single_subject_data = {};
-addParameter(p,'single_subject_data',def_single_subject_data,@iscell);
+def_WI_sub_data = {};
+addParameter(p,'WI_subdata',def_WI_sub_data,@iscell);
 %Supress summary
 def_NO_summary = 0;
 addParameter(p,'NO_summary',def_NO_summary,@isnumeric);
-%Xscale 
-def_Xscale = NaN;%per default the scale is chosen based on the largest absolute single subject value: round(max(abs(val))).
-addParameter(p,'Xscale',def_Xscale,@isnumeric);
+%X_scale 
+def_X_scale = NaN;%per default the scale is chosen based on the largest absolute single subject value: round(max(abs(val))).
+addParameter(p,'X_scale',def_X_scale,@isnumeric);
 
 parse(p,eff,se_eff,n,summary,varargin{:});
 % Re-format inputs for convenience
@@ -107,11 +106,10 @@ font_size=p.Results.font_size;
 print_width=p.Results.print_width;
 withoutlier=p.Results.with_outlier;
 WI_subdata=p.Results.WI_subdata;
-single_subject_data=p.Results.single_subject_data;
 text_offset=p.Results.text_offset;
 box_scaling=p.Results.box_scaling;
 NO_summary=p.Results.NO_summary;
-Xscale=p.Results.Xscale;
+X_scale=p.Results.X_scale;
 
 % Check whether Fisher's z transform is necessary for valid CIs
 if ismember(summary_stat,{'r','ICC','r_external'})
@@ -166,20 +164,20 @@ font_name='Arial';
 x_graphW=0.3333333; %relative size of x-axis in normalized space (rel to the whole graph)
     
 %AXIS SCALE
-if isnan(Xscale)
-    if ~WI_subdata % no-single subj data-points >> scale x-axis to max(GIV_summary?CI) but at least Xscale
+if isnan(X_scale)
+    if isempty(WI_subdata) % no-single subj data-points >> scale x-axis to max(GIV_summary?CI) but at least X_scale
         x_axis_size=double(ceil(max(abs([ciLo;ciHi]))));
-    elseif WI_subdata && withoutlier % single subj data-points (for WI-studies), yet points beyond max(GIV_summary?CI) not plotted > outliermarks instead
+    elseif ~isempty(WI_subdata) && withoutlier % single subj data-points (for WI-studies), yet points beyond max(GIV_summary?CI) not plotted > outliermarks instead
         x_axis_size=double(ceil(max(abs([ciLo;ciHi])))); 
-    elseif WI_subdata && ~withoutlier % plot full range of wi-single subj data. x-axis are scaled to max(abs(indiv datapoint))
-        if length(single_subject_data)~=length(eff)
-            error('Single within-subject data-points requested, but not passed properly ''single_subject_data''.');
+    elseif ~isempty(WI_subdata) && ~withoutlier % plot full range of wi-single subj data. x-axis are scaled to max(abs(indiv datapoint))
+        if length(WI_subdata)~=length(eff)
+            error('Single within-subject data-points requested, but not passed properly ''WI_subdata''.');
         else
-            x_axis_size=double(ceil(max(abs(vertcat(single_subject_data))))); 
+            x_axis_size=double(ceil(max(abs(vertcat(WI_subdata{:}))))); 
         end 
     end
 else
-    x_axis_size=Xscale;
+    x_axis_size=X_scale;
 end
 if strcmp(summary_stat,'r')|strcmp(summary_stat,'ICC')
     x_axis_size=1;
@@ -274,8 +272,8 @@ for i=1:length(ids)
         xsdright=ciHi(ii); % Set current x-error
 
         % Plot points representing standardized single-subject results
-        if WI_subdata
-            ss_delta=MetaStats(ii).std_delta;
+        if ~isempty(WI_subdata)
+            ss_delta=WI_subdata{ii};
             if ~isempty(ss_delta)
                 plot(ss_delta,... % X
                      random('unif',-.1,.1,length(ss_delta),1)+y,... %Y
@@ -402,9 +400,11 @@ if ~NO_summary
     y=[1 1+rhoheight/2 1 1-rhoheight/2];
     fill(x,y,[0.9 0.9 0.9]);
     %   Txt study GIV_summary
-        if p>=0.001
+        if p>=0.01
+            formatSpec='Total effect (95%% CI): z=%0.2f, p=%0.2f';
+        elseif p<0.01 && p>=0.001
             formatSpec='Total effect (95%% CI): z=%0.2f, p=%0.3f';
-            elseif p<0.001
+        elseif p<0.001
             formatSpec='Total effect (95%% CI): z=%0.2f, p<.%0.0f01'; 
         end
         text(txt_position_study, 1, sprintf(formatSpec,z,p),...
@@ -414,9 +414,11 @@ if ~NO_summary
              'FontWeight','bold',...
              'FontName',font_name);
     %   Txt study GIV_summary 2 (Heterogeneity)
-        if p_het>=0.001
+        if p_het>=0.01
+            formatSpec='Heterogeneity: Chi^2(%d)=%0.2f, p=%0.2f\nTau^2=%0.2f, I^2=%0.2f%%';
+        elseif p_het<0.01 && p_het>=0.001
             formatSpec='Heterogeneity: Chi^2(%d)=%0.2f, p=%0.3f\nTau^2=%0.2f, I^2=%0.2f%%';
-            elseif p_het<0.001
+        elseif p_het<0.001
             formatSpec='Heterogeneity: Chi^2(%d)=%0.2f, p<.%0.0f01\nTau^2=%0.2f, I^2=%0.2f%%';
         end
         text(txt_position_study, -0.5, sprintf(formatSpec,df,chisq,p_het,tausq,Isq),...
