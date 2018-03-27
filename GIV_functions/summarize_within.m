@@ -1,4 +1,4 @@
-function StudyStat=withinMetastats(cond1,cond2)
+function StudyStat=summarize_within(cond1,cond2,varargin)
 % Function for computing stats for meta-analysis when single-subject data
 % from a two-condition within-subject experiment are available (cond1-cond2), or when
 % single- subject data representing the contrast (difference) between the
@@ -59,6 +59,14 @@ elseif length(cond2)==1
      r=ones(1,size(cond1,2)).*r; % extend imputed r to all columns
 else
         fprintf('WARNING BY withinMetastats.m: Vectors entered in and cond1,cond2 were not of equal length or cond2 was not a scalar.\n')
+end
+
+%% OPTINAL: winsorize
+if any(strcmp(varargin,'winsor'))
+    for i=1:size(delta,2)
+        sd_cutoff=varargin{find(strcmp(varargin,'winsor'))+1};
+        delta(:,i)=winsor_std(delta(:,i),sd_cutoff);
+    end
 end
 
 %% Calculate study stats

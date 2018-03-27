@@ -1,4 +1,4 @@
-function StudyStat=betweenMetastats(cond1,cond2)
+function StudyStat=summarize_between(cond1,cond2,varargin)
 
 % Function for computing stats for meta-analysis when single-subject data
 % from a two-group between-subject experiment are available or when
@@ -43,6 +43,19 @@ StudyStat.se_g=NaN;
 StudyStat.r_external=[];
 StudyStat.n_r_external=[];
 end
+
+%% OPTINAL: winsorize
+if any(strcmp(varargin,'winsor'))
+    sd_cutoff=varargin{find(strcmp(varargin,'winsor'))+1}
+    for i=1:size(cond1,2)
+        cond1(:,i)=winsor_std(cond1(:,i),sd_cutoff);
+    end
+    
+    for i=1:size(cond2,2)
+        cond2(:,i)=winsor_std(cond2(:,i),sd_cutoff);
+    end
+end
+
 
 % VERSION A: COMPUTE IF TWO SAMPLES ARE PROVIDED
 if ((length(cond1)>1) && (length(cond2)>1)) % Check if arrays were provided
