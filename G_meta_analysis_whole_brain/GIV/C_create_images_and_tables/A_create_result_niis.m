@@ -16,7 +16,6 @@ load(fullfile(datapath,'data_frame'),'df');
 load(fullfile(results_path,'WB_summary_pain_full.mat'));
 load(fullfile(results_path,'WB_summary_placebo_full.mat'));
 
-
 %% Pain ALL
 print_summary_niis(summary_pain.g,dfv_masked.brainmask,'Full_pain_g', fullfile(nii_path,'/full/pain/g/'))
 %% Placebo ALL
@@ -47,7 +46,7 @@ for i=1:size(df,1)
 end
 
 
-%% Print single-study summaries PLACEBO
+%% Print single-study summaries g PLACEBO
 for i=1:size(df,1)
    template=zeros(size(dfv_masked.brainmask));
    outimg_main=template;
@@ -55,6 +54,17 @@ for i=1:size(df,1)
    if ~isempty(currstat)
        outimg_main(dfv_masked.brainmask)=currstat;
        print_image(outimg_main,mask_path,fullfile(nii_path,'/full/pla/g/study_level/',df.study_ID{i}));
+   end
+end
+
+%% Print single-study summaries r_external PLACEBO
+for i=1:size(df,1)
+   template=zeros(size(dfv_masked.brainmask));
+   outimg_main=template;
+   currstat=placebo_stats(i).r_external*-1; %multiply by -1 so the correlation represents placebo effect vs brain activity change rather than rating chage vs brain activity
+   if ~isempty(currstat)
+       outimg_main(dfv_masked.brainmask)=currstat;
+       print_image(outimg_main,mask_path,fullfile(nii_path,'/full/pla/rrating/study_level/',df.study_ID{i}));
    end
 end
 
