@@ -21,7 +21,6 @@ atlas_names={'bucknerlab_wholebrain',...
             'basal_ganglia'};
         
 n=size(df,1);
-h = waitbar(0,'Calculating Buckner lab map simularity, studies completed:');
 %%
 % Load Bucknerlab maps
 [mask{1}, ~, ~] = load_image_set('bucknerlab_wholebrain'); % different loading procedure required.
@@ -29,10 +28,17 @@ mask{2} = load_atlas_matthias('thalamus');
 mask{3} = load_atlas_matthias('brainstem');
 mask{4} = load_atlas_matthias('basal_ganglia');
 
-for l=4%1:length(mask)
+for l=1:length(mask)
     curr_mask=mask{l};
+    curr_mask = replace_empty(curr_mask); % add zeros back in
+    
     curr_atlasname=atlas_names{l};
+    h = waitbar(0, [curr_atlasname, ' studies completed:']);
 for i=1:n %loops over studies
+    %for each study resample mask space to first study image (this is prefered over resampling the mask for every image to save computational time)
+    first_img=fullfile(datapath,df.subjects{i}.(contrasts{4}){1}.norm_img);
+    curr_mask = resample_space(curr_mask,...
+                               fmri_data(first_img,'noverbose'));
     for j=1:length(contrasts) %loops over contrasts
         for k=1:size(df.subjects{i},1)
             if ~isempty(df.subjects{i}.(contrasts{j}){k})
@@ -40,20 +46,13 @@ for i=1:n %loops over studies
             in_path= fullfile(datapath,curr_img);
             in_img=fmri_data(in_path,'noverbose');
             sim = matthias_pattern_similarity(in_img,curr_mask);
-%             for im = 1:size(curr_mask.dat, 2) %loops over pattern masks
-%                 sim(im, :) = canlab_pattern_similarity(in_img.dat, curr_mask.dat(:,im), 'dot_product');
-%             end
-%             image_similarity_plot(in_img,curr_mask,...
-%                                        'cosine_similarity',...
-%                                        'nofigure',...
-%                                        'noplot');
             df.subjects{i}.(contrasts{j}){k}.(curr_atlasname) = sim';
             end 
         end
     save(df_path,'df');
-    waitbar(i / n);
     end
+    waitbar(i / n,h);
 end
-end  
 close(h)
+end  
 end
