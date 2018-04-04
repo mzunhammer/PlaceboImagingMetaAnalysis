@@ -166,14 +166,17 @@ x_graphW=0.3333333; %relative size of x-axis in normalized space (rel to the who
 %AXIS SCALE
 if isnan(X_scale)
     if isempty(WI_subdata) % no-single subj data-points >> scale x-axis to max(GIV_summary?CI) but at least X_scale
-        x_axis_size=double(ceil(max(abs([ciLo;ciHi]))));
+        %x_axis_size=double(ceil(max(abs([ciLo;ciHi]))));
+        x_axis_size=double(round(max(abs([ciLo;ciHi]),1,'significant')));
     elseif ~isempty(WI_subdata) && withoutlier % single subj data-points (for WI-studies), yet points beyond max(GIV_summary?CI) not plotted > outliermarks instead
-        x_axis_size=double(ceil(max(abs([ciLo;ciHi])))); 
+        %x_axis_size=double(ceil(max(abs([ciLo;ciHi]))));
+        x_axis_size=double(round(max(abs([ciLo;ciHi])),1,'significant')); 
     elseif ~isempty(WI_subdata) && ~withoutlier % plot full range of wi-single subj data. x-axis are scaled to max(abs(indiv datapoint))
         if length(WI_subdata)~=length(eff)
             error('Single within-subject data-points requested, but not passed properly ''WI_subdata''.');
         else
-            x_axis_size=double(ceil(max(abs(vertcat(WI_subdata{:}))))); 
+            %x_axis_size=double(ceil(max(abs(vertcat(WI_subdata{:})))));
+            x_axis_size=double(round(max(abs(vertcat(WI_subdata{:}))),1,'significant')); 
         end 
     end
 else
@@ -333,7 +336,7 @@ for i=1:length(ids)
 
     
         % Txt effect 
-        formatSpec='%0.2f [%0.2f; %0.2f]';
+        formatSpec='%0.2g [%0.2g; %0.2g]';
         text(txt_position_eff, y, sprintf(formatSpec,x,xsdleft,xsdright),...
              'HorizontalAlignment','right',...
              'VerticalAlignment','middle',...
@@ -427,7 +430,7 @@ if ~NO_summary
              'FontSize',font_size*0.90,...
              'FontName',font_name);
     %   Txt effect GIV_summary
-        formatSpec='%0.2f [%0.2f; %0.2f]';
+        formatSpec='%0.2g [%0.2g; %0.2g]';
         text(txt_position_eff, 1, sprintf(formatSpec,summary_total,summary_ciLo,summary_ciHi),...
              'HorizontalAlignment','right',...
              'VerticalAlignment','middle',...
