@@ -1,4 +1,4 @@
-function B1_select_for_meta_conservative_sample()
+function B1_select_for_meta_conservative_sample(datapath)
 %% Define cases for the meta-analysis of the conservative sample
 
 % Difference compared to "ALL":
@@ -25,7 +25,6 @@ function B1_select_for_meta_conservative_sample()
 %         available + only ASL study
 
 % Add folder with Generic Inverse Variance Methods Functions first
-datapath='../../Datasets';
 load(fullfile(datapath,'data_frame.mat'),'df')
 df.conservative=df.full;
 studies_excluded={'bingel11','kong06','ruetgen','wager04b_michigan','zeidan'};

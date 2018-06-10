@@ -32,8 +32,26 @@ if istable(cond2)
 cond2=cond2{:,:};
 end
 
+if isempty(cond1)||isempty(cond2)
+    StudyStat.mu=[];
+    StudyStat.sd_diff=[];
+    StudyStat.sd_pooled=[];
+    StudyStat.se_mu=[];
+    StudyStat.n=[];
+    StudyStat.r=[];
+    StudyStat.d=[];
+    StudyStat.se_d=[];
+    StudyStat.g=[];
+    StudyStat.se_g=[];
+    StudyStat.delta=[];
+    StudyStat.std_delta=[];
+    StudyStat.ICC=[];
+    StudyStat.r_external=[];
+    StudyStat.n_r_external=[];
+    return
+end
 % VERSION A: COMPUTE WHEN TWO ARRAYS (= measurement timepoints) ARE PROVIDED
-if size(cond1)==size(cond2) % Check if arrays of equal size were provided
+if all(size(cond1)==size(cond2)) % Check if arrays of equal size were provided
     delta=cond1-cond2;      %by-subj differences
     r=fastcorrcoef(cond1,cond2,'exclude_nan');
     %Correlation between paired conditions

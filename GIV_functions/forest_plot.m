@@ -167,7 +167,7 @@ x_graphW=0.3333333; %relative size of x-axis in normalized space (rel to the who
 if isnan(X_scale)
     if isempty(WI_subdata) % no-single subj data-points >> scale x-axis to max(GIV_summary?CI) but at least X_scale
         %x_axis_size=double(ceil(max(abs([ciLo;ciHi]))));
-        x_axis_size=double(round(max(abs([ciLo;ciHi]),1,'significant')));
+        x_axis_size=double(round(max(abs([ciLo;ciHi])),1,'significant'));
     elseif ~isempty(WI_subdata) && withoutlier % single subj data-points (for WI-studies), yet points beyond max(GIV_summary?CI) not plotted > outliermarks instead
         %x_axis_size=double(ceil(max(abs([ciLo;ciHi]))));
         x_axis_size=double(round(max(abs([ciLo;ciHi])),1,'significant')); 

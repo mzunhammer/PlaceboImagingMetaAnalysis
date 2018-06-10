@@ -29,20 +29,6 @@ cond2=cond2{:,:};
 end
 
 % If cond1 or cond2 contain merely NaN, return a struct of NaNs
-if (isscalar(cond1)&&isscalar(cond1))&&(isnan(cond1)||isnan(cond2))
-StudyStat.mu=NaN;
-StudyStat.sd_diff=NaN;
-StudyStat.sd_pooled=NaN;
-StudyStat.se_mu=NaN;
-StudyStat.n=NaN;
-StudyStat.r=NaN;
-StudyStat.d=NaN;
-StudyStat.se_d=NaN;
-StudyStat.g=NaN;
-StudyStat.se_g=NaN;
-StudyStat.r_external=[];
-StudyStat.n_r_external=[];
-end
 
 %% OPTINAL: winsorize
 if any(strcmp(varargin,'winsor'))
@@ -91,7 +77,22 @@ if ((length(cond1)>1) && (length(cond2)>1)) % Check if arrays were provided
     g=d.*J;  % Hedges adjusted g, See: [1] Deeks JJ, Higgins JP. Statistical algorithms in Review Manager 5 on behalf of the Statistical Methods Group of The Cochrane Collaboration. 2010
     se_g=sqrt(var_d.*J.^2);
 else
-    disp('Error, enter two proper numeric vectors representing data from condition1 and condition2. For one-sample data use "withinMetastats" with imputed correlation of r=0 zero instead of Condition 2 ')
+    %disp('Error, enter two proper numeric vectors representing data from condition1 and condition2. For one-sample data use "withinMetastats" with imputed correlation of r=0 zero instead of Condition 2 ')
+    mu=[];
+    delta=[];
+    std_delta=[];
+    sd=[];
+    sd_diff=[];
+    sd_pooled=[];
+    se_mu=[];
+    n=[];
+    r=[];
+    d=[];
+    se_d=[];
+    g=[];
+    se_g=[];
+    r_external=[];
+    n_r_external=[];
 end
 
 % Group results in struct to make output shorter and easier to handle
