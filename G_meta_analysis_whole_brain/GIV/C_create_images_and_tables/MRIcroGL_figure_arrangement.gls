@@ -21,7 +21,7 @@ BASEPATH_NII:='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/analysis/G_meta_an
 BASEPATH_FIG:='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/whole_brain/figures/'
 
 // Set background image specs for all images and load image
-RESETDEFAULTS;
+// RESETDEFAULTS;
 BACKCOLOR (255,255,255);
 LOADIMAGE('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/pattern_masks/fsl_standards/MNI152_T1_1mm_brain.nii');
 
@@ -29,11 +29,15 @@ LOADIMAGE('/Users/matthiaszunhammer/Dropbox/Boulder_Essen/pattern_masks/fsl_stan
 // Set overlay specs for all overlays
 OVERLAYTRANSPARENCYONBACKGROUND(40);
 OVERLAYTRANSPARENCYONOVERLAY(0);
+OVERLAYMASKEDBYBACKGROUND(true)
 
 OVERLAYCOLORFROMZERO(false);
 OVERLAYLOADSMOOTH(true);
 OVERLAYHIDEZEROS(false);
 COLORBARPOSITION(4);
+COLORBARVISIBLE(true);
+COLORBARSIZE(0.03);
+
 //SHADERFORMVISIBLE(false);
 //CUTOUTFORMVISIBLE(false);
 //CLIPFORMVISIBLE(false);
@@ -115,16 +119,16 @@ SAVEBMP(BASEPATH_FIG+'Pain>BL_untresholded');
 OVERLAYCLOSEALL;
 
 // Main effect pain — Full sample significant
-COLORBARVISIBLE(false);
-OVERLAYHIDEZEROS(True);
+//COLORBARVISIBLE(false);
+//OVERLAYHIDEZEROS(True);
 OVERLAYLOAD(BASEPATH_NII+'full/pain/g/random/Full_pain_g_pperm_FWE05.nii');
 OVERLAYCOLORNAME(1,'blue_0_red');
 OVERLAYMINMAX(1,-1.5,1.5);
 MOSAIC(SPECS_standard);
 SAVEBMP(BASEPATH_FIG+'Pain>BL_FWE');
 OVERLAYCLOSEALL;
-OVERLAYHIDEZEROS(false);
-COLORBARVISIBLE(true);
+//OVERLAYHIDEZEROS(false);
+//COLORBARVISIBLE(true);
 
 // Heterogeneity pain — Full sample
 // OVERLAY 1
@@ -190,7 +194,7 @@ SAVEBMP(BASEPATH_FIG+'Placebo_g_tau');
 OVERLAYCLOSEALL;
 
 // g HETEROGENEITY TRESHOLDED
-OVERLAYHIDEZEROS(true);
+//OVERLAYHIDEZEROS(true);
 OVERLAYLOADSMOOTH(false);
 over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/heterogeneity/Full_pla_g_tau_pperm_FWE05.nii');
 OVERLAYCOLORNAME(over1,'0_indigo');
@@ -199,7 +203,7 @@ MOSAIC(SPECS_standard);
 SAVEBMP(BASEPATH_FIG+'Placebo_g_tau_FWE');
 OVERLAYCLOSEALL;
 OVERLAYLOADSMOOTH(true);
-OVERLAYHIDEZEROS(false);
+//OVERLAYHIDEZEROS(false);
 
 // g FIXED EFFECTS TRESHOLDED
 // over1 := OVERLAYLOAD(BASEPATH_NII+'full/pla/g/fixed/Full_pla_g_unthresh.nii');
@@ -258,50 +262,50 @@ OVERLAYCLOSEALL;
 // ######## CONSERVATIVE SAMPLE #############
 
 // g Main effect placebo — Conservative sample
-over1 := OVERLAYLOAD(BASEPATH_NII+'conservative/pla/g/random/Conservative_pla_g_unthresh.nii');
+over1 := OVERLAYLOAD(BASEPATH_NII+'conservative/pla/g/random/conservative_pla_g_unthresh.nii');
 OVERLAYCOLORNAME(over1,'blue_0_red');
-OVERLAYMINMAX(over1,-0.2,0.2);
+OVERLAYMINMAX(over1,-0.25,0.25);
 MOSAIC(SPECS_standard);
 SAVEBMP(BASEPATH_FIG+'Figure_S10_g_placebo_conserv');
 OVERLAYCLOSEALL;
 
-// g Main effect placebo — Conservative sample
-over1 := OVERLAYLOAD(BASEPATH_NII+'conservative/pla/g/random/Conservative_pla_g_unthresh.nii');
+// g Main effect placebo — conservative sample
+over1 := OVERLAYLOAD(BASEPATH_NII+'conservative/pla/g/random/conservative_pla_g_unthresh.nii');
 OVERLAYCOLORNAME(over1,'blue_0_red');
-OVERLAYMINMAX(over1,-0.2,0.2);
+OVERLAYMINMAX(over1,-0.25,0.25);
 OVERLAYLOADSMOOTH(false);
-over2 := OVERLAYLOAD(BASEPATH_NII+'conservative/pla/g/random/Conservative_pla_g_pperm05.nii');
+over2 := OVERLAYLOAD(BASEPATH_NII+'conservative/pla/g/random/conservative_pla_g_pperm_FWE05.nii');
 OVERLAYCOLORNAME(over2,'0_cyan');
-OVERLAYMINMAX(over2,-0.2,0);
+OVERLAYMINMAX(over2,-0.25,0);
 MOSAIC(SPECS_standard);
 SAVEBMP(BASEPATH_FIG+'Figure_S11_g_placebo_conserv_w_perm05');
 OVERLAYCLOSEALL;
 OVERLAYLOADSMOOTH(true);
 
-// Heterogeneity — Conservative sample
+// Heterogeneity — conservative sample
 // OVERLAY 1
-OVERLAYLOAD(BASEPATH_NII+'conservative/pla/g/heterogeneity/Conservative_pla_g_tau.nii');
+OVERLAYLOAD(BASEPATH_NII+'conservative/pla/g/heterogeneity/conservative_pla_g_tau.nii');
 OVERLAYCOLORNAME(1,'0_indigo');
 OVERLAYMINMAX(1,0,0.3);
 MOSAIC(SPECS_standard);
 SAVEBMP(BASEPATH_FIG+'Figure_S12_tau_placebo_conserv');
 OVERLAYCLOSEALL;
 
-// Correlation w behaviour placebo — Conservative sample
-OVERLAYLOAD(BASEPATH_NII+'conservative/pla/rrating/random/Conservative_pla_rrating_unthresh.nii');
+// Correlation w behaviour placebo — conservative sample
+OVERLAYLOAD(BASEPATH_NII+'conservative/pla/rrating/random/conservative_pla_rrating_unthresh.nii');
 OVERLAYCOLORNAME(1,'blue_0_red');
-OVERLAYMINMAX(1,-0.2,0.2);
+OVERLAYMINMAX(1,-0.26,0.26);
 MOSAIC(SPECS_standard);
 SAVEBMP(BASEPATH_FIG+'Figure_S13_r_placebo_conserv');
 OVERLAYCLOSEALL;
 
-// Correlation w behaviour placebo — Conservative sample SIGNIFICANT
-over1 := OVERLAYLOAD(BASEPATH_NII+'conservative/pla/rrating/random/Conservative_pla_rrating_unthresh.nii');
+// Correlation w behaviour placebo — conservative sample SIGNIFICANT
+over1 := OVERLAYLOAD(BASEPATH_NII+'conservative/pla/rrating/random/conservative_pla_rrating_unthresh.nii');
 OVERLAYCOLORNAME(over1,'blue_0_red');
-OVERLAYMINMAX(over1,-0.2,0.2);
+OVERLAYMINMAX(over1,-0.26,0.26);
 OVERLAYLOADSMOOTH(false);
 
-over2 := OVERLAYLOAD(BASEPATH_NII+'conservative/pla/rrating/random/Conservative_pla_rrating_pperm05.nii');
+over2 := OVERLAYLOAD(BASEPATH_NII+'conservative/pla/rrating/random/conservative_pla_rrating_pperm_FWE05.nii');
 OVERLAYCOLORNAME(over2,'0_cyan');
 OVERLAYMINMAX(over2,0.001,0.2);
 
@@ -310,14 +314,5 @@ SAVEBMP(BASEPATH_FIG+'Figure_S14_r_placebo_conserv_w_perm05');
 OVERLAYCLOSEALL;
 OVERLAYLOADSMOOTH(true);
 
-
-
-// z Main effect placebo — Full sample
-OVERLAYLOAD(BASEPATH_NII+'full/pla/rrating/random/Full_pla_rrating_z.nii');
-OVERLAYCOLORNAME(1,'blue_0_red');
-OVERLAYMINMAX(1,-4,4);
-MOSAIC(SPECS_standard);
-SAVEBMP(BASEPATH_FIG+'Figure_S8_r_placebo_z');
-OVERLAYCLOSEALL;
 
 END.

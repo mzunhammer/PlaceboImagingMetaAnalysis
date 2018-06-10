@@ -11,7 +11,7 @@ Affiliations:
 e-mail: matthias.zunhammer@uk-essen.de
 
 
-Start at A_Run_All_Analyses.m to get an overview of analyses.
+see: A_Run_All_Analyses.m for an overview of analyses.
 
 Analysis requires:
 – MATLAB 2016b or newer
@@ -22,6 +22,5 @@ Analysis requires:
 – MRIcroGL (PASCAL-based program for plotting/rendering images) 
 – The data collected by the Placebo Imaging Collaboration (currently only available for members of the Placebo Imaging Collaboration)
 (in a folder "Datasets" situated on the same path as the "PlaceboImagingMetaAnalysis" Repository)
-
-Work in progress.
+– 
 

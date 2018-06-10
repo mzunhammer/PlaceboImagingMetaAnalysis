@@ -1,16 +1,21 @@
-function B_mask_missing_voxels(datapath)
+function B_mask_missing_voxels(datapath,varargin)
 p = mfilename('fullpath'); %CANlab's apply mask do not like relative paths so this cludge is needed
 [p,~,~]=fileparts(p);
-splitp=strsplit(p,'/');
-whole_brain_path=fullfile(filesep,splitp{1:end-1});
+splitp=strsplit(p,['(?<!^)',filesep], 'DelimiterType','RegularExpression');
+whole_brain_path=fullfile(splitp{1:end-1});
 results_path=fullfile(whole_brain_path,'nii_results');
-mask_path=fullfile(filesep,splitp{1:end-4},'pattern_masks','brainmask_logical_50.nii');
+mask_path=fullfile(splitp{1:end-4},'pattern_masks','brainmask_logical_50.nii');
 %% Run once to get a mask excluding all voxels where signal == 0 in more
 % than X% of cases.
 null_trshld=0.1; %PROPORTION OF MISSING CASES NECESSARY TO EXCLUDE A VOXEL
 
 % Add folder with Generic Inverse Variance Methods Functions first
-load(fullfile(datapath,'vectorized_images_full'),'dfv');
+if strcmp(varargin,'conservative')
+    fname_dfv='vectorized_images_conservative';
+else
+    fname_dfv='vectorized_images_full';
+end
+load(fullfile(datapath,fname_dfv),'dfv');
 load(fullfile(datapath,'data_frame'),'df');
 
 %% Masking on a by-study basis to detect outliers studies
@@ -60,7 +65,7 @@ prop_nan_overall=sum(n_nan_corrected)/sum(n_subj);
 
  hist(prop_nan_overall,50);
  hold on
- vline(null_trshld)
+ vline(null_trshld);
  hold off
  
 mask_exvoxels=prop_nan_overall<null_trshld;
@@ -83,10 +88,15 @@ end
 dfv_masked.brainmask=mask_exvoxels;
 dfv_masked.brainmask3d=vector2img(mask_exvoxels,mask_path);
 
-save(fullfile(datapath,'vectorized_images_full_masked_10_percent.mat'),'dfv_masked','-v7.3');
-%delete(fullfile(datapath,'vectorized_images_full.mat')); %The unmasked file is huge (>2GB) and only needed once. Delete to free diskspace.
-print_image(mask_exvoxels,mask_path,fullfile(results_path,'full_masked_10_percent'))
+save(fullfile(datapath,[fname_dfv, '_masked_10_percent.mat']),'dfv_masked','-v7.3');
+delete(fullfile(datapath,[fname_dfv,'.mat'])); %The unmasked file is huge (>2GB) and only needed once. Delete to free diskspace.
 
+if strcmp(varargin,'conservative')
+    print_image(mask_exvoxels,mask_path,fullfile(results_path,'conservative_masked_10_percent'))
+
+else
+    print_image(mask_exvoxels,mask_path,fullfile(results_path,'full_masked_10_percent'))
+end
 %% Mask studies on study-level to check for outliers
 for i = 1:size(df,1)
     mask_exvoxels=prop_nan_study_level(i,:)<null_trshld;

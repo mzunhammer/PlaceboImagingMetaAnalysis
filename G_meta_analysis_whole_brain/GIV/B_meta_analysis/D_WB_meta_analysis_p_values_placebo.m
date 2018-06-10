@@ -1,15 +1,18 @@
-function D_WB_meta_analysis_p_values_placebo(datapath)
+function D_WB_meta_analysis_p_values_placebo(datapath,varargin)
 %% Create p-Values and thresholds:
 
 % Add permutation summary to statistical summary struct
 p = mfilename('fullpath');
 [p,~,~]=fileparts(p);
-splitp=strsplit(p,'/');
-whole_brain_path=fullfile(filesep,splitp{1:end-1});
+splitp=strsplit(p,['(?<!^)',filesep], 'DelimiterType','RegularExpression');
+whole_brain_path=fullfile(splitp{1:end-1});
 results_path=fullfile(whole_brain_path,'vectorized_results');
 
-load(fullfile(results_path,'WB_summary_placebo_full.mat'));
-
+if strcmp(varargin,'conservative')
+    load(fullfile(results_path,'WB_summary_placebo_conservative.mat'));
+else
+    load(fullfile(results_path,'WB_summary_placebo_full.mat'));
+end
 %% Placebo
 disp('START: P-Values Placebo g')                                     
 % g
@@ -102,6 +105,11 @@ summary_placebo.g.heterogeneity.perm.chi_dist=[];
 summary_placebo.r_external.heterogeneity.perm.chi_dist=[];
  
 % All has to be overwritten to get rid of large permutation distributions
- save(fullfile(results_path,'WB_summary_placebo_full.mat'),...
-     'summary_placebo','placebo_stats','-v7.3');
 
+if strcmp(varargin,'conservative')
+     save(fullfile(results_path,'WB_summary_placebo_conservative.mat'),...
+     'summary_placebo','placebo_stats','-v7.3');
+else
+     save(fullfile(results_path,'WB_summary_placebo_full.mat'),...
+     'summary_placebo','placebo_stats','-v7.3');
+end

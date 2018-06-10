@@ -3,8 +3,8 @@ addpath(genpath(fullfile(userpath,'/CanlabCore/CanlabCore'))); % Required for FD
 
 p = mfilename('fullpath'); %CANlab's apply mask do not like relative paths so this cludge is needed
 [p,~,~]=fileparts(p);
-splitp=strsplit(p,'/');
-mask_path=fullfile(filesep,splitp{1:end-4},'pattern_masks','brainmask_logical_50.nii');
+splitp=strsplit(p,['(?<!^)',filesep], 'DelimiterType','RegularExpression');
+mask_path=fullfile(splitp{1:end-4},'pattern_masks','brainmask_logical_50.nii');
 
 %% Print supplementary information
 print_img(outpath,summary.n,'_n')
@@ -32,7 +32,7 @@ print_img(outpath_het,summary.heterogeneity.perm.p_FWE,'_p_map_perm_FWE');
 
 %% Print images for main effect FIXED
 outpath_fixed=fullfile(outpath,'fixed');
-if strcmp(label,'Full_pla_rrating')
+if ~isempty(regexp(label,'rrating','once'))
     eff_size_fixed=summary.fixed.summary*-1; % Correlation between brain activity and behavior was determine as the contrast pla-con. Therefore positive correlations represent brain regions where more brain activity is associated with more pain(!) under placebo conditions. Correlations are inverted so that positive correlations denote more brain activity AND more placebo effect (i.e. less pain under placebo conditions) 
 else
     eff_size_fixed=summary.fixed.summary;
@@ -60,7 +60,7 @@ print_img(outpath_fixed,summary.fixed.perm.p_FWE,'_p_map_perm_FWE')
 
 %% Print images for main effect RANDOM
 outpath_random=fullfile(outpath,'random');
-if strcmp(label,'Full_pla_rrating')
+if ~isempty(regexp(label,'rrating','once'))
     eff_size_random=summary.random.summary*-1; % Correlation between brain activity and behavior was determine as the contrast pla-con. Therefore positive correlations represent brain regions where more brain activity is associated with more pain(!) under placebo conditions. Correlations are inverted so that positive correlations denote more brain activity AND more placebo effect (i.e. less pain under placebo conditions) 
 else
     eff_size_random=summary.random.summary;

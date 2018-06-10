@@ -225,3 +225,68 @@ BEGIN
 		   0,0,0);
 	SHADERADJUST('ambient', 1.75); // back to original
 	SHADERADJUST('diffuse', 0.35);
+
+// ###### PLACEBO BEHAVIORAL CORRELATION R CONSERVATIVE ######
+
+	OVERLAYLOADSMOOTH(true);
+	OVERLAYTRANSPARENCYONBACKGROUND(40);
+	OVERLAYLOAD(BASEPATH_NII+'conservative/pla/rrating/random/conservative_pla_rrating_pperm_tfce_FWE05_neg.nii');
+	OVERLAYCOLORNAME(1,'0_blue_trans');
+	OVERLAYMINMAX(1,0.1,0.2);
+	// No significant positive correlations
+	// OVERLAYLOAD(BASEPATH_NII+'conservative/pla/rrating/random/conservative_pla_rrating_pperm_FWE05_pos.nii');
+	// OVERLAYCOLORNAME(2,'0_green');
+	// OVERLAYMINMAX(2,0.001,0.01);
+	OVERLAYTRANSPARENCYONBACKGROUND(0);
+    OVERLAYLOADSMOOTH(false);
+    
+	OVERLAYLOAD(BASEPATH_NII+'conservative/pla/rrating/random/conservative_pla_rrating_pperm_FWE05_neg.nii');
+	OVERLAYCOLORNAME(2,'0_green');
+	OVERLAYMINMAX(2,0.001,0.01);
+	// No significant positive correlations
+	// OVERLAYLOAD(BASEPATH_NII+'conservative/pla/rrating/random/conservative_pla_rrating_pperm_FWE05_pos.nii');
+	// OVERLAYCOLORNAME(2,'0_green');
+	// OVERLAYMINMAX(2,0.001,0.01);
+
+	//AZIMUTHELEVATION (AZI, ELEV: integer). Sets the viewer location. For example,
+	//AZIMUTHELEVATION(90,10) will show a sagittal (right side) view from a slightly inclined viewpoint.
+	//Zero degrees azimuth refers to posterior, while 180 degress is directly anterior. Note that these values are
+	//absolute, while the AZIMUTH and ELEVATION commands refer to relative changes in viewpoint.
+
+	AZIMUTHELEVATION(0,10);
+	SAVEBMP(BASEPATH_FIG+'Figure_S10_r_conservative_Random_post');
+
+	AZIMUTHELEVATION(90,10);
+	SAVEBMP(BASEPATH_FIG+'Figure_S10_r_conservative_Random_left');
+
+	AZIMUTHELEVATION(180,10);
+	SAVEBMP(BASEPATH_FIG+'Figure_S10_r_conservative_Random_ant');
+
+	AZIMUTHELEVATION(270,10);
+	SAVEBMP(BASEPATH_FIG+'Figure_S10_r_conservative_Random_right');
+	
+	SHADERADJUST('ambient', 1.5); // cuts need less light and diffuse as white matter is whiter
+	SHADERADJUST('diffuse', 0.15);
+	
+	AZIMUTHELEVATION(200,10);
+	//CUTOUT (L,A,S,R,P,I: single)
+	CUTOUT(0.0,0.52,0.0,
+		   1.0,1.0,1.0); // to   R P I
+	SAVEBMP(BASEPATH_FIG+'Figure_S10_r_conservative_Random_cut_thalamus');
+
+	AZIMUTHELEVATION(90,10);
+	//CUTOUT (L,A,S,R,P,I: single)
+	CUTOUT(0,0.0,0.0,
+		   0.45,1.0,1.0); // to   R P I 42
+	SAVEBMP(BASEPATH_FIG+'Figure_S10_r_conservative_Random_cut_medial_left');
+	
+	AZIMUTHELEVATION(270,10);
+	//CUTOUT (L,A,S,R,P,I: single)
+	CUTOUT(0.59,0.0,0.0,
+		   1.0,1.0,1.0); // to   R P I 55
+	SAVEBMP(BASEPATH_FIG+'Figure_S10_r_conservative_Random_cut_medial_right');
+	OVERLAYCLOSEALL;
+	CUTOUT(0,0,0,
+		   0,0,0);
+	SHADERADJUST('ambient', 1.75); // back to original
+	SHADERADJUST('diffuse', 0.35);

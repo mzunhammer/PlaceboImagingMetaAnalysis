@@ -1,17 +1,23 @@
-function C_WB_meta_analysis_permute_placebo(datapath,n_perms)
+function C_WB_meta_analysis_permute_placebo(datapath,n_perms,varargin)
 %% Create permuted sample for thresholding meta-analysis maps
-% Function analog to the full meta-analysis of NPS results
+% Function analog to the conservative meta-analysis of NPS results
 % for creating a permuted (null) distribution of statistics
 % Duration for 1000 permutations: >6 hours!
 % smallest p possible is 1/n_perms
+addpath(genpath(fullfile(userpath,'CanlabCore')));
+addpath(genpath(fullfile(userpath,'MatlabTFCE')));
 
 p = mfilename('fullpath'); %CANlab's apply mask do not like relative paths so this cludge is needed
 [p,~,~]=fileparts(p);
-splitp=strsplit(p,'/');
-whole_brain_path=fullfile(filesep,splitp{1:end-1});
+splitp=strsplit(p,['(?<!^)',filesep], 'DelimiterType','RegularExpression');
+whole_brain_path=fullfile(splitp{1:end-1});
 results_path=fullfile(whole_brain_path,'vectorized_results');
 
-load_a=load(fullfile(datapath,'vectorized_images_full_masked_10_percent'),'dfv_masked');
+if any(strcmp(varargin,'conservative'))
+    load_a=load(fullfile(datapath,'vectorized_images_conservative_masked_10_percent'),'dfv_masked');
+    else
+    load_a=load(fullfile(datapath,'vectorized_images_full_masked_10_percent'),'dfv_masked');
+end
 load_b=load(fullfile(datapath,'data_frame'),'df');
 dfv_masked=load_a.dfv_masked; % Cludge necessary for parfor
 df=load_b.df; % Cludge necessary for parfor
@@ -33,10 +39,17 @@ tic
 h = waitbar(0,'Permuting placebo...');
 for p=1:n_perms %exchange parfor with for if parallel processing is not possible
     % Shuffle placebo/baseline labels 
-    [curr_df_null, curr_dfv_null]=relabel_placebo_for_perm(df,dfv_masked);
+    % NOTE: Originally, I've shuffled labels for permutation testing using a separate function
+    % however, it turned out that creating a full second shuffled copy of the data would occupy too much memory.
+    %[curr_df_null, curr_dfv_null]=relabel_placebo_for_perm(df,dfv_masked);
+    %
     % Analyze as in original
-    curr_null_stats_voxels_placebo=create_meta_stats_voxels_placebo(curr_df_null, curr_dfv_null);
-    % Summarize
+    if any(strcmp(varargin,'conservative'))
+        curr_null_stats_voxels_placebo=create_meta_stats_voxels_placebo(df, dfv_masked,'conservative','perm');
+    else
+        curr_null_stats_voxels_placebo=create_meta_stats_voxels_placebo(df, dfv_masked,'perm');
+    end
+        % Summarize
     curr_perm_summary_stats=GIV_summary(curr_null_stats_voxels_placebo,{'g','r_external'});           % use output-argument to only compute stats for "g" and "r_external"
     % Obtained smoothed error image and smoothed z-Distribution
     curr_perm_summary_stats.g=smooth_SE(curr_perm_summary_stats.g,dfv_masked.brainmask3d);
@@ -62,8 +75,14 @@ end
 close(h) 
 toc
 %% Add permuted null-distributions to statistical summary struct
-load(fullfile(results_path,'WB_summary_placebo_full.mat'),...
+
+if any(strcmp(varargin,'conservative'))
+    load(fullfile(results_path,'WB_summary_placebo_conservative.mat'),...
     'summary_placebo');
+else
+    load(fullfile(results_path,'WB_summary_placebo_full.mat'),...
+    'summary_placebo');
+end
 
 summary_placebo.g.fixed.perm.z_dist=g_z_fixed;
 summary_placebo.g.random.perm.z_dist=g_z_random;
@@ -85,5 +104,10 @@ summary_placebo.r_external=smooth_SE(summary_placebo.r_external,dfv_masked.brain
 summary_placebo.r_external=meta_TFCE(summary_placebo.r_external,dfv_masked.brainmask3d);
 
 
-save(fullfile(results_path,'WB_summary_placebo_full.mat'),...
+if any(strcmp(varargin,'conservative'))
+    save(fullfile(results_path,'WB_summary_placebo_conservative.mat'),...
     'summary_placebo','-append');
+else
+    save(fullfile(results_path,'WB_summary_placebo_full.mat'),...
+    'summary_placebo','-append');
+end

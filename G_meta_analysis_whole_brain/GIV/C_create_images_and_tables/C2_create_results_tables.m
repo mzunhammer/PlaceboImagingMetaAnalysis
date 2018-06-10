@@ -1,4 +1,4 @@
-function C2_create_results_tables()
+function C2_create_results_tables(an_type)
 
 %% Print and label results cluster-wise
 
@@ -18,41 +18,41 @@ function C2_create_results_tables()
 %     ?Oxford-Imanova Striatal Structural Atlas?
 %     ?Talairach Daemon Labels?
 
-atlases= {%'Harvard-Oxford Cortical Structural Atlas',...
-          'Harvard-Oxford Subcortical Structural Atlas'};%,...
-         %'Oxford Thalamic Connectivity Probability Atlas',...
-         %'Talairach Daemon Labels',...
-         %'Cerebellar Atlas in MNI152 space after normalization with FLIRT'};
+atlases= {'Harvard-Oxford Cortical Structural Atlas',...
+          'Harvard-Oxford Subcortical Structural Atlas',...
+          'Oxford Thalamic Connectivity Probability Atlas',...
+          'Talairach Daemon Labels',...
+          'Cerebellar Atlas in MNI152 space after normalization with FLIRT'};
          %{'Talairach Daemon Labels',...
          % 'Cerebellar Atlas in MNI152 space after normalization with FLIRT'}; %'Harvard-Oxford Cortical Structural Atlas',...
          
          %
           %','Harvard-Oxford Cortical Structural Atlas'};
-satlases={'Hrvrd_Subcort'};%'Hrvrd_Cort', 'Thal','Talairach','Cerebellum'}; % {'Talairach','Cerebellum'}; %'TD', 'HO_cort','HO_subcort','Thalamus','Cerebellum',
+satlases={'Hrvrd_Subcort','Hrvrd_Cort', 'Thal','Talairach','Cerebellum'}; % {'Talairach','Cerebellum'}; %'TD', 'HO_cort','HO_subcort','Thalamus','Cerebellum',
 %% Read all nii results images, filter thresholded ones
 %select images for tables manually
 img_path_pperm05={
 
 %%Pain, g's, perm
-  '../nii_results/full/pain/g/random/Full_pain_g_pperm_FWE05';
+ % ['../nii_results/',an_type,'/pain/g/random/',an_type,'_pain_g_pperm_FWE05'];
 
 % Placebo, fixed, g's
-  '../nii_results/full/pla/g/fixed/Full_pla_g_pperm_FWE05';
+  ['../nii_results/',an_type,'/pla/g/fixed/',an_type,'_pla_g_pperm_FWE05'];
 
 % Placebo, fixed, correlations
-  '../nii_results/full/pla/rrating/fixed/Full_pla_rrating_pperm_FWE05';
+  ['../nii_results/',an_type,'/pla/rrating/fixed/',an_type,'_pla_rrating_pperm_FWE05'];
 
 % Placebo, random, g's
-  '../nii_results/full/pla/g/random/Full_pla_g_pperm_FWE05';
+  ['../nii_results/',an_type,'/pla/g/random/',an_type,'_pla_g_pperm_FWE05'];
 
 % Placebo, Random, correlations
-  '../nii_results/full/pla/rrating/random/Full_pla_rrating_pperm_FWE05';
+  ['../nii_results/',an_type,'/pla/rrating/random/',an_type,'_pla_rrating_pperm_FWE05'];
  
 
   };
 
 %% Print tables for p<0.05 permutation test based results
-% Tabulate and label results full sample, negative and positive
+% Tabulate and label results negative and positive
 for k=1:length(atlases)
     for i=1:length(img_path_pperm05)
         curr_img=img_path_pperm05{i};

@@ -1,10 +1,14 @@
-function C_winsorize(datapath)
+function C_winsorize(datapath,varargin)
 % Censoring extreme values to 3 standard deviations (most extreme 0.3% of data)
 % The 3 SD target is chosen for consistency with earlier Wager studies.
 % Winsorizing is performed on a by-study-by-contrast level.
 
 % Load data
-load(fullfile(datapath,'vectorized_images_full_masked_10_percent.mat'),'dfv_masked')
+if strcmp(varargin,'conservative')
+    load(fullfile(datapath,'vectorized_images_conservative_masked_10_percent.mat'),'dfv_masked')
+else
+    load(fullfile(datapath,'vectorized_images_full_masked_10_percent.mat'),'dfv_masked')
+end
 
 % Set windsorizing parameters:
 target_sd=3;
@@ -77,6 +81,9 @@ plot(sum(e,2)/size(e,2));
 
 dfv_masked.placebo_and_control_scaled=[];
 
-save(fullfile(datapath,'vectorized_images_full_masked_10_percent.mat'),'dfv_masked','-v7.3')
-
+if strcmp(varargin,'conservative')
+    save(fullfile(datapath,'vectorized_images_conservative_masked_10_percent.mat'),'dfv_masked','-v7.3')
+else
+    save(fullfile(datapath,'vectorized_images_full_masked_10_percent.mat'),'dfv_masked','-v7.3')
+end
 end

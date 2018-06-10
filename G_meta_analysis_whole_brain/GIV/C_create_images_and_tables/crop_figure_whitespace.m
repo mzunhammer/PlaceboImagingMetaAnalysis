@@ -29,6 +29,14 @@ fig2_paths={
 'Figure_3B_r_Random_left.png'
 'Figure_3B_r_Random_post.png'
 'Figure_3B_r_Random_right.png'
+'Figure_S10_g_placebo_conserv.png'
+'Figure_S10_r_conservative_Random_ant.png'
+'Figure_S10_r_conservative_Random_cut_medial_left.png'
+'Figure_S10_r_conservative_Random_cut_medial_right.png'
+'Figure_S10_r_conservative_Random_cut_thalamus.png'
+'Figure_S10_r_conservative_Random_left.png'
+'Figure_S10_r_conservative_Random_post.png'
+'Figure_S10_r_conservative_Random_right.png'
     };
 for i=1:length(fig2_paths)
 crop(fullfile(figpath,fig2_paths{i}));

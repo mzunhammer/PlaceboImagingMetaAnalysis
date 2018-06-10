@@ -13,8 +13,8 @@ mask_path=fullfile(results_path,'full_masked_10_percent.nii');
 %load(fullfile(datapath,'vectorized_images_full_masked_10_percent'),'dfv_masked');
 load(fullfile(datapath,'data_frame'),'df');
 
-load(fullfile(results_path,'WB_summary_pain_full.mat'));
-load(fullfile(results_path,'WB_summary_placebo_full.mat'));
+%load(fullfile(results_path,'WB_summary_pain_conservative.mat'));
+load(fullfile(results_path,'WB_summary_placebo_conservative.mat'));
 %% Create results tables
 %% Explore VOIS FULL SAMPLE PLACEBO G
 
@@ -37,8 +37,8 @@ for i=1:length(MNI_pla_g)
                   'with_outlier',0,...%'WI_subdata',0,...
                   'box_scaling',1,...
                   'text_offset',0);  
-  curr_svg=sprintf([outpath '/VOI_Full_pla_g_%d_%d_%d.svg'],MNI_pla_g{i});
-  curr_png=sprintf([outpath '/VOI_Full_pla_g_%d_%d_%d.png'],MNI_pla_g{i});
+  curr_svg=sprintf([outpath '/VOI_Full_pla_g_%d_%d_%d_conservative.svg'],MNI_pla_g{i});
+  curr_png=sprintf([outpath '/VOI_Full_pla_g_%d_%d_%d_conservative.png'],MNI_pla_g{i});
 
   hgexport(gcf, curr_svg, hgexport('factorystyle'), 'Format', 'svg'); 
   hgexport(gcf, curr_png, hgexport('factorystyle'), 'Format', 'png'); 

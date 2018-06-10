@@ -1,4 +1,4 @@
-function D_img_similarity_corr(datapath)
+function D_img_similarity_corr(datapath,varargin)
 % For correlation maps of behavior vs placebo-related brain activity
 % we cannot get single-subject estimates (correlations
 % were calculated on study level). Similarity of activation patterns is
@@ -9,12 +9,18 @@ addpath(genpath(fullfile(userpath,'CanlabCore')));
 addpath(genpath(fullfile(userpath,'CanlabPatternMasks')));
 addpath(genpath(fullfile(userpath,'cbrewer')));
 
+if any(strcmp(varargin,'conservative'))
+    fnamesuffix='conservative';
+else
+    fnamesuffix='full';
+end
+
 %Set paths relative to function
 p = mfilename('fullpath');
 [resultspath,~,~]=fileparts(p);
-splitp=strsplit(resultspath,'/');
-anpath=fullfile(filesep,splitp{1:end-1});
-outpath=fullfile(filesep,splitp{1:end-1},'figure_results/');
+splitp=strsplit(p,['(?<!^)',filesep], 'DelimiterType','RegularExpression');
+anpath=fullfile(splitp{1:end-2});
+outpath=fullfile(splitp{1:end-2},'figure_results/');
 
 % Load dataframe
 df_name= 'data_frame.mat';
@@ -22,8 +28,17 @@ load(fullfile(datapath,df_name),'df');
 
 % Load study-summary images from GIV analysis
 targetvars={'r'};
-random_img_dir_r=fullfile(anpath,'/nii_results/full/pla/rrating/study_level');
-r_imgs_random=fullfile(random_img_dir_r,strcat(df.study_ID,'.nii'));
+if strcmp(varargin,'conservative')
+    random_img_dir_r=fullfile(anpath,'/nii_results/conservative/pla/rrating/study_level');
+    df_r=df(~df.excluded_conservative_sample & ~strcmp(df.study_design,'between'),:);
+    r_imgs_random=fullfile(random_img_dir_r,...
+                           strcat(df_r.study_ID,'.nii'));
+else
+    random_img_dir_r=fullfile(anpath,'/nii_results/full/pla/rrating/study_level');
+    df_r=df(~strcmp(df.study_design,'between'),:);
+    r_imgs_random=fullfile(random_img_dir_r,...
+                           strcat(df_r.study_ID,'.nii'));
+end
 images_RANDOM.r=fmri_data(r_imgs_random); %Create CANlab data obj
 images_RANDOM.r.removed_images = 0;
 
@@ -54,7 +69,7 @@ for k=1:length(atlas_names)
                                            'nofigure',...
                                            'noplot'); % CAVE: THESE RESULTS ARE NOT WEIGHTED FOR N YET!
         sim=curr_stats.r';
-        SE_sim=n2fishersZse(repmat(df.n,1,size(sim,2))); % approximation of SE based on n of subjects
+        SE_sim=n2fishersZse(repmat(df_r.n,1,size(sim,2))); % approximation of SE based on n of subjects
         % GIV summarize across studies
         simil=[];
         for j=1:size(sim,2)
@@ -80,7 +95,7 @@ for k=1:length(atlas_names)
                             SE_values(seq),...
                             results_labels(seq),...
                             'metric','cosim')
-        curr_path=fullfile(outpath,['wedge_placebo_random_',targetvars{i},'_',atlas_names{k}]);
+        curr_path=fullfile(outpath,['wedge_placebo_random_',targetvars{i},'_',atlas_names{k},'_',fnamesuffix]);
         curr_svg=[curr_path,'.svg'];
         curr_png=[curr_path,'.png'];
         hgexport(gcf, curr_svg, hgexport('factorystyle'), 'Format', 'svg'); 
