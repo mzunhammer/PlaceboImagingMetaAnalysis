@@ -1,11 +1,12 @@
 function A_apply_various(datapath)
-addpath(genpath('~/Documents/MATLAB/CanlabCore/CanlabCore/'));
+addpath(genpath(fullfile(userpath,'/CanlabCore/CanlabCore/')));
+addpath(genpath(fullfile(userpath,'/CanlabPatternMasks/MasksPrivate')));
 
 %% Set IO paths
 p = mfilename('fullpath'); %CANlab's apply mask do not like relative paths so this cludge is needed
 [p,~,~]=fileparts(p);
-splitp=strsplit(p,'/');
-maskdir=fullfile(filesep,splitp{1:end-2},'pattern_masks');
+splitp=strsplit(p,['(?<!^)',filesep], 'DelimiterType','RegularExpression');
+maskdir=fullfile(splitp{1:end-2},'pattern_masks');
 addpath(maskdir);
 df_path=fullfile(datapath,'data_frame.mat');
 load(df_path,'df');
@@ -18,17 +19,18 @@ contrasts={'pain_placebo',...
 atlas_names={'bucknerlab_wholebrain',...
             'thalamus',...
             'brainstem',...
-            'basal_ganglia'};
+            'basal_ganglia',...
+            'insula'};
         
 n=size(df,1);
 %%
 % Load Bucknerlab maps
-[mask{1}, ~, ~] = load_image_set('bucknerlab_wholebrain'); % different loading procedure required.
-mask{2} = load_atlas_matthias('thalamus');
-mask{3} = load_atlas_matthias('brainstem');
-mask{4} = load_atlas_matthias('basal_ganglia');
-
-for l=1:length(mask)
+%[mask{1}, ~, ~] = load_image_set('bucknerlab_wholebrain'); % different loading procedure required.
+%mask{2} = load_atlas_matthias('thalamus');
+%mask{3} = load_atlas_matthias('brainstem');
+%mask{4} = load_atlas_matthias('basal_ganglia');
+mask{5} = load_insular_atlas();
+for l=length(mask);%1:length(mask);
     curr_mask=mask{l};
     curr_mask = replace_empty(curr_mask); % add zeros back in
     
