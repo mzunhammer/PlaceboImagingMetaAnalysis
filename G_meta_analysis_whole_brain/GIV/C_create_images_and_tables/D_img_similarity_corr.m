@@ -26,41 +26,109 @@ outpath=fullfile(splitp{1:end-2},'figure_results/');
 df_name= 'data_frame.mat';
 load(fullfile(datapath,df_name),'df');
 
-% Load study-summary images from GIV analysis
-targetvars={'r'};
-if strcmp(varargin,'conservative')
-    random_img_dir_r=fullfile(anpath,'/nii_results/conservative/pla/rrating/study_level');
-    df_r=df(~df.excluded_conservative_sample & ~strcmp(df.study_design,'between'),:);
-    r_imgs_random=fullfile(random_img_dir_r,...
-                           strcat(df_r.study_ID,'.nii'));
-else
-    random_img_dir_r=fullfile(anpath,'/nii_results/full/pla/rrating/study_level');
-    df_r=df(~strcmp(df.study_design,'between'),:);
-    r_imgs_random=fullfile(random_img_dir_r,...
-                           strcat(df_r.study_ID,'.nii'));
-end
-images_RANDOM.r=fmri_data(r_imgs_random); %Create CANlab data obj
-images_RANDOM.r.removed_images = 0;
-
-% Prepare/load bucknerlab (wholebrain), thalamus, brainstem, basal ganglia atlases
+% Correlate behavioral placebo response with bucknerlab (wholebrain), thalamus,
+% brainstem, basal ganglia and insular atlase activation
 
 
-atlas_names={'bucknerlab_wholebrain','thalamus','brainstem','basal_ganglia'};
-for k=1:length(atlas_names)
-    %[~, names_buckner_wholebrain, ~] = load_image_set('bucknerlab_wholebrain');
-    %seq_buckner=[7,6,5,3,4,2,1];
-    if strcmp(atlas_names{k},'bucknerlab_wholebrain')
-       [mask, curr_labels, ~] = load_image_set('bucknerlab_wholebrain'); 
-       seq=[7,2,6,5,4,3,1]; %sequence of wedges
-    else
-        curr_atlas = load_atlas(atlas_names{k});
-        mask=fmri_data;
-        mask.dat=curr_atlas.probability_maps;
-        mask.removed_voxels=curr_atlas.removed_voxels;
-        mask.volInfo=curr_atlas.volInfo; % Well, that was a pain to get right
-        curr_labels= curr_atlas.labels;
-        seq=1:length(curr_labels);
+
+% Load labels for bucknerlab masks, set order
+[mask{1}, labels{1}, ~] = load_image_set('bucknerlab_wholebrain');
+mask{2} = load_atlas('thalamus');
+mask{3} = load_atlas('brainstem');
+mask{4} = load_atlas('basal_ganglia');
+mask{5} = load_insular_atlas();
+
+labels{2} = mask{2}.labels;
+labels{3} = mask{3}.labels;
+labels{4} = mask{4}.labels;
+labels{5} = mask{5}.additional_info{1};
+
+%Sequence of wedges
+seq{1}=[7,2,6,5,4,3,1];
+seq{2}=1:length(labels{2});
+seq{3}=1:length(labels{3});
+seq{4}=1:length(labels{4});
+seq{5}=1:length(labels{5});
+
+atlas_names={'bucknerlab_wholebrain','thalamus','brainstem','basal_ganglia','insula'};
+
+for j=1:length(atlas_names)
+    for i=1:length(df.GIV_stats_rating)
+        curr_ROI_set=['GIV_stats_',atlas_names{j}];
+        % correlate single-subject effect of behavior and voxel signal 
+        df.(curr_ROI_set)(i).r_external=fastcorrcoef(df.(curr_ROI_set)(i).delta,...
+                                                    df.GIV_stats_rating(i).delta,...
+                                                    'exclude_nan'); % correlate single-subject effect of behavior and voxel signal 
+        if ~isempty(df.(curr_ROI_set)(i).delta) % necessary as "sum" returns 0 for [] for some stupid reason
+            df.(curr_ROI_set)(i).n_r_external=sum(~(isnan(df.(curr_ROI_set)(i).delta)|... % the n for the correlation is the n of subjects showing non-nan values at that particular voxels
+                                             isnan(df.GIV_stats_rating(i).delta))); % AND non nan-ratings
+        else
+            df.(curr_ROI_set)(i).r_external=NaN(size(labels));
+            df.(curr_ROI_set)(i).n_r_external=NaN(size(labels));
+        end
     end
+end
+
+%% Wedge plots for CORRELATIONS
+for i=1:length(atlas_names)
+    currvar=atlas_names{i};
+    curr_summary=GIV_summary(df.(['GIV_stats_',currvar])(strcmp(df.study_design,'within')),'r_external'); 
+    % Wedge Plot
+    values=curr_summary.r_external.random.summary*-1; % invert correlation as it is representing change in pain, not placebo effect
+    SE_values=curr_summary.r_external.random.SEsummary;
+    p_values=curr_summary.r_external.random.p';
+    results_labels={};
+    for j=1:length(labels{i})
+        if p_values(j)<0.05
+            results_labels{j}=strrep([labels{i}{j},'*'],'_',' ');
+        else
+            results_labels{j}=strrep([labels{i}{j}],'_',' ');
+        end
+    end
+    matthias_wedge_plot(values(seq{i})',...
+                        SE_values(seq{i})',...
+                        results_labels(seq{i})',...
+                        'metric','similarity');
+    curr_path=fullfile(outpath,['wedge_placebo_correlation_random_',currvar,'_',fnamesuffix]);
+    curr_eps=[curr_path,'.eps'];
+    curr_png=[curr_path,'.png'];
+    hgexport(gcf, curr_eps, hgexport('factorystyle'), 'Format', 'eps'); 
+    hgexport(gcf, curr_png, hgexport('factorystyle'), 'Format', 'png'); 
+    crop(curr_png);
+    close all;
+end
+
+
+%% Forest plots for PLACEBO
+if any(strcmp(varargin,'forest_plots'))
+for i=1:length(variable_select)
+    currvar=variable_select{i};
+    GIV_stats=df.(['GIV_stats_',currvar]);
+    for j=1:length(GIV_stats(1).mu)
+      currstat=stat_reduce(GIV_stats,j);
+      forest_plotter(currstat,...
+                  'study_ID_texts',df.study_citations,...
+                  'outcome_labels',strrep([currvar,'_',labels{i}{j},' (Cosine similarity)'],'_',' '),...
+                  'type','random',...
+                  'summary_stat','mu',...
+                  'with_outlier',0,...
+                  'WI_subdata',{currstat.delta},...
+                  'box_scaling',1,...
+                  'text_offset',0);
+    curr_path=fullfile(outpath,['forest_placebo_random_cossim_',currvar,'_',labels{i}{j},'_',fnamesuffix]);
+    curr_eps=[curr_path,'.eps'];
+    curr_png=[curr_path,'.png'];
+    hgexport(gcf, curr_eps, hgexport('factorystyle'), 'Format', 'eps'); 
+    hgexport(gcf, curr_png, hgexport('factorystyle'), 'Format', 'png'); 
+    crop(curr_png);
+    close all;
+    end
+end
+
+
+
+
+%% Plot
     for i=1:length(targetvars)
         curr_stats = image_similarity_plot(images_RANDOM.(targetvars{i}),...
                                            'mapset',mask,...
@@ -102,5 +170,6 @@ for k=1:length(atlas_names)
         hgexport(gcf, curr_png, hgexport('factorystyle'), 'Format', 'png'); 
         crop(curr_png);
         close all;
-        end
+    end
+    
 end

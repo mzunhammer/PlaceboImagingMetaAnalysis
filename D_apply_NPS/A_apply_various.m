@@ -25,12 +25,12 @@ atlas_names={'bucknerlab_wholebrain',...
 n=size(df,1);
 %%
 % Load Bucknerlab maps
-%[mask{1}, ~, ~] = load_image_set('bucknerlab_wholebrain'); % different loading procedure required.
+[mask{1}, ~, ~] = load_image_set('bucknerlab_wholebrain'); % different loading procedure required.
 %mask{2} = load_atlas_matthias('thalamus');
 %mask{3} = load_atlas_matthias('brainstem');
 %mask{4} = load_atlas_matthias('basal_ganglia');
-mask{5} = load_insular_atlas();
-for l=length(mask);%1:length(mask);
+%mask{5} = load_insular_atlas();
+for l=1:length(mask);
     curr_mask=mask{l};
     curr_mask = replace_empty(curr_mask); % add zeros back in
     

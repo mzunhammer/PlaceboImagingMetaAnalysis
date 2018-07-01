@@ -4,14 +4,14 @@
 % MUST BE ABSOLUTE PATHS! Some SPM and CANlab functions do not deal well with
 % relative paths.
 % Folder with analysis functions (git repository)
-analysispath='D:\Dropbox\Boulder_Essen\Analysis';
-% analysispath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/analysis'; % MAC OS EXAMPLE
+%analysispath='D:\Dropbox\Boulder_Essen\Analysis';
+ analysispath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/analysis'; % MAC OS EXAMPLE
 % Folder where where result figures should be saved (not in git repository)
-pubpath='D:\Dropbox\Boulder_Essen\Protocol_and_Manuscript\NPS_placebo\JAMA';
-% pubpath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/NPS_placebo/JAMA/'; % (MAX OS EXAMPLE) (MAX OS EXAMPLE)
+%pubpath='D:\Dropbox\Boulder_Essen\Protocol_and_Manuscript\NPS_placebo\JAMA';
+pubpath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/NPS_placebo/JAMA/'; % (MAX OS EXAMPLE) (MAX OS EXAMPLE)
 % Folder where the data-set rests (not in git repository)
-datapath='D:\Dropbox\Boulder_Essen\datasets'; %MUST BE ABSOLUTE PATH. SPM and CANlab functions do not deal well with relative paths
-% datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/datasets'; % MAC OS EXAMPLE
+%datapath='D:\Dropbox\Boulder_Essen\datasets'; %MUST BE ABSOLUTE PATH. SPM and CANlab functions do not deal well with relative paths
+datapath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/datasets'; % MAC OS EXAMPLE
 
 %% Add paths to workspace to make all functions available
 addpath(genpath(analysispath));
