@@ -5,6 +5,10 @@ if any(strcmp(varargin,'metric'))
 else
     metric='g';
 end
+
+if any(strcmp(varargin,'nolabels'))
+    wedgenames=repmat({''},size(wedgenames,1),size(wedgenames,1));
+end
 % set up vaules and SE's for tor_wedge_plot
 toplot=double([values+SE_values...
         values...

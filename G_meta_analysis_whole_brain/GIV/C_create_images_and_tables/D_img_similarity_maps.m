@@ -5,16 +5,24 @@ function D_img_similarity_maps(datapath,varargin)
 % optional inputs:
 % 'forest_plots': Will additionally provide a forest_plot with each wedge
 % 'conservative': Will use the conservative instead of the full sample.
-%
+% 'nolabels': Will yield wedge-plots without lables.
+
 addpath(genpath(fullfile(userpath,'CanlabCore')));
 addpath(genpath(fullfile(userpath,'CanlabPatternMasks')));
 addpath(genpath(fullfile(userpath,'cbrewer')));
 
-if any(strcmp(varargin,'conservative'))
-    fnamesuffix='conservative';
+if any(strcmp(varargin,'nolabels'))
+    labelflag='nolabels';
 else
-    fnamesuffix='full';
-end    
+    labelflag=[];
+end   
+
+if any(strcmp(varargin,'conservative'))
+    fnamesuffix=['conservative',labelflag];
+else
+    fnamesuffix=['full',labelflag];
+end
+
 %Set paths relative to function
 p = mfilename('fullpath');
 [resultspath,~,~]=fileparts(p);
@@ -22,6 +30,7 @@ splitp=strsplit(p,['(?<!^)',filesep], 'DelimiterType','RegularExpression');
 anpath=fullfile(splitp{1:end-2});
 outpath=fullfile(splitp{1:end-2},'figure_results/');
 
+disp(['Results saved in:', outpath])
 % Load dataframe
 df_name= 'data_frame.mat';
 load(fullfile(datapath,df_name),'df');
@@ -36,10 +45,10 @@ mask{5} = load_insular_atlas();
 labels{2} = mask{2}.labels;
 labels{3} = mask{3}.labels;
 labels{4} = mask{4}.labels;
-labels{5} = mask{5}.additional_info{1};
+labels{5} = mask{5}.additional_info{1}';
 
 % Sequence of wedges
-seq{1}=[7,2,6,5,4,3,1];
+seq{1}=[1,2,3,4,5,6,7]; %alternative [7,2,6,5,4,3,1]
 seq{2}=1:length(labels{2});
 seq{3}=1:length(labels{3});
 seq{4}=1:length(labels{4});
@@ -47,7 +56,7 @@ seq{5}=1:length(labels{5});
 
 
 %% Meta-Analysis of binary maps for pain
-variable_select={'bucknerlab_wholebrain','thalamus','brainstem','basal_ganglia','insula'}; %
+variable_select={'bucknerlab_wholebrain','thalamus','brainstem','basal_ganglia','insula'}; %,
 for j=1:length(variable_select) % Loop through all outcome variables
     currvar=variable_select{j};
     for i=1:size(df,1) % Loop through all studies...
@@ -77,14 +86,18 @@ for i=1:length(variable_select)
     matthias_wedge_plot(values(seq{i})',...
                         SE_values(seq{i})',...
                         results_labels(seq{i})',...
-                        'metric','similarity');
-    curr_path=fullfile(outpath,['wedge_pain_random_cossim_',currvar]);
+                        'metric','similarity',labelflag);
+    curr_path=fullfile(outpath,['wedge_pain_random_cossim_',labelflag,currvar]);
     curr_eps=[curr_path,'.eps'];
     curr_png=[curr_path,'.png'];
     hgexport(gcf, curr_eps, hgexport('factorystyle'), 'Format', 'eps'); 
     hgexport(gcf, curr_png, hgexport('factorystyle'), 'Format', 'png'); 
     crop(curr_png);
     close all;
+    %% print table
+    disp("Pain")
+    currvar
+    table(labels{i}',values',SE_values',p_values,'VariableNames',{'ROI','Similarity','SE','p'})
 end
 
 %% Forest plots for PAIN
@@ -185,7 +198,7 @@ for i=1:length(variable_select)
     matthias_wedge_plot(values(seq{i})',...
                         SE_values(seq{i})',...
                         results_labels(seq{i})',...
-                        'metric','similarity');
+                        'metric','similarity',labelflag);
     curr_path=fullfile(outpath,['wedge_placebo_random_cossim_',currvar,'_',fnamesuffix]);
     curr_eps=[curr_path,'.eps'];
     curr_png=[curr_path,'.png'];
@@ -193,6 +206,10 @@ for i=1:length(variable_select)
     hgexport(gcf, curr_png, hgexport('factorystyle'), 'Format', 'png'); 
     crop(curr_png);
     close all;
+     %% print table
+    disp("Placebo")
+    currvar
+    table(labels{i}',values',SE_values',p_values,'VariableNames',{'ROI','Similarity','SE','p'})
 end
 
 

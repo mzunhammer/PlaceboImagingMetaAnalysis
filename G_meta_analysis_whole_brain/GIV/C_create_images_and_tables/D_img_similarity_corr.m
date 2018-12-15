@@ -9,10 +9,16 @@ addpath(genpath(fullfile(userpath,'CanlabCore')));
 addpath(genpath(fullfile(userpath,'CanlabPatternMasks')));
 addpath(genpath(fullfile(userpath,'cbrewer')));
 
-if any(strcmp(varargin,'conservative'))
-    fnamesuffix='conservative';
+if any(strcmp(varargin,'nolabels'))
+    labelflag='nolabels';
 else
-    fnamesuffix='full';
+    labelflag=[];
+end   
+
+if any(strcmp(varargin,'conservative'))
+    fnamesuffix=['conservative',labelflag];
+else
+    fnamesuffix=['full',labelflag];
 end
 
 %Set paths relative to function
@@ -41,10 +47,10 @@ mask{5} = load_insular_atlas();
 labels{2} = mask{2}.labels;
 labels{3} = mask{3}.labels;
 labels{4} = mask{4}.labels;
-labels{5} = mask{5}.additional_info{1};
+labels{5} = mask{5}.additional_info{1}';
 
 %Sequence of wedges
-seq{1}=[7,2,6,5,4,3,1];
+seq{1}=[1,2,3,4,5,6,7];
 seq{2}=1:length(labels{2});
 seq{3}=1:length(labels{3});
 seq{4}=1:length(labels{4});
@@ -88,7 +94,7 @@ for i=1:length(atlas_names)
     matthias_wedge_plot(values(seq{i})',...
                         SE_values(seq{i})',...
                         results_labels(seq{i})',...
-                        'metric','similarity');
+                        'metric','similarity',labelflag);
     curr_path=fullfile(outpath,['wedge_placebo_correlation_random_',currvar,'_',fnamesuffix]);
     curr_eps=[curr_path,'.eps'];
     curr_png=[curr_path,'.png'];
@@ -96,26 +102,30 @@ for i=1:length(atlas_names)
     hgexport(gcf, curr_png, hgexport('factorystyle'), 'Format', 'png'); 
     crop(curr_png);
     close all;
+      %% print table
+    disp("Placebo")
+    currvar
+    table(labels{i}',values',SE_values',p_values,'VariableNames',{'ROI','r','SE','p'})
 end
 
 
 %% Forest plots for PLACEBO
 if any(strcmp(varargin,'forest_plots'))
-for i=1:length(variable_select)
-    currvar=variable_select{i};
+for i=1:length(atlas_names)
+    currvar=atlas_names{i};
     GIV_stats=df.(['GIV_stats_',currvar]);
-    for j=1:length(GIV_stats(1).mu)
+    for j=1:length(GIV_stats(1).r_external)
       currstat=stat_reduce(GIV_stats,j);
       forest_plotter(currstat,...
                   'study_ID_texts',df.study_citations,...
                   'outcome_labels',strrep([currvar,'_',labels{i}{j},' (Cosine similarity)'],'_',' '),...
                   'type','random',...
-                  'summary_stat','mu',...
+                  'summary_stat','r_external',...
                   'with_outlier',0,...
-                  'WI_subdata',{currstat.delta},...
                   'box_scaling',1,...
-                  'text_offset',0);
-    curr_path=fullfile(outpath,['forest_placebo_random_cossim_',currvar,'_',labels{i}{j},'_',fnamesuffix]);
+                  'text_offset',0,...
+                   'X_scale',1);
+    curr_path=fullfile(outpath,['forest_placebo_corr_cossim_',currvar,'_',labels{i}{j},'_',fnamesuffix]);
     curr_eps=[curr_path,'.eps'];
     curr_png=[curr_path,'.png'];
     hgexport(gcf, curr_eps, hgexport('factorystyle'), 'Format', 'eps'); 
@@ -128,48 +138,48 @@ end
 
 
 
-%% Plot
-    for i=1:length(targetvars)
-        curr_stats = image_similarity_plot(images_RANDOM.(targetvars{i}),...
-                                           'mapset',mask,...
-                                           'networknames',curr_labels,...
-                                           'cosine_similarity',...
-                                           'nofigure',...
-                                           'noplot'); % CAVE: THESE RESULTS ARE NOT WEIGHTED FOR N YET!
-        sim=curr_stats.r';
-        SE_sim=n2fishersZse(repmat(df_r.n,1,size(sim,2))); % approximation of SE based on n of subjects
-        % GIV summarize across studies
-        simil=[];
-        for j=1:size(sim,2)
-        [simil(j).fixed,simil(j).random,simil(j).heterogeneity]=GIV_weight(r2fishersZ(sim(:,j)),...
-                                                                            SE_sim(:,j));
-        [simil(j).fixed,simil(j).random,simil(j).heterogeneity]=GIV_weight_fishersZ2r(simil(j).fixed,simil(j).random,simil(j).heterogeneity);
-        end
-        % Wedge Plot
-        simil_vert=vertcat(simil.random);
-        values=vertcat(simil_vert.summary);
-        SE_values=vertcat(simil_vert.SEsummary);
-        p_values=vertcat(simil_vert.p);
-        results_labels={};
-        for j=1:length(curr_labels)
-            if p_values(j)<0.05
-                results_labels{j}=[curr_labels{j},'*'];
-            else
-                results_labels{j}=[curr_labels{j}];
-            end
-            results_labels{j}=strrep(results_labels{j},'_',' ');
-        end
-        matthias_wedge_plot(values(seq),...
-                            SE_values(seq),...
-                            results_labels(seq),...
-                            'metric','cosim')
-        curr_path=fullfile(outpath,['wedge_placebo_random_',targetvars{i},'_',atlas_names{k},'_',fnamesuffix]);
-        curr_svg=[curr_path,'.svg'];
-        curr_png=[curr_path,'.png'];
-        hgexport(gcf, curr_svg, hgexport('factorystyle'), 'Format', 'svg'); 
-        hgexport(gcf, curr_png, hgexport('factorystyle'), 'Format', 'png'); 
-        crop(curr_png);
-        close all;
-    end
+% %% Plot
+%     for i=1:length(atlas_names)
+%         curr_stats = image_similarity_plot(images_RANDOM.(atlas_names{i}),...
+%                                            'mapset',mask,...
+%                                            'networknames',curr_labels,...
+%                                            'cosine_similarity',...
+%                                            'nofigure',...
+%                                            'noplot'); % CAVE: THESE RESULTS ARE NOT WEIGHTED FOR N YET!
+%         sim=curr_stats.r';
+%         SE_sim=n2fishersZse(repmat(df_r.n,1,size(sim,2))); % approximation of SE based on n of subjects
+%         % GIV summarize across studies
+%         simil=[];
+%         for j=1:size(sim,2)
+%         [simil(j).fixed,simil(j).random,simil(j).heterogeneity]=GIV_weight(r2fishersZ(sim(:,j)),...
+%                                                                             SE_sim(:,j));
+%         [simil(j).fixed,simil(j).random,simil(j).heterogeneity]=GIV_weight_fishersZ2r(simil(j).fixed,simil(j).random,simil(j).heterogeneity);
+%         end
+%         % Wedge Plot
+%         simil_vert=vertcat(simil.random);
+%         values=vertcat(simil_vert.summary);
+%         SE_values=vertcat(simil_vert.SEsummary);
+%         p_values=vertcat(simil_vert.p);
+%         results_labels={};
+%         for j=1:length(curr_labels)
+%             if p_values(j)<0.05
+%                 results_labels{j}=[curr_labels{j},'*'];
+%             else
+%                 results_labels{j}=[curr_labels{j}];
+%             end
+%             results_labels{j}=strrep(results_labels{j},'_',' ');
+%         end
+%         matthias_wedge_plot(values(seq),...
+%                             SE_values(seq),...
+%                             results_labels(seq),...
+%                             'metric','cosim',labelflag)
+%         curr_path=fullfile(outpath,['wedge_placebo_random_',targetvars{i},'_',atlas_names{k},'_',fnamesuffix]);
+%         curr_svg=[curr_path,'.svg'];
+%         curr_png=[curr_path,'.png'];
+%         hgexport(gcf, curr_svg, hgexport('factorystyle'), 'Format', 'svg'); 
+%         hgexport(gcf, curr_png, hgexport('factorystyle'), 'Format', 'png'); 
+%         crop(curr_png);
+%         close all;
+%     end
     
 end
