@@ -6,6 +6,7 @@ function D_img_similarity_maps(datapath,varargin)
 % 'forest_plots': Will additionally provide a forest_plot with each wedge
 % 'conservative': Will use the conservative instead of the full sample.
 % 'nolabels': Will yield wedge-plots without lables.
+% 'bar': Will yield bar-plots instead of wedge-plots.
 
 addpath(genpath(fullfile(userpath,'CanlabCore')));
 addpath(genpath(fullfile(userpath,'CanlabPatternMasks')));
@@ -83,11 +84,21 @@ for i=1:length(variable_select)
             results_labels{j}=strrep([labels{i}{j}],'_',' ');
         end
     end
-    matthias_wedge_plot(values(seq{i})',...
-                        SE_values(seq{i})',...
-                        results_labels(seq{i})',...
-                        'metric','similarity',labelflag);
-    curr_path=fullfile(outpath,['wedge_pain_random_cossim_',labelflag,currvar]);
+    
+    if any(strcmp(varargin,'bar'))
+        matthias_bar_plot_similarity(values(seq{i})',...
+                            SE_values(seq{i})',...
+                            results_labels(seq{i})',labelflag);
+        xlabel('Cosine similarity ± SE')
+        curr_path=fullfile(outpath,['bar_pain_random_cossim_',labelflag,currvar]);
+    else
+        matthias_wedge_plot(values(seq{i})',...
+                            SE_values(seq{i})',...
+                            results_labels(seq{i})',...
+                            'metric','similarity',labelflag);
+        curr_path=fullfile(outpath,['wedge_pain_random_cossim_',labelflag,currvar]);
+    end
+        
     curr_eps=[curr_path,'.eps'];
     curr_png=[curr_path,'.png'];
     hgexport(gcf, curr_eps, hgexport('factorystyle'), 'Format', 'eps'); 
@@ -195,11 +206,21 @@ for i=1:length(variable_select)
             results_labels{j}=strrep([labels{i}{j}],'_',' ');
         end
     end
-    matthias_wedge_plot(values(seq{i})',...
-                        SE_values(seq{i})',...
-                        results_labels(seq{i})',...
-                        'metric','similarity',labelflag);
-    curr_path=fullfile(outpath,['wedge_placebo_random_cossim_',currvar,'_',fnamesuffix]);
+    
+    if any(strcmp(varargin,'bar'))
+        matthias_bar_plot_similarity(values(seq{i})',...
+                            SE_values(seq{i})',...
+                            results_labels(seq{i})',labelflag);
+        xlabel('Cosine Similarity ± SE')
+        a=gca; a.YAxis.Visible = 'off';
+        curr_path=fullfile(outpath,['bar_placebo_random_cossim_',labelflag,currvar]);
+    else
+        matthias_wedge_plot(values(seq{i})',...
+                            SE_values(seq{i})',...
+                            results_labels(seq{i})',...
+                            'metric','similarity',labelflag);
+        curr_path=fullfile(outpath,['wedge_placebo_random_cossim_',labelflag,currvar]);
+    end
     curr_eps=[curr_path,'.eps'];
     curr_png=[curr_path,'.png'];
     hgexport(gcf, curr_eps, hgexport('factorystyle'), 'Format', 'eps'); 
