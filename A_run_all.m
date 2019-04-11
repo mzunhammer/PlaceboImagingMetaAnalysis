@@ -5,7 +5,7 @@
 % relative paths.
 % Folder with analysis functions (git repository)
 %analysispath='D:\Dropbox\Boulder_Essen\Analysis';
- analysispath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/analysis'; % MAC OS EXAMPLE
+analysispath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/analysis'; % MAC OS EXAMPLE
 % Folder where where result figures should be saved (not in git repository)
 %pubpath='D:\Dropbox\Boulder_Essen\Protocol_and_Manuscript\NPS_placebo\JAMA';
 pubpath='/Users/matthiaszunhammer/Dropbox/Boulder_Essen/Protocol_and_Manuscript/NPS_placebo/JAMA/'; % (MAX OS EXAMPLE) (MAX OS EXAMPLE)

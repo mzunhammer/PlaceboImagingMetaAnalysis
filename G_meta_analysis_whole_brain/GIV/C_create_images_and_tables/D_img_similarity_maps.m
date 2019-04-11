@@ -212,7 +212,9 @@ for i=1:length(variable_select)
                             SE_values(seq{i})',...
                             results_labels(seq{i})',labelflag);
         xlabel('Cosine Similarity ± SE')
-        a=gca; a.YAxis.Visible = 'off';
+        a=gca;
+        a.YTickLabel={}; %turn y-labels off (unnecessary if arranged with pain in line)
+        %a.YAxis.Visible = 'off'; %alternative: turn y-axis and labels off (unnecessary if arranged with pain in line)
         curr_path=fullfile(outpath,['bar_placebo_random_cossim_',labelflag,currvar]);
     else
         matthias_wedge_plot(values(seq{i})',...
@@ -227,7 +229,7 @@ for i=1:length(variable_select)
     hgexport(gcf, curr_png, hgexport('factorystyle'), 'Format', 'png'); 
     crop(curr_png);
     close all;
-     %% print table
+    % print table
     disp("Placebo")
     currvar
     table(labels{i}',values',SE_values',p_values,'VariableNames',{'ROI','Similarity','SE','p'})

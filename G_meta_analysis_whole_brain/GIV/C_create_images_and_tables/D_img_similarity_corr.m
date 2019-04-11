@@ -91,11 +91,22 @@ for i=1:length(atlas_names)
             results_labels{j}=strrep([labels{i}{j}],'_',' ');
         end
     end
-    matthias_wedge_plot(values(seq{i})',...
-                        SE_values(seq{i})',...
-                        results_labels(seq{i})',...
-                        'metric','similarity',labelflag);
-    curr_path=fullfile(outpath,['wedge_placebo_correlation_random_',currvar,'_',fnamesuffix]);
+    if any(strcmp(varargin,'bar'))
+        matthias_bar_plot_similarity(values(seq{i})',...
+                            SE_values(seq{i})',...
+                            results_labels(seq{i})',labelflag);
+        xlabel('r ± SE')
+        a=gca;
+        a.YTickLabel={}; %turn y-labels off (unnecessary if arranged with pain in line)
+        %a.YAxis.Visible = 'off'; %alternative: turn y-axis and labels off (unnecessary if arranged with pain in line)
+        curr_path=fullfile(outpath,['bar_placebo_correlation_random_',labelflag,currvar]);
+    else
+        matthias_wedge_plot(values(seq{i})',...
+                            SE_values(seq{i})',...
+                            results_labels(seq{i})',...
+                            'metric','similarity',labelflag);
+        curr_path=fullfile(outpath,['wedge_placebo_correlation_random_',labelflag,currvar]);
+    end
     curr_eps=[curr_path,'.eps'];
     curr_png=[curr_path,'.png'];
     hgexport(gcf, curr_eps, hgexport('factorystyle'), 'Format', 'eps'); 
